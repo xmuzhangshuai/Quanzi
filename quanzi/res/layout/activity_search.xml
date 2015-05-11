@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@color/navigation_bg"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingBottom="@dimen/margin_chat_activity"
+        android:paddingTop="@dimen/margin_chat_activity" >
+
+        <LinearLayout
+            android:id="@+id/left_btn_bg"
+            android:layout_width="@dimen/login_register"
+            android:layout_height="match_parent"
+            android:background="@drawable/sel_nav_leftbtn_bg"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/margin_chat_activity" >
+
+            <ImageView
+                android:id="@+id/nav_left_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:src="@drawable/ic_action_previous_item" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/search_content"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/sent_btn_height"
+            android:layout_weight="6"
+            android:background="@drawable/shape_radius"
+            android:drawableLeft="@drawable/search"
+            android:drawablePadding="10dp"
+            android:hint="搜索标签、话题、用户"
+            android:maxLines="1"
+            android:paddingLeft="10.0dip"
+            android:textSize="@dimen/day_recommend_font_info" />
+
+        <TextView
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/sel_radius_green_btn_bg"
+            android:gravity="center"
+            android:paddingBottom="@dimen/margin_chat_activity"
+            android:paddingLeft="@dimen/new_msg"
+            android:paddingRight="@dimen/new_msg"
+            android:paddingTop="@dimen/margin_chat_activity"
+            android:text="搜索"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/search_output_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:divider="@color/system_gray"
+        android:dividerHeight="0.5dp" >
+    </ListView>
+
+</LinearLayout>

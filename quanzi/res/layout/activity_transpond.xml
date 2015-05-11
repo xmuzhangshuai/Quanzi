@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/system_back"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/login_register"
+        android:gravity="center_vertical"
+        android:padding="0.0px" >
+
+        <ImageView
+            android:id="@+id/rlCommenTitleBG"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/navigation_bg" />
+
+        <LinearLayout
+            android:id="@+id/left_btn_bg"
+            android:layout_width="@dimen/login_register"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/sel_nav_leftbtn_bg"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/day_recommend_help_font_space" >
+
+            <ImageView
+                android:id="@+id/nav_left_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:src="@drawable/ic_action_previous_item" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/nav_text"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@+id/left_btn_bg"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="转发"
+            android:textColor="@color/white"
+            android:textSize="@dimen/day_recommend_user_font" />
+
+        <TextView
+            android:id="@+id/publish_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:background="@drawable/sel_radius_green_btn_bg"
+            android:gravity="center"
+            android:paddingBottom="@dimen/margin_chat_activity"
+            android:paddingLeft="@dimen/new_msg"
+            android:paddingRight="@dimen/new_msg"
+            android:paddingTop="@dimen/margin_chat_activity"
+            android:text="转发"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.0"
+        android:orientation="vertical" >
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:orientation="vertical"
+            android:scrollbars="vertical" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <EditText
+                    android:id="@+id/publish_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:ems="10"
+                    android:height="100dp"
+                    android:hint="写点什么..."
+                    android:maxLines="10"
+                    android:padding="@dimen/personal_timecapsule_padding"
+                    android:textSize="16sp" >
+                </EditText>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/setting_list_margin" >
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:gravity="center_vertical"
+                        android:background="#F8F8F8" >
+
+                        <ImageView
+                            android:layout_width="@dimen/personal_photo_margin"
+                            android:layout_height="@dimen/personal_photo_margin"
+                            android:scaleType="centerCrop"
+                            android:layout_marginLeft="@dimen/personal_timecapsule_padding"
+                            android:src="@drawable/content" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/personal_timecapsule_padding"
+                            android:text="今天天气好晴朗，处处好风光啊好风光~！今天天气好晴朗，处处好风光啊好风光~！"
+                            android:textColor="@color/dark_gray"
+                            android:textSize="@dimen/day_recommend_user_font" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</LinearLayout>

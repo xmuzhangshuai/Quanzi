@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/system_back"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="52dp"
+        android:gravity="center_vertical"
+        android:padding="0.0px" >
+
+        <ImageView
+            android:id="@+id/rlCommenTitleBG"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/navigation_bg" />
+
+        <LinearLayout
+            android:id="@+id/left_btn_bg"
+            android:layout_width="@dimen/login_register"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/sel_nav_leftbtn_bg"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/day_recommend_help_font_space" >
+
+            <ImageView
+                android:id="@+id/nav_left_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:src="@drawable/ic_action_previous_item" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/nav_text"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@+id/left_btn_bg"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="新活动"
+            android:textColor="@color/white"
+            android:textSize="@dimen/day_recommend_user_font" />
+
+        <TextView
+            android:id="@+id/publish_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:background="@drawable/sel_radius_green_btn_bg"
+            android:gravity="center"
+            android:paddingBottom="@dimen/margin_chat_activity"
+            android:paddingLeft="@dimen/new_msg"
+            android:paddingRight="@dimen/new_msg"
+            android:paddingTop="@dimen/margin_chat_activity"
+            android:text="发布"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.0"
+        android:orientation="vertical" >
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:orientation="vertical"
+            android:scrollbars="vertical" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <EditText
+                    android:id="@+id/publish_act_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:ems="10"
+                    android:gravity="left|top"
+                    android:height="100dp"
+                    android:hint="标题（20个字以内）"
+                    android:maxLines="10"
+                    android:padding="@dimen/personal_timecapsule_padding"
+                    android:textSize="16sp" >
+                </EditText>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/personal_timecapsule_padding" >
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical|left"
+                        android:orientation="vertical" >
+
+                        <ImageView
+                            android:id="@+id/publish_image1"
+                            android:layout_width="@dimen/get_image_btn_padding"
+                            android:layout_height="@dimen/get_image_btn_padding"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/content" />
+
+                        <ImageView
+                            android:id="@+id/publish_addiamge1"
+                            android:layout_width="@dimen/get_image_btn_padding"
+                            android:layout_height="@dimen/get_image_btn_padding"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/sel_publish_add_image"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal" >
+
+                        <ImageView
+                            android:id="@+id/publish_image2"
+                            android:layout_width="@dimen/get_image_btn_padding"
+                            android:layout_height="@dimen/get_image_btn_padding"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/content"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/publish_addiamge2"
+                            android:layout_width="@dimen/get_image_btn_padding"
+                            android:layout_height="@dimen/get_image_btn_padding"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/sel_publish_add_image" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal" >
+
+                        <ImageView
+                            android:id="@+id/publish_image3"
+                            android:layout_width="@dimen/get_image_btn_padding"
+                            android:layout_height="@dimen/get_image_btn_padding"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/content"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/publish_addiamge3"
+                            android:layout_width="@dimen/get_image_btn_padding"
+                            android:layout_height="@dimen/get_image_btn_padding"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/sel_publish_add_image"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal" >
+
+                        <ImageView
+                            android:id="@+id/publish_image4"
+                            android:layout_width="@dimen/get_image_btn_padding"
+                            android:layout_height="@dimen/get_image_btn_padding"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/content"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/publish_addiamge4"
+                            android:layout_width="@dimen/get_image_btn_padding"
+                            android:layout_height="@dimen/get_image_btn_padding"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/sel_publish_add_image"
+                            android:visibility="gone" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/setting_list_margin" >
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal" >
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal" >
+
+                            <ImageView
+                                android:id="@+id/publish_image5"
+                                android:layout_width="@dimen/get_image_btn_padding"
+                                android:layout_height="@dimen/get_image_btn_padding"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/content"
+                                android:visibility="gone" />
+
+                            <ImageView
+                                android:id="@+id/publish_addiamge5"
+                                android:layout_width="@dimen/get_image_btn_padding"
+                                android:layout_height="@dimen/get_image_btn_padding"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/sel_publish_add_image"
+                                android:visibility="gone" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal" >
+
+                            <ImageView
+                                android:id="@+id/publish_image6"
+                                android:layout_width="@dimen/get_image_btn_padding"
+                                android:layout_height="@dimen/get_image_btn_padding"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/content"
+                                android:visibility="gone" />
+
+                            <ImageView
+                                android:id="@+id/publish_addiamge6"
+                                android:layout_width="@dimen/get_image_btn_padding"
+                                android:layout_height="@dimen/get_image_btn_padding"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/sel_publish_add_image"
+                                android:visibility="gone" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal" >
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/personal_timecapsule_padding"
+                    android:paddingLeft="@dimen/motify_data_space"
+                    android:paddingRight="@dimen/personal_timecapsule_padding"
+                    android:paddingTop="@dimen/personal_timecapsule_padding" >
+
+                    <ImageView
+                        android:layout_width="@dimen/day_recommend_help_padding"
+                        android:layout_height="@dimen/day_recommend_help_padding"
+                        android:layout_marginRight="@dimen/personal_timecapsule_padding"
+                        android:src="@drawable/calender" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="时间"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="@dimen/day_recommend_user_font" />
+
+                    <EditText
+                        android:id="@+id/publish_act_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/get_image_btn_padding"
+                        android:background="@color/white"
+                        android:ems="10"
+                        android:singleLine="true"
+                        android:text="2015-4-5 13:20"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="@dimen/day_recommend_user_font" >
+                    </EditText>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/unenable_font" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/personal_timecapsule_padding"
+                    android:paddingLeft="@dimen/motify_data_space"
+                    android:paddingRight="@dimen/personal_timecapsule_padding"
+                    android:paddingTop="@dimen/personal_timecapsule_padding" >
+
+                    <ImageView
+                        android:layout_width="@dimen/day_recommend_help_padding"
+                        android:layout_height="@dimen/day_recommend_help_padding"
+                        android:layout_marginRight="@dimen/personal_timecapsule_padding"
+                        android:src="@drawable/location" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="地点"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="@dimen/day_recommend_user_font" />
+
+                    <EditText
+                        android:id="@+id/publish_act_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/get_image_btn_padding"
+                        android:background="@color/white"
+                        android:ems="10"
+                        android:singleLine="true"
+                        android:text="2015-4-5 13:20"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="@dimen/day_recommend_user_font" >
+                    </EditText>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/unenable_font" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/personal_timecapsule_padding"
+                    android:paddingLeft="@dimen/motify_data_space"
+                    android:paddingRight="@dimen/personal_timecapsule_padding"
+                    android:paddingTop="@dimen/personal_timecapsule_padding" >
+
+                    <ImageView
+                        android:layout_width="@dimen/day_recommend_help_padding"
+                        android:layout_height="@dimen/day_recommend_help_padding"
+                        android:layout_marginRight="@dimen/personal_timecapsule_padding"
+                        android:src="@drawable/follower" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="对象"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="@dimen/day_recommend_user_font" />
+
+                    <EditText
+                        android:id="@+id/publish_act_target"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/get_image_btn_padding"
+                        android:background="@color/white"
+                        android:ems="10"
+                        android:singleLine="true"
+                        android:text="2015-4-5 13:20"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="@dimen/day_recommend_user_font" >
+                    </EditText>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp" >
+
+                    <EditText
+                        android:id="@+id/publish_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:ems="10"
+                        android:gravity="left|top"
+                        android:height="100dp"
+                        android:hint="活动详情"
+                        android:maxLines="10"
+                        android:padding="@dimen/personal_timecapsule_padding"
+                        android:textSize="16sp" >
+                    </EditText>
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</LinearLayout>

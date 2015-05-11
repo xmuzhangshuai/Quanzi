@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/share_space"
+    android:paddingRight="@dimen/share_space" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_noradius"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/setting_list_margin" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/personal_timecapsule_padding"
+            android:layout_marginRight="@dimen/personal_timecapsule_padding"
+            android:layout_marginTop="@dimen/margin_chat_activity" >
+
+            <ImageView
+                android:id="@+id/head_image"
+                android:layout_width="@dimen/headimage_size"
+                android:layout_height="@dimen/headimage_size"
+                android:src="@drawable/photoconor" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/head_image"
+                android:layout_toRightOf="@+id/head_image" >
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/day_recommend_dot_space"
+                    android:textColor="@color/comment_name"
+                    android:textSize="@dimen/register_font_size" />
+
+                <ImageView
+                    android:id="@+id/gender"
+                    android:layout_width="@dimen/day_recommend_dot_space"
+                    android:layout_height="@dimen/day_recommend_dot_space"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/day_recommend_dot_space"
+                    android:layout_toRightOf="@+id/name"
+                    android:src="@drawable/male" />
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/unenable"
+                    android:textSize="@dimen/register_font_size" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/head_image"
+                android:layout_marginLeft="@dimen/day_recommend_dot_space"
+                android:layout_marginRight="@dimen/day_recommend_dot_space"
+                android:layout_toRightOf="@+id/head_image"
+                android:textColor="@color/dark_gray"
+                android:textSize="@dimen/register_font_size" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/system_back"
+    android:orientation="vertical" >
+
+    <include
+        layout="@layout/top_navigation3"
+        android:focusable="true" />
+
+    <RelativeLayout
+        android:id="@+id/follower"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/day_recommend_dot_space"
+        android:layout_marginTop="@dimen/day_recommend_dot_space"
+        android:background="@drawable/sel_color_white_gray"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/day_recommend_dot_space"
+        android:paddingLeft="@dimen/day_recommend_help_padding"
+        android:paddingRight="@dimen/personal_timecapsule_padding"
+        android:paddingTop="@dimen/day_recommend_dot_space" >
+
+        <ImageView
+            android:id="@+id/follow_icon"
+            android:layout_width="@dimen/motify_data_space"
+            android:layout_height="@dimen/motify_data_space"
+            android:layout_centerVertical="true"
+            android:src="@drawable/follower" />
+
+        <TextView
+            android:id="@+id/f_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/day_recommend_help_padding"
+            android:layout_toRightOf="@+id/follow_icon"
+            android:text="新的追随者"
+            android:textColor="@color/gray_normal" />
+
+        <TextView
+            android:id="@+id/new_follows"
+            android:layout_width="@dimen/motify_data_space"
+            android:layout_height="@dimen/motify_data_space"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/day_recommend_help_padding"
+            android:background="@drawable/shape_like_count"
+            android:gravity="center"
+            android:text="2"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/myquanzi_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@color/system_gray"
+        android:dividerHeight="0.5dp" >
+    </ListView>
+
+</LinearLayout>

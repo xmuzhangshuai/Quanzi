@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/system_back"
+    android:orientation="vertical"
+    android:padding="@dimen/day_recommend_dot_space" >
+
+    <EditText
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/register_height"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/shape_radius"
+        android:drawableLeft="@drawable/icon_nickname_gray"
+        android:drawablePadding="10dp"
+        android:hint="昵称"
+        android:inputType="textPersonName"
+        android:maxLength="10"
+        android:maxLines="1"
+        android:paddingLeft="@dimen/personal_timecapsule_padding"
+        android:paddingRight="@dimen/personal_timecapsule_padding"
+        android:textColorHint="@color/system_gray"
+        android:textSize="@dimen/day_recommend_user_font" >
+
+        <requestFocus android:layout_width="match_parent" />
+    </EditText>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/register_height"
+        android:layout_marginTop="@dimen/day_recommend_dot_margin_top"
+        android:background="@drawable/shape_radius"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/personal_timecapsule_padding"
+        android:paddingRight="@dimen/personal_timecapsule_padding" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/icon_gender_gray"
+            android:gravity="center_vertical"
+            android:drawablePadding="10dp"
+            android:text="性别"
+            android:textColor="@color/system_gray"
+            android:textSize="@dimen/day_recommend_user_font" />
+
+        <RadioGroup
+            android:id="@+id/user_gender_radiogroup"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/personal_timecapsule_padding">
+
+            <RadioButton
+                android:id="@+id/male"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="男生"
+                android:textColor="@color/system_gray"
+                android:textSize="@dimen/day_recommend_user_font" />
+
+            <RadioButton
+                android:id="@+id/female"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/login_register"
+                android:text="女生"
+                android:textColor="@color/system_gray"
+                android:textSize="@dimen/day_recommend_user_font" />
+        </RadioGroup>
+    </LinearLayout>
+
+</LinearLayout>

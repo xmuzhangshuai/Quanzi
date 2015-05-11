@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="52dp"
+    android:gravity="center_vertical"
+    android:padding="0.0px" >
+
+    <ImageView
+        android:id="@+id/rlCommenTitleBG"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/navigation_bg" />
+
+    <TextView
+        android:id="@+id/left_text"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_toRightOf="@+id/left_btn_bg"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/day_recommend_user_font" />
+
+    <TextView
+        android:id="@+id/nav_text"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_centerInParent="true"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:paddingLeft="9.0dip"
+        android:paddingRight="9.0dip"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/day_recommend_user_font" />
+
+    <LinearLayout
+        android:id="@+id/left_btn_bg"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/sel_nav_leftbtn_bg"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/day_recommend_help_font_space" >
+
+        <TextView
+            android:id="@+id/left_text1"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/title_size" />
+    </LinearLayout>
+
+</RelativeLayout>

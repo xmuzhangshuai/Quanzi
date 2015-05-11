@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/system_back"
+    android:orientation="vertical" >
+
+    <include
+        layout="@layout/top_navigation"
+        android:focusable="true" />
+
+    <LinearLayout
+        android:id="@+id/person_image"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/day_recommend_help_padding"
+        android:background="@drawable/sel_color_white_gray"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/share_space"
+        android:paddingLeft="@dimen/day_recommend_help_padding"
+        android:paddingRight="@dimen/day_recommend_help_padding"
+        android:paddingTop="@dimen/share_space" >
+
+        <ImageView
+            android:id="@+id/head_image"
+            android:layout_width="@dimen/get_image_btn_padding"
+            android:layout_height="@dimen/get_image_btn_padding"
+            android:src="@drawable/headimage" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/day_recommend_help_padding"
+            android:text="栗子"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/circle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/day_recommend_help_padding"
+        android:background="@drawable/sel_color_white_gray"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/share_space"
+        android:paddingLeft="@dimen/day_recommend_help_padding"
+        android:paddingRight="@dimen/day_recommend_help_padding"
+        android:paddingTop="@dimen/share_space" >
+
+        <ImageView
+            android:id="@+id/circle_icon"
+            android:layout_width="@dimen/day_recommend_viewpager_margin_top"
+            android:layout_height="@dimen/day_recommend_viewpager_margin_top"
+            android:src="@drawable/circle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/day_recommend_help_padding"
+            android:layout_toRightOf="@+id/circle_icon"
+            android:text="圈子" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/day_recommend_help_padding"
+            android:text="123"
+            android:textColor="@color/gray_normal" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/follower"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0.1dp"
+        android:background="@drawable/sel_color_white_gray"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/share_space"
+        android:paddingLeft="@dimen/day_recommend_help_padding"
+        android:paddingRight="@dimen/day_recommend_help_padding"
+        android:paddingTop="@dimen/share_space" >
+
+        <ImageView
+            android:id="@+id/follow_icon"
+            android:layout_width="@dimen/day_recommend_viewpager_margin_top"
+            android:layout_height="@dimen/day_recommend_viewpager_margin_top"
+            android:layout_centerVertical="true"
+            android:src="@drawable/follower" />
+
+        <TextView
+            android:id="@+id/f_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/day_recommend_help_padding"
+            android:layout_toRightOf="@+id/follow_icon"
+            android:text="追随者" />
+
+        <TextView
+            android:id="@+id/new_follows"
+            android:layout_width="@dimen/motify_data_space"
+            android:layout_height="@dimen/motify_data_space"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/day_recommend_help_font_space"
+            android:layout_toRightOf="@+id/f_text"
+            android:background="@drawable/shape_like_count"
+            android:gravity="center"
+            android:text="2"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/day_recommend_help_padding"
+            android:text="296"
+            android:textColor="@color/gray_normal" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/favour"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0.1dp"
+        android:background="@drawable/sel_color_white_gray"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/share_space"
+        android:paddingLeft="@dimen/day_recommend_help_padding"
+        android:paddingRight="@dimen/day_recommend_help_padding"
+        android:paddingTop="@dimen/share_space" >
+
+        <ImageView
+            android:id="@+id/favor_icon"
+            android:layout_width="@dimen/day_recommend_viewpager_margin_top"
+            android:layout_height="@dimen/day_recommend_viewpager_margin_top"
+            android:src="@drawable/favour" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/day_recommend_help_padding"
+            android:layout_toRightOf="@+id/favor_icon"
+            android:text="赞" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/day_recommend_help_padding"
+            android:text="45"
+            android:textColor="@color/gray_normal" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/person_data"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/day_recommend_help_padding"
+        android:background="@drawable/sel_color_white_gray"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/share_space"
+        android:paddingLeft="@dimen/day_recommend_help_padding"
+        android:paddingRight="@dimen/day_recommend_help_padding"
+        android:paddingTop="@dimen/share_space" >
+
+        <ImageView
+            android:id="@+id/data_icon"
+            android:layout_width="@dimen/day_recommend_viewpager_margin_top"
+            android:layout_height="@dimen/day_recommend_viewpager_margin_top"
+            android:src="@drawable/data" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/day_recommend_help_padding"
+            android:layout_toRightOf="@+id/data_icon"
+            android:text="资料" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/setting"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0.1dp"
+        android:background="@drawable/sel_color_white_gray"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/share_space"
+        android:paddingLeft="@dimen/day_recommend_help_padding"
+        android:paddingRight="@dimen/day_recommend_help_padding"
+        android:paddingTop="@dimen/share_space" >
+
+        <ImageView
+            android:id="@+id/setting_icon"
+            android:layout_width="@dimen/day_recommend_viewpager_margin_top"
+            android:layout_height="@dimen/day_recommend_viewpager_margin_top"
+            android:src="@drawable/setting" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/day_recommend_help_padding"
+            android:layout_toRightOf="@+id/setting_icon"
+            android:text="设置" />
+    </RelativeLayout>
+
+</LinearLayout>

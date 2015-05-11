@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/system_back"
+    android:orientation="vertical" >
+
+    <include
+        layout="@layout/top_navigation3"
+        android:focusable="true" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/tape_margin_top"
+        android:background="@color/white"
+        android:padding="10dp" >
+
+        <LinearLayout
+            android:id="@+id/already_add_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/shape_radius_green"
+                android:padding="3dp"
+                android:text="游泳"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/shape_radius_green"
+                android:padding="3dp"
+                android:text="购物"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/shape_radius_green"
+                android:padding="3dp"
+                android:text="看电影"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/gridview"
+            android:layout_marginLeft="18dp"
+            android:text="您还可以添加的兴趣数为3"
+            android:textColor="@color/unenable"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="28dp"
+        android:layout_marginTop="20dp"
+        android:text="推荐热门的兴趣爱好"
+        android:textColor="@color/unenable"
+        android:textSize="12sp" />
+
+    <ListView
+        android:id="@+id/myquanzi_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@color/system_gray"
+        android:dividerHeight="0.5dp" >
+    </ListView>
+
+</LinearLayout>

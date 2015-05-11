@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.quanzi"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="21" />
+
+    <!-- ###################声明SDK使用的相关权限###################### -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" />
+
+    <permission android:name="android.permission.BAIDU_LOCATION_SERVICE" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <application
+        android:name="com.quanzi.base.BaseApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="com.quanzi.ui.GuideActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 注册或登录页面 -->
+        <activity
+            android:name="com.quanzi.ui.LoginOrRegisterActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+        </activity>
+
+        <!-- 首次安装运行页面 -->
+        <activity
+            android:name="com.quanzi.ui.GuidePagerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+        </activity>
+
+        <!-- 登录页面 -->
+        <activity
+            android:name="com.quanzi.ui.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.quanquan.ui.LoginOrRegisterActivity" />
+
+            <intent-filter>
+                <action android:name="com.quanquanloginorregister" />
+            </intent-filter>
+        </activity>
+
+        <!-- 注册页面 -->
+        <activity
+            android:name="com.quanzi.ui.RegisterActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <!-- 注册成功页面 -->
+        <activity
+            android:name="com.quanzi.ui.RegSuccessActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <!-- 忘记密码页面 -->
+        <activity
+            android:name="com.quanzi.ui.ForgetPassActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <!-- 重置密码页面 -->
+        <activity
+            android:name="com.quanzi.ui.ResetPassActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <!-- 主页面 -->
+        <activity
+            android:name="com.quanzi.ui.MainActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <!-- 显示高清图片 -->
+        <activity
+            android:name="com.quanzi.ui.ImageShowerActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <!-- 帖子详情页面 -->
+        <activity
+            android:name="com.quanzi.ui.PostDetailActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <!-- 活动详情页面 -->
+        <activity
+            android:name="com.quanzi.ui.ActDetailActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <!-- 赞者图片 -->
+        <activity
+            android:name="com.quanzi.ui.AllFavorsActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <!-- 发布帖子 -->
+        <activity
+            android:name="com.quanzi.ui.PublishPostActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
+        </activity>
+
+        <!-- 发布活动 -->
+        <activity
+            android:name="com.quanzi.ui.PublishActActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
+        </activity>
+
+        <!-- 转发页面 -->
+        <activity
+            android:name="com.quanzi.ui.TranspondActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
+        </activity>
+
+        <!-- 搜索页面 -->
+        <activity
+            android:name="com.quanzi.ui.SearchActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
+        </activity>
+
+        <!-- 我的圈子页面 -->
+        <activity
+            android:name="com.quanzi.ui.MyQuanziActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
+        </activity>
+
+        <!-- 我的追随者页面 -->
+        <activity
+            android:name="com.quanzi.ui.MyFollowerActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
+        </activity>
+
+        <!-- 新的追随者页面 -->
+        <activity
+            android:name="com.quanzi.ui.NewFollowerActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
+        </activity>
+
+        <!-- 我赞过的帖子页面 -->
+        <activity
+            android:name="com.quanzi.ui.MyFavoredActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
+        </activity>
+
+        <!-- 修改资料页面 -->
+        <activity
+            android:name="com.quanzi.ui.ModifyDataActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
+        </activity>
+
+        <!-- 设置页面 -->
+        <activity
+            android:name="com.quanzi.ui.SettingActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
+        </activity>
+
+        <!-- 修改昵称页面 -->
+        <activity
+            android:name="com.quanzi.ui.ModifyNameActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
+        </activity>
+
+        <!-- 修改个人签名页面 -->
+        <activity
+            android:name="com.quanzi.ui.ModifyPersonIntroActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
+        </activity>
+
+        <!-- 修改技能页面 -->
+        <activity
+            android:name="com.quanzi.ui.ModifySkillActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
+        </activity>
+
+        <!-- 修改兴趣爱好页面 -->
+        <activity
+            android:name="com.quanzi.ui.ModifyInterestActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
+        </activity>
+
+        <!-- 修改行业页面 -->
+        <activity
+            android:name="com.quanzi.ui.ModifyIndustryActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
+        </activity>
+
+        <!-- 修改行业页面 -->
+        <activity
+            android:name="com.quanzi.ui.ModifyPassActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
+        </activity>
+
+        <!-- 修改行业页面 -->
+        <activity
+            android:name="com.quanzi.ui.BlackListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
+        </activity>
+
+        <!-- 个人中心页面 -->
+        <activity
+            android:name="com.quanzi.ui.MyPersonDetailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
+        </activity>
+
+        <!-- 他人个人中心页面 -->
+        <activity
+            android:name="com.quanzi.ui.PersonDetailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
+        </activity>
+    </application>
+
+</manifest>

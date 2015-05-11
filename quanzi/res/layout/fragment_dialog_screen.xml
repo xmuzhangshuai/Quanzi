@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_top_radius"
+        android:orientation="vertical"
+        android:padding="@dimen/time_capsule20" >
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:text="您想浏览的用户或内容"
+            android:textColor="@color/dark_gray"
+            android:textSize="16sp" />
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/new_msg"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/all_gender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/sel_radio_gray_white"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center_horizontal"
+                android:paddingBottom="@dimen/new_msg"
+                android:paddingTop="@dimen/new_msg"
+                android:text="全部"
+                android:textSize="@dimen/day_recommend_font_info" />
+
+            <RadioButton
+                android:id="@+id/gender_male"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/sel_radio_gray_white"
+                android:button="@null"
+                android:gravity="center_horizontal"
+                android:paddingBottom="@dimen/new_msg"
+                android:paddingTop="@dimen/new_msg"
+                android:text="男"
+                android:textSize="@dimen/day_recommend_font_info" />
+
+            <RadioButton
+                android:id="@+id/gender_female"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/sel_radio_gray_white"
+                android:button="@null"
+                android:gravity="center_horizontal"
+                android:paddingBottom="@dimen/new_msg"
+                android:paddingTop="@dimen/new_msg"
+                android:text="女"
+                android:textSize="@dimen/day_recommend_font_info" />
+        </RadioGroup>
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/new_msg"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/all_statue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/sel_radio_gray_white"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center_horizontal"
+                android:paddingBottom="@dimen/new_msg"
+                android:paddingTop="@dimen/new_msg"
+                android:text="全部"
+                android:textSize="@dimen/day_recommend_font_info" />
+
+            <RadioButton
+                android:id="@+id/single"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/sel_radio_gray_white"
+                android:button="@null"
+                android:gravity="center_horizontal"
+                android:paddingBottom="@dimen/new_msg"
+                android:paddingTop="@dimen/new_msg"
+                android:text="单身"
+                android:textSize="@dimen/day_recommend_font_info" />
+        </RadioGroup>
+
+        <ListView
+            android:id="@+id/dialog_listview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:divider="@color/system_gray"
+            android:dividerHeight="0.2dp"
+            android:scrollbars="none" >
+        </ListView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/sel_alert_dialog_left_btn"
+            android:gravity="center_horizontal"
+            android:paddingBottom="13dp"
+            android:paddingTop="13dp"
+            android:text="确定"
+            android:textColor="@color/alert_dialog_blue"
+            android:textSize="@dimen/day_recommend_font_info" />
+
+        <TextView
+            android:id="@+id/cancle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/sel_alert_dialog_right_btn"
+            android:gravity="center_horizontal"
+            android:paddingBottom="13dp"
+            android:paddingTop="13dp"
+            android:text="取消"
+            android:textColor="@color/dark_gray"
+            android:textSize="@dimen/day_recommend_font_info" />
+    </LinearLayout>
+
+</LinearLayout>

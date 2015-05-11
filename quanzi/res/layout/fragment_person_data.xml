@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/system_main_bg"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/setting_list_margin"
+    android:paddingLeft="@dimen/share_space"
+    android:paddingRight="@dimen/share_space"
+    android:paddingTop="@dimen/setting_list_margin" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_radius" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:paddingBottom="100dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp" >
+
+            <RelativeLayout
+                android:id="@+id/nicknameview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/sel_color_white_gray"
+                android:padding="@dimen/margin_chat_activity" >
+
+                <TextView
+                    android:id="@+id/nicknamelabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="@dimen/motify_data_space"
+                    android:text="昵称"
+                    android:textColor="@color/unenable"
+                    android:textSize="@dimen/day_recommend_font_info" />
+
+                <TextView
+                    android:id="@+id/nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/personal_photo_margin"
+                    android:layout_marginRight="5dp"
+                    android:layout_toRightOf="@+id/nicknamelabel"
+                    android:gravity="right"
+                    android:text="帅哥"
+                    android:textSize="@dimen/day_recommend_font_info" />
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/view2"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_below="@+id/nicknameview"
+                android:background="@color/unenable_font" />
+
+            <RelativeLayout
+                android:id="@+id/genderview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view2"
+                android:background="@drawable/sel_color_white_gray"
+                android:padding="@dimen/margin_chat_activity" >
+
+                <TextView
+                    android:id="@+id/genderlabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="@dimen/motify_data_space"
+                    android:text="性别"
+                    android:textColor="@color/unenable"
+                    android:textSize="@dimen/day_recommend_font_info" />
+
+                <TextView
+                    android:id="@+id/gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/personal_photo_margin"
+                    android:layout_marginRight="5dp"
+                    android:layout_toRightOf="@+id/genderlabel"
+                    android:gravity="right"
+                    android:text="男"
+                    android:textSize="@dimen/day_recommend_font_info" />
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/view3"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_below="@+id/genderview"
+                android:background="@color/unenable_font" />
+
+            <RelativeLayout
+                android:id="@+id/birthdayview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view3"
+                android:background="@drawable/sel_color_white_gray"
+                android:padding="@dimen/margin_chat_activity" >
+
+                <TextView
+                    android:id="@+id/birthdaylabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="@dimen/motify_data_space"
+                    android:text="生日"
+                    android:textColor="@color/unenable"
+                    android:textSize="@dimen/day_recommend_font_info" />
+
+                <TextView
+                    android:id="@+id/birthday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/personal_photo_margin"
+                    android:layout_marginRight="5dp"
+                    android:layout_toRightOf="@+id/birthdaylabel"
+                    android:gravity="right"
+                    android:text="1991-09-28"
+                    android:textSize="@dimen/day_recommend_font_info" />
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/view4"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_below="@+id/birthdayview"
+                android:background="@color/unenable_font" />
+
+            <RelativeLayout
+                android:id="@+id/schoolview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view4"
+                android:background="@drawable/sel_color_white_gray"
+                android:padding="@dimen/margin_chat_activity" >
+
+                <TextView
+                    android:id="@+id/schoollabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="@dimen/motify_data_space"
+                    android:text="学校"
+                    android:textColor="@color/unenable"
+                    android:textSize="@dimen/day_recommend_font_info" />
+
+                <TextView
+                    android:id="@+id/school"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/personal_photo_margin"
+                    android:layout_marginRight="5dp"
+                    android:layout_toRightOf="@+id/schoollabel"
+                    android:gravity="right"
+                    android:text="厦门大学"
+                    android:textSize="@dimen/day_recommend_font_info" />
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/view5"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_below="@+id/schoolview"
+                android:background="@color/unenable_font" />
+
+            <RelativeLayout
+                android:id="@+id/statusView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view5"
+                android:background="@drawable/sel_color_white_gray"
+                android:padding="@dimen/margin_chat_activity" >
+
+                <TextView
+                    android:id="@+id/statuslabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="@dimen/motify_data_space"
+                    android:text="当前身份"
+                    android:textColor="@color/unenable"
+                    android:textSize="@dimen/day_recommend_font_info" />
+
+                <TextView
+                    android:id="@+id/status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/personal_photo_margin"
+                    android:layout_marginRight="5dp"
+                    android:layout_toRightOf="@+id/statuslabel"
+                    android:gravity="right"
+                    android:text="学生"
+                    android:textSize="@dimen/day_recommend_font_info" />
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/view6"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_below="@+id/statusView"
+                android:background="@color/unenable_font" />
+
+            <RelativeLayout
+                android:id="@+id/loveStatusView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view6"
+                android:background="@drawable/sel_color_white_gray"
+                android:padding="@dimen/margin_chat_activity" >
+
+                <TextView
+                    android:id="@+id/lovestatuslabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="@dimen/motify_data_space"
+                    android:text="情感状态"
+                    android:textColor="@color/unenable"
+                    android:textSize="@dimen/day_recommend_font_info" />
+
+                <TextView
+                    android:id="@+id/lovestatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/personal_photo_margin"
+                    android:layout_marginRight="5dp"
+                    android:layout_toRightOf="@+id/lovestatuslabel"
+                    android:gravity="right"
+                    android:text="单身"
+                    android:textSize="@dimen/day_recommend_font_info" />
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/view7"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_below="@+id/loveStatusView"
+                android:background="@color/unenable_font" />
+
+            <RelativeLayout
+                android:id="@+id/interestView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view7"
+                android:background="@drawable/sel_color_white_gray"
+                android:padding="@dimen/margin_chat_activity" >
+
+                <TextView
+                    android:id="@+id/interestlabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="@dimen/motify_data_space"
+                    android:text="兴趣爱好"
+                    android:textColor="@color/unenable"
+                    android:textSize="@dimen/day_recommend_font_info" />
+
+                <TextView
+                    android:id="@+id/interest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/personal_photo_margin"
+                    android:layout_marginRight="5dp"
+                    android:layout_toRightOf="@+id/interestlabel"
+                    android:gravity="right"
+                    android:text="互联网、游泳"
+                    android:textColor="@color/system_green"
+                    android:textSize="@dimen/day_recommend_font_info" />
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/view8"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_below="@+id/interestView"
+                android:background="@color/unenable_font" />
+
+            <RelativeLayout
+                android:id="@+id/skillView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view8"
+                android:background="@drawable/sel_color_white_gray"
+                android:padding="@dimen/margin_chat_activity" >
+
+                <TextView
+                    android:id="@+id/skilllabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="@dimen/motify_data_space"
+                    android:text="擅长技能"
+                    android:textColor="@color/unenable"
+                    android:textSize="@dimen/day_recommend_font_info" />
+
+                <TextView
+                    android:id="@+id/skill"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/personal_photo_margin"
+                    android:layout_marginRight="5dp"
+                    android:layout_toRightOf="@+id/skilllabel"
+                    android:gravity="right"
+                    android:text="Photoshop"
+                    android:textSize="@dimen/day_recommend_font_info" />
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/view9"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_below="@+id/skillView"
+                android:background="@color/unenable_font" />
+
+            <RelativeLayout
+                android:id="@+id/industryView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view9"
+                android:background="@drawable/sel_color_white_gray"
+                android:padding="@dimen/margin_chat_activity" >
+
+                <TextView
+                    android:id="@+id/industrylabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="@dimen/motify_data_space"
+                    android:text="所属行业"
+                    android:textColor="@color/unenable"
+                    android:textSize="@dimen/day_recommend_font_info" />
+
+                <TextView
+                    android:id="@+id/industry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/personal_photo_margin"
+                    android:layout_marginRight="5dp"
+                    android:layout_toRightOf="@+id/industrylabel"
+                    android:gravity="right"
+                    android:text="软件开发"
+                    android:textColor="@color/system_green"
+                    android:textSize="@dimen/day_recommend_font_info" />
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/view10"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_below="@+id/industryView"
+                android:background="@color/unenable_font" />
+
+            <RelativeLayout
+                android:id="@+id/personIntroview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view10"
+                android:background="@drawable/sel_color_white_gray"
+                android:padding="@dimen/margin_chat_activity" >
+
+                <TextView
+                    android:id="@+id/personIntrolabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="@dimen/motify_data_space"
+                    android:text="个人签名"
+                    android:textColor="@color/unenable"
+                    android:textSize="@dimen/day_recommend_font_info" />
+
+                <TextView
+                    android:id="@+id/personIntro"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/personal_photo_margin"
+                    android:layout_marginRight="5dp"
+                    android:layout_toRightOf="@+id/personIntrolabel"
+                    android:gravity="right"
+                    android:text="今天很舒服"
+                    android:textSize="@dimen/day_recommend_font_info" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_below="@+id/personIntrolabel"
+                    android:layout_marginTop="3dp"
+                    android:background="@color/unenable_font" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

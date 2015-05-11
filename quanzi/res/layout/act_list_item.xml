@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/system_main_bg"
+    android:paddingBottom="@dimen/share_space"
+    android:paddingLeft="@dimen/share_space"
+    android:paddingRight="@dimen/share_space"
+    android:paddingTop="@dimen/share_space" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_radius_with_stroke"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/margin_chat_activity" >
+
+        <TextView
+            android:id="@+id/act_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/share_space"
+            android:layout_marginLeft="@dimen/personal_timecapsule_padding"
+            android:layout_marginRight="@dimen/personal_timecapsule_padding"
+            android:layout_marginTop="@dimen/margin_chat_activity"
+            android:text="一起来看流星雨"
+            android:textSize="@dimen/day_recommend_font_info"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f8f8f8"
+            android:paddingBottom="@dimen/margin_chat_activity"
+            android:paddingLeft="@dimen/personal_timecapsule_padding"
+            android:paddingRight="@dimen/personal_timecapsule_padding"
+            android:paddingTop="@dimen/margin_chat_activity" >
+
+            <ImageView
+                android:id="@+id/head_image"
+                android:layout_width="@dimen/day_recommend_help_padding"
+                android:layout_height="@dimen/day_recommend_help_padding"
+                android:src="@drawable/photoconor" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/day_recommend_help_padding"
+                android:layout_toRightOf="@+id/head_image"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/day_recommend_dot_space"
+                    android:ellipsize="end"
+                    android:maxLength="4"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/day_recommend_user_font" />
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/unenable"
+                    android:textSize="@dimen/register_font_size" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/share_space"
+            android:paddingLeft="@dimen/personal_timecapsule_padding"
+            android:paddingRight="@dimen/personal_timecapsule_padding"
+            android:paddingTop="@dimen/share_space" >
+
+            <ImageView
+                android:id="@+id/item_image"
+                android:layout_width="@dimen/get_image_btn_top"
+                android:layout_height="@dimen/get_image_btn_top"
+                android:clickable="true"
+                android:focusable="false"
+                android:scaleType="centerCrop"
+                android:src="@drawable/content" />
+
+            <LinearLayout
+                android:id="@+id/act_time_container"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="@dimen/margin_chat_activity"
+                android:layout_toRightOf="@+id/item_image"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/margin_chat_activity" >
+
+                <ImageView
+                    android:layout_width="@dimen/time_capsule20"
+                    android:layout_height="@dimen/time_capsule20"
+                    android:src="@drawable/calender" />
+
+                <TextView
+                    android:id="@+id/act_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/personal_timecapsule_padding"
+                    android:singleLine="true"
+                    android:text="4月12日 周天，12:90-20:90"
+                    android:textSize="@dimen/register_font_size" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/act_location_container"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/act_time_container"
+                android:layout_marginLeft="@dimen/margin_chat_activity"
+                android:layout_toRightOf="@+id/item_image"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/margin_chat_activity" >
+
+                <ImageView
+                    android:layout_width="@dimen/time_capsule20"
+                    android:layout_height="@dimen/time_capsule20"
+                    android:src="@drawable/location" />
+
+                <TextView
+                    android:id="@+id/act_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/personal_timecapsule_padding"
+                    android:singleLine="true"
+                    android:text="厦门市思明区中山路"
+                    android:textSize="@dimen/register_font_size" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/act_gender_container"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/act_content_container"
+                android:layout_marginLeft="@dimen/margin_chat_activity"
+                android:layout_toRightOf="@+id/item_image"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/margin_chat_activity" >
+
+                <ImageView
+                    android:layout_width="@dimen/time_capsule20"
+                    android:layout_height="@dimen/time_capsule20"
+                    android:src="@drawable/follower" />
+
+                <TextView
+                    android:id="@+id/act_gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/personal_timecapsule_padding"
+                    android:singleLine="true"
+                    android:text="男女不限"
+                    android:textSize="@dimen/register_font_size" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/act_content_container"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/item_image"
+                android:layout_marginLeft="@dimen/margin_chat_activity"
+                android:layout_toRightOf="@+id/item_image"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/margin_chat_activity" >
+
+                <ImageView
+                    android:layout_width="@dimen/time_capsule20"
+                    android:layout_height="@dimen/time_capsule20"
+                    android:src="@drawable/detail_content" />
+
+                <TextView
+                    android:id="@+id/act_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/personal_timecapsule_padding"
+                    android:singleLine="true"
+                    android:text="这是一部很好的电影，大家一起来看吧"
+                    android:textSize="@dimen/register_font_size" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/comment_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/personal_timecapsule_padding"
+            android:layout_marginRight="@dimen/personal_timecapsule_padding"
+            android:layout_marginTop="@dimen/margin_chat_activity"
+            android:text="查看全部215条评论"
+            android:textColor="@color/unenable"
+            android:textSize="@dimen/register_font_size" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="@dimen/day_recommend_dot_space"
+            android:background="@color/unenable_font" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/personal_timecapsule_padding"
+            android:layout_marginRight="@dimen/personal_timecapsule_padding"
+            android:paddingBottom="@dimen/new_msg"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/new_msg" >
+
+            <TextView
+                android:id="@+id/favor_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="106"
+                android:textColor="@color/sel_color_gray_green"
+                android:textSize="@dimen/register_font_size" />
+
+            <ImageView
+                android:id="@+id/more"
+                android:layout_width="@dimen/time_capsule20"
+                android:layout_height="@dimen/time_capsule20"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/login_register"
+                android:layout_marginTop="10dp"
+                android:layout_toLeftOf="@+id/comment_btn"
+                android:clickable="true"
+                android:focusable="false"
+                android:src="@drawable/sel_more_btn" />
+
+            <ImageView
+                android:id="@+id/comment_btn"
+                android:layout_width="@dimen/motify_data_space"
+                android:layout_height="@dimen/motify_data_space"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/login_register"
+                android:layout_toLeftOf="@+id/favor_btn"
+                android:src="@drawable/sel_comment_btn" />
+
+            <CheckBox
+                android:id="@+id/favor_btn"
+                android:layout_width="@dimen/motify_data_space"
+                android:layout_height="@dimen/motify_data_space"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/sel_flipper_checkbox"
+                android:button="@null" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>
