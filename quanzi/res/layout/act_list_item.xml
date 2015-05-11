@@ -19,12 +19,13 @@
             android:id="@+id/act_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/share_space"
+            android:layout_marginBottom="@dimen/personal_timecapsule_padding"
             android:layout_marginLeft="@dimen/personal_timecapsule_padding"
             android:layout_marginRight="@dimen/personal_timecapsule_padding"
             android:layout_marginTop="@dimen/margin_chat_activity"
             android:text="一起来看流星雨"
-            android:textSize="@dimen/day_recommend_font_info"
+            android:textColor="@color/comment_name"
+            android:textSize="@dimen/act_title_size"
             android:textStyle="bold" />
 
         <RelativeLayout

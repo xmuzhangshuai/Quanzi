@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/day_recommend_help_padding"
             android:layout_toRightOf="@+id/circle_icon"
-            android:text="圈子" />
+            android:text="人脉圈" />
 
         <TextView
             android:layout_width="wrap_content"

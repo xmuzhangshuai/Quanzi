@@ -224,18 +224,6 @@
                 android:text="简约但不适华丽"
                 android:textColor="@color/unenable"
                 android:textSize="@dimen/comment_font_size" />
-
-            <TextView
-                android:id="@+id/time1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="@dimen/personal_timecapsule_padding"
-                android:layout_marginTop="@dimen/margin_chat_activity"
-                android:text="12:02"
-                android:textColor="@color/unenable"
-                android:textSize="12sp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -290,18 +278,6 @@
                 android:text="谢谢哈~！！有你真好"
                 android:textColor="@color/unenable"
                 android:textSize="@dimen/comment_font_size" />
-
-            <TextView
-                android:id="@+id/time2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="@dimen/personal_timecapsule_padding"
-                android:layout_marginTop="@dimen/margin_chat_activity"
-                android:text="14:22"
-                android:textColor="@color/unenable"
-                android:textSize="12sp" />
         </RelativeLayout>
 
         <TextView

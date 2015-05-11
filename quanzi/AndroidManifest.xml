@@ -76,7 +76,7 @@
             android:name="com.quanzi.ui.LoginActivity"
             android:label="@string/title_activity_login"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateVisible" >
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.quanquan.ui.LoginOrRegisterActivity" />
@@ -89,7 +89,8 @@
         <!-- 注册页面 -->
         <activity
             android:name="com.quanzi.ui.RegisterActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
         </activity>
 
         <!-- 注册成功页面 -->
@@ -107,7 +108,8 @@
         <!-- 重置密码页面 -->
         <activity
             android:name="com.quanzi.ui.ResetPassActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
         </activity>
 
         <!-- 主页面 -->

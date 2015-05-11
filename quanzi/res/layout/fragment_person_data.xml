@@ -263,7 +263,7 @@
                 android:background="@color/unenable_font" />
 
             <RelativeLayout
-                android:id="@+id/interestView"
+                android:id="@+id/industryView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/view7"
@@ -271,27 +271,27 @@
                 android:padding="@dimen/margin_chat_activity" >
 
                 <TextView
-                    android:id="@+id/interestlabel"
+                    android:id="@+id/industrylabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginTop="@dimen/motify_data_space"
-                    android:text="兴趣爱好"
+                    android:text="专业/行业"
                     android:textColor="@color/unenable"
                     android:textSize="@dimen/day_recommend_font_info" />
 
                 <TextView
-                    android:id="@+id/interest"
+                    android:id="@+id/industry"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/personal_photo_margin"
                     android:layout_marginRight="5dp"
-                    android:layout_toRightOf="@+id/interestlabel"
+                    android:layout_toRightOf="@+id/industrylabel"
                     android:gravity="right"
-                    android:text="互联网、游泳"
+                    android:text="互联网"
                     android:textColor="@color/system_green"
                     android:textSize="@dimen/day_recommend_font_info" />
             </RelativeLayout>
@@ -300,7 +300,7 @@
                 android:id="@+id/view8"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_below="@+id/interestView"
+                android:layout_below="@+id/industryView"
                 android:background="@color/unenable_font" />
 
             <RelativeLayout
@@ -332,7 +332,7 @@
                     android:layout_marginRight="5dp"
                     android:layout_toRightOf="@+id/skilllabel"
                     android:gravity="right"
-                    android:text="Photoshop"
+                    android:text="Photoshop | 口译"
                     android:textSize="@dimen/day_recommend_font_info" />
             </RelativeLayout>
 
@@ -344,7 +344,7 @@
                 android:background="@color/unenable_font" />
 
             <RelativeLayout
-                android:id="@+id/industryView"
+                android:id="@+id/interestView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/view9"
@@ -352,27 +352,27 @@
                 android:padding="@dimen/margin_chat_activity" >
 
                 <TextView
-                    android:id="@+id/industrylabel"
+                    android:id="@+id/interestlabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginTop="@dimen/motify_data_space"
-                    android:text="所属行业"
+                    android:text="兴趣爱好"
                     android:textColor="@color/unenable"
                     android:textSize="@dimen/day_recommend_font_info" />
 
                 <TextView
-                    android:id="@+id/industry"
+                    android:id="@+id/interest"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/personal_photo_margin"
                     android:layout_marginRight="5dp"
-                    android:layout_toRightOf="@+id/industrylabel"
+                    android:layout_toRightOf="@+id/interestlabel"
                     android:gravity="right"
-                    android:text="软件开发"
+                    android:text="游泳 | 健身 | 读书 | 电影"
                     android:textColor="@color/system_green"
                     android:textSize="@dimen/day_recommend_font_info" />
             </RelativeLayout>
@@ -381,7 +381,7 @@
                 android:id="@+id/view10"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_below="@+id/industryView"
+                android:layout_below="@+id/interestView"
                 android:background="@color/unenable_font" />
 
             <RelativeLayout

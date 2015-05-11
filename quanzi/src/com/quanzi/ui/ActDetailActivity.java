@@ -74,10 +74,7 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 	public ImageView commentBtn;
 	private EditText commentEditText;
 	private Button sendBtn;
-	//	private TextView topNavigation;//导航栏文字
 	private View leftImageButton;//导航栏左侧按钮
-	//	private View rightBtnBg;//导航栏右侧按钮
-	//	private ImageView rightBtn;
 
 	private View actionBar;//操作条
 	private View inputBar;//输入评论条
