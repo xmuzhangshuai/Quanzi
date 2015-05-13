@@ -1,5 +1,6 @@
 package com.quanzi.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -8,9 +9,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+import com.baidu.location.LocationClientOption.LocationMode;
 import com.quanzi.R;
 import com.quanzi.base.BaseActivity;
 import com.quanzi.base.BaseApplication;
+import com.quanzi.config.DefaultKeys;
 import com.quanzi.db.CopyDataBase;
 import com.quanzi.utils.NetworkUtils;
 import com.quanzi.utils.SharePreferenceUtil;
@@ -26,8 +33,8 @@ import com.quanzi.utils.UserPreference;
  */
 
 public class GuideActivity extends BaseActivity {
-	// public LocationClient mLocationClient = null;
-	// public BDLocationListener myListener = new MyLocationListener();
+	public LocationClient mLocationClient = null;
+	public BDLocationListener myListener = new MyLocationListener();
 	public SharedPreferences locationPreferences;// 记录用户位置
 	SharedPreferences.Editor locationEditor;
 	private SharePreferenceUtil sharePreferenceUtil;
@@ -48,7 +55,7 @@ public class GuideActivity extends BaseActivity {
 		userPreference = BaseApplication.getInstance().getUserPreference();
 
 		// 获取定位
-		// initLocation();
+		initLocation();
 		// 开启百度推送服务
 		//		PushManager.startWork(getApplicationContext(), PushConstants.LOGIN_TYPE_API_KEY,
 		//				Constants.BaiduPushConfig.API_KEY);
@@ -124,43 +131,42 @@ public class GuideActivity extends BaseActivity {
 		// versionInfotTextView.setText("一线牵\n\n"+getVersion());
 	}
 
-	// @Override
-	// public void onDestroy() {
-	// stopListener();// 停止监听
-	// super.onDestroy();
-	// }
+	@Override
+	public void onDestroy() {
+		stopListener();// 停止监听
+		super.onDestroy();
+	}
 
 	/**
 	 * 停止，减少资源消耗
 	 */
-	// public void stopListener() {
-	// if (mLocationClient != null && mLocationClient.isStarted()) {
-	// mLocationClient.stop();// 关闭定位SDK
-	// mLocationClient = null;
-	// }
-	// }
+	public void stopListener() {
+		if (mLocationClient != null && mLocationClient.isStarted()) {
+			mLocationClient.stop();// 关闭定位SDK
+			mLocationClient = null;
+		}
+	}
 
 	/**
 	 * 初始化定位
 	 */
-	// public void initLocation() {
-	// mLocationClient = new LocationClient(getApplicationContext()); //
-	// 声明LocationClient类
-	// mLocationClient.registerLocationListener(myListener); // 注册监听函数
-	// LocationClientOption option = new LocationClientOption();
-	// option.setOpenGps(true);// 打开GPS
-	// option.setIsNeedAddress(true);//返回的定位结果包含地址信息
-	// option.setCoorType("bd09ll");// 返回的定位结果是百度经纬度,默认值gcj02
-	// option.setLocationMode(LocationMode.Hight_Accuracy);//设置定位模式
-	// option.setScanSpan(5 * 60 * 60 * 1000);// 设置发起定位请求的间隔时间为3000ms
-	// mLocationClient.setLocOption(option);// 使用设置
-	// mLocationClient.start();// 开启定位SDK
-	// mLocationClient.requestLocation();// 开始请求位置
-	//
-	// locationPreferences = getSharedPreferences("location",
-	// Context.MODE_PRIVATE);
-	// locationEditor = locationPreferences.edit();
-	// }
+	public void initLocation() {
+		mLocationClient = new LocationClient(getApplicationContext());
+		// 声明LocationClient类
+		mLocationClient.registerLocationListener(myListener); // 注册监听函数
+		LocationClientOption option = new LocationClientOption();
+		option.setOpenGps(true);// 打开GPS
+		option.setIsNeedAddress(true);//返回的定位结果包含地址信息
+		option.setCoorType("bd09ll");// 返回的定位结果是百度经纬度,默认值gcj02
+		option.setLocationMode(LocationMode.Hight_Accuracy);//设置定位模式
+		option.setScanSpan(5 * 60 * 60 * 1000);// 设置发起定位请求的间隔时间为3000ms
+		mLocationClient.setLocOption(option);// 使用设置
+		mLocationClient.start();// 开启定位SDK
+		mLocationClient.requestLocation();// 开始请求位置
+
+		locationPreferences = getSharedPreferences("location", Context.MODE_PRIVATE);
+		locationEditor = locationPreferences.edit();
+	}
 
 	/**
 	 * 获取版本号
@@ -182,22 +188,21 @@ public class GuideActivity extends BaseActivity {
 	/**
 	 * 位置监听类
 	 */
-	// public class MyLocationListener implements BDLocationListener {
-	// @Override
-	// public void onReceiveLocation(BDLocation location) {
-	// if (location != null) {
-	// province = location.getProvince();
-	// city = location.getCity();
-	// detailLocation = location.getAddrStr();//详细地址
-	// locationEditor.putString(DefaultKeys.USER_PROVINCE, province);
-	// locationEditor.putString(DefaultKeys.USER_CITY, city);
-	// locationEditor.putString(DefaultKeys.USER_DETAIL_LOCATION,
-	// detailLocation);
-	// locationEditor.commit();
-	// }
-	//
-	// }
-	// }
+	public class MyLocationListener implements BDLocationListener {
+		@Override
+		public void onReceiveLocation(BDLocation location) {
+			if (location != null) {
+				province = location.getProvince();
+				city = location.getCity();
+				detailLocation = location.getAddrStr();//详细地址
+				locationEditor.putString(DefaultKeys.USER_PROVINCE, province);
+				locationEditor.putString(DefaultKeys.USER_CITY, city);
+				locationEditor.putString(DefaultKeys.USER_DETAIL_LOCATION, detailLocation);
+				locationEditor.commit();
+			}
+
+		}
+	}
 
 	/**
 	 * 类名称：initDataBase 类描述：拷贝数据库 创建人： 张帅 创建时间：2014年7月8日 下午4:51:58

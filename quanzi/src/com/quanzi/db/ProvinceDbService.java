@@ -1,10 +1,10 @@
 package com.quanzi.db;
 
-import com.quanquan.dao.DaoSession;
-import com.quanquan.dao.ProvinceDao;
-import com.quanquan.dao.ProvinceDao.Properties;
-import com.quanquan.entities.Province;
 import com.quanzi.base.BaseApplication;
+import com.quanzi.dao.DaoSession;
+import com.quanzi.dao.ProvinceDao;
+import com.quanzi.dao.ProvinceDao.Properties;
+import com.quanzi.entities.Province;
 
 import android.content.Context;
 

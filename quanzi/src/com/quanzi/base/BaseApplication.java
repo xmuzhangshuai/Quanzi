@@ -16,9 +16,9 @@ import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.quanquan.dao.DaoMaster;
-import com.quanquan.dao.DaoMaster.OpenHelper;
-import com.quanquan.dao.DaoSession;
+import com.quanzi.dao.DaoMaster;
+import com.quanzi.dao.DaoSession;
+import com.quanzi.dao.DaoMaster.OpenHelper;
 import com.quanzi.utils.LogTool;
 import com.quanzi.utils.UserPreference;
 

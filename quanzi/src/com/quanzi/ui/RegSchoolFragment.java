@@ -17,9 +17,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.quanquan.entities.City;
-import com.quanquan.entities.Province;
-import com.quanquan.entities.School;
 import com.quanzi.R;
 import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseV4Fragment;
@@ -27,6 +24,10 @@ import com.quanzi.config.DefaultKeys;
 import com.quanzi.db.CityDbService;
 import com.quanzi.db.ProvinceDbService;
 import com.quanzi.db.SchoolDbService;
+import com.quanzi.entities.City;
+import com.quanzi.entities.Province;
+import com.quanzi.entities.School;
+import com.quanzi.utils.LogTool;
 import com.quanzi.utils.ToastTool;
 import com.quanzi.utils.UserPreference;
 
@@ -73,6 +74,9 @@ public class RegSchoolFragment extends BaseV4Fragment {
 		locationPreferences = getActivity().getSharedPreferences("location", Context.MODE_PRIVATE);
 		mProvince = locationPreferences.getString(DefaultKeys.USER_PROVINCE, "");
 		mCity = locationPreferences.getString(DefaultKeys.USER_CITY, "");
+		
+		LogTool.i("省份"+mProvince);
+		LogTool.i("城市"+mCity);
 
 		currentProvince = new Province();
 		currentCity = new City();

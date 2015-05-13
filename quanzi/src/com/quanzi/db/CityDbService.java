@@ -2,12 +2,12 @@ package com.quanzi.db;
 
 import java.util.List;
 
-import com.quanquan.dao.CityDao;
-import com.quanquan.dao.CityDao.Properties;
-import com.quanquan.dao.DaoSession;
-import com.quanquan.entities.City;
-import com.quanquan.entities.Province;
 import com.quanzi.base.BaseApplication;
+import com.quanzi.dao.CityDao;
+import com.quanzi.dao.DaoSession;
+import com.quanzi.dao.CityDao.Properties;
+import com.quanzi.entities.City;
+import com.quanzi.entities.Province;
 
 import android.content.Context;
 

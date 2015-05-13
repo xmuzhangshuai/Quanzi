@@ -58,7 +58,6 @@ public class RegAccountFragment extends BaseV4Fragment {
 	private UserPreference userPreference;
 	private TextView leftNavigation;//步骤
 
-	private String mName;
 	private String mPhone;
 	private String mPassword;
 	private String mConformPass;
@@ -326,7 +325,6 @@ public class RegAccountFragment extends BaseV4Fragment {
 			// 没有错误，则存储值
 			userPreference.setU_tel(mPhone);
 			userPreference.setU_password(MD5For32.GetMD5Code(mPassword));
-			userPreference.setU_nickname(mName);
 			next();
 
 		}

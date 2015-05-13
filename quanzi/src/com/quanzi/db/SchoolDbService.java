@@ -4,12 +4,12 @@ import java.util.List;
 
 import android.content.Context;
 
-import com.quanquan.dao.DaoSession;
-import com.quanquan.dao.SchoolDao;
-import com.quanquan.dao.SchoolDao.Properties;
-import com.quanquan.entities.City;
-import com.quanquan.entities.School;
 import com.quanzi.base.BaseApplication;
+import com.quanzi.dao.DaoSession;
+import com.quanzi.dao.SchoolDao;
+import com.quanzi.dao.SchoolDao.Properties;
+import com.quanzi.entities.City;
+import com.quanzi.entities.School;
 
 public class SchoolDbService {
 	private static final String TAG = SchoolDbService.class.getSimpleName();

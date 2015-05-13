@@ -36,8 +36,6 @@ public class RegPerInfoFragment extends BaseV4Fragment implements OnCheckedChang
 	/*************Views************/
 	private View rootView;// 根View
 
-	//	private RadioButton mSingleView;//单身
-	//	private RadioButton mLoveView;//恋爱
 	private RadioButton mMale;//男
 	private RadioButton mFemale;//女
 	private EditText mNameView;//昵称
@@ -76,8 +74,6 @@ public class RegPerInfoFragment extends BaseV4Fragment implements OnCheckedChang
 	@Override
 	protected void findViewById() {
 		// TODO Auto-generated method stub
-		//		mSingleView = (RadioButton) rootView.findViewById(R.id.single);
-		//		mLoveView = (RadioButton) rootView.findViewById(R.id.love);
 		mMale = (RadioButton) rootView.findViewById(R.id.male);
 		mFemale = (RadioButton) rootView.findViewById(R.id.female);
 		mNameView = (EditText) rootView.findViewById(R.id.name);
@@ -106,11 +102,9 @@ public class RegPerInfoFragment extends BaseV4Fragment implements OnCheckedChang
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				next();
+				vertifyGender();
 			}
 		});
-		//		mSingleView.setOnCheckedChangeListener(this);
-		//		mLoveView.setOnCheckedChangeListener(this);
 		mMale.setOnCheckedChangeListener(this);
 		mFemale.setOnCheckedChangeListener(this);
 		mNameView.addTextChangedListener(new TextWatcher() {
@@ -169,6 +163,7 @@ public class RegPerInfoFragment extends BaseV4Fragment implements OnCheckedChang
 	 */
 	private void vertifyGender() {
 		if (flag) {
+			next();
 			return;
 		} else {
 			final MyAlertDialog dialog = new MyAlertDialog(getActivity());
@@ -181,6 +176,7 @@ public class RegPerInfoFragment extends BaseV4Fragment implements OnCheckedChang
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					dialog.dismiss();
+					next();
 				}
 			};
 			dialog.setPositiveButton("确定", comfirm);
@@ -226,7 +222,6 @@ public class RegPerInfoFragment extends BaseV4Fragment implements OnCheckedChang
 		} else {
 			// 没有错误则存储值
 			rightImageButton.setEnabled(true);
-			userPreference.setU_stateid(UserStateType.SINGLE);
 			userPreference.setU_nickname(mName);
 		}
 	}
@@ -247,7 +242,6 @@ public class RegPerInfoFragment extends BaseV4Fragment implements OnCheckedChang
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		// TODO Auto-generated method stub
-		vertifyGender();
 		attemptNext();
 	}
 }

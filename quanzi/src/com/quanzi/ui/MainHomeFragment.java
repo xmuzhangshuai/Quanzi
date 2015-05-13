@@ -1,7 +1,9 @@
 package com.quanzi.ui;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -65,12 +67,21 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 	private PostAdapter mAdapter;
 	private ProgressDialog progressDialog;
 
+	private List<String> imageList;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		userPreference = BaseApplication.getInstance().getUserPreference();
 		jsonPostItemList = new LinkedList<JsonPostItem>();
+		imageList = new ArrayList<String>();
+		imageList.add("drawable://" + R.drawable.content);
+		imageList.add("drawable://" + R.drawable.content2);
+		imageList.add("drawable://" + R.drawable.content3);
+		imageList.add("drawable://" + R.drawable.content4);
+		imageList.add("drawable://" + R.drawable.content5);
+		imageList.add("drawable://" + R.drawable.content6);
 	}
 
 	@Override
@@ -392,6 +403,22 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 					});
 				}
 			}
+
+			holder.itemImageView1.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Intent intent = new Intent(getActivity(), GalleryPictureActivity.class);
+					String[] urls = new String[] { "drawable://" + R.drawable.content,
+							"drawable://" + R.drawable.content2, "drawable://" + R.drawable.content3,
+							"drawable://" + R.drawable.content4, "drawable://" + R.drawable.content5,
+							"drawable://" + R.drawable.content6 };
+					intent.putExtra(GalleryPictureActivity.IMAGE_URLS, urls);
+					startActivity(intent);
+					getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
+				}
+			});
 
 			if (position == 0) {//只有一张图片
 				//				holder.itemImageView1.setVisibility(View.VISIBLE);

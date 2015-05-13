@@ -5,14 +5,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
-import com.quanquan.dao.CityDao.Properties;
-import com.quanquan.entities.City;
-import com.quanquan.entities.School;
+import com.quanzi.dao.CityDao.Properties;
 import com.quanzi.db.CityDbService;
 import com.quanzi.db.ProvinceDbService;
 import com.quanzi.db.SchoolDbService;
+import com.quanzi.entities.City;
+import com.quanzi.entities.School;
 import com.quanzi.table.UserTable;
-
 
 public class UserPreference {
 	private SharedPreferences sp;
@@ -30,38 +29,11 @@ public class UserPreference {
 	 * 清空数据
 	 */
 	public void clear() {
-//		String tel = getU_tel();
-//		editor.clear();
-//		setU_tel(tel);
-//		editor.commit();
-	}
-
-	/**
-	 * 记录我的邀请码
-	 * @return
-	 */
-	public String getMyInviteCode() {
-		return sp.getString("invitecode", "");
-	}
-
-	public void setMyInvitCode(String code) {
-		editor.putString("invitecode", code);
+		String tel = getU_tel();
+		editor.clear();
+		setU_tel(tel);
 		editor.commit();
 	}
-	
-	/**
-	 * 记录我的获取的邀请码
-	 * @return
-	 */
-	public String getHostInviteCode() {
-		return sp.getString("hostinvitecode", "");
-	}
-
-	public void setHostInvitCode(String code) {
-		editor.putString("hostinvitecode", code);
-		editor.commit();
-	}
-
 
 	//环信用户名和密码
 	public void setHuanXinUserName(String username) {
@@ -82,18 +54,6 @@ public class UserPreference {
 		return sp.getString("huanxin_password", "");
 	}
 
-	//记录是否等待情侣相应
-	public boolean getLoveRequest() {
-		return sp.getBoolean("loverequest", false);
-	}
-
-	public void setLoveRequest(boolean wait) {
-		editor.putBoolean("loverequest", wait);
-		editor.commit();
-	}
-
-
-
 	//记录用户是否登录
 	public boolean getUserLogin() {
 		return sp.getBoolean("login", false);
@@ -102,15 +62,6 @@ public class UserPreference {
 	public void setUserLogin(boolean login) {
 		editor.putBoolean("login", login);
 		editor.commit();
-	}
-
-	//优先返回真名
-	public String getName() {
-		String name = getU_nickname();
-		if (!TextUtils.isEmpty(getU_realname())) {
-			name = getU_realname();
-		}
-		return name;
 	}
 
 	//用户ID
@@ -160,16 +111,6 @@ public class UserPreference {
 
 	public void setU_nickname(String u_nickname) {
 		editor.putString(UserTable.U_NICKNAME, u_nickname);
-		editor.commit();
-	}
-
-	//用户真实姓名
-	public String getU_realname() {
-		return sp.getString(UserTable.U_REALNAME, "");
-	}
-
-	public void setU_realname(String u_realname) {
-		editor.putString(UserTable.U_REALNAME, u_realname);
 		editor.commit();
 	}
 
@@ -270,16 +211,6 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//状态,1为冻结 2为情侣，3为心动，4为单身
-	public int getU_stateid() {
-		return sp.getInt(UserTable.U_STATEID, -1);
-	}
-
-	public void setU_stateid(int u_stateid) {
-		editor.putInt(UserTable.U_STATEID, u_stateid);
-		editor.commit();
-	}
-
 	//省份
 	public int getU_provinceid() {
 		return sp.getInt(UserTable.U_PROVINCEID, -1);
@@ -377,26 +308,6 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//血型
-	public String getU_blood_type() {
-		return sp.getString(UserTable.U_BLOOD_TYPE, "");
-	}
-
-	public void setU_blood_type(String u_blood_type) {
-		editor.putString(UserTable.U_BLOOD_TYPE, u_blood_type);
-		editor.commit();
-	}
-
-	//星座
-	public String getU_constell() {
-		return sp.getString(UserTable.U_CONSTELL, "");
-	}
-
-	public void setU_constell(String u_constell) {
-		editor.putString(UserTable.U_CONSTELL, u_constell);
-		editor.commit();
-	}
-
 	//用户简介
 	public String getU_introduce() {
 		return sp.getString(UserTable.U_INTRODUCE, "");
@@ -407,13 +318,4 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//工资
-	public double getU_salary() {
-		return sp.getInt(UserTable.U_SALARY, -1);
-	}
-
-	public void setU_salary(double u_salary) {
-		editor.putInt(UserTable.U_SALARY, (int) u_salary);
-		editor.commit();
-	}
 }

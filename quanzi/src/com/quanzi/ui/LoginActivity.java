@@ -1,9 +1,15 @@
 package com.quanzi.ui;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.PendingIntent.OnFinished;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -18,6 +24,14 @@ import android.widget.TextView;
 import com.quanzi.R;
 import com.quanzi.base.BaseActivity;
 import com.quanzi.base.BaseApplication;
+import com.quanzi.entities.Conversation;
+import com.quanzi.jsonobject.JsonUser;
+import com.quanzi.table.UserTable;
+import com.quanzi.utils.CommonTools;
+import com.quanzi.utils.FastJsonTool;
+import com.quanzi.utils.HttpUtil;
+import com.quanzi.utils.LogTool;
+import com.quanzi.utils.MD5For32;
 import com.quanzi.utils.SIMCardInfo;
 import com.quanzi.utils.UserPreference;
 
@@ -32,7 +46,7 @@ public class LoginActivity extends BaseActivity {
 	/**
 	 * 用户登录异步任务
 	 */
-	//	private UserLoginTask mAuthTask = null;
+	private UserLoginTask mAuthTask = null;
 
 	// UI references.
 	private EditText mPhoneView;//手机号
@@ -44,7 +58,8 @@ public class LoginActivity extends BaseActivity {
 	private UserPreference userPreference;
 	private TextView forgetPassword;//忘记密码
 	private Button loginButton;//登录
-	//	List<JsonUser> jsonUsers;
+
+	List<JsonUser> jsonUsers;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +88,7 @@ public class LoginActivity extends BaseActivity {
 	@Override
 	protected void initView() {
 		// TODO Auto-generated method stub
-		//		String loginedPhone = userPreference.getU_tel();
-		String loginedPhone = "1111111";
+		String loginedPhone = userPreference.getU_tel();
 		if (!TextUtils.isEmpty(loginedPhone)) {
 			mPhoneView.setText(loginedPhone);
 		} else {
@@ -119,58 +133,55 @@ public class LoginActivity extends BaseActivity {
 	 * errors are presented and no actual login attempt is made.
 	 */
 	public void attemptLogin() {
-		//		if (mAuthTask != null) {
-		//			return;
-		//		}
-		//
-		//		// Reset errors.
-		//		mPhoneView.setError(null);
-		//		mPasswordView.setError(null);
-		//
-		//		// Store values at the time of the login attempt.
-		//		String phone = mPhoneView.getText().toString();
-		//		String password = mPasswordView.getText().toString();
-		//
-		//		boolean cancel = false;
-		//		View focusView = null;
-		//
-		//		// Check for a valid password, if the user entered one.
-		//		if (TextUtils.isEmpty(password)) {
-		//			mPasswordView.setError(getString(R.string.error_field_required));
-		//			focusView = mPasswordView;
-		//			cancel = true;
-		//		} else if (!CommonTools.isPassValid(password)) {
-		//			mPasswordView.setError(getString(R.string.error_pattern_password));
-		//			focusView = mPasswordView;
-		//			cancel = true;
-		//		}
-		//
-		//		// Check for a valid email address.
-		//		else if (TextUtils.isEmpty(phone)) {
-		//			mPhoneView.setError(getString(R.string.error_field_required));
-		//			focusView = mPhoneView;
-		//			cancel = true;
-		//		} else if (!CommonTools.isMobileNO(phone)) {
-		//			mPhoneView.setError(getString(R.string.error_invalid_phone));
-		//			focusView = mPhoneView;
-		//			cancel = true;
-		//		}
-		//
-		//		if (cancel) {
-		//			// There was an error; don't attempt login and focus the first
-		//			// form field with an error.
-		//			focusView.requestFocus();
-		//		} else {
-		//			// Show a progress spinner, and kick off a background task to
-		//			// perform the user login attempt.
-		//			showProgress(true);
-		//			mAuthTask = new UserLoginTask(phone, MD5For32.GetMD5Code(password));
-		//			mAuthTask.execute((Void) null);
-		//		}
-		
-		Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-		startActivity(intent);
-		overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+		if (mAuthTask != null) {
+			return;
+		}
+
+		// Reset errors.
+		mPhoneView.setError(null);
+		mPasswordView.setError(null);
+
+		// Store values at the time of the login attempt.
+		String phone = mPhoneView.getText().toString();
+		String password = mPasswordView.getText().toString();
+
+		boolean cancel = false;
+		View focusView = null;
+
+		// Check for a valid password, if the user entered one.
+		if (TextUtils.isEmpty(password)) {
+			mPasswordView.setError(getString(R.string.error_field_required));
+			focusView = mPasswordView;
+			cancel = true;
+		} else if (!CommonTools.isPassValid(password)) {
+			mPasswordView.setError(getString(R.string.error_pattern_password));
+			focusView = mPasswordView;
+			cancel = true;
+		}
+
+		// Check for a valid email address.
+		else if (TextUtils.isEmpty(phone)) {
+			mPhoneView.setError(getString(R.string.error_field_required));
+			focusView = mPhoneView;
+			cancel = true;
+		} else if (!CommonTools.isMobileNO(phone)) {
+			mPhoneView.setError(getString(R.string.error_invalid_phone));
+			focusView = mPhoneView;
+			cancel = true;
+		}
+
+		if (cancel) {
+			// There was an error; don't attempt login and focus the first
+			// form field with an error.
+			focusView.requestFocus();
+		} else {
+			// Show a progress spinner, and kick off a background task to
+			// perform the user login attempt.
+			showProgress(true);
+			mAuthTask = new UserLoginTask(phone, MD5For32.GetMD5Code(password));
+			mAuthTask.execute((Void) null);
+		}
+
 	}
 
 	/**
@@ -310,85 +321,94 @@ public class LoginActivity extends BaseActivity {
 	 * 类名称：UserLoginTask 类描述：异步任务登录 创建人： 张帅 创建时间：2014-7-4 上午9:30:44
 	 * 
 	 */
-	//	public class UserLoginTask extends AsyncTask<Void, Void, Void> {
-	//
-	//		private final String mPhone;
-	//		private final String mPassword;
-	//
-	//		UserLoginTask(String phone, String password) {
-	//			mPhone = phone;
-	//			mPassword = password;
-	//		}
-	//
-	//		@Override
-	//		protected Void doInBackground(Void... params) {
-	//			// TODO: attempt authentication against a network service.
-	//			String url = "login";
-	//			Map<String, String> map = new HashMap<String, String>();
-	//			map.put(UserTable.U_TEL, mPhone);
-	//			map.put(UserTable.U_PASSWORD, mPassword);
-	//			map.put(UserTable.U_BPUSH_USER_ID, userPreference.getBpush_UserID());
-	//			map.put(UserTable.U_BPUSH_CHANNEL_ID, userPreference.getBpush_ChannelID());
-	//
-	//			String jsonString = null;
-	//			try {
-	//				jsonString = HttpUtil.postRequest(url, map);
-	//			} catch (Exception e) {
-	//				// TODO Auto-generated catch block
-	//				e.printStackTrace();
-	//			}
-	//			jsonUsers = FastJsonTool.getObjectList(jsonString, JsonUser.class);
-	//			// TODO: register the new account here.
-	//			return null;
-	//		}
-	//
-	//		@Override
-	//		protected void onPostExecute(Void result) {
-	//			// TODO Auto-generated method stub
-	//			super.onPostExecute(result);
-	//			mAuthTask = null;
-	//			if (jsonUsers != null) {
-	//				if (jsonUsers.size() > 0) {
-	//					if (jsonUsers.size() == 1) {
-	//						saveUser(jsonUsers.get(0), mPassword);
-	//					} else if (jsonUsers.size() > 1) {
-	//						saveUser(jsonUsers.get(0), mPassword);
-	//						saveFriend(jsonUsers.get(1));
-	//
-	//						if (jsonUsers.get(1) != null) {
-	//							//创建对话
-	//							ConversationDbService conversationDbService = ConversationDbService
-	//									.getInstance(LoginActivity.this);
-	//
-	//							if (!conversationDbService.isConversationExist(friendpreference.getF_id())) {
-	//								Conversation conversation = new Conversation(null, Long.valueOf(friendpreference
-	//										.getF_id()), friendpreference.getName(), friendpreference.getF_small_avatar(),
-	//										"", 0, System.currentTimeMillis());
-	//								conversationDbService.conversationDao.insert(conversation);
-	//							}
-	//						} else {
-	//							LogTool.e("Login", "登录获取两个人，但是第二个为空");
-	//						}
-	//					}
-	//					//登录环信
-	//					attempLoginHuanXin(1);
-	//				} else {
-	//					mPasswordView.setError("用户名或密码错误！");
-	//					mPasswordView.requestFocus();
-	//					showProgress(false);
-	//				}
-	//			} else {
-	//				mPasswordView.setError("用户名或密码错误！");
-	//				mPasswordView.requestFocus();
-	//				showProgress(false);
-	//			}
-	//		}
-	//
-	//		@Override
-	//		protected void onCancelled() {
-	//			mAuthTask = null;
-	//			showProgress(false);
-	//		}
-	//	}
+	public class UserLoginTask extends AsyncTask<Void, Void, Void> {
+
+		private final String mPhone;
+		private final String mPassword;
+
+		UserLoginTask(String phone, String password) {
+			mPhone = phone;
+			mPassword = password;
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			// TODO: attempt authentication against a network service.
+			String url = "login";
+			Map<String, String> map = new HashMap<String, String>();
+			map.put(UserTable.U_TEL, mPhone);
+			map.put(UserTable.U_PASSWORD, mPassword);
+			map.put(UserTable.U_BPUSH_USER_ID, userPreference.getBpush_UserID());
+			map.put(UserTable.U_BPUSH_CHANNEL_ID, userPreference.getBpush_ChannelID());
+
+			String jsonString = null;
+			try {
+				jsonString = HttpUtil.postRequest(url, map);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			jsonUsers = FastJsonTool.getObjectList(jsonString, JsonUser.class);
+			// TODO: register the new account here.
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			mAuthTask = null;
+			if (jsonUsers != null) {
+				if (jsonUsers.size() > 0) {
+					//					if (jsonUsers.size() == 1) {
+					//						saveUser(jsonUsers.get(0), mPassword);
+					//					} else if (jsonUsers.size() > 1) {
+					//						saveUser(jsonUsers.get(0), mPassword);
+					//						saveFriend(jsonUsers.get(1));
+					//
+					//						if (jsonUsers.get(1) != null) {
+					//							//创建对话
+					//							ConversationDbService conversationDbService = ConversationDbService
+					//									.getInstance(LoginActivity.this);
+					//
+					//							if (!conversationDbService.isConversationExist(friendpreference.getF_id())) {
+					//								Conversation conversation = new Conversation(null, Long.valueOf(friendpreference
+					//										.getF_id()), friendpreference.getName(), friendpreference.getF_small_avatar(),
+					//										"", 0, System.currentTimeMillis());
+					//								conversationDbService.conversationDao.insert(conversation);
+					//							}
+					//						} else {
+					//							LogTool.e("Login", "登录获取两个人，但是第二个为空");
+					//						}
+					//					}
+					//					//登录环信
+					//					attempLoginHuanXin(1);
+
+					Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+					startActivity(intent);
+					overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+				} else {
+					mPasswordView.setError("用户名或密码错误！");
+					mPasswordView.requestFocus();
+					showProgress(false);
+				}
+			} else {
+				mPasswordView.setError("用户名或密码错误！");
+				mPasswordView.requestFocus();
+				showProgress(false);
+
+				Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+				startActivity(intent);
+				overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+
+			}
+		}
+
+		@Override
+		protected void onCancelled() {
+			mAuthTask = null;
+			showProgress(false);
+		}
+	}
 
 }
