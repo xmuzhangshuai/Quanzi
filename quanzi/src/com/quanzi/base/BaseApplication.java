@@ -274,7 +274,7 @@ public class BaseApplication extends Application{
 	 */
 	public static DaoMaster getDaoMaster(Context context) {
 		if (daoMaster == null) {
-			OpenHelper openHelper = new DaoMaster.DevOpenHelper(context, "quanquan.db", null);
+			OpenHelper openHelper = new DaoMaster.DevOpenHelper(context, "quanzi.db", null);
 			daoMaster = new DaoMaster(openHelper.getWritableDatabase());
 		}
 		return daoMaster;

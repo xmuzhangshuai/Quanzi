@@ -12,9 +12,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class CopyDataBase {
 	@SuppressLint("SdCardPath")
-	private static String DATABASE_PATH = "/data/data/com.quanquan/databases/";
+	private static String DATABASE_PATH = "/data/data/com.quanzi/databases/";
 	public static SQLiteDatabase database;
-	public static String dbName = "quanquan.db";
+	public static String dbName = "quanzi.db";
 	private Context myContext;
 
 	public CopyDataBase(Context paramContext) {

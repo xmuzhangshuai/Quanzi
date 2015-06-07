@@ -1,5 +1,6 @@
 package com.quanzi.db;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.quanzi.base.BaseApplication;
@@ -10,8 +11,6 @@ import com.quanzi.entities.City;
 import com.quanzi.entities.Province;
 
 import android.content.Context;
-
-
 
 public class CityDbService {
 	private static final String TAG = CityDbService.class.getSimpleName();
@@ -46,7 +45,11 @@ public class CityDbService {
 	 * @return
 	 */
 	public List<City> getCityListByProvince(Province p) {
-		return cityDao.queryBuilder().where(Properties.ProvinceID.eq(p.getProvinceID())).list();
+		if (p.getProvinceID() != null) {
+			return cityDao.queryBuilder().where(Properties.ProvinceID.eq(p.getProvinceID())).list();
+		} else {
+			return new ArrayList<City>();
+		}
 	}
 
 	public String getCityNameById(int cityId) {

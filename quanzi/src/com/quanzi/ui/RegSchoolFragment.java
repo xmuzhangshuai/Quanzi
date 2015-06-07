@@ -74,9 +74,6 @@ public class RegSchoolFragment extends BaseV4Fragment {
 		locationPreferences = getActivity().getSharedPreferences("location", Context.MODE_PRIVATE);
 		mProvince = locationPreferences.getString(DefaultKeys.USER_PROVINCE, "");
 		mCity = locationPreferences.getString(DefaultKeys.USER_CITY, "");
-		
-		LogTool.i("省份"+mProvince);
-		LogTool.i("城市"+mCity);
 
 		currentProvince = new Province();
 		currentCity = new City();
@@ -312,7 +309,7 @@ public class RegSchoolFragment extends BaseV4Fragment {
 			next();
 		}
 	}
-	
+
 	/**
 	 * 下一步
 	 */
