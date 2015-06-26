@@ -74,36 +74,6 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//百度推送userID
-	public String getBpush_UserID() {
-		return sp.getString(UserTable.U_BPUSH_USER_ID, "");
-	}
-
-	public void setBpush_UserID(String u_id) {
-		editor.putString(UserTable.U_BPUSH_USER_ID, u_id);
-		editor.commit();
-	}
-
-	//百度推送ChannelID
-	public String getBpush_ChannelID() {
-		return sp.getString(UserTable.U_BPUSH_CHANNEL_ID, "");
-	}
-
-	public void setBpush_ChannelID(String u_id) {
-		editor.putString(UserTable.U_BPUSH_CHANNEL_ID, u_id);
-		editor.commit();
-	}
-
-	//百度推送AppID
-	public String getAppID() {
-		return sp.getString("appId", "");
-	}
-
-	public void setAppID(String appId) {
-		editor.putString("appId", appId);
-		editor.commit();
-	}
-
 	//用户昵称
 	public String getU_nickname() {
 		return sp.getString(UserTable.U_NICKNAME, "");
@@ -201,16 +171,6 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//职业类型
-	public int getU_vocationid() {
-		return sp.getInt(UserTable.U_VOCATIONID, -1);
-	}
-
-	public void setU_vocationid(int u_vocationid) {
-		editor.putInt(UserTable.U_VOCATIONID, u_vocationid);
-		editor.commit();
-	}
-
 	//省份
 	public int getU_provinceid() {
 		return sp.getInt(UserTable.U_PROVINCEID, -1);
@@ -278,36 +238,6 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//地址
-	public String getU_address() {
-		return sp.getString(UserTable.U_ADDRESS, "");
-	}
-
-	public void setU_address(String u_address) {
-		editor.putString(UserTable.U_ADDRESS, u_address);
-		editor.commit();
-	}
-
-	//身高
-	public int getU_height() {
-		return sp.getInt(UserTable.U_HEIGHT, -1);
-	}
-
-	public void setU_height(int u_height) {
-		editor.putInt(UserTable.U_HEIGHT, u_height);
-		editor.commit();
-	}
-
-	//体重
-	public int getU_weight() {
-		return sp.getInt(UserTable.U_WEIGHT, -1);
-	}
-
-	public void setU_weight(int u_weight) {
-		editor.putInt(UserTable.U_WEIGHT, u_weight);
-		editor.commit();
-	}
-
 	//用户简介
 	public String getU_introduce() {
 		return sp.getString(UserTable.U_INTRODUCE, "");
@@ -318,4 +248,73 @@ public class UserPreference {
 		editor.commit();
 	}
 
+	//学号
+	public String getU_student_number() {
+		return sp.getString(UserTable.U_STUDENT_NUMBER, "");
+	}
+
+	public void setU_student_number(String stundet_number) {
+		editor.putString(UserTable.U_STUDENT_NUMBER, stundet_number);
+		editor.commit();
+	}
+
+	//教务处密码
+	public String getU_student_pass() {
+		return sp.getString(UserTable.U_STUDENT_PASS, "");
+	}
+
+	public void setU_student_pass(String stundet_pass) {
+		editor.putString(UserTable.U_STUDENT_PASS, stundet_pass);
+		editor.commit();
+	}
+
+	//身份
+	public String getU_identity() {
+		return sp.getString(UserTable.U_IDENTITY, "");
+	}
+
+	public void setU_identity(String identity) {
+		editor.putString(UserTable.U_IDENTITY, identity);
+		editor.commit();
+	}
+
+	//行业
+	public int getU_industry_id() {
+		return sp.getInt(UserTable.U_INDUSTRY_ID, -1);
+	}
+
+	public void setU_industry_id(int industry_id) {
+		editor.putInt(UserTable.U_INDUSTRY_ID, industry_id);
+		editor.commit();
+	}
+
+	//技能
+	public String getU_skill_ids() {
+		return sp.getString(UserTable.U_SKILL_IDS, "");
+	}
+
+	public void setU_skill_ids(String skill_ids) {
+		editor.putString(UserTable.U_SKILL_IDS, skill_ids);
+		editor.commit();
+	}
+
+	//情感状态
+	public String getU_love_state() {
+		return sp.getString(UserTable.U_LOVE_STATE, "");
+	}
+
+	public void setU_love_state(String love_state) {
+		editor.putString(UserTable.U_LOVE_STATE, love_state);
+		editor.commit();
+	}
+
+	//兴趣
+	public String getU_interest_ids() {
+		return sp.getString(UserTable.U_INTEREST_IDS, "");
+	}
+
+	public void setU_interest_ids(String interest_ids) {
+		editor.putString(UserTable.U_INTEREST_IDS, interest_ids);
+		editor.commit();
+	}
 }

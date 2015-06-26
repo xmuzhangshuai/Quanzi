@@ -304,7 +304,6 @@ public class RegSchoolFragment extends BaseV4Fragment {
 			userPreference.setU_provinceid(currentProvince.getProvinceID().intValue());
 			userPreference.setU_cityid(currentCity.getCityID().intValue());
 			userPreference.setU_schoolid(currentSchool.getId().intValue());
-			userPreference.setU_address(locationPreferences.getString(DefaultKeys.USER_DETAIL_LOCATION, ""));
 
 			next();
 		}

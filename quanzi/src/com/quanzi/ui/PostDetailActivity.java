@@ -221,12 +221,12 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 
 		if (jsonPostItem != null) {
 			//设置头像
-			if (!TextUtils.isEmpty(jsonPostItem.getN_small_avatar())) {
+			if (!TextUtils.isEmpty(jsonPostItem.getP_small_avatar())) {
 				//				imageLoader.displayImage(AsyncHttpClientImageSound.getAbsoluteUrl(jsonPostItem.getN_small_avatar()),
 				//						holder.headImageView, ImageLoaderTool.getHeadImageOptions(10));
-				imageLoader.displayImage(jsonPostItem.getN_small_avatar(), headImageView,
+				imageLoader.displayImage(jsonPostItem.getP_small_avatar(), headImageView,
 						ImageLoaderTool.getHeadImageOptions(10));
-				if (userPreference.getU_id() != jsonPostItem.getN_userid()) {
+				if (userPreference.getU_id() != jsonPostItem.getP_userid()) {
 					//点击头像进入详情页面
 					headImageView.setOnClickListener(new OnClickListener() {
 
@@ -244,7 +244,7 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 			}
 
 			//设置照片
-			if (!TextUtils.isEmpty(jsonPostItem.getN_image())) {
+			if (!TextUtils.isEmpty(jsonPostItem.getP_thumbnail())) {
 				//				imageLoader.displayImage(AsyncHttpClientImageSound.getAbsoluteUrl(jsonPostItem.getN_image()),
 				//						holder.contentImageView, ImageLoaderTool.getImageOptions());
 				imageLoader.displayImage("drawable://" + R.drawable.content, contentImageView,
@@ -276,23 +276,23 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 			});
 
 			//设置内容
-			contentTextView.setText(jsonPostItem.getN_content());
+			contentTextView.setText(jsonPostItem.getP_text_content());
 
 			//设置姓名
-			nameTextView.setText(jsonPostItem.getN_name());
+			nameTextView.setText(jsonPostItem.getP_username());
 
 			//设置性别
-			if (jsonPostItem.getN_gender().equals(Constants.Gender.MALE)) {
+			if (jsonPostItem.getP_gender().equals(Constants.Gender.MALE)) {
 				genderImageView.setImageResource(R.drawable.male);
 			} else {
 				genderImageView.setImageResource(R.drawable.female);
 			}
 
 			//设置日期
-			timeTextView.setText(DateTimeTools.getHourAndMin(jsonPostItem.getN_time()));
+			timeTextView.setText(DateTimeTools.getHourAndMin(jsonPostItem.getP_time()));
 
 			//设置赞的次数
-			favorCountTextView.setText("" + jsonPostItem.getN_flipcount() + "赞");
+			favorCountTextView.setText("" + jsonPostItem.getP_favor_count() + "赞");
 
 			//			commentCount = jsonPostItem.getN_commentcount();
 			//			//设置评论次数
@@ -550,7 +550,7 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 			}
 
 			//设置头像
-			if (!TextUtils.isEmpty(jsonPostItem.getN_small_avatar())) {
+			if (!TextUtils.isEmpty(jsonPostItem.getP_small_avatar())) {
 				//				imageLoader.displayImage(AsyncHttpClientImageSound.getAbsoluteUrl(postComment.getC_small_avatar()),
 				//						holder.headImageView, ImageLoaderTool.getHeadImageOptions(10));
 				imageLoader.displayImage(postComment.getC_small_avatar(), holder.headImageView,

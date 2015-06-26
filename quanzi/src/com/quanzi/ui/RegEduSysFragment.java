@@ -1,5 +1,7 @@
 package com.quanzi.ui;
 
+import org.apache.http.Header;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -16,9 +18,16 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.quanzi.R;
+import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseV4Fragment;
+import com.quanzi.jsonobject.JsonUser;
+import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.CommonTools;
+import com.quanzi.utils.FastJsonTool;
+import com.quanzi.utils.ToastTool;
 import com.quanzi.utils.UserPreference;
 
 /**
@@ -46,6 +55,7 @@ public class RegEduSysFragment extends BaseV4Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		rootView = inflater.inflate(R.layout.fragment_reg_edusys, container, false);
+		userPreference = BaseApplication.getInstance().getUserPreference();
 		findViewById();// 初始化views
 		initView();
 		return rootView;
@@ -135,11 +145,73 @@ public class RegEduSysFragment extends BaseV4Fragment {
 			//			mAuthTask = new UserLoginTask(phone, MD5For32.GetMD5Code(password));
 			//			mAuthTask.execute((Void) null);
 
+			// 没有错误，则存储值
+			userPreference.setU_student_number(studentNumber);
+			userPreference.setU_student_pass(password);
+
+			register();
+
 			Intent intent = new Intent(getActivity(), RegSuccessActivity.class);
 			startActivity(intent);
 			getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 			showProgress(false);
 		}
+	}
+
+	//注册网络操作
+	private void register() {
+		// 没有错误，则修改
+		RequestParams params = new RequestParams();
+		JsonUser jsonUser = new JsonUser(userPreference.getU_nickname(), userPreference.getU_password(),
+				userPreference.getU_gender(), userPreference.getU_tel(), userPreference.getU_provinceid(),
+				userPreference.getU_cityid(), userPreference.getU_schoolid(), userPreference.getU_student_number(),
+				userPreference.getU_student_pass());
+
+		params.put("register", FastJsonTool.createJsonString(jsonUser));
+
+		//		params.put(UserTable.U_NICKNAME, userPreference.getU_nickname());
+		//		params.put(UserTable.U_GENDER, userPreference.getU_gender());
+		//		params.put(UserTable.U_TEL, userPreference.getU_tel());
+		//		params.put(UserTable.U_PASSWORD, userPreference.getU_password());
+		//		params.put(UserTable.U_SCHOOLID, String.valueOf(userPreference.getU_schoolid()));
+		//		params.put(UserTable.U_CITYID, String.valueOf(userPreference.getU_cityid()));
+		//		params.put(UserTable.U_PROVINCEID, String.valueOf(userPreference.getU_provinceid()));
+		//		params.put(UserTable.U_STUDENT_NUMBER, userPreference.getU_student_number());
+		//		params.put(UserTable.U_STUDENT_PASS, userPreference.getU_student_pass());
+
+		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+				showProgress(true);
+			}
+
+			@Override
+			public void onFinish() {
+				// TODO Auto-generated method stub
+				super.onFinish();
+				showProgress(false);
+			}
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, String response) {
+				// TODO Auto-generated method stub
+				if (statusCode == 200) {
+					if (response.equals("1")) {
+					} else {
+					}
+				}
+			}
+
+			@Override
+			public void onFailure(int arg0, Header[] arg1, String arg2, Throwable arg3) {
+				// TODO Auto-generated method stub
+				ToastTool.showLong(getActivity(), "服务器错误");
+			}
+		};
+		AsyncHttpClientTool.post("resetuserpassword", params, responseHandler);
 	}
 
 	/**

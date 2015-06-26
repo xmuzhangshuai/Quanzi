@@ -15,7 +15,6 @@ public class JsonUser implements Serializable {
 
 	private int u_id;
 	private String u_nickname;
-	private String u_realname;
 	private String u_password;
 	private String u_gender;
 	private String u_tel;
@@ -24,36 +23,20 @@ public class JsonUser implements Serializable {
 	private int u_age;
 	private String u_large_avatar;
 	private String u_small_avatar;
-	private int u_vocationid;
-	private int u_stateid;
+	private String u_identity;
+	private String u_love_state;
 	private int u_provinceid;
 	private int u_cityid;
 	private int u_schoolid;
-	private String u_address;
-	private int u_height;
-	private int u_weight;
-	private String u_blood_type;
-	private String u_constell;
+	private String u_interest_ids;
+	private String u_skill_ids;
+	private int u_industry_id;
 	private String u_introduce;
-	private double u_salary;
-	private int u_amount;
+	private int u_post_amount;
+	private int u_act_amount;
 
-	//用于聊天所需要的字段
-	private String u_bpush_user_id;
-	private String u_bpush_channel_id;
-	
-	//学生证头像审核的字段
-	private String u_vertify_image;
-	
-	private int u_vertify_image_pass;
-
-	public String getU_gender() {
-		return u_gender;
-	}
-
-	public void setU_gender(String u_gender) {
-		this.u_gender = u_gender;
-	}
+	private String u_student_number;//学号
+	private String u_stundet_pass;//密码
 
 	public int getU_id() {
 		return u_id;
@@ -71,20 +54,20 @@ public class JsonUser implements Serializable {
 		this.u_nickname = u_nickname;
 	}
 
-	public String getU_realname() {
-		return u_realname;
-	}
-
-	public void setU_realname(String u_realname) {
-		this.u_realname = u_realname;
-	}
-
 	public String getU_password() {
 		return u_password;
 	}
 
 	public void setU_password(String u_password) {
 		this.u_password = u_password;
+	}
+
+	public String getU_gender() {
+		return u_gender;
+	}
+
+	public void setU_gender(String u_gender) {
+		this.u_gender = u_gender;
 	}
 
 	public String getU_tel() {
@@ -135,20 +118,20 @@ public class JsonUser implements Serializable {
 		this.u_small_avatar = u_small_avatar;
 	}
 
-	public int getU_vocationid() {
-		return u_vocationid;
+	public String getU_identity() {
+		return u_identity;
 	}
 
-	public void setU_vocationid(int u_vocationid) {
-		this.u_vocationid = u_vocationid;
+	public void setU_identity(String u_identity) {
+		this.u_identity = u_identity;
 	}
 
-	public int getU_stateid() {
-		return u_stateid;
+	public String getU_love_tate() {
+		return u_love_state;
 	}
 
-	public void setU_stateid(int u_stateid) {
-		this.u_stateid = u_stateid;
+	public void setU_love_tate(String u_love_state) {
+		this.u_love_state = u_love_state;
 	}
 
 	public int getU_provinceid() {
@@ -175,44 +158,28 @@ public class JsonUser implements Serializable {
 		this.u_schoolid = u_schoolid;
 	}
 
-	public String getU_address() {
-		return u_address;
+	public String getU_interest_ids() {
+		return u_interest_ids;
 	}
 
-	public void setU_address(String u_address) {
-		this.u_address = u_address;
+	public void setU_interest_ids(String u_interest_ids) {
+		this.u_interest_ids = u_interest_ids;
 	}
 
-	public int getU_height() {
-		return u_height;
+	public String getU_skill_ids() {
+		return u_skill_ids;
 	}
 
-	public void setU_height(int u_height) {
-		this.u_height = u_height;
+	public void setU_skill_ids(String u_skill_ids) {
+		this.u_skill_ids = u_skill_ids;
 	}
 
-	public int getU_weight() {
-		return u_weight;
+	public int getU_industry_id() {
+		return u_industry_id;
 	}
 
-	public void setU_weight(int u_weight) {
-		this.u_weight = u_weight;
-	}
-
-	public String getU_blood_type() {
-		return u_blood_type;
-	}
-
-	public void setU_blood_type(String u_blood_type) {
-		this.u_blood_type = u_blood_type;
-	}
-
-	public String getU_constell() {
-		return u_constell;
-	}
-
-	public void setU_constell(String u_constell) {
-		this.u_constell = u_constell;
+	public void setU_industry_id(int u_industry_id) {
+		this.u_industry_id = u_industry_id;
 	}
 
 	public String getU_introduce() {
@@ -223,166 +190,54 @@ public class JsonUser implements Serializable {
 		this.u_introduce = u_introduce;
 	}
 
-	public double getU_salary() {
-		return u_salary;
+	public int getU_post_amount() {
+		return u_post_amount;
 	}
 
-	public void setU_salary(double u_salary) {
-		this.u_salary = u_salary;
+	public void setU_post_amount(int u_post_amount) {
+		this.u_post_amount = u_post_amount;
 	}
 
-	public int getU_amount() {
-		return u_amount;
+	public int getU_act_amount() {
+		return u_act_amount;
 	}
 
-	public void setU_amount(int u_amount) {
-		this.u_amount = u_amount;
+	public void setU_act_amount(int u_act_amount) {
+		this.u_act_amount = u_act_amount;
 	}
 
-	public String getU_bpush_user_id() {
-		return u_bpush_user_id;
+	public String getU_student_number() {
+		return u_student_number;
 	}
 
-	public void setU_bpush_user_id(String u_bpush_user_id) {
-		this.u_bpush_user_id = u_bpush_user_id;
+	public void setU_student_number(String u_student_number) {
+		this.u_student_number = u_student_number;
 	}
 
-	public String getU_bpush_channel_id() {
-		return u_bpush_channel_id;
+	public String getU_stundet_pass() {
+		return u_stundet_pass;
 	}
 
-	public void setU_bpush_channel_id(String u_bpush_channel_id) {
-		this.u_bpush_channel_id = u_bpush_channel_id;
-	}
-
-	public String getU_vertify_image() {
-		return u_vertify_image;
-	}
-
-	public void setU_vertify_image(String u_vertify_image) {
-		this.u_vertify_image = u_vertify_image;
-	}
-
-	public int getU_vertify_image_pass() {
-		return u_vertify_image_pass;
-	}
-
-	public void setU_vertify_image_pass(int u_vertify_image_pass) {
-		this.u_vertify_image_pass = u_vertify_image_pass;
-	}
-
-	public JsonUser(int u_id, String u_nickname, String u_realname, String u_password, String u_gender, String u_tel,
-			String u_email, Date u_birthday, int u_age, String u_large_avatar, String u_small_avatar, int u_vocationid,
-			int u_stateid, int u_provinceid, int u_cityid, int u_schoolid, String u_address, int u_height,
-			int u_weight, String u_blood_type, String u_constell, String u_introduce, double u_salary, int u_amount) {
-		super();
-		this.u_id = u_id;
-		this.u_nickname = u_nickname;
-		this.u_realname = u_realname;
-		this.u_password = u_password;
-		this.u_gender = u_gender;
-		this.u_tel = u_tel;
-		this.u_email = u_email;
-		this.u_birthday = u_birthday;
-		this.u_age = u_age;
-		this.u_large_avatar = u_large_avatar;
-		this.u_small_avatar = u_small_avatar;
-		this.u_vocationid = u_vocationid;
-		this.u_stateid = u_stateid;
-		this.u_provinceid = u_provinceid;
-		this.u_cityid = u_cityid;
-		this.u_schoolid = u_schoolid;
-		this.u_address = u_address;
-		this.u_height = u_height;
-		this.u_weight = u_weight;
-		this.u_blood_type = u_blood_type;
-		this.u_constell = u_constell;
-		this.u_introduce = u_introduce;
-		this.u_salary = u_salary;
-		this.u_amount = u_amount;
-	}
-
-	public JsonUser(int u_id, String u_nickname, String u_realname, String u_password, String u_gender, String u_tel,
-			String u_email, Date u_birthday, int u_age, String u_large_avatar, String u_small_avatar, int u_vocationid,
-			int u_stateid, int u_provinceid, int u_cityid, int u_schoolid, String u_address, int u_height,
-			int u_weight, String u_blood_type, String u_constell, String u_introduce, double u_salary, int u_amount,
-			String u_bpush_user_id, String u_bpush_channel_id) {
-		super();
-		this.u_id = u_id;
-		this.u_nickname = u_nickname;
-		this.u_realname = u_realname;
-		this.u_password = u_password;
-		this.u_gender = u_gender;
-		this.u_tel = u_tel;
-		this.u_email = u_email;
-		this.u_birthday = u_birthday;
-		this.u_age = u_age;
-		this.u_large_avatar = u_large_avatar;
-		this.u_small_avatar = u_small_avatar;
-		this.u_vocationid = u_vocationid;
-		this.u_stateid = u_stateid;
-		this.u_provinceid = u_provinceid;
-		this.u_cityid = u_cityid;
-		this.u_schoolid = u_schoolid;
-		this.u_address = u_address;
-		this.u_height = u_height;
-		this.u_weight = u_weight;
-		this.u_blood_type = u_blood_type;
-		this.u_constell = u_constell;
-		this.u_introduce = u_introduce;
-		this.u_salary = u_salary;
-		this.u_amount = u_amount;
-		this.u_bpush_user_id = u_bpush_user_id;
-		this.u_bpush_channel_id = u_bpush_channel_id;
-	}
-
-	public JsonUser(String u_password, String u_tel) {
-		super();
-		this.u_password = u_password;
-		this.u_tel = u_tel;
-	}
-
-	public JsonUser(String u_password, String u_gender, String u_tel, int u_stateid, int u_schoolid) {
-		super();
-		this.u_password = u_password;
-		this.u_gender = u_gender;
-		this.u_tel = u_tel;
-		this.u_stateid = u_stateid;
-		this.u_schoolid = u_schoolid;
-	}
-
-	public JsonUser(String u_password, String u_gender, String u_tel, int u_stateid, int u_provinceid, int u_cityid,
-			int u_schoolid, String u_address) {
-		super();
-		this.u_password = u_password;
-		this.u_gender = u_gender;
-		this.u_tel = u_tel;
-		this.u_stateid = u_stateid;
-		this.u_provinceid = u_provinceid;
-		this.u_cityid = u_cityid;
-		this.u_schoolid = u_schoolid;
-		this.u_address = u_address;
-	}
-
-	public JsonUser(String u_nickname, String u_password, String u_gender, String u_tel, int u_stateid,
-			int u_provinceid, int u_cityid, int u_schoolid, String u_address, String u_bpush_user_id,
-			String u_bpush_channel_id) {
-		super();
-		this.u_nickname = u_nickname;
-		this.u_password = u_password;
-		this.u_gender = u_gender;
-		this.u_tel = u_tel;
-		this.u_stateid = u_stateid;
-		this.u_provinceid = u_provinceid;
-		this.u_cityid = u_cityid;
-		this.u_schoolid = u_schoolid;
-		this.u_address = u_address;
-		this.u_bpush_user_id = u_bpush_user_id;
-		this.u_bpush_channel_id = u_bpush_channel_id;
+	public void setU_stundet_pass(String u_stundet_pass) {
+		this.u_stundet_pass = u_stundet_pass;
 	}
 
 	public JsonUser() {
 		super();
+	}
+
+	public JsonUser(String u_nickname, String u_password, String u_gender, String u_tel, int u_provinceid,
+			int u_cityid, int u_schoolid, String u_student_number, String u_stundet_pass) {
+		super();
+		this.u_nickname = u_nickname;
+		this.u_password = u_password;
+		this.u_gender = u_gender;
+		this.u_tel = u_tel;
+		this.u_provinceid = u_provinceid;
+		this.u_cityid = u_cityid;
+		this.u_schoolid = u_schoolid;
+		this.u_student_number = u_student_number;
+		this.u_stundet_pass = u_stundet_pass;
 	}
 
 }

@@ -19,7 +19,6 @@ import com.quanzi.R;
 import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseV4Fragment;
 import com.quanzi.config.Constants;
-import com.quanzi.config.Constants.UserStateType;
 import com.quanzi.customewidget.MyAlertDialog;
 import com.quanzi.utils.UserPreference;
 

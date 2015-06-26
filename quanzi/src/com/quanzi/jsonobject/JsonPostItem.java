@@ -3,148 +3,151 @@ package com.quanzi.jsonobject;
 import java.io.Serializable;
 import java.util.Date;
 
-public class JsonPostItem implements Serializable{
-	private int n_id;
-	private int n_userid;
-	private String n_name;
-	private String n_small_avatar;
-	private String n_gender;
-	private int n_schoolid;
-	private String n_content;
-	private String n_image;
-	private Date n_time;
-	private int n_flipcount;
-	private int n_commentcount;
+public class JsonPostItem implements Serializable {
+	private int p_id;
+	private int p_userid;
+	private String p_username;
+	private String p_small_avatar;
+	private String p_large_avatar;
+	private String p_gender;
+	private String p_text_content;
+	private String p_thumbnail;
+	private String p_big_photo;
+	private Date p_time;
+	private int p_comment_count;
+	private int p_favor_count;
 
 	public JsonPostItem() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public int getN_id() {
-		return n_id;
+	public int getP_id() {
+		return p_id;
 	}
 
-	public String getN_small_avatar() {
-		return n_small_avatar;
+	public void setP_id(int p_id) {
+		this.p_id = p_id;
 	}
 
-	public void setN_small_avatar(String n_small_avatar) {
-		this.n_small_avatar = n_small_avatar;
+	public int getP_userid() {
+		return p_userid;
 	}
 
-	public void setN_id(int n_id) {
-		this.n_id = n_id;
+	public void setP_userid(int p_userid) {
+		this.p_userid = p_userid;
 	}
 
-	public int getN_userid() {
-		return n_userid;
+	public String getP_username() {
+		return p_username;
 	}
 
-	public void setN_userid(int n_userid) {
-		this.n_userid = n_userid;
+	public void setP_username(String p_username) {
+		this.p_username = p_username;
 	}
 
-	public String getN_name() {
-		return n_name;
+	public String getP_small_avatar() {
+		return p_small_avatar;
 	}
 
-	public void setN_name(String n_name) {
-		this.n_name = n_name;
+	public void setP_small_avatar(String p_small_avatar) {
+		this.p_small_avatar = p_small_avatar;
 	}
 
-	public String getN_gender() {
-		return n_gender;
+	public String getP_large_avatar() {
+		return p_large_avatar;
 	}
 
-	public void setN_gender(String n_gender) {
-		this.n_gender = n_gender;
+	public void setP_large_avatar(String p_large_avatar) {
+		this.p_large_avatar = p_large_avatar;
 	}
 
-	public int getN_schoolid() {
-		return n_schoolid;
+	public String getP_gender() {
+		return p_gender;
 	}
 
-	public void setN_schoolid(int n_schoolid) {
-		this.n_schoolid = n_schoolid;
+	public void setP_gender(String p_gender) {
+		this.p_gender = p_gender;
 	}
 
-	public String getN_content() {
-		return n_content;
+	public String getP_text_content() {
+		return p_text_content;
 	}
 
-	public void setN_content(String n_content) {
-		this.n_content = n_content;
+	public void setP_text_content(String p_text_content) {
+		this.p_text_content = p_text_content;
 	}
 
-	public String getN_image() {
-		return n_image;
+	public String getP_thumbnail() {
+		return p_thumbnail;
 	}
 
-	public void setN_image(String n_image) {
-		this.n_image = n_image;
+	public void setP_thumbnail(String p_thumbnail) {
+		this.p_thumbnail = p_thumbnail;
 	}
 
-	public Date getN_time() {
-		return n_time;
+	public String getP_big_photo() {
+		return p_big_photo;
 	}
 
-	public void setN_time(Date n_time) {
-		this.n_time = n_time;
+	public void setP_big_photo(String p_big_photo) {
+		this.p_big_photo = p_big_photo;
 	}
 
-	public int getN_flipcount() {
-		return n_flipcount;
+	public Date getP_time() {
+		return p_time;
 	}
 
-	public void setN_flipcount(int n_flipcount) {
-		this.n_flipcount = n_flipcount;
+	public void setP_time(Date p_time) {
+		this.p_time = p_time;
 	}
 
-	public int getN_commentcount() {
-		return n_commentcount;
+	public int getP_comment_count() {
+		return p_comment_count;
 	}
 
-	public void setN_commentcount(int n_commentcount) {
-		this.n_commentcount = n_commentcount;
+	public void setP_comment_count(int p_comment_count) {
+		this.p_comment_count = p_comment_count;
 	}
 
-	public JsonPostItem(int n_id, int n_userid, String n_name, String n_small_avatar, String n_gender, int n_schoolid,
-			String n_content, String n_image, Date n_time, int n_flipcount, int n_commentcount) {
+	public int getP_favor_count() {
+		return p_favor_count;
+	}
+
+	public void setP_favor_count(int p_favor_count) {
+		this.p_favor_count = p_favor_count;
+	}
+
+	public JsonPostItem(int p_userid, String p_username, String p_small_avatar, String p_large_avatar, String p_gender,
+			String p_text_content, String p_thumbnail, String p_big_photo, Date p_time) {
 		super();
-		this.n_id = n_id;
-		this.n_userid = n_userid;
-		this.n_name = n_name;
-		this.n_small_avatar = n_small_avatar;
-		this.n_gender = n_gender;
-		this.n_schoolid = n_schoolid;
-		this.n_content = n_content;
-		this.n_image = n_image;
-		this.n_time = n_time;
-		this.n_flipcount = n_flipcount;
-		this.n_commentcount = n_commentcount;
+		this.p_userid = p_userid;
+		this.p_username = p_username;
+		this.p_small_avatar = p_small_avatar;
+		this.p_large_avatar = p_large_avatar;
+		this.p_gender = p_gender;
+		this.p_text_content = p_text_content;
+		this.p_thumbnail = p_thumbnail;
+		this.p_big_photo = p_big_photo;
+		this.p_time = p_time;
 	}
 
-	public JsonPostItem(int n_id, int n_userid, String n_name, String n_gender, int n_schoolid, String n_content,
-			String n_image, Date n_time) {
+	public JsonPostItem(int p_id, int p_userid, String p_username, String p_small_avatar, String p_large_avatar,
+			String p_gender, String p_text_content, String p_thumbnail, String p_big_photo, Date p_time,
+			int p_comment_count, int p_favor_count) {
 		super();
-		this.n_id = n_id;
-		this.n_userid = n_userid;
-		this.n_name = n_name;
-		this.n_gender = n_gender;
-		this.n_schoolid = n_schoolid;
-		this.n_content = n_content;
-		this.n_image = n_image;
-		this.n_time = n_time;
+		this.p_id = p_id;
+		this.p_userid = p_userid;
+		this.p_username = p_username;
+		this.p_small_avatar = p_small_avatar;
+		this.p_large_avatar = p_large_avatar;
+		this.p_gender = p_gender;
+		this.p_text_content = p_text_content;
+		this.p_thumbnail = p_thumbnail;
+		this.p_big_photo = p_big_photo;
+		this.p_time = p_time;
+		this.p_comment_count = p_comment_count;
+		this.p_favor_count = p_favor_count;
 	}
 
-	public JsonPostItem(int n_userid, String n_name, String n_gender, int n_schoolid, String n_content, String n_image) {
-		super();
-		this.n_userid = n_userid;
-		this.n_name = n_name;
-		this.n_gender = n_gender;
-		this.n_schoolid = n_schoolid;
-		this.n_content = n_content;
-		this.n_image = n_image;
-	}
 }

@@ -4,10 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.Header;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.PendingIntent.OnFinished;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -21,18 +22,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.quanzi.R;
 import com.quanzi.base.BaseActivity;
 import com.quanzi.base.BaseApplication;
-import com.quanzi.entities.Conversation;
 import com.quanzi.jsonobject.JsonUser;
 import com.quanzi.table.UserTable;
+import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.CommonTools;
 import com.quanzi.utils.FastJsonTool;
 import com.quanzi.utils.HttpUtil;
 import com.quanzi.utils.LogTool;
-import com.quanzi.utils.MD5For32;
 import com.quanzi.utils.SIMCardInfo;
+import com.quanzi.utils.ToastTool;
 import com.quanzi.utils.UserPreference;
 
 /**
@@ -177,9 +180,10 @@ public class LoginActivity extends BaseActivity {
 		} else {
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
-			showProgress(true);
-			mAuthTask = new UserLoginTask(phone, MD5For32.GetMD5Code(password));
-			mAuthTask.execute((Void) null);
+//			showProgress(true);
+//			mAuthTask = new UserLoginTask(phone, MD5For32.GetMD5Code(password));
+//			mAuthTask.execute((Void) null);
+			login(phone, password);
 		}
 
 	}
@@ -287,35 +291,88 @@ public class LoginActivity extends BaseActivity {
 	/**
 	 * 存储自己的信息
 	 */
-	//	private void saveUser(final JsonUser user, final String password) {
-	//		// TODO Auto-generated method stub
-	//		userPreference.clear();
-	//		userPreference.setU_birthday(user.getU_birthday());
-	//		userPreference.setU_blood_type(user.getU_blood_type());
-	//		userPreference.setU_cityid(user.getU_cityid());
-	//		userPreference.setU_constell(user.getU_constell());
-	//		userPreference.setU_email(user.getU_email());
-	//		userPreference.setU_gender(user.getU_gender());
-	//		userPreference.setU_age(user.getU_age());
-	//		userPreference.setU_height(user.getU_height());
-	//		userPreference.setU_id(user.getU_id());
-	//		userPreference.setU_introduce(user.getU_introduce());
-	//		userPreference.setU_large_avatar(user.getU_large_avatar());
-	//		userPreference.setU_nickname(user.getU_nickname());
-	//		userPreference.setU_provinceid(user.getU_provinceid());
-	//		userPreference.setU_realname(user.getU_realname());
-	//		userPreference.setU_salary(user.getU_salary());
-	//		userPreference.setU_schoolid(user.getU_schoolid());
-	//		userPreference.setU_small_avatar(user.getU_small_avatar());
-	//		userPreference.setU_stateid(user.getU_stateid());
-	//		userPreference.setU_tel(user.getU_tel());
-	//		userPreference.setU_vocationid(user.getU_vocationid());
-	//		userPreference.setU_weight(user.getU_weight());
-	//		userPreference.setU_password(password);
-	//		userPreference.setHuanXinUserName("" + user.getU_id());
-	//		userPreference.setHuanXinPassword(MD5For16.GetMD5CodeToLower(password));
-	//		userPreference.setVertify(user.getU_vertify_image_pass());
-	//	}
+	private void saveUser(final JsonUser user, final String password) {
+		// TODO Auto-generated method stub
+		userPreference.clear();
+		userPreference.setU_birthday(user.getU_birthday());
+		userPreference.setU_cityid(user.getU_cityid());
+		userPreference.setU_email(user.getU_email());
+		userPreference.setU_gender(user.getU_gender());
+		userPreference.setU_age(user.getU_age());
+		userPreference.setU_id(user.getU_id());
+		userPreference.setU_introduce(user.getU_introduce());
+		userPreference.setU_large_avatar(user.getU_large_avatar());
+		userPreference.setU_nickname(user.getU_nickname());
+		userPreference.setU_provinceid(user.getU_provinceid());
+		userPreference.setU_schoolid(user.getU_schoolid());
+		userPreference.setU_small_avatar(user.getU_small_avatar());
+		userPreference.setU_tel(user.getU_tel());
+		userPreference.setU_password(password);
+		userPreference.setU_identity(String.valueOf(user.getU_industry_id()));
+		userPreference.setU_love_state(user.getU_love_tate());
+		userPreference.setU_interest_ids(user.getU_interest_ids());
+		userPreference.setU_skill_ids(user.getU_skill_ids());
+		userPreference.setU_industry_id(user.getU_industry_id());
+		userPreference.setU_student_number(user.getU_student_number());
+		userPreference.setU_student_pass(user.getU_stundet_pass());
+	}
+
+	//登录
+	private void login(String tel, final String pass) {
+
+//		Client c = Client.create();
+//		WebResource r = c.resource("http://192.168.1.112:8080/XiaoYuanQuanQuan/rest/TestService/test");
+//		JSONObject obj = new JSONObject();
+//		obj.put(UserTable.U_TEL, tel);
+//		obj.put(UserTable.U_PASSWORD, pass);
+//		JSONObject response = r.type(MediaType.APPLICATION_JSON_TYPE).post(JSONObject.class, obj);
+//		LogTool.e(response.toJSONString());
+
+		RequestParams params = new RequestParams();
+		params.put(UserTable.U_TEL, tel);
+		params.put(UserTable.U_PASSWORD, pass);
+
+		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+				showProgress(true);
+			}
+
+			@Override
+			public void onFinish() {
+				// TODO Auto-generated method stub
+				//				dialog.dismiss();
+				showProgress(false);
+				super.onFinish();
+			}
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, String response) {
+				// TODO Auto-generated method stub
+				if (statusCode == 200) {
+					LogTool.i("返回的信息:", response);
+					if (!response.isEmpty()) {
+						JsonUser user = FastJsonTool.getObject(response, JsonUser.class);
+						saveUser(user, pass);//更新用户信息
+						Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+						startActivity(intent);
+						overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+					}
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+				// TODO Auto-generated method stub
+				ToastTool.showLong(LoginActivity.this, "服务器错误");
+				LogTool.e("服务器错误" + errorResponse);
+			}
+		};
+		AsyncHttpClientTool.post("LoginServlet", params, responseHandler);
+	}
 
 	/**
 	 * 类名称：UserLoginTask 类描述：异步任务登录 创建人： 张帅 创建时间：2014-7-4 上午9:30:44
@@ -334,16 +391,15 @@ public class LoginActivity extends BaseActivity {
 		@Override
 		protected Void doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
-			String url = "login";
+			String url = "rest/TestService/test";
 			Map<String, String> map = new HashMap<String, String>();
 			map.put(UserTable.U_TEL, mPhone);
 			map.put(UserTable.U_PASSWORD, mPassword);
-			map.put(UserTable.U_BPUSH_USER_ID, userPreference.getBpush_UserID());
-			map.put(UserTable.U_BPUSH_CHANNEL_ID, userPreference.getBpush_ChannelID());
 
 			String jsonString = null;
 			try {
 				jsonString = HttpUtil.postRequest(url, map);
+				LogTool.e(jsonString);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -358,50 +414,50 @@ public class LoginActivity extends BaseActivity {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			mAuthTask = null;
-			if (jsonUsers != null) {
-				if (jsonUsers.size() > 0) {
-					//					if (jsonUsers.size() == 1) {
-					//						saveUser(jsonUsers.get(0), mPassword);
-					//					} else if (jsonUsers.size() > 1) {
-					//						saveUser(jsonUsers.get(0), mPassword);
-					//						saveFriend(jsonUsers.get(1));
-					//
-					//						if (jsonUsers.get(1) != null) {
-					//							//创建对话
-					//							ConversationDbService conversationDbService = ConversationDbService
-					//									.getInstance(LoginActivity.this);
-					//
-					//							if (!conversationDbService.isConversationExist(friendpreference.getF_id())) {
-					//								Conversation conversation = new Conversation(null, Long.valueOf(friendpreference
-					//										.getF_id()), friendpreference.getName(), friendpreference.getF_small_avatar(),
-					//										"", 0, System.currentTimeMillis());
-					//								conversationDbService.conversationDao.insert(conversation);
-					//							}
-					//						} else {
-					//							LogTool.e("Login", "登录获取两个人，但是第二个为空");
-					//						}
-					//					}
-					//					//登录环信
-					//					attempLoginHuanXin(1);
-
-					Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-					startActivity(intent);
-					overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-				} else {
-					mPasswordView.setError("用户名或密码错误！");
-					mPasswordView.requestFocus();
-					showProgress(false);
-				}
-			} else {
-				mPasswordView.setError("用户名或密码错误！");
-				mPasswordView.requestFocus();
-				showProgress(false);
-
-				Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-				startActivity(intent);
-				overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-
-			}
+			//			if (jsonUsers != null) {
+			//				if (jsonUsers.size() > 0) {
+			//					//					if (jsonUsers.size() == 1) {
+			//					//						saveUser(jsonUsers.get(0), mPassword);
+			//					//					} else if (jsonUsers.size() > 1) {
+			//					//						saveUser(jsonUsers.get(0), mPassword);
+			//					//						saveFriend(jsonUsers.get(1));
+			//					//
+			//					//						if (jsonUsers.get(1) != null) {
+			//					//							//创建对话
+			//					//							ConversationDbService conversationDbService = ConversationDbService
+			//					//									.getInstance(LoginActivity.this);
+			//					//
+			//					//							if (!conversationDbService.isConversationExist(friendpreference.getF_id())) {
+			//					//								Conversation conversation = new Conversation(null, Long.valueOf(friendpreference
+			//					//										.getF_id()), friendpreference.getName(), friendpreference.getF_small_avatar(),
+			//					//										"", 0, System.currentTimeMillis());
+			//					//								conversationDbService.conversationDao.insert(conversation);
+			//					//							}
+			//					//						} else {
+			//					//							LogTool.e("Login", "登录获取两个人，但是第二个为空");
+			//					//						}
+			//					//					}
+			//					//					//登录环信
+			//					//					attempLoginHuanXin(1);
+			//
+			//					Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+			//					startActivity(intent);
+			//					overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+			//				} else {
+			//					mPasswordView.setError("用户名或密码错误！");
+			//					mPasswordView.requestFocus();
+			//					showProgress(false);
+			//				}
+			//			} else {
+			//				mPasswordView.setError("用户名或密码错误！");
+			//				mPasswordView.requestFocus();
+			//				showProgress(false);
+			//
+			//				Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+			//				startActivity(intent);
+			//				overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+			//
+			//			}
 		}
 
 		@Override

@@ -258,16 +258,25 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 		//			}
 		//		};
 		//		AsyncHttpClientTool.post(getActivity(), "getlovebridgelist", params, responseHandler);
-		JsonPostItem item1 = new JsonPostItem(1, 1, "张帅", "drawable://" + R.drawable.headimage1, "男", 78,
-				"一见倾心，再见依然痴迷", "drawable://" + R.drawable.content, new Date(), 20, 2);
-		JsonPostItem item2 = new JsonPostItem(2, 2, "叶子", "drawable://" + R.drawable.headimage2, "女", 8, "你的美丽让我情不自禁",
-				"drawable://" + R.drawable.content2, new Date(), 45, 20);
-		JsonPostItem item3 = new JsonPostItem(3, 3, "荣发", "drawable://" + R.drawable.headimage3, "男", 78,
-				"这是一片很寂寞的天下着有些伤心的雨", "drawable://" + R.drawable.content, new Date(), 76, 32);
-		JsonPostItem item4 = new JsonPostItem(4, 4, "伟强", "drawable://" + R.drawable.headimage4, "女", 8,
-				"爱上你的日子，每天都在想你", "drawable://" + R.drawable.content2, new Date(), 26, 280);
-		JsonPostItem item5 = new JsonPostItem(5, 5, "王坤", "drawable://" + R.drawable.headimage5, "女", 8,
-				"卡又丢了，快来点开心的事冲冲喜吧！", "drawable://" + R.drawable.content, new Date(), 256, 46);
+		JsonPostItem item1 = new JsonPostItem(1, 1, "张帅", "drawable://" + R.drawable.headimage1, "drawable://"
+				+ R.drawable.headimage1, "男", "一见倾心，再见依然痴迷", "drawable://" + R.drawable.content, "drawable://"
+				+ R.drawable.content, new Date(), 20, 2);
+
+		JsonPostItem item2 = new JsonPostItem(2, 2, "叶子", "drawable://" + R.drawable.headimage2, "drawable://"
+				+ R.drawable.headimage2, "女", "你的美丽让我情不自禁", "drawable://" + R.drawable.content2, "drawable://"
+				+ R.drawable.content2, new Date(), 45, 20);
+
+		JsonPostItem item3 = new JsonPostItem(3, 3, "荣发", "drawable://" + R.drawable.headimage3, "drawable://"
+				+ R.drawable.headimage3, "男", "这是一片很寂寞的天下着有些伤心的雨", "drawable://" + R.drawable.content, "drawable://"
+				+ R.drawable.content, new Date(), 76, 32);
+
+		JsonPostItem item4 = new JsonPostItem(4, 4, "伟强", "drawable://" + R.drawable.headimage4, "drawable://"
+				+ R.drawable.headimage4, "女", "爱上你的日子，每天都在想你", "drawable://" + R.drawable.content2, "drawable://"
+				+ R.drawable.content2, new Date(), 26, 280);
+
+		JsonPostItem item5 = new JsonPostItem(5, 5, "王坤", "drawable://" + R.drawable.headimage5, "drawable://"
+				+ R.drawable.headimage5, "女", "卡又丢了，快来点开心的事冲冲喜吧！", "drawable://" + R.drawable.content, "drawable://"
+				+ R.drawable.content, new Date(), 256, 46);
 		jsonPostItemList.add(item1);
 		jsonPostItemList.add(item2);
 		jsonPostItemList.add(item3);
@@ -382,12 +391,12 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 			});
 
 			//设置头像
-			if (!TextUtils.isEmpty(jsonPostItem.getN_small_avatar())) {
+			if (!TextUtils.isEmpty(jsonPostItem.getP_small_avatar())) {
 				//				imageLoader.displayImage(AsyncHttpClientImageSound.getAbsoluteUrl(jsonPostItem.getN_small_avatar()),
 				//						holder.headImageView, ImageLoaderTool.getHeadImageOptions(10));
-				imageLoader.displayImage(jsonPostItem.getN_small_avatar(), holder.headImageView,
+				imageLoader.displayImage(jsonPostItem.getP_small_avatar(), holder.headImageView,
 						ImageLoaderTool.getHeadImageOptions(10));
-				if (userPreference.getU_id() != jsonPostItem.getN_userid()) {
+				if (userPreference.getU_id() != jsonPostItem.getP_userid()) {
 					//点击头像进入详情页面
 					holder.headImageView.setOnClickListener(new OnClickListener() {
 
@@ -542,23 +551,23 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 			//			}
 
 			//设置内容
-			holder.contentTextView.setText(jsonPostItem.getN_content());
+			holder.contentTextView.setText(jsonPostItem.getP_text_content());
 
 			//设置姓名
-			holder.nameTextView.setText(jsonPostItem.getN_name());
+			holder.nameTextView.setText(jsonPostItem.getP_username());
 
 			//设置性别
-			if (jsonPostItem.getN_gender().equals(Constants.Gender.MALE)) {
+			if (jsonPostItem.getP_gender().equals(Constants.Gender.MALE)) {
 				holder.genderImageView.setImageResource(R.drawable.male);
 			} else {
 				holder.genderImageView.setImageResource(R.drawable.female);
 			}
 
 			//设置日期
-			holder.timeTextView.setText(DateTimeTools.getMonAndDay(jsonPostItem.getN_time()));
+			holder.timeTextView.setText(DateTimeTools.getMonAndDay(jsonPostItem.getP_time()));
 
 			//设置被赞次数
-			holder.favorCountTextView.setText("" + jsonPostItem.getN_flipcount() + "赞");
+			holder.favorCountTextView.setText("" + jsonPostItem.getP_favor_count() + "赞");
 
 			holder.favorCountTextView.setOnClickListener(new OnClickListener() {
 
@@ -572,7 +581,7 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 			});
 
 			//设置评论次数
-			holder.commentCountTextView.setText("查看全部" + jsonPostItem.getN_commentcount() + "条评论");
+			holder.commentCountTextView.setText("查看全部" + jsonPostItem.getP_comment_count() + "条评论");
 
 			//评论
 			holder.commentBtn.setOnClickListener(new OnClickListener() {
