@@ -1,6 +1,8 @@
 package com.quanzi.ui;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
@@ -103,4 +105,36 @@ public class MainActivity extends BaseFragmentActivity {
 		mTabs[index].setSelected(true);
 		currentTabIndex = index;
 	}
+
+	/**
+	 * 按两次返回键退出
+	 */
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			exit();
+			return false;
+		} else {
+			return super.onKeyDown(keyCode, event);
+		}
+	}
+
+	public void exit() {
+		if (!isExit) {
+			isExit = true;
+			CommonTools.showShortToast(MainActivity.this, "再按一次退出程序");
+			mHandler.sendEmptyMessageDelayed(0, 2000);
+		} else {
+			close();
+		}
+	}
+	
+	Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			// TODO Auto-generated method stub   
+			super.handleMessage(msg);
+			isExit = false;
+		}
+	};
 }

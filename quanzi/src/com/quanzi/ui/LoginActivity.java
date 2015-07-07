@@ -1,8 +1,6 @@
 package com.quanzi.ui;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.http.Header;
 
@@ -10,7 +8,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -32,8 +29,8 @@ import com.quanzi.table.UserTable;
 import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.CommonTools;
 import com.quanzi.utils.FastJsonTool;
-import com.quanzi.utils.HttpUtil;
 import com.quanzi.utils.LogTool;
+import com.quanzi.utils.MD5For32;
 import com.quanzi.utils.SIMCardInfo;
 import com.quanzi.utils.ToastTool;
 import com.quanzi.utils.UserPreference;
@@ -46,10 +43,6 @@ import com.quanzi.utils.UserPreference;
  * 
  */
 public class LoginActivity extends BaseActivity {
-	/**
-	 * 用户登录异步任务
-	 */
-	private UserLoginTask mAuthTask = null;
 
 	// UI references.
 	private EditText mPhoneView;//手机号
@@ -136,9 +129,6 @@ public class LoginActivity extends BaseActivity {
 	 * errors are presented and no actual login attempt is made.
 	 */
 	public void attemptLogin() {
-		if (mAuthTask != null) {
-			return;
-		}
 
 		// Reset errors.
 		mPhoneView.setError(null);
@@ -180,43 +170,97 @@ public class LoginActivity extends BaseActivity {
 		} else {
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
-//			showProgress(true);
-//			mAuthTask = new UserLoginTask(phone, MD5For32.GetMD5Code(password));
-//			mAuthTask.execute((Void) null);
-			login(phone, password);
+			showProgress(true);
+			login(phone, MD5For32.GetMD5Code(password));
 		}
 
 	}
 
-	/**
-	 * Shows the progress UI and hides the login form.
-	 */
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-	public void showProgress(final boolean show) {
-		// On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-		// for very easy animations. If available, use these APIs to fade-in
-		// the progress spinner.
-		if (show) {
-			//隐藏软键盘   
-			((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(LoginActivity.this
-					.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-		}
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-			int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+	//登录
+	private void login(String tel, final String pass) {
 
-			mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-			mProgressView.animate().setDuration(shortAnimTime).alpha(show ? 1 : 0)
-					.setListener(new AnimatorListenerAdapter() {
-						@Override
-						public void onAnimationEnd(Animator animation) {
-							mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+		RequestParams params = new RequestParams();
+		params.put(UserTable.U_TEL, tel);
+		params.put(UserTable.U_PASSWORD, pass);
+
+		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+				showProgress(true);
+			}
+
+			@Override
+			public void onFinish() {
+				// TODO Auto-generated method stub
+				showProgress(false);
+				super.onFinish();
+			}
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, String response) {
+				// TODO Auto-generated method stub
+				if (statusCode == 200) {
+					LogTool.i("返回的信息:", response);
+					if (!response.isEmpty()) {
+						if (response.equals("-1")) {
+							mPasswordView.setError("电话或密码错误！");
+							mPasswordView.requestFocus();
+							showProgress(false);
+						} else {
+							JsonUser user = FastJsonTool.getObject(response, JsonUser.class);
+							if (user != null) {
+								saveUser(user);//更新用户信息
+								Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+								startActivity(intent);
+								overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+							} else {
+								LogTool.e("登录返回出错,user为空");
+							}
 						}
-					});
-		} else {
-			// The ViewPropertyAnimator APIs are not available, so simply show
-			// and hide the relevant UI components.
-			mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-		}
+					}
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+				// TODO Auto-generated method stub
+				LogTool.e("服务器错误" + errorResponse);
+			}
+		};
+		AsyncHttpClientTool.post("user/login", params, responseHandler);
+	}
+
+	/**
+	 * 存储自己的信息
+	 */
+	private void saveUser(final JsonUser user) {
+		// TODO Auto-generated method stub
+		LogTool.i("ServerUtil", "存储自身信息");
+		userPreference.setU_id(user.getU_id());
+		userPreference.setU_nickname(user.getU_nickname());
+		userPreference.setU_password(user.getU_password());
+		userPreference.setU_gender(user.getU_gender());
+		userPreference.setU_tel(user.getU_tel());
+		userPreference.setU_email(user.getU_email());
+		userPreference.setU_birthday(user.getU_birthday());
+		userPreference.setU_age(user.getU_age());
+		userPreference.setU_large_avatar(user.getU_large_avatar());
+		userPreference.setU_small_avatar(user.getU_small_avatar());
+		userPreference.setU_identity(user.getU_identity());
+		userPreference.setU_love_state(user.getU_love_tate());
+		userPreference.setU_provinceid(user.getU_provinceid());
+		userPreference.setU_cityid(user.getU_cityid());
+		userPreference.setU_schoolid(user.getU_schoolid());
+		userPreference.setU_interest_ids(user.getU_interest_ids());
+		userPreference.setU_skill_ids(user.getU_skill_ids());
+		userPreference.setU_industry_id(user.getU_industry_id());
+		userPreference.setU_introduce(user.getU_introduce());
+		userPreference.setU_student_number(user.getU_student_number());
+		userPreference.setU_student_pass(user.getU_stundet_pass());
+		userPreference.setUserLogin(true);
 	}
 
 	/**
@@ -287,183 +331,34 @@ public class LoginActivity extends BaseActivity {
 	//			}
 	//		}
 	//	}
-
 	/**
-	 * 存储自己的信息
+	 * Shows the progress UI and hides the login form.
 	 */
-	private void saveUser(final JsonUser user, final String password) {
-		// TODO Auto-generated method stub
-		userPreference.clear();
-		userPreference.setU_birthday(user.getU_birthday());
-		userPreference.setU_cityid(user.getU_cityid());
-		userPreference.setU_email(user.getU_email());
-		userPreference.setU_gender(user.getU_gender());
-		userPreference.setU_age(user.getU_age());
-		userPreference.setU_id(user.getU_id());
-		userPreference.setU_introduce(user.getU_introduce());
-		userPreference.setU_large_avatar(user.getU_large_avatar());
-		userPreference.setU_nickname(user.getU_nickname());
-		userPreference.setU_provinceid(user.getU_provinceid());
-		userPreference.setU_schoolid(user.getU_schoolid());
-		userPreference.setU_small_avatar(user.getU_small_avatar());
-		userPreference.setU_tel(user.getU_tel());
-		userPreference.setU_password(password);
-		userPreference.setU_identity(String.valueOf(user.getU_industry_id()));
-		userPreference.setU_love_state(user.getU_love_tate());
-		userPreference.setU_interest_ids(user.getU_interest_ids());
-		userPreference.setU_skill_ids(user.getU_skill_ids());
-		userPreference.setU_industry_id(user.getU_industry_id());
-		userPreference.setU_student_number(user.getU_student_number());
-		userPreference.setU_student_pass(user.getU_stundet_pass());
-	}
-
-	//登录
-	private void login(String tel, final String pass) {
-
-//		Client c = Client.create();
-//		WebResource r = c.resource("http://192.168.1.112:8080/XiaoYuanQuanQuan/rest/TestService/test");
-//		JSONObject obj = new JSONObject();
-//		obj.put(UserTable.U_TEL, tel);
-//		obj.put(UserTable.U_PASSWORD, pass);
-//		JSONObject response = r.type(MediaType.APPLICATION_JSON_TYPE).post(JSONObject.class, obj);
-//		LogTool.e(response.toJSONString());
-
-		RequestParams params = new RequestParams();
-		params.put(UserTable.U_TEL, tel);
-		params.put(UserTable.U_PASSWORD, pass);
-
-		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
-
-			@Override
-			public void onStart() {
-				// TODO Auto-generated method stub
-				super.onStart();
-				showProgress(true);
-			}
-
-			@Override
-			public void onFinish() {
-				// TODO Auto-generated method stub
-				//				dialog.dismiss();
-				showProgress(false);
-				super.onFinish();
-			}
-
-			@Override
-			public void onSuccess(int statusCode, Header[] headers, String response) {
-				// TODO Auto-generated method stub
-				if (statusCode == 200) {
-					LogTool.i("返回的信息:", response);
-					if (!response.isEmpty()) {
-						JsonUser user = FastJsonTool.getObject(response, JsonUser.class);
-						saveUser(user, pass);//更新用户信息
-						Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-						startActivity(intent);
-						overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-					}
-				}
-			}
-
-			@Override
-			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
-				// TODO Auto-generated method stub
-				ToastTool.showLong(LoginActivity.this, "服务器错误");
-				LogTool.e("服务器错误" + errorResponse);
-			}
-		};
-		AsyncHttpClientTool.post("LoginServlet", params, responseHandler);
-	}
-
-	/**
-	 * 类名称：UserLoginTask 类描述：异步任务登录 创建人： 张帅 创建时间：2014-7-4 上午9:30:44
-	 * 
-	 */
-	public class UserLoginTask extends AsyncTask<Void, Void, Void> {
-
-		private final String mPhone;
-		private final String mPassword;
-
-		UserLoginTask(String phone, String password) {
-			mPhone = phone;
-			mPassword = password;
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+	public void showProgress(final boolean show) {
+		// On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+		// for very easy animations. If available, use these APIs to fade-in
+		// the progress spinner.
+		if (show) {
+			//隐藏软键盘   
+			((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(LoginActivity.this
+					.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 		}
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+			int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-		@Override
-		protected Void doInBackground(Void... params) {
-			// TODO: attempt authentication against a network service.
-			String url = "rest/TestService/test";
-			Map<String, String> map = new HashMap<String, String>();
-			map.put(UserTable.U_TEL, mPhone);
-			map.put(UserTable.U_PASSWORD, mPassword);
-
-			String jsonString = null;
-			try {
-				jsonString = HttpUtil.postRequest(url, map);
-				LogTool.e(jsonString);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			jsonUsers = FastJsonTool.getObjectList(jsonString, JsonUser.class);
-			// TODO: register the new account here.
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Void result) {
-			// TODO Auto-generated method stub
-			super.onPostExecute(result);
-			mAuthTask = null;
-			//			if (jsonUsers != null) {
-			//				if (jsonUsers.size() > 0) {
-			//					//					if (jsonUsers.size() == 1) {
-			//					//						saveUser(jsonUsers.get(0), mPassword);
-			//					//					} else if (jsonUsers.size() > 1) {
-			//					//						saveUser(jsonUsers.get(0), mPassword);
-			//					//						saveFriend(jsonUsers.get(1));
-			//					//
-			//					//						if (jsonUsers.get(1) != null) {
-			//					//							//创建对话
-			//					//							ConversationDbService conversationDbService = ConversationDbService
-			//					//									.getInstance(LoginActivity.this);
-			//					//
-			//					//							if (!conversationDbService.isConversationExist(friendpreference.getF_id())) {
-			//					//								Conversation conversation = new Conversation(null, Long.valueOf(friendpreference
-			//					//										.getF_id()), friendpreference.getName(), friendpreference.getF_small_avatar(),
-			//					//										"", 0, System.currentTimeMillis());
-			//					//								conversationDbService.conversationDao.insert(conversation);
-			//					//							}
-			//					//						} else {
-			//					//							LogTool.e("Login", "登录获取两个人，但是第二个为空");
-			//					//						}
-			//					//					}
-			//					//					//登录环信
-			//					//					attempLoginHuanXin(1);
-			//
-			//					Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-			//					startActivity(intent);
-			//					overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-			//				} else {
-			//					mPasswordView.setError("用户名或密码错误！");
-			//					mPasswordView.requestFocus();
-			//					showProgress(false);
-			//				}
-			//			} else {
-			//				mPasswordView.setError("用户名或密码错误！");
-			//				mPasswordView.requestFocus();
-			//				showProgress(false);
-			//
-			//				Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-			//				startActivity(intent);
-			//				overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-			//
-			//			}
-		}
-
-		@Override
-		protected void onCancelled() {
-			mAuthTask = null;
-			showProgress(false);
+			mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+			mProgressView.animate().setDuration(shortAnimTime).alpha(show ? 1 : 0)
+					.setListener(new AnimatorListenerAdapter() {
+						@Override
+						public void onAnimationEnd(Animator animation) {
+							mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+						}
+					});
+		} else {
+			// The ViewPropertyAnimator APIs are not available, so simply show
+			// and hide the relevant UI components.
+			mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
 		}
 	}
 

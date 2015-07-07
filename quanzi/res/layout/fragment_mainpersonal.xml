@@ -33,7 +33,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/day_recommend_help_padding"
-            android:text="栗子"
             android:textSize="17sp" />
     </LinearLayout>
 

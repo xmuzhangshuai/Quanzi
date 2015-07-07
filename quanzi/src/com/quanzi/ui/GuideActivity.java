@@ -25,7 +25,9 @@ import com.quanzi.utils.UserPreference;
 
 /**
  * 类名称：GuideActivity
- * 类描述：引导页面，首次运行进入首次引导页面，GuidePagerActivity;用户没有登录则进入登录/注册页面；用户已经登录过则进入主页面加载页，
+ * 类描述：引导页面，首次运行进入首次引导页面，GuidePagerActivity;
+ * 用户没有登录则进入登录/注册页面；
+ * 用户已经登录过则进入主页面加载页，
  * 期间完成程序的初始化工作。 
  * 创建人： 张帅
  * 创建时间：2015-4-4 上午8:32:52
@@ -81,13 +83,11 @@ public class GuideActivity extends BaseActivity {
 			startActivity(new Intent(GuideActivity.this, GuidePagerActivity.class));
 		} else {// 如果不是第一次使用,则不启动向导页面，显示欢迎页面。
 			if (userPreference.getUserLogin()) {// 如果是已经登陆过
-				if (NetworkUtils.isNetworkAvailable(GuideActivity.this)) {// 如果网络可用
-					setContentView(R.layout.activity_guide);
-					findViewById();
-					initView();
-				} else {
-					startActivity(new Intent(GuideActivity.this, MainActivity.class));
-				}
+				setContentView(R.layout.activity_guide);
+				findViewById();
+				initView();
+				startActivity(new Intent(GuideActivity.this, MainActivity.class));
+				GuideActivity.this.finish();
 			} else {// 如果用户没有登录过或者已经注销
 				startActivity(new Intent(GuideActivity.this, LoginOrRegisterActivity.class));
 			}

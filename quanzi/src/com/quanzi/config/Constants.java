@@ -11,7 +11,7 @@ public class Constants {
 	//域名或者是IP
 	//	public static String AppliactionServerIP = "http://121.40.101.36/";
 
-	public static String AppliactionServerDomain = "http://192.168.1.112:8080/XiaoYuanQuanQuan/";
+	public static String AppliactionServerDomain = "http://192.168.1.114:8080/XiaoYuanQuanQuan/";
 
 	//	public static String ImageServerIP = "http://121.40.92.222/";
 

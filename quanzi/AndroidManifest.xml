@@ -286,6 +286,13 @@
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="pwpG0K4DEsCmgRwhCzTqqnr8" />
+        
+        <meta-data
+            android:name="EASEMOB_APPKEY"
+            android:value="yixianqian#quanzi" />
+        
+        <service android:name="com.easemob.chat.EMChatService" />
+        
     </application>
 
 </manifest>

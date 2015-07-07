@@ -9,8 +9,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.quanzi.R;
+import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseV4Fragment;
+import com.quanzi.utils.AsyncHttpClientTool;
+import com.quanzi.utils.ImageLoaderTool;
+import com.quanzi.utils.UserPreference;
 
 /**
  *
@@ -31,11 +36,14 @@ public class MainPersonalFragment extends BaseV4Fragment implements OnClickListe
 	private View persondataView;//资料
 	private View settingView;//设置
 	private ImageView headImageView;//头像
+	private TextView nameTextView;//名字
+	private UserPreference userPreference;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		rootView = inflater.inflate(R.layout.fragment_mainpersonal, container, false);
+		userPreference = BaseApplication.getInstance().getUserPreference();
 
 		findViewById();// 初始化views
 		initView();
@@ -54,6 +62,7 @@ public class MainPersonalFragment extends BaseV4Fragment implements OnClickListe
 		persondataView = rootView.findViewById(R.id.person_data);
 		settingView = rootView.findViewById(R.id.setting);
 		headImageView = (ImageView) rootView.findViewById(R.id.head_image);
+		nameTextView = (TextView) rootView.findViewById(R.id.name);
 	}
 
 	@Override
@@ -67,6 +76,11 @@ public class MainPersonalFragment extends BaseV4Fragment implements OnClickListe
 		persondataView.setOnClickListener(this);
 		settingView.setOnClickListener(this);
 		headImageView.setOnClickListener(this);
+
+		//显示头像
+		ImageLoader.getInstance().displayImage(AsyncHttpClientTool.getAbsoluteUrl(userPreference.getU_small_avatar()),
+				headImageView, ImageLoaderTool.getHeadImageOptions(10));
+		nameTextView.setText(userPreference.getU_nickname());
 	}
 
 	@Override

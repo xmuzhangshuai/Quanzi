@@ -69,8 +69,8 @@ public class RegAccountFragment extends BaseV4Fragment {
 	private Button authCodeButton;
 	private EditText authCodeView;
 	private Timer timer;
-	private String huanxinUsername;
-	private String huanxinaPassword;
+//	private String huanxinUsername;
+//	private String huanxinaPassword;
 	ProgressDialog dialog;
 	private BroadcastReceiver smsReceiver;
 	private IntentFilter filter2;

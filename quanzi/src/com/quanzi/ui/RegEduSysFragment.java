@@ -27,6 +27,7 @@ import com.quanzi.jsonobject.JsonUser;
 import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.CommonTools;
 import com.quanzi.utils.FastJsonTool;
+import com.quanzi.utils.LogTool;
 import com.quanzi.utils.ToastTool;
 import com.quanzi.utils.UserPreference;
 
@@ -142,8 +143,6 @@ public class RegEduSysFragment extends BaseV4Fragment {
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
 			showProgress(true);
-			//			mAuthTask = new UserLoginTask(phone, MD5For32.GetMD5Code(password));
-			//			mAuthTask.execute((Void) null);
 
 			// 没有错误，则存储值
 			userPreference.setU_student_number(studentNumber);
@@ -151,10 +150,6 @@ public class RegEduSysFragment extends BaseV4Fragment {
 
 			register();
 
-			Intent intent = new Intent(getActivity(), RegSuccessActivity.class);
-			startActivity(intent);
-			getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-			showProgress(false);
 		}
 	}
 
@@ -168,16 +163,6 @@ public class RegEduSysFragment extends BaseV4Fragment {
 				userPreference.getU_student_pass());
 
 		params.put("register", FastJsonTool.createJsonString(jsonUser));
-
-		//		params.put(UserTable.U_NICKNAME, userPreference.getU_nickname());
-		//		params.put(UserTable.U_GENDER, userPreference.getU_gender());
-		//		params.put(UserTable.U_TEL, userPreference.getU_tel());
-		//		params.put(UserTable.U_PASSWORD, userPreference.getU_password());
-		//		params.put(UserTable.U_SCHOOLID, String.valueOf(userPreference.getU_schoolid()));
-		//		params.put(UserTable.U_CITYID, String.valueOf(userPreference.getU_cityid()));
-		//		params.put(UserTable.U_PROVINCEID, String.valueOf(userPreference.getU_provinceid()));
-		//		params.put(UserTable.U_STUDENT_NUMBER, userPreference.getU_student_number());
-		//		params.put(UserTable.U_STUDENT_PASS, userPreference.getU_student_pass());
 
 		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
 
@@ -199,19 +184,31 @@ public class RegEduSysFragment extends BaseV4Fragment {
 			public void onSuccess(int statusCode, Header[] headers, String response) {
 				// TODO Auto-generated method stub
 				if (statusCode == 200) {
-					if (response.equals("1")) {
+					if (!response.isEmpty()) {
+						int userID = Integer.parseInt(response.trim());
+						if (userID > 0) {
+							userPreference.setU_id(userID);
+							userPreference.setUserLogin(true);
+							Intent intent = new Intent(getActivity(), RegSuccessActivity.class);
+							startActivity(intent);
+							getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+						} else {
+							LogTool.e("注册时返回负数" + response);
+						}
 					} else {
+						LogTool.e("注册时返回为空");
 					}
 				}
 			}
 
 			@Override
-			public void onFailure(int arg0, Header[] arg1, String arg2, Throwable arg3) {
+			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
 				// TODO Auto-generated method stub
-				ToastTool.showLong(getActivity(), "服务器错误");
+				ToastTool.showLong(getActivity(), "注册失败");
+				LogTool.e("注册时服务器错误");
 			}
 		};
-		AsyncHttpClientTool.post("resetuserpassword", params, responseHandler);
+		AsyncHttpClientTool.post("user/regist", params, responseHandler);
 	}
 
 	/**
