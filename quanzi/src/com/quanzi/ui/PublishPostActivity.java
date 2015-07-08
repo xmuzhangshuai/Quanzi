@@ -90,7 +90,7 @@ public class PublishPostActivity extends BaseActivity implements OnClickListener
 				(ImageView) findViewById(R.id.publish_addiamge2), (ImageView) findViewById(R.id.publish_addiamge3),
 				(ImageView) findViewById(R.id.publish_addiamge4), (ImageView) findViewById(R.id.publish_addiamge5),
 				(ImageView) findViewById(R.id.publish_addiamge6) };
-		photoUris = new String[12];
+		photoUris = new String[6];
 		publishEditeEditText = (EditText) findViewById(R.id.publish_content);
 		publishBtn = (TextView) findViewById(R.id.publish_btn);
 		backBtn = findViewById(R.id.left_btn_bg);
@@ -271,60 +271,10 @@ public class PublishPostActivity extends BaseActivity implements OnClickListener
 	}
 
 	/**
-	 * 上传图片
-	 */
-	//	private void uploadImage() {
-	//		File[] photoFiles = new File[] {};
-	//		for (int i = 0; i < 6; i++) {
-	//			LogTool.d("地址", photoUris[i]);
-	//			if (!TextUtils.isEmpty(photoUris[i])
-	//					&& photoUris[i].equals(Environment.getExternalStorageDirectory() + "/quanzi/image/temp.jpeg")) {
-	//				photoFiles[i] = new File(photoUris[i]);
-	//			}
-	//		}
-	//
-	//		dialog = showProgressDialog("正在发布，请稍后...");
-	//		dialog.setCancelable(false);
-	//
-	//		RequestParams params = new RequestParams();
-	//		params.put(LoveBridgeItemTable.N_USERID, userPreference.getU_id());
-	//		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
-	//
-	//			@Override
-	//			public void onSuccess(int statusCode, Header[] headers, String response) {
-	//				// TODO Auto-generated method stub
-	//				if (statusCode == 200) {
-	//					publish(response);
-	//				}
-	//			}
-	//
-	//			@Override
-	//			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
-	//				// TODO Auto-generated method stub
-	//				LogTool.e("上传图片失败");
-	//			}
-	//		};
-	//
-	//		for (int i = 0; i < photoFiles.length; i++) {
-	//			File file = photoFiles[i];
-	//			if (file != null && file.exists()) {
-	//				try {
-	//					params.put("image" + i, file);
-	//				} catch (FileNotFoundException e1) {
-	//					// TODO Auto-generated catch block
-	//					e1.printStackTrace();
-	//				}
-	//				AsyncHttpClientTool.post("lovebridgeitemimage", params, responseHandler);
-	//			} else {
-	//				publish("");
-	//			}
-	//		}
-	//	}
-
-	/**
 	 * 发布
 	 */
 	private void publish() {
+		String content = publishEditeEditText.getText().toString().trim();
 		List<File> photoFiles = new ArrayList<File>();
 		//		File[] photoFiles = new File[] {};
 		for (int i = 0; i < 6; i++) {
@@ -344,9 +294,14 @@ public class PublishPostActivity extends BaseActivity implements OnClickListener
 			public void onSuccess(int statusCode, Header[] headers, String response) {
 				// TODO Auto-generated method stub
 				if (statusCode == 200) {
-					ToastTool.showShort(PublishPostActivity.this, "发布成功！");
-					finish();
-					overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
+					if (response.equals("1")) {
+						ToastTool.showShort(PublishPostActivity.this, "发布成功！");
+						finish();
+						overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
+					} else {
+						LogTool.e("服务器处理失败" + response);
+					}
+
 				}
 			}
 
@@ -377,7 +332,7 @@ public class PublishPostActivity extends BaseActivity implements OnClickListener
 
 		};
 		params.put(PostTable.P_USERID, userPreference.getU_id());
-		params.put(PostTable.P_CONTENT, publishEditeEditText.getText().toString().trim());
+		params.put(PostTable.P_CONTENT, content);
 		for (int i = 0; i < photoFiles.size(); i++) {
 			File file = photoFiles.get(i);
 			if (file != null && file.exists()) {
@@ -389,7 +344,18 @@ public class PublishPostActivity extends BaseActivity implements OnClickListener
 				}
 			}
 		}
-		AsyncHttpClientTool.post("/post/addtest", params, responseHandler);
+		if (!content.isEmpty() || photoFiles.size() > 0) {
+			if (photoFiles.size() > 0) {
+				AsyncHttpClientTool.post("/post/add", params, responseHandler);
+			}else {
+				AsyncHttpClientTool.post("/post/add_no_pic", params, responseHandler);
+			}
+			
+		} else {
+			ToastTool.showLong(PublishPostActivity.this, "请填写内容或图片");
+			dialog.dismiss();
+		}
+
 	}
 
 	@Override
