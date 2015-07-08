@@ -103,7 +103,5 @@ public class JsonPostComment {
 		this.c_read = c_read;
 		this.c_time = c_time;
 	}
-	
-	
 
 }

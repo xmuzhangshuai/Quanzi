@@ -1,5 +1,7 @@
 package com.quanzi.ui;
 
+import java.net.ServerSocket;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,6 +22,7 @@ import com.quanzi.base.BaseApplication;
 import com.quanzi.config.DefaultKeys;
 import com.quanzi.db.CopyDataBase;
 import com.quanzi.utils.NetworkUtils;
+import com.quanzi.utils.ServerUtil;
 import com.quanzi.utils.SharePreferenceUtil;
 import com.quanzi.utils.UserPreference;
 
@@ -86,8 +89,9 @@ public class GuideActivity extends BaseActivity {
 				setContentView(R.layout.activity_guide);
 				findViewById();
 				initView();
-				startActivity(new Intent(GuideActivity.this, MainActivity.class));
-				GuideActivity.this.finish();
+				ServerUtil.getInstance().login(GuideActivity.this, MainActivity.class);
+//				startActivity(new Intent(GuideActivity.this, MainActivity.class));
+//				GuideActivity.this.finish();
 			} else {// 如果用户没有登录过或者已经注销
 				startActivity(new Intent(GuideActivity.this, LoginOrRegisterActivity.class));
 			}

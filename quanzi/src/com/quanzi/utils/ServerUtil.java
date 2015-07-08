@@ -14,8 +14,16 @@ import com.quanzi.base.BaseApplication;
 import com.quanzi.jsonobject.JsonUser;
 import com.quanzi.table.UserTable;
 import com.quanzi.ui.LoginOrRegisterActivity;
-import com.quanzi.ui.MainActivity;
 
+/**
+ *
+ * 项目名称：quanzi  
+ * 类名称：ServerUtil  
+ * 类描述：一些公用的网络操作类
+ * @author zhangshuai
+ * @date 创建时间：2015-7-7 下午4:26:35 
+ *
+ */
 public class ServerUtil {
 	private static ServerUtil instance;
 	private UserPreference userPreference;
@@ -40,7 +48,7 @@ public class ServerUtil {
 	/**
 	 * 用户登录
 	 */
-	public void login(final Context context) {
+	public <T> void login(final Context context, final Class<T> cls) {
 		String mPhone = userPreference.getU_tel();
 		final String mPassword = userPreference.getU_password();
 
@@ -59,10 +67,10 @@ public class ServerUtil {
 						saveUser(jsonUser);
 						//登录环信
 						//attempLoginHuanXin(1);
-						Intent intent = new Intent(context, MainActivity.class);
+						Intent intent = new Intent(context, cls);
 						context.startActivity(intent);
 						((Activity) context).overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-
+						((Activity) context).finish();
 					} else {
 						LogTool.e("ServerUtil", "jsonUsers长度为0");
 						Intent intent = new Intent(context, LoginOrRegisterActivity.class);
@@ -79,36 +87,35 @@ public class ServerUtil {
 				// TODO Auto-generated method stub
 			}
 		};
-		AsyncHttpClientTool.post("login", params, responseHandler);
+		AsyncHttpClientTool.post("user/login", params, responseHandler);
 	}
 
 	/**
 	 * 存储自己的信息
 	 */
-	private void saveUser(final JsonUser user) {
+	private static void saveUser(final JsonUser user) {
 		// TODO Auto-generated method stub
-		LogTool.i("ServerUtil", "存储自身信息");
-		userPreference.setU_id(user.getU_id());
-		userPreference.setU_nickname(user.getU_nickname());
-		userPreference.setU_password(user.getU_password());
-		userPreference.setU_gender(user.getU_gender());
-		userPreference.setU_tel(user.getU_tel());
-		userPreference.setU_email(user.getU_email());
-		userPreference.setU_birthday(user.getU_birthday());
-		userPreference.setU_age(user.getU_age());
-		userPreference.setU_large_avatar(user.getU_large_avatar());
-		userPreference.setU_small_avatar(user.getU_small_avatar());
-		userPreference.setU_identity(user.getU_identity());
-		userPreference.setU_love_state(user.getU_love_tate());
-		userPreference.setU_provinceid(user.getU_provinceid());
-		userPreference.setU_cityid(user.getU_cityid());
-		userPreference.setU_schoolid(user.getU_schoolid());
-		userPreference.setU_interest_ids(user.getU_interest_ids());
-		userPreference.setU_skill_ids(user.getU_skill_ids());
-		userPreference.setU_industry_id(user.getU_industry_id());
-		userPreference.setU_introduce(user.getU_introduce());
-		userPreference.setU_student_number(user.getU_student_number());
-		userPreference.setU_student_pass(user.getU_stundet_pass());
-		userPreference.setUserLogin(true);
+		instance.userPreference.setU_id(user.getU_id());
+		instance.userPreference.setU_nickname(user.getU_nickname());
+		instance.userPreference.setU_password(user.getU_password());
+		instance.userPreference.setU_gender(user.getU_gender());
+		instance.userPreference.setU_tel(user.getU_tel());
+		instance.userPreference.setU_email(user.getU_email());
+		instance.userPreference.setU_birthday(user.getU_birthday());
+		instance.userPreference.setU_age(user.getU_age());
+		instance.userPreference.setU_large_avatar(user.getU_large_avatar());
+		instance.userPreference.setU_small_avatar(user.getU_small_avatar());
+		instance.userPreference.setU_identity(user.getU_identity());
+		instance.userPreference.setU_love_state(user.getU_love_tate());
+		instance.userPreference.setU_provinceid(user.getU_provinceid());
+		instance.userPreference.setU_cityid(user.getU_cityid());
+		instance.userPreference.setU_schoolid(user.getU_schoolid());
+		instance.userPreference.setU_interest_ids(user.getU_interest_ids());
+		instance.userPreference.setU_skill_ids(user.getU_skill_ids());
+		instance.userPreference.setU_industry_id(user.getU_industry_id());
+		instance.userPreference.setU_introduce(user.getU_introduce());
+		instance.userPreference.setU_student_number(user.getU_student_number());
+		instance.userPreference.setU_student_pass(user.getU_stundet_pass());
+		instance.userPreference.setUserLogin(true);
 	}
 }
