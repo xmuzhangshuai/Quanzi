@@ -34,6 +34,7 @@ import com.quanzi.utils.DensityUtil;
  */
 public class GalleryPictureActivity extends BaseFragmentActivity {
 	public static final String IMAGE_URLS = "image_urls";
+	public static final String POSITON = "position";
 	// 翻页控件
 	private ViewPager mViewPager;
 
@@ -41,6 +42,7 @@ public class GalleryPictureActivity extends BaseFragmentActivity {
 	private List<ImageView> dotImageViews;
 	private LinearLayout dotContainer;
 	private String[] imageUrls;
+	private int position;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,7 @@ public class GalleryPictureActivity extends BaseFragmentActivity {
 		dotImageViews = new ArrayList<ImageView>();
 
 		imageUrls = getIntent().getStringArrayExtra(IMAGE_URLS);
+		position = getIntent().getIntExtra(POSITON, 0);
 
 		findViewById();
 		initView();
@@ -104,6 +107,7 @@ public class GalleryPictureActivity extends BaseFragmentActivity {
 			// 填充ViewPager的数据适配器
 			GalleryPagerAdapter mPagerAdapter = new GalleryPagerAdapter(views);
 			mViewPager.setAdapter(mPagerAdapter);
+			mViewPager.setCurrentItem(position);//设置当前显示页面
 		}
 	}
 

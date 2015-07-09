@@ -1,7 +1,9 @@
 package com.quanzi.ui;
 
-import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
+
+import org.apache.http.Header;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -17,7 +19,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -25,14 +26,21 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.quanzi.R;
 import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseV4Fragment;
 import com.quanzi.config.Constants;
+import com.quanzi.config.Constants.Config;
 import com.quanzi.jsonobject.JsonPostItem;
+import com.quanzi.table.UserTable;
+import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.DateTimeTools;
+import com.quanzi.utils.FastJsonTool;
 import com.quanzi.utils.ImageLoaderTool;
+import com.quanzi.utils.LogTool;
 import com.quanzi.utils.ToastTool;
 import com.quanzi.utils.UserPreference;
 
@@ -56,7 +64,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 	private LinkedList<JsonPostItem> jsonPostItemList;
 	private int pageNow = 0;//控制页数
 	private PostAdapter mAdapter;
-	private ProgressDialog progressDialog;
+//	private ProgressDialog progressDialog;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -155,75 +163,56 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 	 * 网络获取数据
 	 */
 	private void getDataTask(int p) {
-		//		final int page = p;
-		//		RequestParams params = new RequestParams();
-		//		params.put("page", pageNow);
-		//		params.put(UserTable.U_SCHOOLID, userPreference.getU_schoolid());
-		//		params.put(UserTable.U_STATEID, userPreference.getU_stateid());
-		//		params.put(UserTable.U_GENDER, userPreference.getU_gender());
-		//		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
-		//
-		//			@Override
-		//			public void onSuccess(int statusCode, Header[] headers, String response) {
-		//				// TODO Auto-generated method stub
-		//				if (statusCode == 200) {
-		//					List<JsonPostItem> temp = FastJsonTool.getObjectList(response, JsonPostItem.class);
-		//					if (temp != null) {
-		//						//如果是首次获取数据
-		//						if (page == 0) {
-		//							if (temp.size() < Config.PAGE_NUM) {
-		//								pageNow = -1;
-		//							}
-		//							jsonPostItemList = new LinkedList<JsonPostItem>();
-		//							jsonPostItemList.addAll(temp);
-		//						}
-		//						//如果是获取更多
-		//						else if (page > 0) {
-		//							if (temp.size() < Config.PAGE_NUM) {
-		//								pageNow = -1;
-		//								ToastTool.showShort(getActivity(), "没有更多了！");
-		//							}
-		//							jsonPostItemList.addAll(temp);
-		//						}
-		//						mAdapter.notifyDataSetChanged();
-		//					}
-		//				}
-		//				postListView.onRefreshComplete();
-		//			}
-		//
-		//			@Override
-		//			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
-		//				// TODO Auto-generated method stub
-		//				LogTool.e("LoveBridgeSchoolFragment", "获取列表失败");
-		//				postListView.onRefreshComplete();
-		//			}
-		//		};
-		//		AsyncHttpClientTool.post(getActivity(), "getlovebridgelist", params, responseHandler);
-		JsonPostItem item1 = new JsonPostItem(1, 1, "张帅", "drawable://" + R.drawable.headimage1, "drawable://"
-				+ R.drawable.headimage1, "男", "一见倾心，再见依然痴迷", "drawable://" + R.drawable.content, "drawable://"
-				+ R.drawable.content, new Date(), 20, 2);
+		final int page = p;
+		RequestParams params = new RequestParams();
+		params.put("page", pageNow);
+		params.put(UserTable.U_SCHOOLID, userPreference.getU_schoolid());
+		params.put(UserTable.U_GENDER, userPreference.getU_gender());
+		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
 
-		JsonPostItem item2 = new JsonPostItem(2, 2, "叶子", "drawable://" + R.drawable.headimage2, "drawable://"
-				+ R.drawable.headimage2, "女", "你的美丽让我情不自禁", "drawable://" + R.drawable.content2, "drawable://"
-				+ R.drawable.content2, new Date(), 45, 20);
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, String response) {
+				// TODO Auto-generated method stub
+				if (statusCode == 200) {
+					List<JsonPostItem> temp = FastJsonTool.getObjectList(response, JsonPostItem.class);
+					if (temp != null) {
+						//如果是首次获取数据
+						if (page == 0) {
+							if (temp.size() < Config.PAGE_NUM) {
+								pageNow = -1;
+							}
+							jsonPostItemList = new LinkedList<JsonPostItem>();
+							jsonPostItemList.addAll(temp);
+						}
+						//如果是获取更多
+						else if (page > 0) {
+							if (temp.size() < Config.PAGE_NUM) {
+								pageNow = -1;
+								ToastTool.showShort(getActivity(), "没有更多了！");
+							}
+							jsonPostItemList.addAll(temp);
+						}
+						mAdapter.notifyDataSetChanged();
+					}
+				}
+				//				postListView.onRefreshComplete();
+			}
 
-		JsonPostItem item3 = new JsonPostItem(3, 3, "荣发", "drawable://" + R.drawable.headimage3, "drawable://"
-				+ R.drawable.headimage3, "男", "这是一片很寂寞的天下着有些伤心的雨", "drawable://" + R.drawable.content, "drawable://"
-				+ R.drawable.content, new Date(), 76, 32);
+			@Override
+			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+				// TODO Auto-generated method stub
+				LogTool.e("获取帖子列表失败"+errorResponse);
+			}
 
-		JsonPostItem item4 = new JsonPostItem(4, 4, "伟强", "drawable://" + R.drawable.headimage4, "drawable://"
-				+ R.drawable.headimage4, "女", "爱上你的日子，每天都在想你", "drawable://" + R.drawable.content2, "drawable://"
-				+ R.drawable.content2, new Date(), 26, 280);
+			@Override
+			public void onFinish() {
+				// TODO Auto-generated method stub
+				super.onFinish();
+				postListView.onRefreshComplete();
+			}
 
-		JsonPostItem item5 = new JsonPostItem(5, 5, "王坤", "drawable://" + R.drawable.headimage5, "drawable://"
-				+ R.drawable.headimage5, "女", "卡又丢了，快来点开心的事冲冲喜吧！", "drawable://" + R.drawable.content, "drawable://"
-				+ R.drawable.content, new Date(), 256, 46);
-		jsonPostItemList.add(item1);
-		jsonPostItemList.add(item2);
-		jsonPostItemList.add(item3);
-		jsonPostItemList.add(item4);
-		jsonPostItemList.add(item5);
-		postListView.onRefreshComplete();
+		};
+		AsyncHttpClientTool.post(getActivity(), "getlovebridgelist", params, responseHandler);
 	}
 
 	/**
@@ -249,6 +238,15 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 			public ImageView commentBtn;
 			public TextView commentCountTextView;
 			public ImageView moreBtn;
+			public ImageView itemImageView;
+			public ImageView itemImageView1;
+			public ImageView itemImageView2;
+			public ImageView itemImageView3;
+			public ImageView itemImageView4;
+			public ImageView itemImageView5;
+			public ImageView itemImageView6;
+			public View imageViewGroup2;
+			public View imageViewGroup1;
 		}
 
 		@Override
@@ -285,11 +283,19 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 				holder.headImageView = (ImageView) view.findViewById(R.id.head_image);
 				holder.nameTextView = (TextView) view.findViewById(R.id.name);
 				holder.genderImageView = (ImageView) view.findViewById(R.id.gender);
-				holder.concernBtn = (CheckBox) view.findViewById(R.id.concern_btn);
 				holder.timeTextView = (TextView) view.findViewById(R.id.time);
 				holder.contentTextView = (TextView) view.findViewById(R.id.content);
-				holder.contentImageView = (ImageView) view.findViewById(R.id.item_image);
+				holder.itemImageView = (ImageView) view.findViewById(R.id.item_image);
+				holder.itemImageView1 = (ImageView) view.findViewById(R.id.item_image1);
+				holder.itemImageView2 = (ImageView) view.findViewById(R.id.item_image2);
+				holder.itemImageView3 = (ImageView) view.findViewById(R.id.item_image3);
+				holder.itemImageView4 = (ImageView) view.findViewById(R.id.item_image4);
+				holder.itemImageView5 = (ImageView) view.findViewById(R.id.item_image5);
+				holder.itemImageView6 = (ImageView) view.findViewById(R.id.item_image6);
+				holder.imageViewGroup2 = view.findViewById(R.id.item_image_group2);
+				holder.imageViewGroup1 = view.findViewById(R.id.item_image_group1);
 				holder.favorBtn = (CheckBox) view.findViewById(R.id.favor_btn);
+				holder.concernBtn = (CheckBox) view.findViewById(R.id.concern_btn);
 				holder.favorCountTextView = (TextView) view.findViewById(R.id.favor_count);
 				holder.commentBtn = (ImageView) view.findViewById(R.id.comment_btn);
 				holder.commentCountTextView = (TextView) view.findViewById(R.id.comment_count);
@@ -331,29 +337,6 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 						}
 					});
 				}
-			}
-
-			//设置照片
-			if (!TextUtils.isEmpty(jsonPostItem.getP_thumbnail())) {
-				//				imageLoader.displayImage(AsyncHttpClientImageSound.getAbsoluteUrl(jsonPostItem.getN_image()),
-				//						holder.contentImageView, ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage(jsonPostItem.getP_thumbnail(), holder.contentImageView,
-						ImageLoaderTool.getImageOptions());
-				holder.contentImageView.setVisibility(View.VISIBLE);
-				holder.contentImageView.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						//						Intent intent = new Intent(getActivity(), ImageShowerActivity.class);
-						//						intent.putExtra(ImageShowerActivity.SHOW_BIG_IMAGE,
-						//								AsyncHttpClientImageSound.getAbsoluteUrl(jsonPostItem.getN_image()));
-						//						startActivity(intent);
-						//						getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
-					}
-				});
-			} else {
-				holder.contentImageView.setVisibility(View.GONE);
 			}
 
 			//设置内容
@@ -424,30 +407,185 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 					showMoreDialog();
 				}
 			});
-			//
-			//			if (userPreference.getU_id() == jsonPostItem.getN_userid() || holder.flipperBtn.isChecked()) {
-			//				holder.flipperBtn.setEnabled(false);
-			//			} else {
-			//				//心动
-			//				holder.flipperBtn.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			//
-			//					@Override
-			//					public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-			//						// TODO Auto-generated method stub
-			//						if (userPreference.getU_id() != jsonPostItem.getN_userid()) {
-			//							if (isChecked) {
-			//								flipper(jsonPostItem.getN_id());
-			//								sendLoveReuest(jsonPostItem.getN_userid());
-			//								holder.flipperCountTextView.setText("" + (jsonPostItem.getN_flipcount() + 1));
-			//								holder.flipperBtn.setEnabled(false);
-			//							}
-			//						} else {
-			//							ToastTool.showShort(getActivity(), "不能对自己心动哦~");
-			//						}
-			//					}
-			//				});
-			//			}
+
+			String[] smallPhotos = null;
+			//设置缩略图
+			if (!jsonPostItem.getP_thumbnail().isEmpty()) {
+				smallPhotos = jsonPostItem.getP_thumbnail().split("//|");
+			}
+
+			if (smallPhotos != null && smallPhotos.length > 0) {
+				switch (smallPhotos.length) {
+				case 1://只有一张图片
+					holder.imageViewGroup1.setVisibility(View.GONE);
+					holder.imageViewGroup2.setVisibility(View.GONE);
+					holder.itemImageView.setVisibility(View.VISIBLE);
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView,
+							ImageLoaderTool.getImageOptions());
+					break;
+				case 2://有两张图片
+					holder.itemImageView.setVisibility(View.GONE);
+					holder.imageViewGroup2.setVisibility(View.GONE);
+					holder.imageViewGroup1.setVisibility(View.VISIBLE);
+					holder.itemImageView1.setVisibility(View.VISIBLE);
+					holder.itemImageView2.setVisibility(View.VISIBLE);
+					holder.itemImageView3.setVisibility(View.INVISIBLE);
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2,
+							ImageLoaderTool.getImageOptions());
+					break;
+				case 3://有三张图片
+					holder.itemImageView.setVisibility(View.GONE);
+					holder.imageViewGroup2.setVisibility(View.GONE);
+					holder.imageViewGroup1.setVisibility(View.VISIBLE);
+					holder.itemImageView1.setVisibility(View.VISIBLE);
+					holder.itemImageView2.setVisibility(View.VISIBLE);
+					holder.itemImageView3.setVisibility(View.VISIBLE);
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), holder.itemImageView3,
+							ImageLoaderTool.getImageOptions());
+					break;
+				case 4://有四张图片
+					holder.itemImageView.setVisibility(View.GONE);
+					holder.imageViewGroup2.setVisibility(View.VISIBLE);
+					holder.imageViewGroup1.setVisibility(View.VISIBLE);
+					holder.itemImageView1.setVisibility(View.VISIBLE);
+					holder.itemImageView2.setVisibility(View.VISIBLE);
+					holder.itemImageView3.setVisibility(View.INVISIBLE);
+					holder.itemImageView4.setVisibility(View.VISIBLE);
+					holder.itemImageView5.setVisibility(View.VISIBLE);
+					holder.itemImageView6.setVisibility(View.INVISIBLE);
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), holder.itemImageView4,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[3]), holder.itemImageView5,
+							ImageLoaderTool.getImageOptions());
+					break;
+				case 5://有五张图片
+					holder.itemImageView.setVisibility(View.GONE);
+					holder.imageViewGroup2.setVisibility(View.VISIBLE);
+					holder.imageViewGroup1.setVisibility(View.VISIBLE);
+					holder.itemImageView1.setVisibility(View.VISIBLE);
+					holder.itemImageView2.setVisibility(View.VISIBLE);
+					holder.itemImageView3.setVisibility(View.VISIBLE);
+					holder.itemImageView4.setVisibility(View.VISIBLE);
+					holder.itemImageView5.setVisibility(View.VISIBLE);
+					holder.itemImageView6.setVisibility(View.INVISIBLE);
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), holder.itemImageView3,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[3]), holder.itemImageView4,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[4]), holder.itemImageView5,
+							ImageLoaderTool.getImageOptions());
+					break;
+				case 6://有六张图片
+					holder.itemImageView.setVisibility(View.GONE);
+					holder.imageViewGroup2.setVisibility(View.VISIBLE);
+					holder.imageViewGroup1.setVisibility(View.VISIBLE);
+					holder.itemImageView1.setVisibility(View.VISIBLE);
+					holder.itemImageView2.setVisibility(View.VISIBLE);
+					holder.itemImageView3.setVisibility(View.VISIBLE);
+					holder.itemImageView4.setVisibility(View.VISIBLE);
+					holder.itemImageView5.setVisibility(View.VISIBLE);
+					holder.itemImageView6.setVisibility(View.VISIBLE);
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), holder.itemImageView3,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[3]), holder.itemImageView4,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[4]), holder.itemImageView5,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[5]), holder.itemImageView6,
+							ImageLoaderTool.getImageOptions());
+					break;
+				default:
+					holder.itemImageView.setVisibility(View.GONE);
+					holder.imageViewGroup1.setVisibility(View.GONE);
+					holder.imageViewGroup2.setVisibility(View.GONE);
+					break;
+				}
+			} else {
+				holder.itemImageView.setVisibility(View.GONE);
+				holder.imageViewGroup1.setVisibility(View.GONE);
+				holder.imageViewGroup2.setVisibility(View.GONE);
+			}
+
+			holder.itemImageView1.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					goBigPhoto(jsonPostItem.getP_big_photo(), 1);
+				}
+			});
+			holder.itemImageView2.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					goBigPhoto(jsonPostItem.getP_big_photo(), 2);
+				}
+			});
+			holder.itemImageView3.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					goBigPhoto(jsonPostItem.getP_big_photo(), 3);
+				}
+			});
+			holder.itemImageView4.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					goBigPhoto(jsonPostItem.getP_big_photo(), 4);
+				}
+			});
+			holder.itemImageView5.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					goBigPhoto(jsonPostItem.getP_big_photo(), 5);
+				}
+			});
+			holder.itemImageView6.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					goBigPhoto(jsonPostItem.getP_big_photo(), 6);
+				}
+			});
+
 			return view;
+		}
+
+		//查看大图
+		public void goBigPhoto(String url, int postion) {
+			Intent intent = new Intent(getActivity(), GalleryPictureActivity.class);
+			if (!url.isEmpty()) {
+				String[] BigPhotoUrls = url.split("//|");
+				intent.putExtra(GalleryPictureActivity.IMAGE_URLS, BigPhotoUrls);
+				intent.putExtra(GalleryPictureActivity.POSITON, postion);
+				startActivity(intent);
+				getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
+			}
 		}
 	}
 

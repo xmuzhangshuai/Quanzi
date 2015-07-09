@@ -45,7 +45,7 @@
             android:textSize="@dimen/day_recommend_font_info" />
 
         <TextView
-            android:id="@+id/cancel"
+            android:id="@+id/search_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"

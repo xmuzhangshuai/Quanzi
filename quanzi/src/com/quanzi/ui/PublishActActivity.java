@@ -3,7 +3,6 @@ package com.quanzi.ui;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -14,12 +13,11 @@ import org.apache.http.Header;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -30,16 +28,15 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
+import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -48,14 +45,12 @@ import com.quanzi.base.BaseActivity;
 import com.quanzi.base.BaseApplication;
 import com.quanzi.customewidget.MyAlertDialog;
 import com.quanzi.customewidget.MyMenuDialog;
+import com.quanzi.table.ActivityTable;
 import com.quanzi.table.PostTable;
-import com.quanzi.table.UserTable;
 import com.quanzi.utils.AsyncHttpClientTool;
-import com.quanzi.utils.CommonTools;
 import com.quanzi.utils.DateTimeTools;
 import com.quanzi.utils.ImageTools;
 import com.quanzi.utils.LogTool;
-import com.quanzi.utils.MD5For32;
 import com.quanzi.utils.ToastTool;
 import com.quanzi.utils.UserPreference;
 
@@ -69,7 +64,6 @@ import com.quanzi.utils.UserPreference;
  *
  */
 public class PublishActActivity extends BaseActivity implements OnClickListener {
-	private EditText publishEditeEditText;
 	private View timeContainerView;
 	private TextView timeTextView;
 	private EditText localtionEditText;
@@ -118,7 +112,6 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 				(ImageView) findViewById(R.id.publish_addiamge4), (ImageView) findViewById(R.id.publish_addiamge5),
 				(ImageView) findViewById(R.id.publish_addiamge6) };
 
-		publishEditeEditText = (EditText) findViewById(R.id.publish_content);
 		publishBtn = (TextView) findViewById(R.id.publish_btn);
 		backBtn = findViewById(R.id.left_btn_bg);
 		timeContainerView = findViewById(R.id.time_container);
@@ -465,10 +458,12 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, String response) {
 				// TODO Auto-generated method stub
-				if (statusCode == 200) {
+				if (statusCode == 200 && response.equals("1")) {
 					ToastTool.showShort(PublishActActivity.this, "发布成功！");
 					finish();
 					overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
+				} else {
+					LogTool.e("发布失败" + response);
 				}
 			}
 
@@ -498,8 +493,13 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 			}
 
 		};
-		params.put(PostTable.P_USERID, userPreference.getU_id());
-		params.put(PostTable.P_CONTENT, publishEditeEditText.getText().toString().trim());
+		params.put(ActivityTable.A_USER_ID, userPreference.getU_id());
+		params.put(ActivityTable.A_ACT_TITLE, titleEditText.getText().toString().trim());
+		params.put(ActivityTable.A_ACTTIME, DateTimeTools.DateToString(choosenCalendar.getTime()));
+		params.put(ActivityTable.A_ADDRESS, localtionEditText.getText().toString().trim());
+		params.put(ActivityTable.A_TARGET, targetTextView.getText().toString().trim());
+		params.put(ActivityTable.A_ACT_TYPE, typeTextView.getText().toString().trim());
+		params.put(ActivityTable.A_CONTENT, detailEditText.getText().toString().trim());
 		for (int i = 0; i < photoFiles.size(); i++) {
 			File file = photoFiles.get(i);
 			if (file != null && file.exists()) {
@@ -511,7 +511,7 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 				}
 			}
 		}
-		AsyncHttpClientTool.post("/post/add", params, responseHandler);
+		AsyncHttpClientTool.post("activity/add", params, responseHandler);
 	}
 
 	@Override

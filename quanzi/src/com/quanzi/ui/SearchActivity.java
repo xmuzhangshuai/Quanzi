@@ -26,7 +26,9 @@ import com.quanzi.base.BaseActivity;
  */
 public class SearchActivity extends BaseActivity implements OnClickListener {
 	private ListView searchOutputListView;
-	private TextView cancelBtn;
+	private TextView searchBtn;
+	private View backBtn;
+	
 	private String[] names = new String[] { "张帅", "刘伟强", "黄蓉发", "王坤" };
 	private int[] headimages = new int[] { R.drawable.headimage, R.drawable.headimage1, R.drawable.headimage2,
 			R.drawable.headimage3 };
@@ -45,16 +47,17 @@ public class SearchActivity extends BaseActivity implements OnClickListener {
 	@Override
 	protected void findViewById() {
 		// TODO Auto-generated method stub
-
 		searchOutputListView = (ListView) findViewById(R.id.search_output_list);
-		cancelBtn = (TextView) findViewById(R.id.cancel);
+		searchBtn = (TextView) findViewById(R.id.search_btn);
+		backBtn = findViewById(R.id.left_btn_bg);
+	
 	}
 
 	@Override
 	protected void initView() {
 		// TODO Auto-generated method stub
-		cancelBtn.setOnClickListener(this);
-
+		searchBtn.setOnClickListener(this);
+		backBtn.setOnClickListener(this);
 		searchOutputListView.setAdapter(new MyOutputAdapter());
 	}
 
@@ -69,11 +72,12 @@ public class SearchActivity extends BaseActivity implements OnClickListener {
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
-		case R.id.cancel:
+		case R.id.left_btn_bg:
 			finish();
 			overridePendingTransition(R.anim.splash_fade_in, R.anim.splash_fade_out);
 			break;
-
+		case R.id.search_btn:
+			break;
 		default:
 			break;
 		}

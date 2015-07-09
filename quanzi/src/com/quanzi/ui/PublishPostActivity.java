@@ -346,9 +346,9 @@ public class PublishPostActivity extends BaseActivity implements OnClickListener
 		}
 		if (!content.isEmpty() || photoFiles.size() > 0) {
 			if (photoFiles.size() > 0) {
-				AsyncHttpClientTool.post("/post/add", params, responseHandler);
+				AsyncHttpClientTool.post("post/add", params, responseHandler);
 			}else {
-				AsyncHttpClientTool.post("/post/add_no_pic", params, responseHandler);
+				AsyncHttpClientTool.post("post/add_no_pic", params, responseHandler);
 			}
 			
 		} else {

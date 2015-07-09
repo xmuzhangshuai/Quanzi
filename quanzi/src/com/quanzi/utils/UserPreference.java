@@ -317,4 +317,8 @@ public class UserPreference {
 		editor.putString(UserTable.U_INTEREST_IDS, interest_ids);
 		editor.commit();
 	}
+	
+	//我关注的人数
+	//我的追随者
+	//我赞过的帖子的数量
 }

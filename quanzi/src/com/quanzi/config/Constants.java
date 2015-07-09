@@ -1,6 +1,5 @@
 package com.quanzi.config;
 
-
 public class Constants {
 
 	//包名
@@ -11,7 +10,7 @@ public class Constants {
 	//域名或者是IP
 	//	public static String AppliactionServerIP = "http://121.40.101.36/";
 
-	public static String AppliactionServerDomain = "http://192.168.1.114:8080/XiaoYuanQuanQuan/";
+	public static String AppliactionServerDomain = "http://192.168.1.109:8080/XiaoYuanQuanQuan/";
 
 	//	public static String ImageServerIP = "http://121.40.92.222/";
 
@@ -32,6 +31,8 @@ public class Constants {
 
 		// 每页20个表情,还有最后一个删除button
 		public static int NUM = 20;
+
+		public static int PAGE_NUM = 20;
 
 		//聊天每次刷新纪录条数
 		public static int LOAD_MESSAGE_COUNT = 20;
