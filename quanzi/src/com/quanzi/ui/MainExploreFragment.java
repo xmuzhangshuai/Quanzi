@@ -103,7 +103,7 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 	}
 
 	/**
-	 * 菜单显示
+	 * 显示发布帖子或活动菜单
 	 */
 	void showPublishDialog() {
 
@@ -111,7 +111,7 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 		// in a transaction.  We also want to remove any currently showing
 		// dialog, so make our own transaction and take care of that here.
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
-		Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+		Fragment prev = getFragmentManager().findFragmentByTag("publish_dialog");
 		if (prev != null) {
 			ft.remove(prev);
 		}
@@ -119,11 +119,11 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 
 		// Create and show the dialog.
 		PublishDialogFragment newFragment = PublishDialogFragment.newInstance();
-		newFragment.show(ft, "dialog");
+		newFragment.show(ft, "publish_dialog");
 	}
 
 	/**
-	 * 菜单显示
+	 * 显示筛选菜单
 	 */
 	void showScreenDialog() {
 
@@ -131,7 +131,7 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 		// in a transaction.  We also want to remove any currently showing
 		// dialog, so make our own transaction and take care of that here.
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
-		Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+		Fragment prev = getFragmentManager().findFragmentByTag("screen_dialog");
 		if (prev != null) {
 			ft.remove(prev);
 		}
@@ -139,7 +139,7 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 
 		// Create and show the dialog.
 		ScreenDialogFragment newFragment = ScreenDialogFragment.newInstance();
-		newFragment.show(ft, "dialog");
+		newFragment.show(ft, "screen_dialog");
 	}
 
 	/**
