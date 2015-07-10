@@ -23,7 +23,6 @@
             android:layout_marginLeft="@dimen/personal_timecapsule_padding"
             android:layout_marginRight="@dimen/personal_timecapsule_padding"
             android:layout_marginTop="@dimen/margin_chat_activity"
-            android:text="一起来看流星雨"
             android:textColor="@color/comment_name"
             android:textSize="@dimen/act_title_size"
             android:textStyle="bold" />
@@ -110,7 +109,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/personal_timecapsule_padding"
                     android:singleLine="true"
-                    android:text="4月12日 周天，12:90-20:90"
                     android:textSize="@dimen/register_font_size" />
             </LinearLayout>
 
@@ -136,7 +134,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/personal_timecapsule_padding"
                     android:singleLine="true"
-                    android:text="厦门市思明区中山路"
                     android:textSize="@dimen/register_font_size" />
             </LinearLayout>
 
@@ -162,7 +159,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/personal_timecapsule_padding"
                     android:singleLine="true"
-                    android:text="男女不限"
                     android:textSize="@dimen/register_font_size" />
             </LinearLayout>
 
@@ -188,7 +184,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/personal_timecapsule_padding"
                     android:singleLine="true"
-                    android:text="这是一部很好的电影，大家一起来看吧"
                     android:textSize="@dimen/register_font_size" />
             </LinearLayout>
         </RelativeLayout>

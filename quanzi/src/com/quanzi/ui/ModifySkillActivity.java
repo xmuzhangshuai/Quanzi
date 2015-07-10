@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,11 +23,15 @@ import com.quanzi.base.BaseActivity;
  *
  */
 public class ModifySkillActivity extends BaseActivity {
-
+	
 	/***********VIEWS************/
 	private ListView industryListView;
 	private TextView leftTextView;//导航栏左侧文字
 	private View leftButton;//导航栏左侧按钮
+	private TextView skillTextView1;
+	private TextView skillTextView2;
+	private TextView skillTextView3;
+	
 
 	private String[] industry = new String[] { "保险", "程序开发", "保险", "教育", "互联网", "摄影", "医疗" };
 

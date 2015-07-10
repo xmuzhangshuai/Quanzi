@@ -129,9 +129,6 @@ public class SettingMainFragment extends BaseV4Fragment implements OnClickListen
 				Intent intent;
 				BaseApplication.getInstance().logout();
 				userPreference.clear();
-				//				friendPreference.clear();
-				//				FlipperDbService flipperDbService = FlipperDbService.getInstance(getActivity());
-				//				flipperDbService.flipperDao.deleteAll();
 				intent = new Intent(getActivity(), LoginOrRegisterActivity.class);
 				getActivity().startActivity(intent);
 				getActivity().finish();

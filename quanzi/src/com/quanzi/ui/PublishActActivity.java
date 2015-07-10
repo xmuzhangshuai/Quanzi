@@ -43,6 +43,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import com.quanzi.R;
 import com.quanzi.base.BaseActivity;
 import com.quanzi.base.BaseApplication;
+import com.quanzi.config.Constants;
 import com.quanzi.customewidget.MyAlertDialog;
 import com.quanzi.customewidget.MyMenuDialog;
 import com.quanzi.table.ActivityTable;
@@ -375,8 +376,7 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 		final MyMenuDialog myMenuDialog = new MyMenuDialog(PublishActActivity.this);
 		myMenuDialog.setTitle("选择类型");
 		final ArrayList<String> list = new ArrayList<String>();
-		list.add("讲座");
-		list.add("活动");
+		list.addAll(Constants.ActivityType.getList());
 		list.add("其他");
 		myMenuDialog.setMenuList(list);
 		OnItemClickListener listener = new OnItemClickListener() {
@@ -427,6 +427,12 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 			cancel = true;
 		}
 
+		else if (!publishImageViews[0].isShown()) {
+			ToastTool.showLong(PublishActActivity.this, "请至少上传一张图片");
+			focusView = addPublishImageViews[0];
+			cancel = true;
+		}
+		
 		if (cancel) {
 			// There was an error; don't attempt login and focus the first
 			// form field with an error.

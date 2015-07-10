@@ -1,5 +1,8 @@
 package com.quanzi.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Constants {
 
 	//包名
@@ -10,7 +13,7 @@ public class Constants {
 	//域名或者是IP
 	//	public static String AppliactionServerIP = "http://121.40.101.36/";
 
-	public static String AppliactionServerDomain = "http://192.168.1.109:8080/XiaoYuanQuanQuan/";
+	public static String AppliactionServerDomain = "http://192.168.1.108:8080/XiaoYuanQuanQuan/";
 
 	//	public static String ImageServerIP = "http://121.40.92.222/";
 
@@ -66,6 +69,35 @@ public class Constants {
 		public static final int NOTPASSED = -1;
 		//未提交
 		public static final int NOTSUBMIT = 0;
+	}
+
+	//活动种类
+	public static class ActivityType {
+		public static final String JIANGZUO = "讲座";
+		public static final String ZHAOPIN = "招聘";
+		public static final String SHETUAN = "社团";
+		public static final String YINYUE = "音乐";
+		public static final String DIANYING = "电影";
+		public static final String YUNDONG = "运动";
+		public static final String JUHUI = "聚会";
+		public static final String ZHANLAN = "展览";
+		public static final String GONGYI = "公益";
+		public static final String YOUHUIQUAN = "优惠券";
+
+		public static List<String> getList() {
+			List<String> temp = new ArrayList<String>();
+			temp.add(JIANGZUO);
+			temp.add(ZHAOPIN);
+			temp.add(SHETUAN);
+			temp.add(YINYUE);
+			temp.add(DIANYING);
+			temp.add(YUNDONG);
+			temp.add(JUHUI);
+			temp.add(ZHANLAN);
+			temp.add(GONGYI);
+			temp.add(YOUHUIQUAN);
+			return temp;
+		}
 	}
 
 	public static class BaiduPushConfig {

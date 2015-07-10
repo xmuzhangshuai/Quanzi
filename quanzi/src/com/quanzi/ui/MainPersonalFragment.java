@@ -44,6 +44,7 @@ public class MainPersonalFragment extends BaseV4Fragment implements OnClickListe
 		// TODO Auto-generated method stub
 		rootView = inflater.inflate(R.layout.fragment_mainpersonal, container, false);
 		userPreference = BaseApplication.getInstance().getUserPreference();
+		userPreference.printUserInfo();//打印用户信息
 
 		findViewById();// 初始化views
 		initView();

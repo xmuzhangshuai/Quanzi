@@ -38,8 +38,21 @@ public class DateTimeTools {
 	 * @return
 	 */
 	public static String DateToString(Date date) {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		return format.format(date);
+		if (date != null) {
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			return format.format(date);
+		} else {
+			return "";
+		}
+	}
+
+	public static String DateToStringForCN(Date date) {
+		if (date != null) {
+			SimpleDateFormat format = new SimpleDateFormat("yyƒÍMM‘¬dd»’   HH:mm");
+			return format.format(date);
+		} else {
+			return "";
+		}
 	}
 
 	public static String getMonAndDay(Date date) {

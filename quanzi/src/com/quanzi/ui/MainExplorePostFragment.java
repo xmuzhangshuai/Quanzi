@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.http.Header;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -64,7 +63,6 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 	private LinkedList<JsonPostItem> jsonPostItemList;
 	private int pageNow = 0;//控制页数
 	private PostAdapter mAdapter;
-//	private ProgressDialog progressDialog;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -167,7 +165,6 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 		RequestParams params = new RequestParams();
 		params.put("page", pageNow);
 		params.put(UserTable.U_SCHOOLID, userPreference.getU_schoolid());
-		params.put(UserTable.U_GENDER, userPreference.getU_gender());
 		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
 
 			@Override
@@ -201,7 +198,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 			@Override
 			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
 				// TODO Auto-generated method stub
-				LogTool.e("获取帖子列表失败"+errorResponse);
+				LogTool.e("获取学校帖子列表失败"+errorResponse);
 			}
 
 			@Override
@@ -411,7 +408,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 			String[] smallPhotos = null;
 			//设置缩略图
 			if (!jsonPostItem.getP_thumbnail().isEmpty()) {
-				smallPhotos = jsonPostItem.getP_thumbnail().split("//|");
+				smallPhotos = jsonPostItem.getP_thumbnail().split("\\|");
 			}
 
 			if (smallPhotos != null && smallPhotos.length > 0) {
@@ -580,7 +577,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 		public void goBigPhoto(String url, int postion) {
 			Intent intent = new Intent(getActivity(), GalleryPictureActivity.class);
 			if (!url.isEmpty()) {
-				String[] BigPhotoUrls = url.split("//|");
+				String[] BigPhotoUrls = url.split("\\|");
 				intent.putExtra(GalleryPictureActivity.IMAGE_URLS, BigPhotoUrls);
 				intent.putExtra(GalleryPictureActivity.POSITON, postion);
 				startActivity(intent);

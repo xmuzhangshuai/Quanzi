@@ -35,6 +35,7 @@ import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseV4Fragment;
 import com.quanzi.config.Constants;
 import com.quanzi.jsonobject.JsonPostItem;
+import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.DateTimeTools;
 import com.quanzi.utils.DensityUtil;
 import com.quanzi.utils.ImageLoaderTool;
@@ -267,8 +268,9 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 				+ R.drawable.content2, new Date(), 45, 20);
 
 		JsonPostItem item3 = new JsonPostItem(3, 3, "荣发", "drawable://" + R.drawable.headimage3, "drawable://"
-				+ R.drawable.headimage3, "男", "这是一片很寂寞的天下着有些伤心的雨", "drawable://" + R.drawable.content, "drawable://"
-				+ R.drawable.content, new Date(), 76, 32);
+				+ R.drawable.headimage3, "男", "这是一片很寂寞的天下着有些伤心的雨", "drawable://" + R.drawable.content + "|"
+				+ "drawable://" + R.drawable.content2, "drawable://" + R.drawable.content + "|" + "drawable://"
+				+ R.drawable.content2, new Date(), 76, 32);
 
 		JsonPostItem item4 = new JsonPostItem(4, 4, "伟强", "drawable://" + R.drawable.headimage4, "drawable://"
 				+ R.drawable.headimage4, "女", "爱上你的日子，每天都在想你", "drawable://" + R.drawable.content2, "drawable://"
@@ -392,8 +394,8 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 
 			//设置头像
 			if (!TextUtils.isEmpty(jsonPostItem.getP_small_avatar())) {
-				//				imageLoader.displayImage(AsyncHttpClientImageSound.getAbsoluteUrl(jsonPostItem.getN_small_avatar()),
-				//						holder.headImageView, ImageLoaderTool.getHeadImageOptions(10));
+				//	imageLoader.displayImage(AsyncHttpClientImageSound.getAbsoluteUrl(jsonPostItem.getN_small_avatar()),
+				//	holder.headImageView, ImageLoaderTool.getHeadImageOptions(10));
 				imageLoader.displayImage(jsonPostItem.getP_small_avatar(), holder.headImageView,
 						ImageLoaderTool.getHeadImageOptions(10));
 				if (userPreference.getU_id() != jsonPostItem.getP_userid()) {
@@ -404,151 +406,14 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 						public void onClick(View v) {
 							// TODO Auto-generated method stub
 							Intent intent = new Intent(getActivity(), PersonDetailActivity.class);
-							//							intent.putExtra(PersonDetailActivity.PERSON_TYPE, Constants.PersonDetailType.SINGLE);
-							//							intent.putExtra(UserTable.U_ID, jsonPostItem.getN_userid());
+							//	intent.putExtra(PersonDetailActivity.PERSON_TYPE, Constants.PersonDetailType.SINGLE);
+							//	intent.putExtra(UserTable.U_ID, jsonPostItem.getN_userid());
 							startActivity(intent);
 							getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
 						}
 					});
 				}
 			}
-
-			holder.itemImageView1.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					Intent intent = new Intent(getActivity(), GalleryPictureActivity.class);
-					String[] urls = new String[] { "drawable://" + R.drawable.content,
-							"drawable://" + R.drawable.content2, "drawable://" + R.drawable.content3,
-							"drawable://" + R.drawable.content4, "drawable://" + R.drawable.content5,
-							"drawable://" + R.drawable.content6 };
-					intent.putExtra(GalleryPictureActivity.IMAGE_URLS, urls);
-					startActivity(intent);
-					getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
-				}
-			});
-
-			if (position == 0) {//只有一张图片
-				//				holder.itemImageView1.setVisibility(View.VISIBLE);
-				//				holder.imageViewGroup2.setVisibility(View.GONE);
-				holder.imageViewGroup1.setVisibility(View.GONE);
-				holder.imageViewGroup2.setVisibility(View.GONE);
-				holder.itemImageView.setVisibility(View.VISIBLE);
-				imageLoader.displayImage("drawable://" + R.drawable.content, holder.itemImageView,
-						ImageLoaderTool.getImageOptions());
-			} else if (position == 1) {//有两张图片
-				holder.itemImageView.setVisibility(View.GONE);
-				holder.imageViewGroup2.setVisibility(View.GONE);
-				holder.imageViewGroup1.setVisibility(View.VISIBLE);
-				holder.itemImageView1.setVisibility(View.VISIBLE);
-				holder.itemImageView2.setVisibility(View.VISIBLE);
-				holder.itemImageView3.setVisibility(View.INVISIBLE);
-				imageLoader.displayImage("drawable://" + R.drawable.content, holder.itemImageView1,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage("drawable://" + R.drawable.content2, holder.itemImageView2,
-						ImageLoaderTool.getImageOptions());
-			} else if (position == 2) {//有三张图片
-				holder.itemImageView.setVisibility(View.GONE);
-				holder.imageViewGroup2.setVisibility(View.GONE);
-				holder.imageViewGroup1.setVisibility(View.VISIBLE);
-				holder.itemImageView1.setVisibility(View.VISIBLE);
-				holder.itemImageView2.setVisibility(View.VISIBLE);
-				holder.itemImageView3.setVisibility(View.VISIBLE);
-				imageLoader.displayImage("drawable://" + R.drawable.content, holder.itemImageView1,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage("drawable://" + R.drawable.content2, holder.itemImageView2,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage("drawable://" + R.drawable.content3, holder.itemImageView3,
-						ImageLoaderTool.getImageOptions());
-			} else if (position == 3) {//有四张图片
-				holder.itemImageView.setVisibility(View.GONE);
-				holder.imageViewGroup2.setVisibility(View.VISIBLE);
-				holder.imageViewGroup1.setVisibility(View.VISIBLE);
-				holder.itemImageView1.setVisibility(View.VISIBLE);
-				holder.itemImageView2.setVisibility(View.VISIBLE);
-				holder.itemImageView3.setVisibility(View.INVISIBLE);
-				holder.itemImageView4.setVisibility(View.VISIBLE);
-				holder.itemImageView5.setVisibility(View.VISIBLE);
-				holder.itemImageView6.setVisibility(View.INVISIBLE);
-				imageLoader.displayImage("drawable://" + R.drawable.content, holder.itemImageView1,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage("drawable://" + R.drawable.content2, holder.itemImageView2,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage("drawable://" + R.drawable.content3, holder.itemImageView4,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage("drawable://" + R.drawable.content4, holder.itemImageView5,
-						ImageLoaderTool.getImageOptions());
-			} else if (position == 4) {//有五张图片
-				holder.itemImageView.setVisibility(View.GONE);
-				holder.imageViewGroup2.setVisibility(View.VISIBLE);
-				holder.imageViewGroup1.setVisibility(View.VISIBLE);
-				holder.itemImageView1.setVisibility(View.VISIBLE);
-				holder.itemImageView2.setVisibility(View.VISIBLE);
-				holder.itemImageView3.setVisibility(View.VISIBLE);
-				holder.itemImageView4.setVisibility(View.VISIBLE);
-				holder.itemImageView5.setVisibility(View.VISIBLE);
-				holder.itemImageView6.setVisibility(View.INVISIBLE);
-				imageLoader.displayImage("drawable://" + R.drawable.content, holder.itemImageView1,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage("drawable://" + R.drawable.content2, holder.itemImageView2,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage("drawable://" + R.drawable.content3, holder.itemImageView3,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage("drawable://" + R.drawable.content4, holder.itemImageView4,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage("drawable://" + R.drawable.content5, holder.itemImageView5,
-						ImageLoaderTool.getImageOptions());
-			} else if (position == 5) {//有六张图片
-				holder.itemImageView.setVisibility(View.GONE);
-				holder.imageViewGroup2.setVisibility(View.VISIBLE);
-				holder.imageViewGroup1.setVisibility(View.VISIBLE);
-				holder.itemImageView1.setVisibility(View.VISIBLE);
-				holder.itemImageView2.setVisibility(View.VISIBLE);
-				holder.itemImageView3.setVisibility(View.VISIBLE);
-				holder.itemImageView4.setVisibility(View.VISIBLE);
-				holder.itemImageView5.setVisibility(View.VISIBLE);
-				holder.itemImageView6.setVisibility(View.VISIBLE);
-				imageLoader.displayImage("drawable://" + R.drawable.content, holder.itemImageView1,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage("drawable://" + R.drawable.content2, holder.itemImageView2,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage("drawable://" + R.drawable.content3, holder.itemImageView3,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage("drawable://" + R.drawable.content4, holder.itemImageView4,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage("drawable://" + R.drawable.content5, holder.itemImageView5,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage("drawable://" + R.drawable.content6, holder.itemImageView6,
-						ImageLoaderTool.getImageOptions());
-			} else {
-				holder.itemImageView.setVisibility(View.GONE);
-				holder.imageViewGroup1.setVisibility(View.GONE);
-				holder.imageViewGroup2.setVisibility(View.GONE);
-			}
-
-			//设置照片
-			//			if (!TextUtils.isEmpty(jsonPostItem.getN_image())) {
-			//				//				imageLoader.displayImage(AsyncHttpClientImageSound.getAbsoluteUrl(jsonPostItem.getN_image()),
-			//				//						holder.contentImageView, ImageLoaderTool.getImageOptions());
-			//				imageLoader.displayImage(jsonPostItem.getN_image(), holder.contentImageView,
-			//						ImageLoaderTool.getImageOptions());
-			//				holder.contentImageView.setVisibility(View.VISIBLE);
-			//				holder.contentImageView.setOnClickListener(new OnClickListener() {
-			//
-			//					@Override
-			//					public void onClick(View v) {
-			//						// TODO Auto-generated method stub
-			//						//						Intent intent = new Intent(getActivity(), ImageShowerActivity.class);
-			//						//						intent.putExtra(ImageShowerActivity.SHOW_BIG_IMAGE,
-			//						//								AsyncHttpClientImageSound.getAbsoluteUrl(jsonPostItem.getN_image()));
-			//						//						startActivity(intent);
-			//						//						getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
-			//					}
-			//				});
-			//			} else {
-			//				holder.contentImageView.setVisibility(View.GONE);
-			//			}
 
 			//设置内容
 			holder.contentTextView.setText(jsonPostItem.getP_text_content());
@@ -617,29 +482,184 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 				}
 			});
 
-			//			if (userPreference.getU_id() == jsonPostItem.getN_userid() || holder.flipperBtn.isChecked()) {
-			//				holder.flipperBtn.setEnabled(false);
-			//			} else {
-			//				//心动
-			//				holder.flipperBtn.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			//
-			//					@Override
-			//					public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-			//						// TODO Auto-generated method stub
-			//						if (userPreference.getU_id() != jsonPostItem.getN_userid()) {
-			//							if (isChecked) {
-			//								flipper(jsonPostItem.getN_id());
-			//								sendLoveReuest(jsonPostItem.getN_userid());
-			//								holder.flipperCountTextView.setText("" + (jsonPostItem.getN_flipcount() + 1));
-			//								holder.flipperBtn.setEnabled(false);
-			//							}
-			//						} else {
-			//							ToastTool.showShort(getActivity(), "不能对自己心动哦~");
-			//						}
-			//					}
-			//				});
-			//			}
+			String[] smallPhotos = null;
+			//设置缩略图
+			if (!jsonPostItem.getP_thumbnail().isEmpty()) {
+				smallPhotos = jsonPostItem.getP_thumbnail().split("\\|");
+			}
+			LogTool.e("缩略图数量" + smallPhotos.length + "——————————" + jsonPostItem.getP_thumbnail());
+
+			if (smallPhotos != null && smallPhotos.length > 0) {
+				switch (smallPhotos.length) {
+				case 1://只有一张图片
+					holder.imageViewGroup1.setVisibility(View.GONE);
+					holder.imageViewGroup2.setVisibility(View.GONE);
+					holder.itemImageView.setVisibility(View.VISIBLE);
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView,
+							ImageLoaderTool.getImageOptions());
+					break;
+				case 2://有两张图片
+					holder.itemImageView.setVisibility(View.GONE);
+					holder.imageViewGroup2.setVisibility(View.GONE);
+					holder.imageViewGroup1.setVisibility(View.VISIBLE);
+					holder.itemImageView1.setVisibility(View.VISIBLE);
+					holder.itemImageView2.setVisibility(View.VISIBLE);
+					holder.itemImageView3.setVisibility(View.INVISIBLE);
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2,
+							ImageLoaderTool.getImageOptions());
+					break;
+				case 3://有三张图片
+					holder.itemImageView.setVisibility(View.GONE);
+					holder.imageViewGroup2.setVisibility(View.GONE);
+					holder.imageViewGroup1.setVisibility(View.VISIBLE);
+					holder.itemImageView1.setVisibility(View.VISIBLE);
+					holder.itemImageView2.setVisibility(View.VISIBLE);
+					holder.itemImageView3.setVisibility(View.VISIBLE);
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), holder.itemImageView3,
+							ImageLoaderTool.getImageOptions());
+					break;
+				case 4://有四张图片
+					holder.itemImageView.setVisibility(View.GONE);
+					holder.imageViewGroup2.setVisibility(View.VISIBLE);
+					holder.imageViewGroup1.setVisibility(View.VISIBLE);
+					holder.itemImageView1.setVisibility(View.VISIBLE);
+					holder.itemImageView2.setVisibility(View.VISIBLE);
+					holder.itemImageView3.setVisibility(View.INVISIBLE);
+					holder.itemImageView4.setVisibility(View.VISIBLE);
+					holder.itemImageView5.setVisibility(View.VISIBLE);
+					holder.itemImageView6.setVisibility(View.INVISIBLE);
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), holder.itemImageView4,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[3]), holder.itemImageView5,
+							ImageLoaderTool.getImageOptions());
+					break;
+				case 5://有五张图片
+					holder.itemImageView.setVisibility(View.GONE);
+					holder.imageViewGroup2.setVisibility(View.VISIBLE);
+					holder.imageViewGroup1.setVisibility(View.VISIBLE);
+					holder.itemImageView1.setVisibility(View.VISIBLE);
+					holder.itemImageView2.setVisibility(View.VISIBLE);
+					holder.itemImageView3.setVisibility(View.VISIBLE);
+					holder.itemImageView4.setVisibility(View.VISIBLE);
+					holder.itemImageView5.setVisibility(View.VISIBLE);
+					holder.itemImageView6.setVisibility(View.INVISIBLE);
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), holder.itemImageView3,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[3]), holder.itemImageView4,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[4]), holder.itemImageView5,
+							ImageLoaderTool.getImageOptions());
+					break;
+				case 6://有六张图片
+					holder.itemImageView.setVisibility(View.GONE);
+					holder.imageViewGroup2.setVisibility(View.VISIBLE);
+					holder.imageViewGroup1.setVisibility(View.VISIBLE);
+					holder.itemImageView1.setVisibility(View.VISIBLE);
+					holder.itemImageView2.setVisibility(View.VISIBLE);
+					holder.itemImageView3.setVisibility(View.VISIBLE);
+					holder.itemImageView4.setVisibility(View.VISIBLE);
+					holder.itemImageView5.setVisibility(View.VISIBLE);
+					holder.itemImageView6.setVisibility(View.VISIBLE);
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), holder.itemImageView3,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[3]), holder.itemImageView4,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[4]), holder.itemImageView5,
+							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[5]), holder.itemImageView6,
+							ImageLoaderTool.getImageOptions());
+					break;
+				default:
+					holder.itemImageView.setVisibility(View.GONE);
+					holder.imageViewGroup1.setVisibility(View.GONE);
+					holder.imageViewGroup2.setVisibility(View.GONE);
+					break;
+				}
+			} else {
+				holder.itemImageView.setVisibility(View.GONE);
+				holder.imageViewGroup1.setVisibility(View.GONE);
+				holder.imageViewGroup2.setVisibility(View.GONE);
+			}
+
+			holder.itemImageView1.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					goBigPhoto(jsonPostItem.getP_big_photo(), 1);
+				}
+			});
+			holder.itemImageView2.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					goBigPhoto(jsonPostItem.getP_big_photo(), 2);
+				}
+			});
+			holder.itemImageView3.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					goBigPhoto(jsonPostItem.getP_big_photo(), 3);
+				}
+			});
+			holder.itemImageView4.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					goBigPhoto(jsonPostItem.getP_big_photo(), 4);
+				}
+			});
+			holder.itemImageView5.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					goBigPhoto(jsonPostItem.getP_big_photo(), 5);
+				}
+			});
+			holder.itemImageView6.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					goBigPhoto(jsonPostItem.getP_big_photo(), 6);
+				}
+			});
 			return view;
+		}
+
+		//查看大图
+		public void goBigPhoto(String url, int postion) {
+			Intent intent = new Intent(getActivity(), GalleryPictureActivity.class);
+			if (!url.isEmpty()) {
+				String[] BigPhotoUrls = url.split("\\|");
+				intent.putExtra(GalleryPictureActivity.IMAGE_URLS, BigPhotoUrls);
+				intent.putExtra(GalleryPictureActivity.POSITON, postion);
+				startActivity(intent);
+				getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
+			}
 		}
 	}
 }

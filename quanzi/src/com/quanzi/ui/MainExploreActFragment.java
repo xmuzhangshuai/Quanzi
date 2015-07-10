@@ -28,7 +28,7 @@ import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.quanzi.R;
 import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseV4Fragment;
-import com.quanzi.jsonobject.JsonPostItem;
+import com.quanzi.jsonobject.JsonActItem;
 import com.quanzi.utils.DateTimeTools;
 import com.quanzi.utils.ImageLoaderTool;
 import com.quanzi.utils.UserPreference;
@@ -50,7 +50,7 @@ public class MainExploreActFragment extends BaseV4Fragment {
 	protected boolean pauseOnScroll = false;
 	protected boolean pauseOnFling = true;
 	private UserPreference userPreference;
-	private LinkedList<JsonPostItem> jsonPostItemList;
+	private LinkedList<JsonActItem> jsonActItemList;
 	private int pageNow = 0;//控制页数
 	private PostAdapter mAdapter;
 	private ProgressDialog progressDialog;
@@ -60,7 +60,7 @@ public class MainExploreActFragment extends BaseV4Fragment {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		userPreference = BaseApplication.getInstance().getUserPreference();
-		jsonPostItemList = new LinkedList<JsonPostItem>();
+		jsonActItemList = new LinkedList<JsonActItem>();
 	}
 
 	@Override
@@ -195,30 +195,14 @@ public class MainExploreActFragment extends BaseV4Fragment {
 		//			}
 		//		};
 		//		AsyncHttpClientTool.post(getActivity(), "getlovebridgelist", params, responseHandler);
-		JsonPostItem item1 = new JsonPostItem(1, 1, "张帅", "drawable://" + R.drawable.headimage1, "drawable://"
-				+ R.drawable.headimage1, "男", "一见倾心，再见依然痴迷", "drawable://" + R.drawable.content, "drawable://"
-				+ R.drawable.content, new Date(), 20, 2);
-
-		JsonPostItem item2 = new JsonPostItem(2, 2, "叶子", "drawable://" + R.drawable.headimage2, "drawable://"
-				+ R.drawable.headimage2, "女", "你的美丽让我情不自禁", "drawable://" + R.drawable.content2, "drawable://"
-				+ R.drawable.content2, new Date(), 45, 20);
-
-		JsonPostItem item3 = new JsonPostItem(3, 3, "荣发", "drawable://" + R.drawable.headimage3, "drawable://"
-				+ R.drawable.headimage3, "男", "这是一片很寂寞的天下着有些伤心的雨", "drawable://" + R.drawable.content, "drawable://"
-				+ R.drawable.content, new Date(), 76, 32);
-
-		JsonPostItem item4 = new JsonPostItem(4, 4, "伟强", "drawable://" + R.drawable.headimage4, "drawable://"
-				+ R.drawable.headimage4, "女", "爱上你的日子，每天都在想你", "drawable://" + R.drawable.content2, "drawable://"
-				+ R.drawable.content2, new Date(), 26, 280);
-
-		JsonPostItem item5 = new JsonPostItem(5, 5, "王坤", "drawable://" + R.drawable.headimage5, "drawable://"
-				+ R.drawable.headimage5, "女", "卡又丢了，快来点开心的事冲冲喜吧！", "drawable://" + R.drawable.content, "drawable://"
-				+ R.drawable.content, new Date(), 256, 46);
-		jsonPostItemList.add(item1);
-		jsonPostItemList.add(item2);
-		jsonPostItemList.add(item3);
-		jsonPostItemList.add(item4);
-		jsonPostItemList.add(item5);
+		JsonActItem item1 = new JsonActItem(1, "一起来看流星雨", 1, "张帅", "drawable://" + R.drawable.headimage1, "drawable://"
+				+ R.drawable.headimage1, "男", new Date(), "卡又丢了，快来点开心的事冲冲喜吧！", "drawable://" + R.drawable.content,
+				"drawable://" + R.drawable.content, new Date(), "厦门大学三家村广场", "男女不限", "讲座", 32, 56);
+		jsonActItemList.add(item1);
+		jsonActItemList.add(item1);
+		jsonActItemList.add(item1);
+		jsonActItemList.add(item1);
+		jsonActItemList.add(item1);
 		postListView.onRefreshComplete();
 	}
 
@@ -253,13 +237,13 @@ public class MainExploreActFragment extends BaseV4Fragment {
 		@Override
 		public int getCount() {
 			// TODO Auto-generated method stub
-			return jsonPostItemList.size();
+			return jsonActItemList.size();
 		}
 
 		@Override
 		public Object getItem(int position) {
 			// TODO Auto-generated method stub
-			return jsonPostItemList.get(position);
+			return jsonActItemList.get(position);
 		}
 
 		@Override
@@ -272,8 +256,8 @@ public class MainExploreActFragment extends BaseV4Fragment {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
 			View view = convertView;
-			final JsonPostItem jsonPostItem = jsonPostItemList.get(position);
-			if (jsonPostItem == null) {
+			final JsonActItem jsonActItem = jsonActItemList.get(position);
+			if (jsonActItem == null) {
 				return null;
 			}
 
@@ -281,7 +265,7 @@ public class MainExploreActFragment extends BaseV4Fragment {
 			if (convertView == null) {
 				view = LayoutInflater.from(getActivity()).inflate(R.layout.act_list_item, null);
 				holder = new ViewHolder();
-				holder.titleTextView = (TextView) view.findViewById(R.id.title);
+				holder.titleTextView = (TextView) view.findViewById(R.id.act_title);
 				holder.actTimeTextView = (TextView) view.findViewById(R.id.act_time);
 				holder.actLocationTextView = (TextView) view.findViewById(R.id.act_location);
 				holder.actGenderTextView = (TextView) view.findViewById(R.id.act_gender);
@@ -300,13 +284,15 @@ public class MainExploreActFragment extends BaseV4Fragment {
 				holder = (ViewHolder) view.getTag(); // 把数据取出来  
 			}
 
+			holder.titleTextView.setText(jsonActItem.getA_title());
+
 			//设置头像
-			if (!TextUtils.isEmpty(jsonPostItem.getP_small_avatar())) {
+			if (!TextUtils.isEmpty(jsonActItem.getA_small_avatar())) {
 				//				imageLoader.displayImage(AsyncHttpClientImageSound.getAbsoluteUrl(jsonPostItem.getN_small_avatar()),
 				//						holder.headImageView, ImageLoaderTool.getHeadImageOptions(10));
-				imageLoader.displayImage(jsonPostItem.getP_small_avatar(), holder.headImageView,
+				imageLoader.displayImage(jsonActItem.getA_small_avatar(), holder.headImageView,
 						ImageLoaderTool.getHeadImageOptions(6));
-				if (userPreference.getU_id() != jsonPostItem.getP_userid()) {
+				if (userPreference.getU_id() != jsonActItem.getA_userid()) {
 					//点击头像进入详情页面
 					holder.headImageView.setOnClickListener(new OnClickListener() {
 
@@ -323,53 +309,63 @@ public class MainExploreActFragment extends BaseV4Fragment {
 				}
 			}
 
-			//设置照片
-			//			if (!TextUtils.isEmpty(jsonPostItem.getN_image())) {
-			//				//				imageLoader.displayImage(AsyncHttpClientImageSound.getAbsoluteUrl(jsonPostItem.getN_image()),
-			//				//						holder.contentImageView, ImageLoaderTool.getImageOptions());
-			//				imageLoader.displayImage("drawable://" + R.drawable.headimage, holder.contentImageView,
-			//						ImageLoaderTool.getImageOptions());
-			//				holder.contentImageView.setVisibility(View.VISIBLE);
-			//				holder.contentImageView.setOnClickListener(new OnClickListener() {
-			//
-			//					@Override
-			//					public void onClick(View v) {
-			//						// TODO Auto-generated method stub
-			//						//						Intent intent = new Intent(getActivity(), ImageShowerActivity.class);
-			//						//						intent.putExtra(ImageShowerActivity.SHOW_BIG_IMAGE,
-			//						//								AsyncHttpClientImageSound.getAbsoluteUrl(jsonPostItem.getN_image()));
-			//						//						startActivity(intent);
-			//						//						getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
-			//					}
-			//				});
-			//			} else {
-			//				holder.contentImageView.setVisibility(View.GONE);
-			//			}
-
-			//设置内容
-			//			holder.actContentTextView.setText(jsonPostItem.getN_content());
-
 			//设置姓名
-			holder.nameTextView.setText(jsonPostItem.getP_username());
+			holder.nameTextView.setText(jsonActItem.getA_username());
 
 			//设置日期
-			holder.timeTextView.setText(DateTimeTools.getHourAndMin(jsonPostItem.getP_time()));
+			holder.timeTextView.setText(DateTimeTools.getHourAndMin(jsonActItem.getA_time()));
+
+			//设置活动日期
+			holder.actTimeTextView.setText(DateTimeTools.DateToStringForCN(jsonActItem.getA_act_date()));
+
+			//设置活动地点
+			holder.actLocationTextView.setText(jsonActItem.getA_act_location());
+
+			//设置活动对象
+			holder.actGenderTextView.setText(jsonActItem.getA_act_target());
+
+			//设置活动详情
+			holder.actContentTextView.setText(jsonActItem.getA_detail_content());
+
+			//
+
+			//设置照片
+			if (!TextUtils.isEmpty(jsonActItem.getA_thumbnail())) {
+				//				imageLoader.displayImage(AsyncHttpClientImageSound.getAbsoluteUrl(jsonPostItem.getN_image()),
+				//						holder.contentImageView, ImageLoaderTool.getImageOptions());
+				imageLoader.displayImage(jsonActItem.getA_thumbnail(), holder.contentImageView,
+						ImageLoaderTool.getImageOptions());
+				holder.contentImageView.setVisibility(View.VISIBLE);
+				holder.contentImageView.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						Intent intent = new Intent(getActivity(), ImageShowerActivity.class);
+						intent.putExtra(ImageShowerActivity.SHOW_BIG_IMAGE, jsonActItem.getA_big_photo());
+						startActivity(intent);
+						getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
+					}
+				});
+			} else {
+				holder.contentImageView.setVisibility(View.GONE);
+			}
 
 			//设置被赞次数
-			holder.favorCountTextView.setText("" + jsonPostItem.getP_favor_count() + "赞");
+			holder.favorCountTextView.setText("" + jsonActItem.getA_favor_count() + "赞");
 			holder.favorCountTextView.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					startActivity(new Intent(getActivity(), AllFavorsActivity.class).putExtra(
-							PostDetailActivity.POST_ITEM, jsonPostItem));
+							PostDetailActivity.POST_ITEM, jsonActItem));
 					getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 				}
 			});
 
 			//设置评论次数
-			holder.commentCountTextView.setText("查看全部" + jsonPostItem.getP_comment_count() + "条评论");
+			holder.commentCountTextView.setText("查看全部" + jsonActItem.getA_comment_count() + "条评论");
 
 			//评论
 			holder.commentBtn.setOnClickListener(new OnClickListener() {
@@ -378,7 +374,7 @@ public class MainExploreActFragment extends BaseV4Fragment {
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					startActivity(new Intent(getActivity(), ActDetailActivity.class).putExtra(
-							ActDetailActivity.ACT_ITEM, jsonPostItem));
+							ActDetailActivity.ACT_ITEM, jsonActItem));
 					getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 				}
 			});
