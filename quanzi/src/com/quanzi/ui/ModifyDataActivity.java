@@ -5,55 +5,49 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Locale;
+import java.util.Map;
 
 import org.apache.http.Header;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
-import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.quanzi.R;
 import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseFragmentActivity;
-import com.quanzi.config.Constants;
 import com.quanzi.customewidget.MyAlertDialog;
 import com.quanzi.customewidget.MyMenuDialog;
 import com.quanzi.table.UserTable;
 import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.DateTimeTools;
+import com.quanzi.utils.FastJsonTool;
+import com.quanzi.utils.ImageLoaderTool;
 import com.quanzi.utils.ImageTools;
+import com.quanzi.utils.LogTool;
 import com.quanzi.utils.ToastTool;
 import com.quanzi.utils.UserPreference;
 
@@ -110,26 +104,6 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 	/***个人签名***/
 	private View introView;
 	private TextView introTextView;
-
-	//	private TextView provinceTextView;
-	//	private TextView cityTextView;
-	//	private TextView telEditText;//电话
-	//	private View ageView;
-	//	private View heightView;
-	//	private View weightView;
-	//	private View constellView;
-	//	private ImageView vertifyView;
-	//	private EditText ageEditText;
-	//	private EditText heightEditText;
-	//	private EditText weightEditText;
-	//	private TextView constellEditText;
-	//	private View passView;
-	//	private View phoneView;
-	//	private TextView waitCheckView;
-	//	private String age;
-	//	private String weight;
-	//	private String height;
-	//	private String constell;
 
 	private String personIntro;
 	private UserPreference userPreference;
@@ -193,21 +167,6 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 		introView = findViewById(R.id.personIntroview);
 		introTextView = (TextView) findViewById(R.id.personIntro);
 
-		//		provinceTextView = (TextView) findViewById(R.id.province);
-		//		cityTextView = (TextView) findViewById(R.id.city);
-		//		telEditText = (TextView) findViewById(R.id.phone);
-		//		passView = findViewById(R.id.passview);
-		//		phoneView = findViewById(R.id.phoneview);
-		//		waitCheckView = (TextView) findViewById(R.id.waitcheck);
-		//		ageView = findViewById(R.id.ageview);
-		//		heightView = findViewById(R.id.heightview);
-		//		weightView = findViewById(R.id.weightview);
-		//		constellView = findViewById(R.id.constellview);
-		//		ageEditText = (EditText) findViewById(R.id.age);
-		//		heightEditText = (EditText) findViewById(R.id.height);
-		//		weightEditText = (EditText) findViewById(R.id.weight);
-		//		constellEditText = (TextView) findViewById(R.id.constell);
-
 	}
 
 	@Override
@@ -233,7 +192,9 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 		interestView.setOnClickListener(this);
 		loveStatusView.setOnClickListener(this);
 		schoolView.setOnClickListener(this);
-		headImage.setImageResource(R.drawable.headimage2);
+		//显示头像
+		ImageLoader.getInstance().displayImage(AsyncHttpClientTool.getAbsoluteUrl(userPreference.getU_small_avatar()),
+				headImage, ImageLoaderTool.getHeadImageOptions(3));
 
 		//设置生日
 		if (userPreference.getU_birthday() != null) {
@@ -271,12 +232,12 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 	 */
 	protected void doTakePhoto() {
 		try {
-			File uploadFileDir = new File(Environment.getExternalStorageDirectory(), "/yixianqian");
+			File uploadFileDir = new File(Environment.getExternalStorageDirectory(), "/quanzi/image");
 			Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			if (!uploadFileDir.exists()) {
 				uploadFileDir.mkdirs();
 			}
-			picFile = new File(uploadFileDir, "yixianqian.jpeg");
+			picFile = new File(uploadFileDir, "headimage.jpeg");
 			if (!picFile.exists()) {
 				picFile.createNewFile();
 			}
@@ -295,18 +256,17 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 	 */
 	protected void doCropPhoto() {
 		try {
-			File pictureFileDir = new File(Environment.getExternalStorageDirectory(), "/yixianqian/image");
+			File pictureFileDir = new File(Environment.getExternalStorageDirectory(), "/quanzi/image");
 			if (!pictureFileDir.exists()) {
 				pictureFileDir.mkdirs();
 			}
-			picFile = new File(pictureFileDir, "yixianqian.jpeg");
+			picFile = new File(pictureFileDir, "headimage.jpeg");
 			if (!picFile.exists()) {
 				picFile.createNewFile();
 			}
 			photoUri = Uri.fromFile(picFile);
 			final Intent intent = getCropImageIntent();
 			startActivityForResult(intent, activity_result_cropimage_with_data);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -354,54 +314,56 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 	 * @param filePath
 	 */
 	public void uploadImage(final String filePath) {
-		//		final Bitmap largeAvatar = BitmapFactory.decodeFile(filePath);
-		//		if (largeAvatar != null) {
-		//			final Bitmap smallBitmap = ImageTools.zoomBitmap(largeAvatar, largeAvatar.getWidth() / 4,
-		//					largeAvatar.getHeight() / 4);
-		//			final String smallAvatarPath = Environment.getExternalStorageDirectory() + "/yixianqian/image";
-		//
-		//			RequestParams params = new RequestParams();
-		//			int userId = userPreference.getU_id();
-		//			if (userId > -1) {
-		//				params.put(UserTable.U_ID, String.valueOf(userId));
-		//				try {
-		//					params.put("large_avatar", picFile);
-		//					params.put("small_avatar",
-		//							ImageTools.savePhotoToSDCard(smallBitmap, smallAvatarPath, "smallAvatar.jpeg", 100));
-		//				} catch (FileNotFoundException e1) {
-		//					// TODO Auto-generated catch block
-		//					e1.printStackTrace();
-		//				}
-		//				TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
-		//					@Override
-		//					public void onSuccess(int statusCode, Header[] headers, String response) {
-		//						// TODO Auto-generated method stub
-		//						if (statusCode == 200) {
-		//							ToastTool.showLong(ModifyDataActivity.this, "头像上传成功！请等待审核");
-		//							largeAvatar.recycle();
-		//							smallBitmap.recycle();
-		//							//删除本地头像
-		//							ImageTools.deleteImageByPath(filePath);
-		//							ImageTools.deletePhotoAtPathAndName(smallAvatarPath, "smallAvatar.jpeg");
-		//							//获取新头像地址
-		//							ServerUtil.getInstance().getHeadImage(headImage, waitCheckView);
-		//						}
-		//					}
-		//
-		//					@Override
-		//					public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
-		//						// TODO Auto-generated method stub
-		//						ToastTool.showLong(ModifyDataActivity.this, "头像上传失败！" + errorResponse);
-		//						//删除本地头像
-		//						ImageTools.deleteImageByPath(filePath);
-		//						ImageTools.deletePhotoAtPathAndName(smallAvatarPath, "smallAvatar.jpeg");
-		//					}
-		//				};
-		//				AsyncHttpClientImageSound.post(AsyncHttpClientImageSound.HEADIMAGE_URL, params, responseHandler);
-		//			}
-		//		} else {
-		//			ImageTools.deleteImageByPath(filePath);
-		//		}
+		final Bitmap largeAvatar = BitmapFactory.decodeFile(filePath);
+		if (largeAvatar != null) {
+
+			RequestParams params = new RequestParams();
+			int userId = userPreference.getU_id();
+			if (userId > -1) {
+				params.put(UserTable.U_ID, String.valueOf(userId));
+				try {
+					params.put(UserTable.U_LARGE_AVATAR, picFile);
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
+					@Override
+					public void onSuccess(int statusCode, Header[] headers, String response) {
+						// TODO Auto-generated method stub
+						if (statusCode == 200) {
+							ToastTool.showLong(ModifyDataActivity.this, "头像上传成功！");
+							largeAvatar.recycle();
+							//删除本地头像
+							ImageTools.deleteImageByPath(filePath);
+							//获取新头像地址
+							Map<String, String> map = FastJsonTool.getObject(response, Map.class);
+							if (map != null) {
+								userPreference.setU_large_avatar(map.get(UserTable.U_LARGE_AVATAR));
+								userPreference.setU_small_avatar(map.get(UserTable.U_SMALL_AVATAR));
+								//显示头像
+								ImageLoader.getInstance().displayImage(
+										AsyncHttpClientTool.getAbsoluteUrl(map.get(UserTable.U_SMALL_AVATAR)),
+										headImage, ImageLoaderTool.getHeadImageOptions(3));
+							} else {
+								LogTool.e("上传服务器出错" + response);
+							}
+						}
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+						// TODO Auto-generated method stub
+						LogTool.e("头像上传失败！");
+						//删除本地头像
+						ImageTools.deleteImageByPath(filePath);
+					}
+				};
+				AsyncHttpClientTool.post("user/uploadHeadImg", params, responseHandler);
+			}
+		} else {
+			ImageTools.deleteImageByPath(filePath);
+		}
 	}
 
 	/**
@@ -643,8 +605,9 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				dialog.dismiss();
-				finish();
-				BaseApplication.getInstance().getUserPreference().clear();
+				Intent intent = new Intent(ModifyDataActivity.this, ModifySchoolActivity.class);
+				startActivity(intent);
+				overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 			}
 		};
 		View.OnClickListener cancle = new OnClickListener() {

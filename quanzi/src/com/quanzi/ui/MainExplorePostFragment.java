@@ -340,8 +340,8 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 			if (!TextUtils.isEmpty(jsonPostItem.getP_small_avatar())) {
 				//				imageLoader.displayImage(AsyncHttpClientImageSound.getAbsoluteUrl(jsonPostItem.getN_small_avatar()),
 				//						holder.headImageView, ImageLoaderTool.getHeadImageOptions(10));
-				imageLoader.displayImage(jsonPostItem.getP_small_avatar(), holder.headImageView,
-						ImageLoaderTool.getHeadImageOptions(10));
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonPostItem.getP_small_avatar()),
+						holder.headImageView, ImageLoaderTool.getHeadImageOptions(10));
 				if (userPreference.getU_id() != jsonPostItem.getP_userid()) {
 					//点击头像进入详情页面
 					holder.headImageView.setOnClickListener(new OnClickListener() {
@@ -585,7 +585,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 					// TODO Auto-generated method stub
 					if (bigPhotoUrls.length == 4) {
 						goBigPhoto(bigPhotoUrls, 2);
-					}else {
+					} else {
 						goBigPhoto(bigPhotoUrls, 3);
 					}
 				}
@@ -597,7 +597,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 					// TODO Auto-generated method stub
 					if (bigPhotoUrls.length == 4) {
 						goBigPhoto(bigPhotoUrls, 3);
-					}else {
+					} else {
 						goBigPhoto(bigPhotoUrls, 4);
 					}
 				}

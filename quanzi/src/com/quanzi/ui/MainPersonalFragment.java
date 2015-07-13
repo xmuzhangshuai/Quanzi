@@ -53,6 +53,16 @@ public class MainPersonalFragment extends BaseV4Fragment implements OnClickListe
 	}
 
 	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		//显示头像
+		ImageLoader.getInstance().displayImage(AsyncHttpClientTool.getAbsoluteUrl(userPreference.getU_small_avatar()),
+				headImageView, ImageLoaderTool.getHeadImageOptions(10));
+		nameTextView.setText(userPreference.getU_nickname());
+	}
+
+	@Override
 	protected void findViewById() {
 		// TODO Auto-generated method stub
 		leftTextView = (TextView) rootView.findViewById(R.id.left_text1);
@@ -77,11 +87,6 @@ public class MainPersonalFragment extends BaseV4Fragment implements OnClickListe
 		persondataView.setOnClickListener(this);
 		settingView.setOnClickListener(this);
 		headImageView.setOnClickListener(this);
-
-		//显示头像
-		ImageLoader.getInstance().displayImage(AsyncHttpClientTool.getAbsoluteUrl(userPreference.getU_small_avatar()),
-				headImageView, ImageLoaderTool.getHeadImageOptions(10));
-		nameTextView.setText(userPreference.getU_nickname());
 	}
 
 	@Override
@@ -90,10 +95,8 @@ public class MainPersonalFragment extends BaseV4Fragment implements OnClickListe
 		switch (v.getId()) {
 		case R.id.head_image://放大头像
 			Intent intent = new Intent(getActivity(), ImageShowerActivity.class);
-			//			intent.putExtra(ImageShowerActivity.SHOW_BIG_IMAGE, AsyncHttpClientImageSound
-			//					.getAbsoluteUrl(singleTimeCapsuleList.get(position).getStc_photo()));
-			intent.putExtra(ImageShowerActivity.SHOW_BIG_IMAGE, "drawable://" + R.drawable.headimage);
-
+			intent.putExtra(ImageShowerActivity.SHOW_BIG_IMAGE,
+					AsyncHttpClientTool.getAbsoluteUrl(userPreference.getU_large_avatar()));
 			startActivity(intent);
 			getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
 			break;

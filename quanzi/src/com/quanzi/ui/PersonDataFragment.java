@@ -15,6 +15,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.quanzi.R;
 import com.quanzi.base.BaseV4Fragment;
 import com.quanzi.ui.MainExplorePostFragment.PostAdapter;
+import com.quanzi.utils.DateTimeTools;
 import com.quanzi.utils.UserPreference;
 
 /**
@@ -123,7 +124,43 @@ public class PersonDataFragment extends BaseV4Fragment {
 	@Override
 	protected void initView() {
 		// TODO Auto-generated method stub
+		/***昵称***/
+		if (userPreference.getU_nickname().isEmpty()) {
+			nickNameTextView.setText("未填写");
+		}else {
+			nickNameTextView.setText(userPreference.getU_nickname());
+		}
 
+		/***性别***/
+		genderText.setText(userPreference.getU_gender());
+
+		/***生日***/
+		birthdayTextView.setText(DateTimeTools.DateToString(userPreference.getU_birthday()));
+
+		/***学校***/
+		 schoolTextView.setText(userPreference.getSchoolName());
+
+		/***当前身份***/
+		statusTextView.setText(userPreference.getU_identity());
+
+//		/***情感状态***/
+//		loveStatusTextView;
+//
+//		/***兴趣爱好***/
+//		interestTextView;
+//
+//		/***擅长技能***/
+//		skillTextView;
+//
+//		/***所属行业***/
+//		industryTextView.setText();
+
+		/***个人签名***/
+		if (userPreference.getU_introduce().isEmpty()) {
+			introTextView.setText("未填写");
+		}else {
+			introTextView.setText(userPreference.getU_introduce());
+		}
+		;
 	}
-
 }

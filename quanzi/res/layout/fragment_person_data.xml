@@ -51,7 +51,6 @@
                     android:layout_marginRight="5dp"
                     android:layout_toRightOf="@+id/nicknamelabel"
                     android:gravity="right"
-                    android:text="帅哥"
                     android:textSize="@dimen/day_recommend_font_info" />
             </RelativeLayout>
 
@@ -91,7 +90,6 @@
                     android:layout_marginRight="5dp"
                     android:layout_toRightOf="@+id/genderlabel"
                     android:gravity="right"
-                    android:text="男"
                     android:textSize="@dimen/day_recommend_font_info" />
             </RelativeLayout>
 
@@ -131,7 +129,6 @@
                     android:layout_marginRight="5dp"
                     android:layout_toRightOf="@+id/birthdaylabel"
                     android:gravity="right"
-                    android:text="1991-09-28"
                     android:textSize="@dimen/day_recommend_font_info" />
             </RelativeLayout>
 
@@ -171,7 +168,6 @@
                     android:layout_marginRight="5dp"
                     android:layout_toRightOf="@+id/schoollabel"
                     android:gravity="right"
-                    android:text="厦门大学"
                     android:textSize="@dimen/day_recommend_font_info" />
             </RelativeLayout>
 
@@ -211,7 +207,6 @@
                     android:layout_marginRight="5dp"
                     android:layout_toRightOf="@+id/statuslabel"
                     android:gravity="right"
-                    android:text="学生"
                     android:textSize="@dimen/day_recommend_font_info" />
             </RelativeLayout>
 
@@ -251,7 +246,6 @@
                     android:layout_marginRight="5dp"
                     android:layout_toRightOf="@+id/lovestatuslabel"
                     android:gravity="right"
-                    android:text="单身"
                     android:textSize="@dimen/day_recommend_font_info" />
             </RelativeLayout>
 
@@ -413,7 +407,6 @@
                     android:layout_marginRight="5dp"
                     android:layout_toRightOf="@+id/personIntrolabel"
                     android:gravity="right"
-                    android:text="今天很舒服"
                     android:textSize="@dimen/day_recommend_font_info" />
 
                 <View

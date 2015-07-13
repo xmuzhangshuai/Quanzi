@@ -217,6 +217,13 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" >
         </activity>
+        
+         <!-- 修改学校页面 -->
+        <activity
+            android:name="com.quanzi.ui.ModifySchoolActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
+        </activity>
 
         <!-- 修改个人签名页面 -->
         <activity

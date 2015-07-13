@@ -306,10 +306,8 @@ public class MainExploreActFragment extends BaseV4Fragment {
 
 			//设置头像
 			if (!TextUtils.isEmpty(jsonActItem.getA_small_avatar())) {
-				//				imageLoader.displayImage(AsyncHttpClientImageSound.getAbsoluteUrl(jsonPostItem.getN_small_avatar()),
-				//						holder.headImageView, ImageLoaderTool.getHeadImageOptions(10));
-				imageLoader.displayImage(jsonActItem.getA_small_avatar(), holder.headImageView,
-						ImageLoaderTool.getHeadImageOptions(6));
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonActItem.getA_small_avatar()),
+						holder.headImageView, ImageLoaderTool.getHeadImageOptions(6));
 				if (userPreference.getU_id() != jsonActItem.getA_userid()) {
 					//点击头像进入详情页面
 					holder.headImageView.setOnClickListener(new OnClickListener() {
