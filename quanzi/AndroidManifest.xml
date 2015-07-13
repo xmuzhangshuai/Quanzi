@@ -40,9 +40,9 @@
     <application
         android:name="com.quanzi.base.BaseApplication"
         android:allowBackup="true"
-        android:largeHeap="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.quanzi.ui.GuideActivity"
@@ -126,13 +126,15 @@
         <!-- 帖子详情页面 -->
         <activity
             android:name="com.quanzi.ui.PostDetailActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" >
         </activity>
 
         <!-- 活动详情页面 -->
         <activity
             android:name="com.quanzi.ui.ActDetailActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" >
         </activity>
 
         <!-- 赞者图片 -->
@@ -217,8 +219,8 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" >
         </activity>
-        
-         <!-- 修改学校页面 -->
+
+        <!-- 修改学校页面 -->
         <activity
             android:name="com.quanzi.ui.ModifySchoolActivity"
             android:screenOrientation="portrait"
@@ -294,13 +296,11 @@
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="pwpG0K4DEsCmgRwhCzTqqnr8" />
-        
         <meta-data
             android:name="EASEMOB_APPKEY"
             android:value="yixianqian#quanzi" />
-        
+
         <service android:name="com.easemob.chat.EMChatService" />
-        
     </application>
 
 </manifest>

@@ -71,8 +71,7 @@
         android:background="@drawable/shape_bottombar_gb"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:gravity="center_vertical"
-        android:visibility="gone" >
+        android:gravity="center_vertical" >
 
         <EditText
             android:id="@+id/msg_et"
@@ -109,63 +108,6 @@
                 android:textColor="@drawable/sel_chat_pressed_to_talk"
                 android:textSize="@dimen/day_recommend_font_info" />
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/actionbar"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/shape_bottombar_gb"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:gravity="center_vertical" >
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:layout_marginLeft="@dimen/personal_timecapsule_padding"
-            android:layout_marginRight="@dimen/personal_timecapsule_padding"
-            android:paddingRight="@dimen/activity_horizontal_margin" >
-
-            <TextView
-                android:id="@+id/favor_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:textColor="@color/sel_color_gray_green"
-                android:textSize="@dimen/register_font_size" />
-
-            <ImageView
-                android:id="@+id/more"
-                android:layout_width="@dimen/time_capsule20"
-                android:layout_height="@dimen/time_capsule20"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/login_register"
-                android:layout_marginTop="10dp"
-                android:layout_toLeftOf="@+id/comment_btn"
-                android:clickable="true"
-                android:focusable="false"
-                android:src="@drawable/sel_more_btn" />
-
-            <ImageView
-                android:id="@+id/comment_btn"
-                android:layout_width="@dimen/motify_data_space"
-                android:layout_height="@dimen/motify_data_space"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/login_register"
-                android:layout_toLeftOf="@+id/favor_btn"
-                android:src="@drawable/sel_comment_btn" />
-
-            <CheckBox
-                android:id="@+id/favor_btn"
-                android:layout_width="@dimen/motify_data_space"
-                android:layout_height="@dimen/motify_data_space"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:background="@drawable/sel_flipper_checkbox"
-                android:button="@null" />
-        </RelativeLayout>
     </LinearLayout>
 
 </LinearLayout>

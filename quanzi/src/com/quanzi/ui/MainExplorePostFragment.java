@@ -6,10 +6,7 @@ import java.util.List;
 import org.apache.http.Header;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
@@ -18,12 +15,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -338,8 +333,6 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 
 			//…Ë÷√Õ∑œÒ
 			if (!TextUtils.isEmpty(jsonPostItem.getP_small_avatar())) {
-				//				imageLoader.displayImage(AsyncHttpClientImageSound.getAbsoluteUrl(jsonPostItem.getN_small_avatar()),
-				//						holder.headImageView, ImageLoaderTool.getHeadImageOptions(10));
 				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonPostItem.getP_small_avatar()),
 						holder.headImageView, ImageLoaderTool.getHeadImageOptions(10));
 				if (userPreference.getU_id() != jsonPostItem.getP_userid()) {

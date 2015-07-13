@@ -51,6 +51,15 @@ public class Constants {
 		public static final String MARRIED = "married";
 	}
 
+	//评论类型
+	public static class CommentType {
+		//评论
+		public static final String COMMENT = "COMMENT";
+		//回复
+		public static final String REPLY = "REPLY";
+	}
+
+	
 	//身份
 	public static class Identity {
 		//学生

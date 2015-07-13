@@ -33,7 +33,7 @@ import com.quanzi.R;
 import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseFragmentActivity;
 import com.quanzi.config.Constants;
-import com.quanzi.jsonobject.JsonPostComment;
+import com.quanzi.jsonobject.JsonComment;
 import com.quanzi.jsonobject.JsonPostItem;
 import com.quanzi.utils.DateTimeTools;
 import com.quanzi.utils.ImageLoaderTool;
@@ -80,11 +80,11 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 	private View inputBar;//输入评论条
 
 	private UserPreference userPreference;
-	private PullToRefreshListView loveBridgeListView;
+	private PullToRefreshListView actCommentListView;
 	private JsonPostItem jsonPostItem;
 	private int pageNow = 0;//控制页数
 	private CommentAdapter mAdapter;
-	private LinkedList<JsonPostComment> commentList;
+	private LinkedList<JsonComment> commentList;
 	private InputMethodManager inputMethodManager;
 	private int commentCount = 0;
 
@@ -95,7 +95,7 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_post_detail);
 		userPreference = BaseApplication.getInstance().getUserPreference();
-		commentList = new LinkedList<JsonPostComment>();
+		commentList = new LinkedList<JsonComment>();
 		inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 
 		jsonPostItem = (JsonPostItem) getIntent().getSerializableExtra(ACT_ITEM);
@@ -105,12 +105,12 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 
 		//获取数据
 		getDataTask(pageNow);
-		loveBridgeListView.setMode(Mode.BOTH);
-		ListView mListView = loveBridgeListView.getRefreshableView();
+		actCommentListView.setMode(Mode.BOTH);
+		ListView mListView = actCommentListView.getRefreshableView();
 		mListView.addHeaderView(headView);
 		mListView.addFooterView(footView);
 		mAdapter = new CommentAdapter();
-		loveBridgeListView.setAdapter(mAdapter);
+		actCommentListView.setAdapter(mAdapter);
 	}
 
 	@Override
@@ -124,13 +124,13 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		loveBridgeListView.setOnScrollListener(new PauseOnScrollListener(imageLoader, pauseOnScroll, pauseOnFling));
+		actCommentListView.setOnScrollListener(new PauseOnScrollListener(imageLoader, pauseOnScroll, pauseOnFling));
 	}
 
 	@Override
 	protected void findViewById() {
 		// TODO Auto-generated method stub
-		loveBridgeListView = (PullToRefreshListView) findViewById(R.id.comment_list);
+		actCommentListView = (PullToRefreshListView) findViewById(R.id.comment_list);
 		headView = getLayoutInflater().inflate(R.layout.act_detail_headview, null);
 		footView = getLayoutInflater().inflate(R.layout.comment_foot_view, null);
 		titleTextView = (TextView) headView.findViewById(R.id.title);
@@ -155,7 +155,6 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 		leftImageButton = (View) findViewById(R.id.left_btn_bg);
 		//		rightBtnBg = (View) findViewById(R.id.right_btn_bg);
 		//		rightBtn = (ImageView) findViewById(R.id.nav_right_btn);
-		actionBar = findViewById(R.id.actionbar);
 		inputBar = findViewById(R.id.inputBar);
 	}
 
@@ -173,7 +172,7 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 		//		favorBtn.setEnabled(false);
 
 		//设置上拉下拉刷新事件
-		loveBridgeListView.setOnRefreshListener(new OnRefreshListener2<ListView>() {
+		actCommentListView.setOnRefreshListener(new OnRefreshListener2<ListView>() {
 
 			@Override
 			public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
@@ -300,7 +299,7 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 	 * 更新数据
 	 */
 	private void refresh() {
-		loveBridgeListView.setRefreshing();
+		actCommentListView.setRefreshing();
 		pageNow = 0;
 		getDataTask(pageNow);
 	}
@@ -444,13 +443,7 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 		//		};
 		//		AsyncHttpClientTool.post(PostDetailActivity.this, "getbridgecommentlist", params, responseHandler);
 
-		JsonPostComment postComment1 = new JsonPostComment(1, 1, 3, "drawable://" + R.drawable.headimage5, "蔡卓妍", "女",
-				"好美丽", "", new Date());
-		JsonPostComment postComment2 = new JsonPostComment(2, 2, 4, "drawable://" + R.drawable.headimage4, "黄晓明", "男",
-				"小妞，来一个~！", "", new Date());
-		commentList.add(postComment1);
-		commentList.add(postComment2);
-		loveBridgeListView.onRefreshComplete();
+		actCommentListView.onRefreshComplete();
 	}
 
 	/**
@@ -492,8 +485,8 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
 			View view = convertView;
-			final JsonPostComment postComment = commentList.get(position);
-			if (postComment == null) {
+			final JsonComment actComment = commentList.get(position);
+			if (actComment == null) {
 				return null;
 			}
 
@@ -515,9 +508,9 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 			if (!TextUtils.isEmpty(jsonPostItem.getP_small_avatar())) {
 				//				imageLoader.displayImage(AsyncHttpClientImageSound.getAbsoluteUrl(postComment.getC_small_avatar()),
 				//						holder.headImageView, ImageLoaderTool.getHeadImageOptions(10));
-				imageLoader.displayImage(postComment.getC_small_avatar(), holder.headImageView,
+				imageLoader.displayImage(actComment.getC_user_avatar(), holder.headImageView,
 						ImageLoaderTool.getHeadImageOptions(10));
-				if (userPreference.getU_id() != postComment.getC_userid()) {
+				if (userPreference.getU_id() != actComment.getC_user_id()) {
 					//点击头像进入详情页面
 					holder.headImageView.setOnClickListener(new OnClickListener() {
 
@@ -535,20 +528,20 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 			}
 
 			//设置内容
-			holder.contentTextView.setText(postComment.getC_content());
+			holder.contentTextView.setText(actComment.getC_content());
 
 			//设置姓名
-			holder.nameTextView.setText(postComment.getC_nickname());
+			holder.nameTextView.setText(actComment.getC_user_nickname());
 
 			//设置性别
-			if (postComment.getC_gender().equals(Constants.Gender.MALE)) {
+			if (actComment.getC_user_gender().equals(Constants.Gender.MALE)) {
 				holder.genderImageView.setImageResource(R.drawable.male);
 			} else {
 				holder.genderImageView.setImageResource(R.drawable.female);
 			}
 
 			//设置日期
-			holder.timeTextView.setText(DateTimeTools.getHourAndMin(postComment.getC_time()));
+			holder.timeTextView.setText(DateTimeTools.getHourAndMin(actComment.getC_time()));
 
 			return view;
 		}

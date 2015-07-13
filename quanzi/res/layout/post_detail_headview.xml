@@ -91,14 +91,99 @@
             android:id="@+id/item_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
             android:layout_marginLeft="@dimen/personal_timecapsule_padding"
             android:layout_marginRight="@dimen/personal_timecapsule_padding"
-            android:layout_marginTop="@dimen/margin_chat_activity"
-            android:clickable="true"
-            android:focusable="false"
+            android:layout_marginTop="@dimen/setting_list_margin"
+            android:gravity="center"
             android:maxHeight="@dimen/tape_margin_top"
-            android:visibility="gone" />
+            android:maxWidth="@dimen/tape_margin"
+            android:scaleType="centerCrop" />
+
+        <LinearLayout
+            android:id="@+id/item_image_group1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/setting_list_margin"
+            android:background="@color/white"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/personal_timecapsule_padding"
+            android:paddingRight="@dimen/personal_timecapsule_padding"
+            android:paddingTop="2dp"
+            android:visibility="gone" >
+
+            <ImageView
+                android:id="@+id/item_image1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/personal_photo_size"
+                android:layout_margin="2dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/item_image2"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/personal_photo_size"
+                android:layout_margin="2dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/item_image3"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/personal_photo_size"
+                android:layout_margin="2dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item_image_group2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/personal_timecapsule_padding"
+            android:paddingRight="@dimen/personal_timecapsule_padding"
+            android:visibility="gone" >
+
+            <ImageView
+                android:id="@+id/item_image4"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/personal_photo_size"
+                android:layout_margin="2dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/item_image5"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/personal_photo_size"
+                android:layout_margin="2dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/item_image6"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/personal_photo_size"
+                android:layout_margin="2dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
