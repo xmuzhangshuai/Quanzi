@@ -9,7 +9,7 @@
         layout="@layout/navigation_main"
         android:focusable="true" />
 
-   <com.handmark.pulltorefresh.library.PullToRefreshListView
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
         android:id="@+id/post_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -19,6 +19,23 @@
         android:dividerHeight="0dp"
         android:drawSelectorOnTop="false"
         android:listSelector="#00000000"
-        android:scrollbars="none" />
+        android:scrollbars="none"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="100dp"
+            android:text="快去探索自己的圈子吧..."
+            android:textColor="@color/white"
+            android:textSize="18.0sp" />
+    </RelativeLayout>
 
 </LinearLayout>

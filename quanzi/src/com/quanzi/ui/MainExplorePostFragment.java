@@ -6,7 +6,10 @@ import java.util.List;
 import org.apache.http.Header;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
@@ -15,10 +18,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -63,6 +68,16 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 	private LinkedList<JsonPostItem> jsonPostItemList;
 	private int pageNow = 0;//控制页数
 	private PostAdapter mAdapter;
+	private static MainExplorePostFragment mainExplorePostFragment;
+
+	//创建实例
+	static MainExplorePostFragment newInstance() {
+		if (mainExplorePostFragment == null) {
+			return new MainExplorePostFragment();
+		} else {
+			return mainExplorePostFragment;
+		}
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -158,6 +173,13 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 	}
 
 	/**
+	 * 筛选刷新
+	 */
+	public void refresh() {
+		LogTool.e("刷新！！");
+	}
+
+	/**
 	 * 网络获取数据
 	 */
 	private void getDataTask(int p) {
@@ -173,6 +195,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 				if (statusCode == 200) {
 					List<JsonPostItem> temp = FastJsonTool.getObjectList(response, JsonPostItem.class);
 					if (temp != null) {
+						LogTool.i("列表长度" + temp.size());
 						//如果是首次获取数据
 						if (page == 0) {
 							if (temp.size() < Config.PAGE_NUM) {
@@ -198,7 +221,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 			@Override
 			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
 				// TODO Auto-generated method stub
-				LogTool.e("获取学校帖子列表失败"+errorResponse);
+				LogTool.e("获取学校帖子列表失败" + errorResponse);
 			}
 
 			@Override
@@ -209,7 +232,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 			}
 
 		};
-		AsyncHttpClientTool.post(getActivity(), "getlovebridgelist", params, responseHandler);
+		AsyncHttpClientTool.post(getActivity(), "post/getSchoolPosts", params, responseHandler);
 	}
 
 	/**
@@ -521,12 +544,22 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 				holder.imageViewGroup2.setVisibility(View.GONE);
 			}
 
+			String[] tempBbigPhotoUrls = null;
+
+			if (!jsonPostItem.getP_big_photo().isEmpty()) {
+				tempBbigPhotoUrls = jsonPostItem.getP_big_photo().split("\\|");
+				for (int i = 0; i < tempBbigPhotoUrls.length; i++) {
+					tempBbigPhotoUrls[i] = AsyncHttpClientTool.getAbsoluteUrl(tempBbigPhotoUrls[i]);
+				}
+			}
+			final String[] bigPhotoUrls = tempBbigPhotoUrls;
+
 			holder.itemImageView1.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					goBigPhoto(jsonPostItem.getP_big_photo(), 1);
+					goBigPhoto(bigPhotoUrls, 0);
 				}
 			});
 			holder.itemImageView2.setOnClickListener(new OnClickListener() {
@@ -534,7 +567,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					goBigPhoto(jsonPostItem.getP_big_photo(), 2);
+					goBigPhoto(bigPhotoUrls, 1);
 				}
 			});
 			holder.itemImageView3.setOnClickListener(new OnClickListener() {
@@ -542,7 +575,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					goBigPhoto(jsonPostItem.getP_big_photo(), 3);
+					goBigPhoto(bigPhotoUrls, 2);
 				}
 			});
 			holder.itemImageView4.setOnClickListener(new OnClickListener() {
@@ -550,7 +583,11 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					goBigPhoto(jsonPostItem.getP_big_photo(), 4);
+					if (bigPhotoUrls.length == 4) {
+						goBigPhoto(bigPhotoUrls, 2);
+					}else {
+						goBigPhoto(bigPhotoUrls, 3);
+					}
 				}
 			});
 			holder.itemImageView5.setOnClickListener(new OnClickListener() {
@@ -558,7 +595,11 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					goBigPhoto(jsonPostItem.getP_big_photo(), 5);
+					if (bigPhotoUrls.length == 4) {
+						goBigPhoto(bigPhotoUrls, 3);
+					}else {
+						goBigPhoto(bigPhotoUrls, 4);
+					}
 				}
 			});
 			holder.itemImageView6.setOnClickListener(new OnClickListener() {
@@ -566,7 +607,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					goBigPhoto(jsonPostItem.getP_big_photo(), 6);
+					goBigPhoto(bigPhotoUrls, 5);
 				}
 			});
 
@@ -574,15 +615,12 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 		}
 
 		//查看大图
-		public void goBigPhoto(String url, int postion) {
+		public void goBigPhoto(String[] urls, int postion) {
 			Intent intent = new Intent(getActivity(), GalleryPictureActivity.class);
-			if (!url.isEmpty()) {
-				String[] BigPhotoUrls = url.split("\\|");
-				intent.putExtra(GalleryPictureActivity.IMAGE_URLS, BigPhotoUrls);
-				intent.putExtra(GalleryPictureActivity.POSITON, postion);
-				startActivity(intent);
-				getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
-			}
+			intent.putExtra(GalleryPictureActivity.IMAGE_URLS, urls);
+			intent.putExtra(GalleryPictureActivity.POSITON, postion);
+			startActivity(intent);
+			getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
 		}
 	}
 

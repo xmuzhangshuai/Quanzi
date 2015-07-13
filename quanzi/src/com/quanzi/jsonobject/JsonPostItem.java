@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class JsonPostItem implements Serializable {
 	private int p_id;
+	private int p_postid;
 	private int p_userid;
 	private String p_username;
 	private String p_small_avatar;
@@ -29,7 +30,13 @@ public class JsonPostItem implements Serializable {
 	public void setP_id(int p_id) {
 		this.p_id = p_id;
 	}
+	public int getP_postid() {
+		return p_postid;
+	}
 
+	public void setP_postid(int p_postid) {
+		this.p_postid = p_postid;
+	}
 	public int getP_userid() {
 		return p_userid;
 	}

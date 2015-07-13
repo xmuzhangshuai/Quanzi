@@ -84,8 +84,7 @@
                 android:layout_height="@dimen/get_image_btn_top"
                 android:clickable="true"
                 android:focusable="false"
-                android:scaleType="centerCrop"
-                android:src="@drawable/content" />
+                android:scaleType="centerCrop" />
 
             <LinearLayout
                 android:id="@+id/act_time_container"

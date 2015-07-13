@@ -2,6 +2,9 @@ package com.quanzi.ui;
 
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
+
+import org.apache.http.Header;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -24,13 +27,21 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.quanzi.R;
 import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseV4Fragment;
+import com.quanzi.config.Constants.Config;
 import com.quanzi.jsonobject.JsonActItem;
+import com.quanzi.table.UserTable;
+import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.DateTimeTools;
+import com.quanzi.utils.FastJsonTool;
 import com.quanzi.utils.ImageLoaderTool;
+import com.quanzi.utils.LogTool;
+import com.quanzi.utils.ToastTool;
 import com.quanzi.utils.UserPreference;
 
 /**
@@ -54,6 +65,16 @@ public class MainExploreActFragment extends BaseV4Fragment {
 	private int pageNow = 0;//控制页数
 	private PostAdapter mAdapter;
 	private ProgressDialog progressDialog;
+	private static MainExploreActFragment mainExploreActFragment;
+
+	//创建实例
+	static MainExploreActFragment newInstance() {
+		if (mainExploreActFragment == null) {
+			return new MainExploreActFragment();
+		} else {
+			return mainExploreActFragment;
+		}
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -128,6 +149,13 @@ public class MainExploreActFragment extends BaseV4Fragment {
 	}
 
 	/**
+	 * 筛选刷新
+	 */
+	public void screenType(String type) {
+		LogTool.e("筛选类型" + type);
+	}
+
+	/**
 	 * 显示更多操作的对话窗口
 	 */
 	void showMoreDialog() {
@@ -151,59 +179,49 @@ public class MainExploreActFragment extends BaseV4Fragment {
 	 * 网络获取数据
 	 */
 	private void getDataTask(int p) {
-		//		final int page = p;
-		//		RequestParams params = new RequestParams();
-		//		params.put("page", pageNow);
-		//		params.put(UserTable.U_SCHOOLID, userPreference.getU_schoolid());
-		//		params.put(UserTable.U_STATEID, userPreference.getU_stateid());
-		//		params.put(UserTable.U_GENDER, userPreference.getU_gender());
-		//		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
-		//
-		//			@Override
-		//			public void onSuccess(int statusCode, Header[] headers, String response) {
-		//				// TODO Auto-generated method stub
-		//				if (statusCode == 200) {
-		//					List<JsonPostItem> temp = FastJsonTool.getObjectList(response, JsonPostItem.class);
-		//					if (temp != null) {
-		//						//如果是首次获取数据
-		//						if (page == 0) {
-		//							if (temp.size() < Config.PAGE_NUM) {
-		//								pageNow = -1;
-		//							}
-		//							jsonPostItemList = new LinkedList<JsonPostItem>();
-		//							jsonPostItemList.addAll(temp);
-		//						}
-		//						//如果是获取更多
-		//						else if (page > 0) {
-		//							if (temp.size() < Config.PAGE_NUM) {
-		//								pageNow = -1;
-		//								ToastTool.showShort(getActivity(), "没有更多了！");
-		//							}
-		//							jsonPostItemList.addAll(temp);
-		//						}
-		//						mAdapter.notifyDataSetChanged();
-		//					}
-		//				}
-		//				postListView.onRefreshComplete();
-		//			}
-		//
-		//			@Override
-		//			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
-		//				// TODO Auto-generated method stub
-		//				LogTool.e("LoveBridgeSchoolFragment", "获取列表失败");
-		//				postListView.onRefreshComplete();
-		//			}
-		//		};
-		//		AsyncHttpClientTool.post(getActivity(), "getlovebridgelist", params, responseHandler);
-		JsonActItem item1 = new JsonActItem(1, "一起来看流星雨", 1, "张帅", "drawable://" + R.drawable.headimage1, "drawable://"
-				+ R.drawable.headimage1, "男", new Date(), "卡又丢了，快来点开心的事冲冲喜吧！", "drawable://" + R.drawable.content,
-				"drawable://" + R.drawable.content, new Date(), "厦门大学三家村广场", "男女不限", "讲座", 32, 56);
-		jsonActItemList.add(item1);
-		jsonActItemList.add(item1);
-		jsonActItemList.add(item1);
-		jsonActItemList.add(item1);
-		jsonActItemList.add(item1);
-		postListView.onRefreshComplete();
+		final int page = p;
+		RequestParams params = new RequestParams();
+		params.put("page", pageNow);
+		params.put(UserTable.U_SCHOOLID, userPreference.getU_schoolid());
+		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, String response) {
+				// TODO Auto-generated method stub
+				if (statusCode == 200) {
+					List<JsonActItem> temp = FastJsonTool.getObjectList(response, JsonActItem.class);
+					if (temp != null) {
+						//如果是首次获取数据
+						if (page == 0) {
+							if (temp.size() < Config.PAGE_NUM) {
+								pageNow = -1;
+							}
+							jsonActItemList = new LinkedList<JsonActItem>();
+							jsonActItemList.addAll(temp);
+						}
+						//如果是获取更多
+						else if (page > 0) {
+							if (temp.size() < Config.PAGE_NUM) {
+								pageNow = -1;
+								ToastTool.showShort(getActivity(), "没有更多了！");
+							}
+							jsonActItemList.addAll(temp);
+						}
+						mAdapter.notifyDataSetChanged();
+					}
+				}
+				postListView.onRefreshComplete();
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+				// TODO Auto-generated method stub
+				LogTool.e("获取列表失败");
+				postListView.onRefreshComplete();
+			}
+
+		};
+		AsyncHttpClientTool.post(getActivity(), "activity/getSchoolActivities", params, responseHandler);
 	}
 
 	/**
@@ -327,13 +345,15 @@ public class MainExploreActFragment extends BaseV4Fragment {
 			//设置活动详情
 			holder.actContentTextView.setText(jsonActItem.getA_detail_content());
 
-			//
+			String[] smallPhotos = null;
+			//设置缩略图
+			if (!jsonActItem.getA_thumbnail().isEmpty()) {
+				smallPhotos = jsonActItem.getA_thumbnail().split("\\|");
+			}
 
 			//设置照片
-			if (!TextUtils.isEmpty(jsonActItem.getA_thumbnail())) {
-				//				imageLoader.displayImage(AsyncHttpClientImageSound.getAbsoluteUrl(jsonPostItem.getN_image()),
-				//						holder.contentImageView, ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage(jsonActItem.getA_thumbnail(), holder.contentImageView,
+			if (smallPhotos != null && !smallPhotos[0].isEmpty()) {
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.contentImageView,
 						ImageLoaderTool.getImageOptions());
 				holder.contentImageView.setVisibility(View.VISIBLE);
 				holder.contentImageView.setOnClickListener(new OnClickListener() {
@@ -341,10 +361,15 @@ public class MainExploreActFragment extends BaseV4Fragment {
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
-						Intent intent = new Intent(getActivity(), ImageShowerActivity.class);
-						intent.putExtra(ImageShowerActivity.SHOW_BIG_IMAGE, jsonActItem.getA_big_photo());
-						startActivity(intent);
-						getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
+						String[] tempBbigPhotoUrls = null;
+
+						if (!jsonActItem.getA_big_photo().isEmpty()) {
+							tempBbigPhotoUrls = jsonActItem.getA_big_photo().split("\\|");
+							for (int i = 0; i < tempBbigPhotoUrls.length; i++) {
+								tempBbigPhotoUrls[i] = AsyncHttpClientTool.getAbsoluteUrl(tempBbigPhotoUrls[i]);
+							}
+						}
+						goBigPhoto(tempBbigPhotoUrls, 0);
 					}
 				});
 			} else {
@@ -424,6 +449,15 @@ public class MainExploreActFragment extends BaseV4Fragment {
 			//				});
 			//			}
 			return view;
+		}
+
+		//查看大图
+		public void goBigPhoto(String[] urls, int postion) {
+			Intent intent = new Intent(getActivity(), GalleryPictureActivity.class);
+			intent.putExtra(GalleryPictureActivity.IMAGE_URLS, urls);
+			intent.putExtra(GalleryPictureActivity.POSITON, postion);
+			startActivity(intent);
+			getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
 		}
 	}
 

@@ -5,6 +5,8 @@ import java.util.Date;
 
 public class JsonActItem implements Serializable {
 	private int a_id;
+	private int a_actid;
+
 	private String a_title;
 	private int a_userid;
 	private String a_username;
@@ -57,6 +59,14 @@ public class JsonActItem implements Serializable {
 
 	public void setA_id(int a_id) {
 		this.a_id = a_id;
+	}
+
+	public int getA_actid() {
+		return a_actid;
+	}
+
+	public void setA_actid(int a_actid) {
+		this.a_actid = a_actid;
 	}
 
 	public String getA_title() {

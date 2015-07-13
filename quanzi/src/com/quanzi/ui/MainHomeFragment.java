@@ -57,6 +57,7 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 	private TextView leftTextView;//导航栏左侧文字
 	private View searchBtn;//查找按钮
 	private View publishBtn;//发布按钮
+	private View emptyView;
 
 	private PullToRefreshListView postListView;
 
@@ -107,6 +108,13 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 		// TODO Auto-generated method stub
 		super.onResume();
 		postListView.setOnScrollListener(new PauseOnScrollListener(imageLoader, pauseOnScroll, pauseOnFling));
+		if (jsonPostItemList.size() > 0) {
+			emptyView.setVisibility(View.GONE);
+			postListView.setVisibility(View.VISIBLE);
+		}else {
+			emptyView.setVisibility(View.VISIBLE);
+			postListView.setVisibility(View.GONE);
+		}
 	}
 
 	@Override
@@ -116,6 +124,7 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 		searchBtn = rootView.findViewById(R.id.nav_right_btn2);
 		publishBtn = rootView.findViewById(R.id.nav_right_btn1);
 		postListView = (PullToRefreshListView) rootView.findViewById(R.id.post_list);
+		emptyView = rootView.findViewById(R.id.empty);
 	}
 
 	@Override
@@ -259,38 +268,38 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 		//			}
 		//		};
 		//		AsyncHttpClientTool.post(getActivity(), "getlovebridgelist", params, responseHandler);
-		JsonPostItem item1 = new JsonPostItem(1, 1, "张帅", "drawable://" + R.drawable.headimage1, "drawable://"
-				+ R.drawable.headimage1, "男", "一见倾心，再见依然痴迷", "drawable://" + R.drawable.content, "drawable://"
-				+ R.drawable.content, new Date(), 20, 2);
-
-		JsonPostItem item2 = new JsonPostItem(2, 2, "叶子", "drawable://" + R.drawable.headimage2, "drawable://"
-				+ R.drawable.headimage2, "女", "你的美丽让我情不自禁", "drawable://" + R.drawable.content2, "drawable://"
-				+ R.drawable.content2, new Date(), 45, 20);
-
-		JsonPostItem item3 = new JsonPostItem(3, 3, "荣发", "drawable://" + R.drawable.headimage3, "drawable://"
-				+ R.drawable.headimage3, "男", "这是一片很寂寞的天下着有些伤心的雨", "drawable://" + R.drawable.content + "|"
-				+ "drawable://" + R.drawable.content2, "drawable://" + R.drawable.content + "|" + "drawable://"
-				+ R.drawable.content2, new Date(), 76, 32);
-
-		JsonPostItem item4 = new JsonPostItem(4, 4, "伟强", "drawable://" + R.drawable.headimage4, "drawable://"
-				+ R.drawable.headimage4, "女", "爱上你的日子，每天都在想你", "drawable://" + R.drawable.content2, "drawable://"
-				+ R.drawable.content2, new Date(), 26, 280);
-
-		JsonPostItem item5 = new JsonPostItem(5, 5, "王坤", "drawable://" + R.drawable.headimage5, "drawable://"
-				+ R.drawable.headimage5, "女", "卡又丢了，快来点开心的事冲冲喜吧！", "drawable://" + R.drawable.content, "drawable://"
-				+ R.drawable.content, new Date(), 256, 46);
-		jsonPostItemList.add(item1);
-		jsonPostItemList.add(item2);
-		jsonPostItemList.add(item3);
-		jsonPostItemList.add(item4);
-		jsonPostItemList.add(item5);
-		jsonPostItemList.add(item2);
-		jsonPostItemList.add(item1);
-		jsonPostItemList.add(item2);
-		jsonPostItemList.add(item3);
-		jsonPostItemList.add(item4);
-		jsonPostItemList.add(item5);
-		jsonPostItemList.add(item2);
+		//		JsonPostItem item1 = new JsonPostItem(1, 1, "张帅", "drawable://" + R.drawable.headimage1, "drawable://"
+		//				+ R.drawable.headimage1, "男", "一见倾心，再见依然痴迷", "drawable://" + R.drawable.content, "drawable://"
+		//				+ R.drawable.content, new Date(), 20, 2);
+		//
+		//		JsonPostItem item2 = new JsonPostItem(2, 2, "叶子", "drawable://" + R.drawable.headimage2, "drawable://"
+		//				+ R.drawable.headimage2, "女", "你的美丽让我情不自禁", "drawable://" + R.drawable.content2, "drawable://"
+		//				+ R.drawable.content2, new Date(), 45, 20);
+		//
+		//		JsonPostItem item3 = new JsonPostItem(3, 3, "荣发", "drawable://" + R.drawable.headimage3, "drawable://"
+		//				+ R.drawable.headimage3, "男", "这是一片很寂寞的天下着有些伤心的雨", "drawable://" + R.drawable.content + "|"
+		//				+ "drawable://" + R.drawable.content2, "drawable://" + R.drawable.content + "|" + "drawable://"
+		//				+ R.drawable.content2, new Date(), 76, 32);
+		//
+		//		JsonPostItem item4 = new JsonPostItem(4, 4, "伟强", "drawable://" + R.drawable.headimage4, "drawable://"
+		//				+ R.drawable.headimage4, "女", "爱上你的日子，每天都在想你", "drawable://" + R.drawable.content2, "drawable://"
+		//				+ R.drawable.content2, new Date(), 26, 280);
+		//
+		//		JsonPostItem item5 = new JsonPostItem(5, 5, "王坤", "drawable://" + R.drawable.headimage5, "drawable://"
+		//				+ R.drawable.headimage5, "女", "卡又丢了，快来点开心的事冲冲喜吧！", "drawable://" + R.drawable.content, "drawable://"
+		//				+ R.drawable.content, new Date(), 256, 46);
+		//		jsonPostItemList.add(item1);
+		//		jsonPostItemList.add(item2);
+		//		jsonPostItemList.add(item3);
+		//		jsonPostItemList.add(item4);
+		//		jsonPostItemList.add(item5);
+		//		jsonPostItemList.add(item2);
+		//		jsonPostItemList.add(item1);
+		//		jsonPostItemList.add(item2);
+		//		jsonPostItemList.add(item3);
+		//		jsonPostItemList.add(item4);
+		//		jsonPostItemList.add(item5);
+		//		jsonPostItemList.add(item2);
 		postListView.onRefreshComplete();
 	}
 
@@ -599,12 +608,22 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 				holder.imageViewGroup2.setVisibility(View.GONE);
 			}
 
+			String[] tempBbigPhotoUrls = null;
+
+			if (!jsonPostItem.getP_big_photo().isEmpty()) {
+				tempBbigPhotoUrls = jsonPostItem.getP_big_photo().split("\\|");
+				for (int i = 0; i < tempBbigPhotoUrls.length; i++) {
+					tempBbigPhotoUrls[i] = AsyncHttpClientTool.getAbsoluteUrl(tempBbigPhotoUrls[i]);
+				}
+			}
+			final String[] bigPhotoUrls = tempBbigPhotoUrls;
+
 			holder.itemImageView1.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					goBigPhoto(jsonPostItem.getP_big_photo(), 1);
+					goBigPhoto(bigPhotoUrls, 0);
 				}
 			});
 			holder.itemImageView2.setOnClickListener(new OnClickListener() {
@@ -612,7 +631,7 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					goBigPhoto(jsonPostItem.getP_big_photo(), 2);
+					goBigPhoto(bigPhotoUrls, 1);
 				}
 			});
 			holder.itemImageView3.setOnClickListener(new OnClickListener() {
@@ -620,7 +639,7 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					goBigPhoto(jsonPostItem.getP_big_photo(), 3);
+					goBigPhoto(bigPhotoUrls, 2);
 				}
 			});
 			holder.itemImageView4.setOnClickListener(new OnClickListener() {
@@ -628,7 +647,11 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					goBigPhoto(jsonPostItem.getP_big_photo(), 4);
+					if (bigPhotoUrls.length == 4) {
+						goBigPhoto(bigPhotoUrls, 2);
+					}else {
+						goBigPhoto(bigPhotoUrls, 3);
+					}
 				}
 			});
 			holder.itemImageView5.setOnClickListener(new OnClickListener() {
@@ -636,7 +659,11 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					goBigPhoto(jsonPostItem.getP_big_photo(), 5);
+					if (bigPhotoUrls.length == 4) {
+						goBigPhoto(bigPhotoUrls, 3);
+					}else {
+						goBigPhoto(bigPhotoUrls, 4);
+					}
 				}
 			});
 			holder.itemImageView6.setOnClickListener(new OnClickListener() {
@@ -644,22 +671,20 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					goBigPhoto(jsonPostItem.getP_big_photo(), 6);
+					goBigPhoto(bigPhotoUrls, 5);
 				}
 			});
+
 			return view;
 		}
 
 		//查看大图
-		public void goBigPhoto(String url, int postion) {
+		public void goBigPhoto(String[] urls, int postion) {
 			Intent intent = new Intent(getActivity(), GalleryPictureActivity.class);
-			if (!url.isEmpty()) {
-				String[] BigPhotoUrls = url.split("\\|");
-				intent.putExtra(GalleryPictureActivity.IMAGE_URLS, BigPhotoUrls);
-				intent.putExtra(GalleryPictureActivity.POSITON, postion);
-				startActivity(intent);
-				getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
-			}
+			intent.putExtra(GalleryPictureActivity.IMAGE_URLS, urls);
+			intent.putExtra(GalleryPictureActivity.POSITON, postion);
+			startActivity(intent);
+			getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
 		}
 	}
 }

@@ -22,6 +22,7 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.quanzi.R;
 import com.quanzi.base.BaseFragmentActivity;
 import com.quanzi.utils.DensityUtil;
+import com.quanzi.utils.LogTool;
 
 /**
  *
@@ -108,6 +109,15 @@ public class GalleryPictureActivity extends BaseFragmentActivity {
 			GalleryPagerAdapter mPagerAdapter = new GalleryPagerAdapter(views);
 			mViewPager.setAdapter(mPagerAdapter);
 			mViewPager.setCurrentItem(position);//设置当前显示页面
+			if (position == 0) {
+				for (int i = 0; i < dotImageViews.size(); i++) {
+					if (i == 0) {
+						dotImageViews.get(i).setImageDrawable(getResources().getDrawable(R.drawable.page_now));
+					} else {
+						dotImageViews.get(i).setImageDrawable(getResources().getDrawable(R.drawable.page));
+					}
+				}
+			}
 		}
 	}
 
@@ -188,6 +198,8 @@ public class GalleryPictureActivity extends BaseFragmentActivity {
 		options = new DisplayImageOptions.Builder().showImageOnLoading(R.drawable.loading)// 设置图片下载期间显示的图片
 				.showImageForEmptyUri(R.drawable.image_error) // 设置图片Uri为空或是错误的时候显示的图片
 				.showImageOnFail(R.drawable.image_error) // 设置图片加载或解码过程中发生错误显示的图片
+				.cacheInMemory(false) // 设置下载的图片是否缓存在内存中  
+				.cacheOnDisk(true) // 设置下载的图片是否缓存在SD卡中  
 				.imageScaleType(ImageScaleType.EXACTLY_STRETCHED).build(); // 创建配置过得DisplayImageOption对象
 		return options;
 	}

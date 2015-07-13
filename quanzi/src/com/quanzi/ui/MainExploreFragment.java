@@ -1,22 +1,34 @@
 package com.quanzi.ui;
 
+import java.util.ArrayList;
+
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.quanzi.R;
 import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseV4Fragment;
-import com.quanzi.utils.ToastTool;
+import com.quanzi.config.Constants;
+import com.quanzi.customewidget.MyMenuDialog;
+import com.quanzi.utils.LogTool;
 import com.quanzi.utils.UserPreference;
 
 /**
@@ -98,6 +110,12 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 				}
 				currentTabIndex = position;
 				mTabs[currentTabIndex].setSelected(true);
+
+				if (position == 0) {
+					searchBtn.setVisibility(View.VISIBLE);
+				} else {
+					searchBtn.setVisibility(View.GONE);
+				}
 			}
 		});
 	}
@@ -123,10 +141,39 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 	}
 
 	/**
+	* 显示对话框，选择类型
+	* 
+	* @param context
+	* @param isCrop
+	*/
+	private void showScreenActDialog() {
+		final MyMenuDialog myMenuDialog = new MyMenuDialog(getActivity());
+		myMenuDialog.setTitle("您想要浏览的活动类型");
+		final ArrayList<String> list = new ArrayList<String>();
+		list.add("全部");
+		list.addAll(Constants.ActivityType.getList());
+
+		myMenuDialog.setMenuList(list);
+		OnItemClickListener listener = new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				// TODO Auto-generated method stub
+				FragmentPagerAdapter f = (FragmentPagerAdapter) mViewPager.getAdapter();
+				MainExploreActFragment mainExploreActFragment = (MainExploreActFragment) f.instantiateItem(mViewPager,
+						1);
+				mainExploreActFragment.screenType(list.get(position));
+				myMenuDialog.dismiss();
+			}
+		};
+		myMenuDialog.setListItemClickListener(listener);
+		myMenuDialog.show();
+	}
+
+	/**
 	 * 显示筛选菜单
 	 */
-	void showScreenDialog() {
-
+	void showScreenPostDialog() {
 		// DialogFragment.show() will take care of adding the fragment
 		// in a transaction.  We also want to remove any currently showing
 		// dialog, so make our own transaction and take care of that here.
@@ -138,7 +185,7 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 		ft.addToBackStack(null);
 
 		// Create and show the dialog.
-		ScreenDialogFragment newFragment = ScreenDialogFragment.newInstance();
+		ScreenDialogFragment newFragment = new ScreenDialogFragment();
 		newFragment.show(ft, "screen_dialog");
 	}
 
@@ -177,7 +224,11 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 			getActivity().overridePendingTransition(R.anim.splash_fade_in, R.anim.splash_fade_out);
 			break;
 		case R.id.nav_right_btn3://筛选
-			showScreenDialog();
+			if (mViewPager.getCurrentItem() == 0) {
+				showScreenPostDialog();
+			} else {
+				showScreenActDialog();
+			}
 			break;
 		case R.id.postBtn:
 			onSubTabClicked(v);
@@ -214,10 +265,10 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 
 			switch (position) {
 			case 0:
-				fragment = new MainExplorePostFragment();
+				fragment = MainExplorePostFragment.newInstance();
 				break;
 			case 1:
-				fragment = new MainExploreActFragment();
+				fragment = MainExploreActFragment.newInstance();
 				break;
 			default:
 				break;
@@ -229,6 +280,87 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 		public int getCount() {
 			// TODO Auto-generated method stub
 			return 2;
+		}
+	}
+
+	/**
+	 *
+	 * 项目名称：quanzi  
+	 * 类名称：ScreenDialogFragment  
+	 * 类描述：在探索帖子页面进行用户筛选
+	 * @author zhangshuai
+	 * @date 创建时间：2015-4-29 下午11:37:45 
+	 *
+	 */
+	class ScreenDialogFragment extends DialogFragment implements OnClickListener {
+
+		private View rootView;
+
+		private RadioButton allGenderBtn;//性别全部
+		private RadioButton genderMaleBtn;//男性
+		private RadioButton genderFemaleBtn;//女性
+		private RadioButton allStateBtn;//状态全部
+		private RadioButton stateSingleBtn;//单身
+		private TextView confirmBtn;//确定
+		private TextView cancleBtn;//取消
+
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			// TODO Auto-generated method stub
+			super.onCreate(savedInstanceState);
+			setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+			// TODO Auto-generated method stub
+			rootView = inflater.inflate(R.layout.fragment_dialog_screen, container, false);
+			getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
+			getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+			findViewById();
+			initView();
+			return rootView;
+		}
+
+		private void findViewById() {
+			allGenderBtn = (RadioButton) rootView.findViewById(R.id.all_gender);
+			genderMaleBtn = (RadioButton) rootView.findViewById(R.id.gender_male);
+			genderFemaleBtn = (RadioButton) rootView.findViewById(R.id.gender_female);
+			allStateBtn = (RadioButton) rootView.findViewById(R.id.all_statue);
+			stateSingleBtn = (RadioButton) rootView.findViewById(R.id.single);
+			confirmBtn = (TextView) rootView.findViewById(R.id.confirm);
+			cancleBtn = (TextView) rootView.findViewById(R.id.cancle);
+		}
+
+		private void initView() {
+			allGenderBtn.setOnClickListener(this);
+			genderMaleBtn.setOnClickListener(this);
+			genderFemaleBtn.setOnClickListener(this);
+			allStateBtn.setOnClickListener(this);
+			stateSingleBtn.setOnClickListener(this);
+			confirmBtn.setOnClickListener(this);
+			cancleBtn.setOnClickListener(this);
+		}
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			switch (v.getId()) {
+			case R.id.confirm:
+				FragmentPagerAdapter f = (FragmentPagerAdapter) mViewPager.getAdapter();
+				MainExplorePostFragment mainExplorePostFragment = (MainExplorePostFragment) f.instantiateItem(
+						mViewPager, 0);
+				mainExplorePostFragment.refresh();
+				ScreenDialogFragment.this.dismiss();
+				break;
+			case R.id.cancle:
+				ScreenDialogFragment.this.dismiss();
+				break;
+			default:
+				break;
+			}
 		}
 	}
 }

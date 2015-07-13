@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.quanzi.R;
+import com.quanzi.base.BaseActivity;
 import com.quanzi.base.BaseApplication;
 import com.quanzi.jsonobject.JsonUser;
 import com.quanzi.table.UserTable;
@@ -87,7 +88,15 @@ public class ServerUtil {
 				// TODO Auto-generated method stub
 			}
 		};
-		AsyncHttpClientTool.post("user/login", params, responseHandler);
+		if (NetworkUtils.isNetworkAvailable(context)) {
+			AsyncHttpClientTool.post("user/login", params, responseHandler);
+		} else {
+			Intent intent = new Intent(context, cls);
+			context.startActivity(intent);
+			((Activity) context).overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+			((Activity) context).finish();
+		}
+
 	}
 
 	/**

@@ -122,7 +122,6 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:scaleType="centerCrop"
-                android:src="@drawable/content"
                 android:visibility="gone" />
 
             <ImageView
@@ -133,7 +132,6 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:scaleType="centerCrop"
-                android:src="@drawable/content"
                 android:visibility="gone" />
 
             <ImageView
@@ -144,7 +142,6 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:scaleType="centerCrop"
-                android:src="@drawable/content"
                 android:visibility="gone" />
         </LinearLayout>
 
@@ -167,7 +164,6 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:scaleType="centerCrop"
-                android:src="@drawable/content"
                 android:visibility="gone" />
 
             <ImageView
@@ -178,7 +174,6 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:scaleType="centerCrop"
-                android:src="@drawable/content"
                 android:visibility="gone" />
 
             <ImageView
@@ -189,7 +184,6 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:scaleType="centerCrop"
-                android:src="@drawable/content"
                 android:visibility="gone" />
         </LinearLayout>
 
