@@ -195,7 +195,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
 	 * @return 
 	 * */
 	@SuppressLint("ShowToast")
-	public Dialog showProgressDialog() {
+	public Dialog showProgressDialog(String msg) {
 		ProgressDialog dialog = new ProgressDialog(this);
 		dialog.setMessage("«Î…‘∫Ú...");
 		// dialog.setCancelable(false);

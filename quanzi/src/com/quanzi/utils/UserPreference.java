@@ -185,7 +185,7 @@ public class UserPreference {
 
 	//大头像
 	public String getU_large_avatar() {
-		return sp.getString(UserTable.U_LARGE_AVATAR, null);
+		return sp.getString(UserTable.U_LARGE_AVATAR, "");
 	}
 
 	public void setU_large_avatar(String u_large_avatar) {
@@ -195,7 +195,7 @@ public class UserPreference {
 
 	//小头像
 	public String getU_small_avatar() {
-		return sp.getString(UserTable.U_SMALL_AVATAR, null);
+		return sp.getString(UserTable.U_SMALL_AVATAR, "");
 	}
 
 	public void setU_small_avatar(String u_small_avatar) {

@@ -10,7 +10,7 @@ package com.quanzi.table;
 public class UserTable {
 
 	public static final String U_IDENTITY = "u_identity";
-	public static final String U_LOVE_STATE = "u_love_tate";
+	public static final String U_LOVE_STATE = "u_love_state";
 	public static final String U_INTEREST_IDS = "u_interest_ids";
 	public static final String U_SKILL_IDS = "u_skill_ids";
 	public static final String U_INDUSTRY_ID = "u_industry_id";

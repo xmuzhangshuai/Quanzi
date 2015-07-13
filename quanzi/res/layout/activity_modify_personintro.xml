@@ -69,14 +69,13 @@
     </RelativeLayout>
 
     <EditText
-        android:id="@+id/name"
+        android:id="@+id/intro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:ems="10"
-        android:hint="今天天气好晴朗"
         android:inputType="textPersonName"
         android:paddingLeft="10dp" >
     </EditText>

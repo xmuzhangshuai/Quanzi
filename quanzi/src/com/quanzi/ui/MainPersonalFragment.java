@@ -45,7 +45,6 @@ public class MainPersonalFragment extends BaseV4Fragment implements OnClickListe
 		rootView = inflater.inflate(R.layout.fragment_mainpersonal, container, false);
 		userPreference = BaseApplication.getInstance().getUserPreference();
 		userPreference.printUserInfo();//打印用户信息
-
 		findViewById();// 初始化views
 		initView();
 
@@ -56,9 +55,12 @@ public class MainPersonalFragment extends BaseV4Fragment implements OnClickListe
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		//显示头像
-		ImageLoader.getInstance().displayImage(AsyncHttpClientTool.getAbsoluteUrl(userPreference.getU_small_avatar()),
-				headImageView, ImageLoaderTool.getHeadImageOptions(10));
+		if (!userPreference.getU_small_avatar().isEmpty()) {
+			//显示头像
+			ImageLoader.getInstance().displayImage(
+					AsyncHttpClientTool.getAbsoluteUrl(userPreference.getU_small_avatar()), headImageView,
+					ImageLoaderTool.getHeadImageOptions(10));
+		}
 		nameTextView.setText(userPreference.getU_nickname());
 	}
 
@@ -94,11 +96,13 @@ public class MainPersonalFragment extends BaseV4Fragment implements OnClickListe
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.head_image://放大头像
-			Intent intent = new Intent(getActivity(), ImageShowerActivity.class);
-			intent.putExtra(ImageShowerActivity.SHOW_BIG_IMAGE,
-					AsyncHttpClientTool.getAbsoluteUrl(userPreference.getU_large_avatar()));
-			startActivity(intent);
-			getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
+			if (!userPreference.getU_large_avatar().isEmpty()) {
+				Intent intent = new Intent(getActivity(), ImageShowerActivity.class);
+				intent.putExtra(ImageShowerActivity.SHOW_BIG_IMAGE,
+						AsyncHttpClientTool.getAbsoluteUrl(userPreference.getU_large_avatar()));
+				startActivity(intent);
+				getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
+			}
 			break;
 		case R.id.circle:
 			startActivity(new Intent(getActivity(), MyQuanziActivity.class));

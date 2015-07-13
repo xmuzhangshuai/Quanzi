@@ -12,6 +12,7 @@ import java.util.Map;
 import org.apache.http.Header;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -23,6 +24,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -137,7 +139,21 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		//		telEditText.setText(userPreference.getU_tel());
+		/***学校***/
+		schoolTextView.setText(userPreference.getSchoolName());
+		/***昵称***/
+		if (userPreference.getU_nickname().isEmpty()) {
+			nickNameTextView.setText("未填写");
+		} else {
+			nickNameTextView.setText(userPreference.getU_nickname());
+		}
+
+		/***个人签名***/
+		if (userPreference.getU_introduce().isEmpty()) {
+			introTextView.setText("未填写");
+		} else {
+			introTextView.setText(userPreference.getU_introduce());
+		}
 	}
 
 	@Override
@@ -192,6 +208,28 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 		interestView.setOnClickListener(this);
 		loveStatusView.setOnClickListener(this);
 		schoolView.setOnClickListener(this);
+
+		/***性别***/
+		genderText.setText(userPreference.getU_gender());
+
+		/***当前身份***/
+		statusTextView.setText(userPreference.getU_identity());
+		
+		/***情感状况***/
+		loveStatusTextView.setText(userPreference.getU_love_state());
+
+		//		/***情感状态***/
+		//		loveStatusTextView;
+		//
+		//		/***兴趣爱好***/
+		//		interestTextView;
+		//
+		//		/***擅长技能***/
+		//		skillTextView;
+		//
+		//		/***所属行业***/
+		//		industryTextView.setText();
+
 		//显示头像
 		ImageLoader.getInstance().displayImage(AsyncHttpClientTool.getAbsoluteUrl(userPreference.getU_small_avatar()),
 				headImage, ImageLoaderTool.getHeadImageOptions(3));
@@ -199,8 +237,9 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 		//设置生日
 		if (userPreference.getU_birthday() != null) {
 			birthdayTextView.setText(DateTimeTools.getDateString(userPreference.getU_birthday()));
+		}else {
+			birthdayTextView.setText("未填写");
 		}
-
 	}
 
 	@Override
@@ -395,7 +434,7 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 	//	}
 
 	/**
-	 * 显示生日菜单
+	 * 修改生日
 	 */
 	private void showDatePicker() {
 		final Calendar calendar = Calendar.getInstance(Locale.CHINA);
@@ -409,27 +448,29 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 
 				RequestParams params = new RequestParams();
 				params.put(UserTable.U_ID, userPreference.getU_id());
-				params.put(UserTable.U_BIRTHDAY, date.getTime());
+				params.put(UserTable.U_BIRTHDAY, DateTimeTools.DateToString(date));
 				TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
 
 					@Override
-					public void onSuccess(int arg0, Header[] arg1, String arg2) {
+					public void onSuccess(int statusCode, Header[] headers, String response) {
 						// TODO Auto-generated method stub
-						if (arg0 == 200) {
+						if (statusCode == 200 && response.equals("1")) {
 							userPreference.setU_birthday(date);
 							birthdayTextView.setText(DateTimeTools.getDateString(date));
-							//							constellEditText.setText(ConstellUtil.date2Constellation(calendar));
 							int tempAge = Calendar.getInstance().get(Calendar.YEAR) - year;
-							//							ageEditText.setText("" + tempAge);
+							userPreference.setU_age(tempAge);
+						} else {
+							LogTool.e("修改生日返回错误" + response);
 						}
 					}
 
 					@Override
-					public void onFailure(int arg0, Header[] arg1, String arg2, Throwable arg3) {
+					public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
 						// TODO Auto-generated method stub
+						LogTool.e("修改生日错误");
 					}
 				};
-				AsyncHttpClientTool.post("updateuserbirthday", params, responseHandler);
+				AsyncHttpClientTool.post("user/infoUpdate", params, responseHandler);
 			}
 		};
 		DatePickerDialog datePickerDialog;
@@ -507,8 +548,12 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 				// TODO Auto-generated method stub
 				switch (position) {
 				case 0:
+					updateGender("男");
+					myMenuDialog.dismiss();
 					break;
 				case 1:
+					updateGender("女");
+					myMenuDialog.dismiss();
 					break;
 
 				default:
@@ -517,7 +562,6 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 			}
 		};
 		myMenuDialog.setListItemClickListener(listener);
-
 		myMenuDialog.show();
 	}
 
@@ -542,8 +586,12 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 				// TODO Auto-generated method stub
 				switch (position) {
 				case 0:
+					updateIdentity("学生");
+					myMenuDialog.dismiss();
 					break;
 				case 1:
+					updateGender("校友");
+					myMenuDialog.dismiss();
 					break;
 
 				default:
@@ -578,10 +626,17 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 				// TODO Auto-generated method stub
 				switch (position) {
 				case 0:
+					updateLoveState("单身");
+					myMenuDialog.dismiss();
 					break;
 				case 1:
+					updateLoveState("恋爱中");
+					myMenuDialog.dismiss();
 					break;
-
+				case 2:
+					updateLoveState("已婚");
+					myMenuDialog.dismiss();
+					break;
 				default:
 					break;
 				}
@@ -621,6 +676,168 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 		dialog.setPositiveButton("确定", comfirm);
 		dialog.setNegativeButton("取消", cancle);
 		dialog.show();
+	}
+
+	/**
+	 * 修改性别
+	 * @param name
+	 */
+	public void updateGender(final String gender) {
+		if (!gender.equals(userPreference.getU_gender())) {
+			// 没有错误，则修改
+			RequestParams params = new RequestParams();
+			params.put(UserTable.U_ID, userPreference.getU_id());
+			params.put(UserTable.U_GENDER, gender);
+
+			TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
+				Dialog dialog;
+
+				@Override
+				public void onStart() {
+					// TODO Auto-generated method stub
+					super.onStart();
+					dialog = showProgressDialog("请稍后...");
+				}
+
+				@Override
+				public void onFinish() {
+					// TODO Auto-generated method stub
+					dialog.dismiss();
+					super.onFinish();
+				}
+
+				@Override
+				public void onSuccess(int statusCode, Header[] headers, String response) {
+					// TODO Auto-generated method stub
+					if (statusCode == 200) {
+						if (response.equals("1")) {
+							ToastTool.showShort(ModifyDataActivity.this, "修改成功！");
+							userPreference.setU_gender(gender);
+							genderText.setText(gender);
+						} else if (response.equals("-1")) {
+							LogTool.e("修改性别返回-1");
+						}
+					}
+				}
+
+				@Override
+				public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+					// TODO Auto-generated method stub
+					LogTool.e("修改性别错误");
+				}
+			};
+			AsyncHttpClientTool.post("user/infoUpdate", params, responseHandler);
+		} else {
+
+		}
+	}
+	
+	/**
+	 * 修改身份
+	 * @param name
+	 */
+	public void updateIdentity(final String identity) {
+		if (!identity.equals(userPreference.getU_identity())) {
+			// 没有错误，则修改
+			RequestParams params = new RequestParams();
+			params.put(UserTable.U_ID, userPreference.getU_id());
+			params.put(UserTable.U_IDENTITY, identity);
+
+			TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
+				Dialog dialog;
+
+				@Override
+				public void onStart() {
+					// TODO Auto-generated method stub
+					super.onStart();
+					dialog = showProgressDialog("请稍后...");
+				}
+
+				@Override
+				public void onFinish() {
+					// TODO Auto-generated method stub
+					dialog.dismiss();
+					super.onFinish();
+				}
+
+				@Override
+				public void onSuccess(int statusCode, Header[] headers, String response) {
+					// TODO Auto-generated method stub
+					if (statusCode == 200) {
+						if (response.equals("1")) {
+							ToastTool.showShort(ModifyDataActivity.this, "修改成功！");
+							userPreference.setU_identity(identity);
+							statusTextView.setText(identity);
+						} else if (response.equals("-1")) {
+							LogTool.e("修改身份返回-1");
+						}
+					}
+				}
+
+				@Override
+				public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+					// TODO Auto-generated method stub
+					LogTool.e("修改身份错误");
+				}
+			};
+			AsyncHttpClientTool.post("user/infoUpdate", params, responseHandler);
+		} else {
+
+		}
+	}
+	
+	/**
+	 * 修改情感状况
+	 * @param name
+	 */
+	public void updateLoveState(final String state) {
+		if (!state.equals(userPreference.getU_love_state())) {
+			// 没有错误，则修改
+			RequestParams params = new RequestParams();
+			params.put(UserTable.U_ID, userPreference.getU_id());
+			params.put(UserTable.U_LOVE_STATE, state);
+
+			TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
+				Dialog dialog;
+
+				@Override
+				public void onStart() {
+					// TODO Auto-generated method stub
+					super.onStart();
+					dialog = showProgressDialog("请稍后...");
+				}
+
+				@Override
+				public void onFinish() {
+					// TODO Auto-generated method stub
+					dialog.dismiss();
+					super.onFinish();
+				}
+
+				@Override
+				public void onSuccess(int statusCode, Header[] headers, String response) {
+					// TODO Auto-generated method stub
+					if (statusCode == 200) {
+						if (response.equals("1")) {
+							ToastTool.showShort(ModifyDataActivity.this, "修改成功！");
+							userPreference.setU_love_state(state);
+							loveStatusTextView.setText(state);
+						} else if (response.equals("-1")) {
+							LogTool.e("修改情感状况返回-1");
+						}
+					}
+				}
+
+				@Override
+				public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+					// TODO Auto-generated method stub
+					LogTool.e("修改情感状况错误");
+				}
+			};
+			AsyncHttpClientTool.post("user/infoUpdate", params, responseHandler);
+		} else {
+
+		}
 	}
 
 	@Override

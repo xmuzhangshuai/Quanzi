@@ -3,6 +3,9 @@ package com.quanzi.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.Header;
+
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -15,6 +18,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.quanzi.R;
 import com.quanzi.base.BaseActivity;
 import com.quanzi.base.BaseApplication;
@@ -25,6 +30,9 @@ import com.quanzi.db.SchoolDbService;
 import com.quanzi.entities.City;
 import com.quanzi.entities.Province;
 import com.quanzi.entities.School;
+import com.quanzi.table.UserTable;
+import com.quanzi.utils.AsyncHttpClientTool;
+import com.quanzi.utils.LogTool;
 import com.quanzi.utils.ToastTool;
 import com.quanzi.utils.UserPreference;
 
@@ -290,7 +298,53 @@ public class ModifySchoolActivity extends BaseActivity implements OnClickListene
 	 * 更新学校
 	 */
 	private void updateSchool() {
+		if (currentSchool != null) {
+			RequestParams params = new RequestParams();
+			params.put(UserTable.U_ID, userPreference.getU_id());
+			params.put(UserTable.U_SCHOOLID, currentSchool.getId());
 
+			TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
+				Dialog dialog;
+
+				@Override
+				public void onStart() {
+					// TODO Auto-generated method stub
+					super.onStart();
+					dialog = showProgressDialog("请稍后...");
+				}
+
+				@Override
+				public void onFinish() {
+					// TODO Auto-generated method stub
+					dialog.dismiss();
+					super.onFinish();
+				}
+
+				@Override
+				public void onSuccess(int statusCode, Header[] headers, String response) {
+					// TODO Auto-generated method stub
+					if (statusCode == 200) {
+						if (response.equals("1")) {
+							ToastTool.showShort(ModifySchoolActivity.this, "修改成功！");
+							userPreference.setU_provinceid(currentProvince.getProvinceID().intValue());
+							userPreference.setU_cityid(currentCity.getCityID().intValue());
+							userPreference.setU_schoolid(currentSchool.getId().intValue());
+							finish();
+							overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
+						} else if (response.equals("-1")) {
+							LogTool.e("修改学校返回-1");
+						}
+					}
+				}
+
+				@Override
+				public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+					// TODO Auto-generated method stub
+					LogTool.e("修改学校错误");
+				}
+			};
+			AsyncHttpClientTool.post("user/infoUpdate", params, responseHandler);
+		}
 	}
 
 	@Override

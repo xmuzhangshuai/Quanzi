@@ -26,7 +26,7 @@
             android:id="@+id/head_image"
             android:layout_width="@dimen/get_image_btn_padding"
             android:layout_height="@dimen/get_image_btn_padding"
-            android:src="@drawable/headimage" />
+            android:src="@drawable/photoconor" />
 
         <TextView
             android:id="@+id/name"

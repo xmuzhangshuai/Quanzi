@@ -111,7 +111,7 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 		if (jsonPostItemList.size() > 0) {
 			emptyView.setVisibility(View.GONE);
 			postListView.setVisibility(View.VISIBLE);
-		}else {
+		} else {
 			emptyView.setVisibility(View.VISIBLE);
 			postListView.setVisibility(View.GONE);
 		}
@@ -617,7 +617,18 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 				}
 			}
 			final String[] bigPhotoUrls = tempBbigPhotoUrls;
+			
+			holder.itemImageView.setOnClickListener(new OnClickListener() {
 
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Intent intent = new Intent(getActivity(), ImageShowerActivity.class);
+					intent.putExtra(ImageShowerActivity.SHOW_BIG_IMAGE, bigPhotoUrls[0]);
+					startActivity(intent);
+					getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
+				}
+			});
 			holder.itemImageView1.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -649,7 +660,7 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 					// TODO Auto-generated method stub
 					if (bigPhotoUrls.length == 4) {
 						goBigPhoto(bigPhotoUrls, 2);
-					}else {
+					} else {
 						goBigPhoto(bigPhotoUrls, 3);
 					}
 				}
@@ -661,7 +672,7 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 					// TODO Auto-generated method stub
 					if (bigPhotoUrls.length == 4) {
 						goBigPhoto(bigPhotoUrls, 3);
-					}else {
+					} else {
 						goBigPhoto(bigPhotoUrls, 4);
 					}
 				}

@@ -553,6 +553,18 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 				}
 			}
 			final String[] bigPhotoUrls = tempBbigPhotoUrls;
+			
+			holder.itemImageView.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Intent intent = new Intent(getActivity(), ImageShowerActivity.class);
+					intent.putExtra(ImageShowerActivity.SHOW_BIG_IMAGE,bigPhotoUrls[0]);
+					startActivity(intent);
+					getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
+				}
+			});
 
 			holder.itemImageView1.setOnClickListener(new OnClickListener() {
 

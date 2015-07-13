@@ -161,6 +161,5 @@ public class PersonDataFragment extends BaseV4Fragment {
 		}else {
 			introTextView.setText(userPreference.getU_introduce());
 		}
-		;
 	}
 }
