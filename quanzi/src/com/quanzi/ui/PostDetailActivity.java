@@ -45,6 +45,7 @@ import com.quanzi.jsonobject.JsonComment;
 import com.quanzi.jsonobject.JsonPostItem;
 import com.quanzi.table.PostCommentTable;
 import com.quanzi.table.PostTable;
+import com.quanzi.table.UserTable;
 import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.DateTimeTools;
 import com.quanzi.utils.FastJsonTool;
@@ -732,11 +733,11 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 						@Override
 						public void onClick(View v) {
 							// TODO Auto-generated method stub
-							//							Intent intent = new Intent(PostDetailActivity.this, PersonDetailActivity.class);
-							//							intent.putExtra(PersonDetailActivity.PERSON_TYPE, Constants.PersonDetailType.SINGLE);
-							//							intent.putExtra(UserTable.U_ID, postComment.getC_userid());
-							//							startActivity(intent);
-							//							PostDetailActivity.this.overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
+							Intent intent = new Intent(PostDetailActivity.this, PersonDetailActivity.class);
+							intent.putExtra(UserTable.U_ID, jsonComment.getC_user_id());
+							intent.putExtra(UserTable.U_NICKNAME, jsonComment.getC_user_nickname());
+							startActivity(intent);
+							PostDetailActivity.this.overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
 						}
 					});
 				}

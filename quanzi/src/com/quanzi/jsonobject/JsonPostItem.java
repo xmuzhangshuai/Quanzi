@@ -19,12 +19,8 @@ public class JsonPostItem implements Serializable {
 	private Date p_time;
 	private int p_comment_count;
 	private int p_favor_count;
-	
-	private Map<String, String> comment1;
-	private Map<String, String> comment2;
 
-
-	private List<Map<String,String>> commentList;
+	private List<Map<String, String>> commentList;
 
 	public JsonPostItem() {
 		super();
@@ -38,6 +34,7 @@ public class JsonPostItem implements Serializable {
 	public void setP_id(int p_id) {
 		this.p_id = p_id;
 	}
+
 	public int getP_postid() {
 		return p_postid;
 	}
@@ -45,6 +42,7 @@ public class JsonPostItem implements Serializable {
 	public void setP_postid(int p_postid) {
 		this.p_postid = p_postid;
 	}
+
 	public int getP_userid() {
 		return p_userid;
 	}
@@ -133,61 +131,12 @@ public class JsonPostItem implements Serializable {
 		this.p_favor_count = p_favor_count;
 	}
 
-	
-	public Map<String, String> getComment1() {
-		return comment1;
-	}
-
-	public void setComment1(Map<String, String> comment1) {
-		this.comment1 = comment1;
-	}
-
-	public Map<String, String> getComment2() {
-		return comment2;
-	}
-
-	public void setComment2(Map<String, String> comment2) {
-		this.comment2 = comment2;
-	}
-
 	public List<Map<String, String>> getCommentList() {
 		return commentList;
 	}
 
 	public void setCommentList(List<Map<String, String>> commentList) {
 		this.commentList = commentList;
-	}
-	
-	public JsonPostItem(int p_userid, String p_username, String p_small_avatar, String p_large_avatar, String p_gender,
-			String p_text_content, String p_thumbnail, String p_big_photo, Date p_time) {
-		super();
-		this.p_userid = p_userid;
-		this.p_username = p_username;
-		this.p_small_avatar = p_small_avatar;
-		this.p_large_avatar = p_large_avatar;
-		this.p_gender = p_gender;
-		this.p_text_content = p_text_content;
-		this.p_thumbnail = p_thumbnail;
-		this.p_big_photo = p_big_photo;
-		this.p_time = p_time;
-	}
-
-	public JsonPostItem(int p_id, int p_userid, String p_username, String p_small_avatar, String p_large_avatar,
-			String p_gender, String p_text_content, String p_thumbnail, String p_big_photo, Date p_time,
-			int p_comment_count, int p_favor_count) {
-		super();
-		this.p_id = p_id;
-		this.p_userid = p_userid;
-		this.p_username = p_username;
-		this.p_small_avatar = p_small_avatar;
-		this.p_large_avatar = p_large_avatar;
-		this.p_gender = p_gender;
-		this.p_text_content = p_text_content;
-		this.p_thumbnail = p_thumbnail;
-		this.p_big_photo = p_big_photo;
-		this.p_time = p_time;
-		this.p_comment_count = p_comment_count;
-		this.p_favor_count = p_favor_count;
 	}
 
 }

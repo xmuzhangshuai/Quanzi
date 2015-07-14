@@ -46,7 +46,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	// Constants
 	// ===========================================================
 
-	public static boolean DEBUG = true;
+	public static boolean DEBUG = false;
 
 	static final boolean USE_HW_LAYERS = false;
 
@@ -100,7 +100,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	private SmoothScrollRunnable mCurrentSmoothScrollRunnable;
 	
 	// ===========================================================
-	// TODO mark : Header被拉伸的监听接口
+	// TODO mark : Header琚媺浼哥殑鐩戝惉鎺ュ彛
 	// ===========================================================
 	
 	public interface HeaderPullingListener{
@@ -109,8 +109,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 		int PULLING_ORIENTATION_VERTICAL = 1;
 		
 		/**
-		 * 列表LoadingHeader被拉动
-		 * @param orientation
+		 * 鍒楄〃LoadingHeader琚媺鍔�		 * @param orientation
 		 * @param scrollDistance
 		 */
 		void onHeaderPulling(int orientation, int scrollDistance);
@@ -120,7 +119,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	private HeaderPullingListener headerPullingListener;
 	
 	/**
-	 * 添加Header被拉伸的监听接口
+	 * 娣诲姞Header琚媺浼哥殑鐩戝惉鎺ュ彛
 	 * @param listener
 	 */
 	public void setOnHeaderPullingListener(HeaderPullingListener listener){
@@ -971,7 +970,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	 */
 	protected final void setHeaderScroll(int value) {
 		
-		// TODO mark : Header被拉伸时触发
+		// TODO mark : Header琚媺浼告椂瑙﹀彂
 		if(headerPullingListener != null ){
 			final int orientation = getPullToRefreshScrollDirection() == Orientation.VERTICAL 
 					? HeaderPullingListener.PULLING_ORIENTATION_HORIZONTAL

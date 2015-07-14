@@ -22,7 +22,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/love_vertify_headimage"
                 android:gravity="center"
-                android:text="女 | 厦门大学 | 学生 | 单身 "
                 android:textSize="@dimen/title_size"
                 android:textStyle="bold" />
 
@@ -34,7 +33,6 @@
                 android:gravity="center"
                 android:paddingLeft="@dimen/time_capsule20"
                 android:paddingRight="@dimen/time_capsule20"
-                android:text="今天天气好晴朗，处处好风光~！心情很美了！快来快乐"
                 android:textColor="@color/unenable"
                 android:textSize="@dimen/register_font_size" />
 
@@ -60,8 +58,7 @@
             <ImageView
                 android:id="@+id/head_image"
                 android:layout_width="@dimen/personal_photo_size"
-                android:layout_height="@dimen/personal_photo_size"
-                android:src="@drawable/headimage2" />
+                android:layout_height="@dimen/personal_photo_size" />
         </LinearLayout>
     </FrameLayout>
 

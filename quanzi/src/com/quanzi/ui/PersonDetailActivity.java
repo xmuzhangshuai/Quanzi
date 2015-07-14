@@ -1,19 +1,30 @@
 package com.quanzi.ui;
 
+import org.apache.http.Header;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.quanzi.R;
 import com.quanzi.base.BaseFragmentActivity;
-import com.quanzi.customewidget.MyAlertDialog;
+import com.quanzi.config.Constants;
+import com.quanzi.db.SchoolDbService;
+import com.quanzi.jsonobject.JsonUser;
+import com.quanzi.table.UserTable;
+import com.quanzi.utils.AsyncHttpClientTool;
+import com.quanzi.utils.FastJsonTool;
+import com.quanzi.utils.ImageLoaderTool;
+import com.quanzi.utils.ToastTool;
 
 /**
  *
@@ -30,6 +41,9 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 	private View leftButton;//导航栏左侧按钮
 	private View contactBtn;//私信按钮
 	private View moreBtn;//更多按钮
+	private ImageView headImageView;
+	private TextView basicInfo;
+	private TextView introduce;
 	private int index;
 	private int currentTabIndex;
 	private View[] mTabs;
@@ -38,11 +52,18 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 	private PersonDetailPostFragment personDetailPostFragment;
 	private PersonDataFragment personDataFragment;
 
+	private int userId;
+	private String userName;
+	private JsonUser jsonUser;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_person_detail);
+
+		userId = getIntent().getIntExtra(UserTable.U_ID, -1);
+		userName = getIntent().getStringExtra(UserTable.U_NICKNAME);
 
 		findViewById();
 		initView();
@@ -55,12 +76,15 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 		leftButton = findViewById(R.id.left_btn_bg);
 		contactBtn = findViewById(R.id.nav_right_btn2);
 		moreBtn = findViewById(R.id.nav_right_btn1);
+		headImageView = (ImageView) findViewById(R.id.head_image);
+		basicInfo = (TextView) findViewById(R.id.basic_info);
+		introduce = (TextView) findViewById(R.id.person_intro);
 	}
 
 	@Override
 	protected void initView() {
 		// TODO Auto-generated method stub
-		leftTextView.setText("卓妍");
+		leftTextView.setText(userName);
 		leftButton.setOnClickListener(this);
 		contactBtn.setOnClickListener(this);
 		moreBtn.setOnClickListener(this);
@@ -80,9 +104,6 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 
 	}
 
-	
-	
-
 	/**
 	 * 菜单显示
 	 */
@@ -101,6 +122,64 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 		// Create and show the dialog.
 		PersonDetailMoreDialogFragment newFragment = PersonDetailMoreDialogFragment.newInstance();
 		newFragment.show(ft, "dialog");
+	}
+
+	/**
+	 * 初始化个人信息
+	 */
+	private void initPersonView() {
+
+		//设置头像
+		if (!TextUtils.isEmpty(jsonUser.getU_small_avatar())) {
+			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonUser.getU_small_avatar()), headImageView,
+					ImageLoaderTool.getHeadImageOptions(10));
+			//点击显示高清头像
+			headImageView.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Intent intent = new Intent(PersonDetailActivity.this, ImageShowerActivity.class);
+					intent.putExtra(ImageShowerActivity.SHOW_BIG_IMAGE,
+							AsyncHttpClientTool.getAbsoluteUrl(jsonUser.getU_large_avatar()));
+					startActivity(intent);
+					PersonDetailActivity.this.overridePendingTransition(R.anim.zoomin, R.anim.zoomout);
+				}
+			});
+		}
+		//设置姓名、省份、及学校
+
+		basicInfo.setText(jsonUser.getU_gender() + "|"
+				+ SchoolDbService.getInstance(getApplicationContext()).getSchoolNameById(jsonUser.getU_schoolid())
+				+ "|" + jsonUser.getU_identity() + "|" + jsonUser.getU_love_tate());
+		introduce.setText(jsonUser.getU_introduce());
+	}
+
+	/**
+	 * 	网络获取User信息
+	 */
+	private void getUser() {
+		RequestParams params = new RequestParams();
+		params.put(UserTable.U_ID, userId);
+
+		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, String response) {
+				// TODO Auto-generated method stub
+				if (statusCode == 200) {
+					jsonUser = FastJsonTool.getObject(response, JsonUser.class);
+					if (jsonUser != null) {
+						initPersonView();
+					}
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+				// TODO Auto-generated method stub
+				ToastTool.showLong(PersonDetailActivity.this, "服务器错误");
+			}
+		};
+		AsyncHttpClientTool.post(PersonDetailActivity.this, "getuserbyid", params, responseHandler);
 	}
 
 	/**

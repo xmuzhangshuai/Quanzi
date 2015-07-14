@@ -195,7 +195,6 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 					List<JsonPostItem> temp = FastJsonTool.getObjectList(response, JsonPostItem.class);
 					if (temp != null) {
 						LogTool.i("列表长度" + temp.size());
-						LogTool.i(response);
 						//如果是首次获取数据
 						if (page == 0) {
 							if (temp.size() < Config.PAGE_NUM) {
@@ -409,21 +408,13 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 				}
 			});
 
-			//设置评论
 			List<Map<String, String>> comments = jsonPostItem.getCommentList();
-			if (comments != null) {
-				LogTool.e("不为空");
-				for (Map<String, String> map : comments) {
-					LogTool.e("内容" + map.get(CommentTable.C_CONTENT));
-				}
-			} else {
-				LogTool.e("为空");
-			}
 
+			//设置评论
 			if (comments != null) {
-				if (comments.get(0) != null) {
+				if (comments.size() == 1) {
 					holder.comment1Container.setVisibility(View.VISIBLE);
-					holder.commentUser1.setText(comments.get(0).get(CommentTable.C_USER_NICKNAME));
+					holder.commentUser1.setText(comments.get(0).get(CommentTable.C_USER_NICKNAME) + ":");
 					holder.commentContent1.setText(comments.get(0).get(CommentTable.C_CONTENT));
 					if (comments.get(0).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {//如果是评论
 						holder.toUser1.setVisibility(View.GONE);
@@ -434,9 +425,20 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 						holder.toUser1.setText(comments.get(0).get(CommentTable.TO_USER_NICKNAME));
 					}
 				}
-				if (comments.get(1) != null) {
+				if (comments.size() == 2) {
+					holder.comment1Container.setVisibility(View.VISIBLE);
+					holder.commentUser1.setText(comments.get(0).get(CommentTable.C_USER_NICKNAME) + ":");
+					holder.commentContent1.setText(comments.get(0).get(CommentTable.C_CONTENT));
+					if (comments.get(0).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {//如果是评论
+						holder.toUser1.setVisibility(View.GONE);
+						holder.label1.setVisibility(View.GONE);
+					} else {//如果是回复
+						holder.toUser1.setVisibility(View.VISIBLE);
+						holder.label1.setVisibility(View.VISIBLE);
+						holder.toUser1.setText(comments.get(0).get(CommentTable.TO_USER_NICKNAME));
+					}
 					holder.comment2Container.setVisibility(View.VISIBLE);
-					holder.commentUser2.setText(comments.get(1).get(CommentTable.C_USER_NICKNAME));
+					holder.commentUser2.setText(comments.get(1).get(CommentTable.C_USER_NICKNAME) + ":");
 					holder.commentContent2.setText(comments.get(1).get(CommentTable.C_CONTENT));
 					if (comments.get(1).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {//如果是评论
 						holder.toUser2.setVisibility(View.GONE);
