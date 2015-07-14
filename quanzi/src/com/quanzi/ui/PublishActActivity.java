@@ -499,7 +499,7 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 			}
 
 		};
-		params.put(ActivityTable.A_USER_ID, userPreference.getU_id());
+		params.put(ActivityTable.A_USERID, userPreference.getU_id());
 		params.put(ActivityTable.A_ACT_TITLE, titleEditText.getText().toString().trim());
 		params.put(ActivityTable.A_ACTTIME, DateTimeTools.DateToString(choosenCalendar.getTime()));
 		params.put(ActivityTable.A_ADDRESS, localtionEditText.getText().toString().trim());

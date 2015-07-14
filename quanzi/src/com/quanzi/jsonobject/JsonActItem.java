@@ -2,6 +2,8 @@ package com.quanzi.jsonobject;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 public class JsonActItem implements Serializable {
 	private int a_id;
@@ -23,6 +25,8 @@ public class JsonActItem implements Serializable {
 	private String a_act_type;
 	private int a_comment_count;
 	private int a_favor_count;
+
+	private List<Map<String, String>> commentList;
 
 	public JsonActItem() {
 		super();
@@ -195,6 +199,14 @@ public class JsonActItem implements Serializable {
 
 	public void setA_favor_count(int a_favor_count) {
 		this.a_favor_count = a_favor_count;
+	}
+
+	public List<Map<String, String>> getCommentList() {
+		return commentList;
+	}
+
+	public void setCommentList(List<Map<String, String>> commentList) {
+		this.commentList = commentList;
 	}
 
 }

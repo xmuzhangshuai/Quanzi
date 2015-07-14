@@ -22,7 +22,6 @@
             android:layout_marginLeft="@dimen/personal_timecapsule_padding"
             android:layout_marginRight="@dimen/personal_timecapsule_padding"
             android:layout_marginTop="@dimen/margin_chat_activity"
-            android:text="一起来看流星雨"
             android:textSize="@dimen/day_recommend_font_info"
             android:textStyle="bold" />
 
@@ -69,22 +68,102 @@
             </RelativeLayout>
         </RelativeLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
+      <ImageView
+            android:id="@+id/item_image"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/personal_timecapsule_padding"
+            android:layout_marginRight="@dimen/personal_timecapsule_padding"
+            android:layout_marginTop="@dimen/setting_list_margin"
+            android:gravity="center"
+            android:maxHeight="@dimen/tape_margin_top"
+            android:maxWidth="@dimen/tape_margin"
+            android:scaleType="centerCrop" />
+
+        <LinearLayout
+            android:id="@+id/item_image_group1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/setting_list_margin"
+            android:background="@color/white"
+            android:gravity="center"
+            android:orientation="horizontal"
             android:paddingLeft="@dimen/personal_timecapsule_padding"
             android:paddingRight="@dimen/personal_timecapsule_padding"
-            android:paddingTop="@dimen/new_msg" >
+            android:paddingTop="2dp"
+            android:visibility="gone" >
 
             <ImageView
-                android:id="@+id/item_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:clickable="true"
-                android:focusable="false"
-                android:maxHeight="@dimen/tape_margin"
-                android:src="@drawable/content" />
+                android:id="@+id/item_image1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/personal_photo_size"
+                android:layout_margin="2dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/item_image2"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/personal_photo_size"
+                android:layout_margin="2dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/item_image3"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/personal_photo_size"
+                android:layout_margin="2dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item_image_group2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/personal_timecapsule_padding"
+            android:paddingRight="@dimen/personal_timecapsule_padding"
+            android:visibility="gone" >
+
+            <ImageView
+                android:id="@+id/item_image4"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/personal_photo_size"
+                android:layout_margin="2dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/item_image5"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/personal_photo_size"
+                android:layout_margin="2dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/item_image6"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/personal_photo_size"
+                android:layout_margin="2dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
         </LinearLayout>
 
         <RelativeLayout
@@ -115,7 +194,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/personal_timecapsule_padding"
                     android:singleLine="true"
-                    android:text="4月12日 周天，12:90-20:90"
                     android:textSize="@dimen/register_font_size" />
             </LinearLayout>
 
@@ -139,7 +217,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/personal_timecapsule_padding"
                     android:singleLine="true"
-                    android:text="厦门市思明区中山路"
                     android:textSize="@dimen/register_font_size" />
             </LinearLayout>
 
@@ -163,7 +240,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/personal_timecapsule_padding"
                     android:singleLine="true"
-                    android:text="男女不限"
                     android:textSize="@dimen/register_font_size" />
             </LinearLayout>
 
@@ -185,7 +261,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/personal_timecapsule_padding"
-                    android:text="这是一部很好的电影，大家一起来看吧。情景华丽丽，内容响当当。来吧来吧~！这是一部很好的电影，大家一起来看吧。情景华丽丽，内容响当当。来吧来吧~！"
                     android:textSize="@dimen/register_font_size" />
             </LinearLayout>
         </RelativeLayout>

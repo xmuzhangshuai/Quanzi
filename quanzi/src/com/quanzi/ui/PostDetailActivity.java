@@ -43,7 +43,7 @@ import com.quanzi.config.Constants.CommentType;
 import com.quanzi.config.Constants.Config;
 import com.quanzi.jsonobject.JsonComment;
 import com.quanzi.jsonobject.JsonPostItem;
-import com.quanzi.table.PostCommentTable;
+import com.quanzi.table.CommentTable;
 import com.quanzi.table.PostTable;
 import com.quanzi.table.UserTable;
 import com.quanzi.utils.AsyncHttpClientTool;
@@ -270,8 +270,6 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 					}
 				}
 			});
-
-			sendBtn.setOnClickListener(this);
 
 			String[] smallPhotos = null;
 			//设置缩略图
@@ -544,16 +542,30 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 	private void comment(String content) {
 		if (jsonPostItem != null && !TextUtils.isEmpty(content)) {
 			RequestParams params = new RequestParams();
-			params.put(PostCommentTable.PC_COMMENT_USERID, userPreference.getU_id());
-			params.put(PostCommentTable.PC_TO_USERID, toUserID);
-			params.put(PostCommentTable.PC_CONTENT, content);
-			params.put(PostCommentTable.PC_USERID, jsonPostItem.getP_userid());
-			params.put(PostCommentTable.PC_POSTID, jsonPostItem.getP_postid());
+			params.put(CommentTable.C_USER_ID, userPreference.getU_id());
+			params.put(CommentTable.C_CONTENT, content);
+			params.put(CommentTable.TO_USER_ID, toUserID);
+			params.put(CommentTable.PA_USERID, jsonPostItem.getP_userid());
+			params.put(CommentTable.PA_ID, jsonPostItem.getP_postid());
 			if (isReply) {
-				params.put(PostCommentTable.PC_TYPE, CommentType.REPLY);
+				params.put(CommentTable.COMMENT_TYPE, CommentType.REPLY);
 			} else {
-				params.put(PostCommentTable.PC_TYPE, CommentType.COMMENT);
+				params.put(CommentTable.COMMENT_TYPE, CommentType.COMMENT);
 			}
+			
+			
+//			
+//			params.put(PostCommentTable.PC_COMMENT_USERID, userPreference.getU_id());
+//			params.put(PostCommentTable.PC_TO_USERID, toUserID);
+//			params.put(PostCommentTable.PC_CONTENT, content);
+//			params.put(PostCommentTable.PC_USERID, jsonPostItem.getP_userid());
+//			params.put(PostCommentTable.PC_POSTID, jsonPostItem.getP_postid());
+//			if (isReply) {
+//				params.put(PostCommentTable.PC_TYPE, CommentType.REPLY);
+//			} else {
+//				params.put(PostCommentTable.PC_TYPE, CommentType.COMMENT);
+//			}
+			
 
 			TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
 
@@ -602,9 +614,9 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 		final int page = p;
 		RequestParams params = new RequestParams();
 		params.put("page", pageNow);
-		//如果是单身
 		params.put(PostTable.P_POSTID, jsonPostItem.getP_postid());
 		params.put(PostTable.P_USERID, jsonPostItem.getP_userid());
+		params.put(UserTable.U_ID, userPreference.getU_id());
 		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
 
 			@Override
@@ -777,7 +789,7 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 			} else {
 				holder.lable.setVisibility(View.VISIBLE);
 				holder.toUserName.setVisibility(View.VISIBLE);
-				holder.toUserName.setText(jsonComment.getTo_user_nickname()+":");
+				holder.toUserName.setText(jsonComment.getTo_user_nickname() + ":");
 			}
 
 			//设置日期

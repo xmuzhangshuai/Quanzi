@@ -1,8 +1,8 @@
 package com.quanzi.ui;
 
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.Header;
 
@@ -33,8 +33,10 @@ import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.quanzi.R;
 import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseV4Fragment;
+import com.quanzi.config.Constants.CommentType;
 import com.quanzi.config.Constants.Config;
 import com.quanzi.jsonobject.JsonActItem;
+import com.quanzi.table.CommentTable;
 import com.quanzi.table.UserTable;
 import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.DateTimeTools;
@@ -56,7 +58,7 @@ import com.quanzi.utils.UserPreference;
 public class MainExploreActFragment extends BaseV4Fragment {
 	private View rootView;// 根View
 
-	private PullToRefreshListView postListView;
+	private PullToRefreshListView actListView;
 
 	protected boolean pauseOnScroll = false;
 	protected boolean pauseOnFling = true;
@@ -94,9 +96,9 @@ public class MainExploreActFragment extends BaseV4Fragment {
 		//获取数据
 		getDataTask(pageNow);
 
-		postListView.setMode(Mode.BOTH);
+		actListView.setMode(Mode.BOTH);
 		mAdapter = new PostAdapter();
-		postListView.setAdapter(mAdapter);
+		actListView.setAdapter(mAdapter);
 
 		return rootView;
 	}
@@ -105,13 +107,13 @@ public class MainExploreActFragment extends BaseV4Fragment {
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		postListView.setOnScrollListener(new PauseOnScrollListener(imageLoader, pauseOnScroll, pauseOnFling));
+		actListView.setOnScrollListener(new PauseOnScrollListener(imageLoader, pauseOnScroll, pauseOnFling));
 	}
 
 	@Override
 	protected void findViewById() {
 		// TODO Auto-generated method stub
-		postListView = (PullToRefreshListView) rootView.findViewById(R.id.act_list);
+		actListView = (PullToRefreshListView) rootView.findViewById(R.id.act_list);
 	}
 
 	@Override
@@ -119,7 +121,7 @@ public class MainExploreActFragment extends BaseV4Fragment {
 		// TODO Auto-generated method stub
 
 		//设置上拉下拉刷新事件
-		postListView.setOnRefreshListener(new OnRefreshListener2<ListView>() {
+		actListView.setOnRefreshListener(new OnRefreshListener2<ListView>() {
 
 			@Override
 			public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
@@ -191,6 +193,7 @@ public class MainExploreActFragment extends BaseV4Fragment {
 				if (statusCode == 200) {
 					List<JsonActItem> temp = FastJsonTool.getObjectList(response, JsonActItem.class);
 					if (temp != null) {
+						LogTool.i("获取学校活动列表长度" + temp.size());
 						//如果是首次获取数据
 						if (page == 0) {
 							if (temp.size() < Config.PAGE_NUM) {
@@ -210,16 +213,20 @@ public class MainExploreActFragment extends BaseV4Fragment {
 						mAdapter.notifyDataSetChanged();
 					}
 				}
-				postListView.onRefreshComplete();
 			}
 
 			@Override
 			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
 				// TODO Auto-generated method stub
-				LogTool.e("获取列表失败");
-				postListView.onRefreshComplete();
+				LogTool.e("获取学校活动列表失败");
 			}
 
+			@Override
+			public void onFinish() {
+				// TODO Auto-generated method stub
+				super.onFinish();
+				actListView.onRefreshComplete();
+			}
 		};
 		AsyncHttpClientTool.post(getActivity(), "activity/getSchoolActivities", params, responseHandler);
 	}
@@ -249,7 +256,16 @@ public class MainExploreActFragment extends BaseV4Fragment {
 			public ImageView moreBtn;
 			public ImageView commentBtn;
 			public TextView commentCountTextView;
-
+			public View comment1Container;
+			public View comment2Container;
+			public TextView commentUser1;
+			public TextView label1;
+			public TextView toUser1;
+			public TextView commentContent1;
+			public TextView commentUser2;
+			public TextView label2;
+			public TextView toUser2;
+			public TextView commentContent2;
 		}
 
 		@Override
@@ -297,10 +313,31 @@ public class MainExploreActFragment extends BaseV4Fragment {
 				holder.commentBtn = (ImageView) view.findViewById(R.id.comment_btn);
 				holder.commentCountTextView = (TextView) view.findViewById(R.id.comment_count);
 				holder.moreBtn = (ImageView) view.findViewById(R.id.more);
+				holder.comment1Container = view.findViewById(R.id.comment1_container);
+				holder.comment2Container = view.findViewById(R.id.comment2_container);
+				holder.commentUser1 = (TextView) view.findViewById(R.id.comment_user_name1);
+				holder.label1 = (TextView) view.findViewById(R.id.labe1);
+				holder.toUser1 = (TextView) view.findViewById(R.id.to_user_name1);
+				holder.commentContent1 = (TextView) view.findViewById(R.id.comment_content1);
+				holder.commentUser2 = (TextView) view.findViewById(R.id.comment_user_name2);
+				holder.label2 = (TextView) view.findViewById(R.id.labe2);
+				holder.toUser2 = (TextView) view.findViewById(R.id.to_user_name2);
+				holder.commentContent2 = (TextView) view.findViewById(R.id.comment_content2);
 				view.setTag(holder); // 给View添加一个格外的数据 
 			} else {
 				holder = (ViewHolder) view.getTag(); // 把数据取出来  
 			}
+
+			view.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					startActivity(new Intent(getActivity(), ActDetailActivity.class).putExtra(
+							ActDetailActivity.ACT_ITEM, jsonActItem));
+					getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+				}
+			});
 
 			holder.titleTextView.setText(jsonActItem.getA_title());
 
@@ -315,11 +352,10 @@ public class MainExploreActFragment extends BaseV4Fragment {
 						@Override
 						public void onClick(View v) {
 							// TODO Auto-generated method stub
-							//							Intent intent = new Intent(getActivity(), PersonDetailActivity.class);
-							//							intent.putExtra(PersonDetailActivity.PERSON_TYPE, Constants.PersonDetailType.SINGLE);
-							//							intent.putExtra(UserTable.U_ID, jsonPostItem.getN_userid());
-							//							startActivity(intent);
-							//							getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
+							Intent intent = new Intent(getActivity(), PersonDetailActivity.class);
+							intent.putExtra(UserTable.U_ID, jsonActItem.getA_userid());
+							startActivity(intent);
+							getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
 						}
 					});
 				}
@@ -387,8 +423,61 @@ public class MainExploreActFragment extends BaseV4Fragment {
 				}
 			});
 
+			List<Map<String, String>> comments = jsonActItem.getCommentList();
+
+			//设置评论
+			if (comments != null) {
+				if (comments.size() == 0) {
+					holder.comment1Container.setVisibility(View.GONE);
+					holder.comment2Container.setVisibility(View.GONE);
+				} else if (comments.size() == 1) {
+					holder.comment1Container.setVisibility(View.VISIBLE);
+					holder.commentUser1.setText(comments.get(0).get(CommentTable.C_USER_NICKNAME) + ":");
+					holder.commentContent1.setText(comments.get(0).get(CommentTable.C_CONTENT));
+					if (comments.get(0).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {//如果是评论
+						holder.toUser1.setVisibility(View.GONE);
+						holder.label1.setVisibility(View.GONE);
+					} else {//如果是回复
+						holder.toUser1.setVisibility(View.VISIBLE);
+						holder.label1.setVisibility(View.VISIBLE);
+						holder.toUser1.setText(comments.get(0).get(CommentTable.TO_USER_NICKNAME));
+					}
+				} else if (comments.size() == 2) {
+					holder.comment1Container.setVisibility(View.VISIBLE);
+					holder.commentUser1.setText(comments.get(0).get(CommentTable.C_USER_NICKNAME) + ":");
+					holder.commentContent1.setText(comments.get(0).get(CommentTable.C_CONTENT));
+					if (comments.get(0).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {//如果是评论
+						holder.toUser1.setVisibility(View.GONE);
+						holder.label1.setVisibility(View.GONE);
+					} else {//如果是回复
+						holder.toUser1.setVisibility(View.VISIBLE);
+						holder.label1.setVisibility(View.VISIBLE);
+						holder.toUser1.setText(comments.get(0).get(CommentTable.TO_USER_NICKNAME));
+					}
+					holder.comment2Container.setVisibility(View.VISIBLE);
+					holder.commentUser2.setText(comments.get(1).get(CommentTable.C_USER_NICKNAME) + ":");
+					holder.commentContent2.setText(comments.get(1).get(CommentTable.C_CONTENT));
+					if (comments.get(1).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {//如果是评论
+						holder.toUser2.setVisibility(View.GONE);
+						holder.label2.setVisibility(View.GONE);
+					} else {//如果是回复
+						holder.toUser2.setVisibility(View.VISIBLE);
+						holder.label2.setVisibility(View.VISIBLE);
+						holder.toUser2.setText(comments.get(1).get(CommentTable.TO_USER_NICKNAME));
+					}
+				}
+			} else {
+				holder.comment1Container.setVisibility(View.GONE);
+				holder.comment2Container.setVisibility(View.GONE);
+			}
+
 			//设置评论次数
-			holder.commentCountTextView.setText("查看全部" + jsonActItem.getA_comment_count() + "条评论");
+			if (jsonActItem.getA_comment_count() == 0) {
+				holder.commentCountTextView.setVisibility(View.GONE);
+			} else {
+				holder.commentCountTextView.setVisibility(View.VISIBLE);
+				holder.commentCountTextView.setText("查看全部" + jsonActItem.getA_comment_count() + "条评论");
+			}
 
 			//评论
 			holder.commentBtn.setOnClickListener(new OnClickListener() {

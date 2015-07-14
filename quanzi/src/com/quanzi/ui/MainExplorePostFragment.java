@@ -37,7 +37,6 @@ import com.quanzi.config.Constants.CommentType;
 import com.quanzi.config.Constants.Config;
 import com.quanzi.jsonobject.JsonPostItem;
 import com.quanzi.table.CommentTable;
-import com.quanzi.table.PostCommentTable;
 import com.quanzi.table.UserTable;
 import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.DateTimeTools;
@@ -186,6 +185,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 		RequestParams params = new RequestParams();
 		params.put("page", pageNow);
 		params.put(UserTable.U_SCHOOLID, userPreference.getU_schoolid());
+		params.put(UserTable.U_ID, userPreference.getU_id());
 		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
 
 			@Override
@@ -194,7 +194,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 				if (statusCode == 200) {
 					List<JsonPostItem> temp = FastJsonTool.getObjectList(response, JsonPostItem.class);
 					if (temp != null) {
-						LogTool.i("列表长度" + temp.size());
+						LogTool.i("获取学校帖子列表长度" + temp.size());
 						//如果是首次获取数据
 						if (page == 0) {
 							if (temp.size() < Config.PAGE_NUM) {
@@ -412,8 +412,12 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 
 			//设置评论
 			if (comments != null) {
-				if (comments.size() == 1) {
+				if (comments.size() == 0) {
+					holder.comment1Container.setVisibility(View.GONE);
+					holder.comment2Container.setVisibility(View.GONE);
+				} else if (comments.size() == 1) {
 					holder.comment1Container.setVisibility(View.VISIBLE);
+					holder.comment2Container.setVisibility(View.GONE);
 					holder.commentUser1.setText(comments.get(0).get(CommentTable.C_USER_NICKNAME) + ":");
 					holder.commentContent1.setText(comments.get(0).get(CommentTable.C_CONTENT));
 					if (comments.get(0).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {//如果是评论
@@ -424,8 +428,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 						holder.label1.setVisibility(View.VISIBLE);
 						holder.toUser1.setText(comments.get(0).get(CommentTable.TO_USER_NICKNAME));
 					}
-				}
-				if (comments.size() == 2) {
+				} else if (comments.size() == 2) {
 					holder.comment1Container.setVisibility(View.VISIBLE);
 					holder.commentUser1.setText(comments.get(0).get(CommentTable.C_USER_NICKNAME) + ":");
 					holder.commentContent1.setText(comments.get(0).get(CommentTable.C_CONTENT));
@@ -448,7 +451,12 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 						holder.label2.setVisibility(View.VISIBLE);
 						holder.toUser2.setText(comments.get(1).get(CommentTable.TO_USER_NICKNAME));
 					}
+				}else {
+					LogTool.e("评论有超过两个");
 				}
+			} else {
+				holder.comment1Container.setVisibility(View.GONE);
+				holder.comment2Container.setVisibility(View.GONE);
 			}
 
 			//设置评论次数

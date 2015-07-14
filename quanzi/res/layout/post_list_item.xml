@@ -200,7 +200,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/personal_timecapsule_padding"
                 android:layout_marginTop="@dimen/margin_chat_activity"
-                android:text="小王："
                 android:textColor="@color/comment_name"
                 android:textSize="@dimen/comment_font_size" />
 
@@ -220,7 +219,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dp"
                 android:layout_marginTop="@dimen/margin_chat_activity"
-                android:text="小明："
                 android:textColor="@color/comment_name"
                 android:textSize="@dimen/comment_font_size" />
 
@@ -232,7 +230,6 @@
                 android:layout_marginRight="@dimen/personal_timecapsule_padding"
                 android:layout_marginTop="@dimen/margin_chat_activity"
                 android:singleLine="true"
-                android:text="谢谢哈~！！有你真好"
                 android:textColor="@color/unenable"
                 android:textSize="@dimen/comment_font_size" />
         </LinearLayout>
@@ -250,7 +247,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/personal_timecapsule_padding"
                 android:layout_marginTop="@dimen/margin_chat_activity"
-                android:text="小王："
                 android:textColor="@color/comment_name"
                 android:textSize="@dimen/comment_font_size" />
 
@@ -270,7 +266,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dp"
                 android:layout_marginTop="@dimen/margin_chat_activity"
-                android:text="小明："
                 android:textColor="@color/comment_name"
                 android:textSize="@dimen/comment_font_size" />
 
@@ -282,7 +277,6 @@
                 android:layout_marginRight="@dimen/personal_timecapsule_padding"
                 android:layout_marginTop="@dimen/margin_chat_activity"
                 android:singleLine="true"
-                android:text="谢谢哈~！！有你真好"
                 android:textColor="@color/unenable"
                 android:textSize="@dimen/comment_font_size" />
         </LinearLayout>
@@ -294,7 +288,6 @@
             android:layout_marginLeft="@dimen/personal_timecapsule_padding"
             android:layout_marginRight="@dimen/personal_timecapsule_padding"
             android:layout_marginTop="@dimen/setting_list_margin"
-            android:text="查看全部215条评论"
             android:textColor="@color/unenable"
             android:textSize="@dimen/register_font_size" />
 

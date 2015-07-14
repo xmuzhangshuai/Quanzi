@@ -2,7 +2,8 @@ package com.quanzi.table;
 
 public class ActivityTable {
 	public static String A_ID = "a_id";
-	public static String A_USER_ID = "a_userid";
+	public static String A_ACTID = "a_actid";
+	public static String A_USERID = "a_userid";
 	public static String A_ACTTIME = "a_acttime";
 	public static String A_ACT_TYPE = "a_act_type";
 	public static String A_CONTENT = "a_content";
@@ -13,5 +14,5 @@ public class ActivityTable {
 	public static String A_COMMENT_COUNT = "a_comment_count";
 	public static String A_APPLY_AMOUNT = "a_apply_amount";
 	public static String A_ADDRESS = "a_address";
-	
+
 }
