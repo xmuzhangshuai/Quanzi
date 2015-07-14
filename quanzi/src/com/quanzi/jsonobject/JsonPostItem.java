@@ -2,6 +2,8 @@ package com.quanzi.jsonobject;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 public class JsonPostItem implements Serializable {
 	private int p_id;
@@ -17,6 +19,12 @@ public class JsonPostItem implements Serializable {
 	private Date p_time;
 	private int p_comment_count;
 	private int p_favor_count;
+	
+	private Map<String, String> comment1;
+	private Map<String, String> comment2;
+
+
+	private List<Map<String,String>> commentList;
 
 	public JsonPostItem() {
 		super();
@@ -125,6 +133,31 @@ public class JsonPostItem implements Serializable {
 		this.p_favor_count = p_favor_count;
 	}
 
+	
+	public Map<String, String> getComment1() {
+		return comment1;
+	}
+
+	public void setComment1(Map<String, String> comment1) {
+		this.comment1 = comment1;
+	}
+
+	public Map<String, String> getComment2() {
+		return comment2;
+	}
+
+	public void setComment2(Map<String, String> comment2) {
+		this.comment2 = comment2;
+	}
+
+	public List<Map<String, String>> getCommentList() {
+		return commentList;
+	}
+
+	public void setCommentList(List<Map<String, String>> commentList) {
+		this.commentList = commentList;
+	}
+	
 	public JsonPostItem(int p_userid, String p_username, String p_small_avatar, String p_large_avatar, String p_gender,
 			String p_text_content, String p_thumbnail, String p_big_photo, Date p_time) {
 		super();

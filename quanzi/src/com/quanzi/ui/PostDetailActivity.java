@@ -1,6 +1,7 @@
 package com.quanzi.ui;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.http.Header;
 
@@ -39,13 +40,17 @@ import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseFragmentActivity;
 import com.quanzi.config.Constants;
 import com.quanzi.config.Constants.CommentType;
+import com.quanzi.config.Constants.Config;
 import com.quanzi.jsonobject.JsonComment;
 import com.quanzi.jsonobject.JsonPostItem;
 import com.quanzi.table.PostCommentTable;
+import com.quanzi.table.PostTable;
 import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.DateTimeTools;
+import com.quanzi.utils.FastJsonTool;
 import com.quanzi.utils.ImageLoaderTool;
 import com.quanzi.utils.LogTool;
+import com.quanzi.utils.ToastTool;
 import com.quanzi.utils.UserPreference;
 
 /**
@@ -580,55 +585,59 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 	 * 网络获取数据
 	 */
 	private void getDataTask(int p) {
-		//		if (jsonPostItem == null) {
-		//			return;
-		//		}
-		//		final int page = p;
-		//		RequestParams params = new RequestParams();
-		//		params.put("page", pageNow);
-		//		//如果是单身
-		//		params.put(LoveBridgeItemTable.N_ID, jsonPostItem.getN_id());
-		//		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
-		//
-		//			@Override
-		//			public void onSuccess(int statusCode, Header[] headers, String response) {
-		//				// TODO Auto-generated method stub
-		//				if (statusCode == 200) {
-		//					LogTool.i("LoveBridgeDetail", "长度" + commentList.size());
-		//					List<JsonBridgeComment> temp = FastJsonTool.getObjectList(response, JsonBridgeComment.class);
-		//					if (temp != null) {
-		//						//如果是首次获取数据
-		//						if (page == 0) {
-		//							if (temp.size() < Config.PAGE_NUM) {
-		//								pageNow = -1;
-		//							}
-		//							commentList = new LinkedList<JsonBridgeComment>();
-		//							commentList.addAll(temp);
-		//						}
-		//						//如果是获取更多
-		//						else if (page > 0) {
-		//							if (temp.size() < Config.PAGE_NUM) {
-		//								pageNow = -1;
-		//								ToastTool.showShort(LoveBridgeDetailActivity.this, "没有更多了！");
-		//							}
-		//							commentList.addAll(temp);
-		//						}
-		//						mAdapter.notifyDataSetChanged();
-		//					}
-		//				}
-		//				loveBridgeListView.onRefreshComplete();
-		//			}
-		//
-		//			@Override
-		//			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
-		//				// TODO Auto-generated method stub
-		//				LogTool.e("LoveBridgeDetail", "获取列表失败");
-		//				loveBridgeListView.onRefreshComplete();
-		//			}
-		//		};
-		//		AsyncHttpClientTool.post(PostDetailActivity.this, "getbridgecommentlist", params, responseHandler);
+		if (jsonPostItem == null) {
+			return;
+		}
+		final int page = p;
+		RequestParams params = new RequestParams();
+		params.put("page", pageNow);
+		//如果是单身
+		params.put(PostTable.P_ID, jsonPostItem.getP_id());
+		params.put(PostTable.P_USERID, jsonPostItem.getP_userid());
+		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
 
-		commentListView.onRefreshComplete();
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, String response) {
+				// TODO Auto-generated method stub
+				if (statusCode == 200) {
+					LogTool.i("帖子详情获取评论列表", "长度" + commentList.size());
+					List<JsonComment> temp = FastJsonTool.getObjectList(response, JsonComment.class);
+					if (temp != null) {
+						//如果是首次获取数据
+						if (page == 0) {
+							if (temp.size() < Config.PAGE_NUM) {
+								pageNow = -1;
+							}
+							commentList = new LinkedList<JsonComment>();
+							commentList.addAll(temp);
+						}
+						//如果是获取更多
+						else if (page > 0) {
+							if (temp.size() < Config.PAGE_NUM) {
+								pageNow = -1;
+								ToastTool.showShort(PostDetailActivity.this, "没有更多了！");
+							}
+							commentList.addAll(temp);
+						}
+						mAdapter.notifyDataSetChanged();
+					}
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+				// TODO Auto-generated method stub
+				LogTool.e("帖子详情获取评论列表失败");
+			}
+
+			@Override
+			public void onFinish() {
+				// TODO Auto-generated method stub
+				super.onFinish();
+				commentListView.onRefreshComplete();
+			}
+		};
+		AsyncHttpClientTool.post(PostDetailActivity.this, "getbridgecommentlist", params, responseHandler);
 	}
 
 	/**
@@ -646,6 +655,8 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 			public ImageView genderImageView;
 			public TextView timeTextView;
 			public TextView contentTextView;
+			public TextView lable;
+			public TextView toUserName;
 		}
 
 		@Override
@@ -670,8 +681,8 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
 			View view = convertView;
-			final JsonComment postComment = commentList.get(position);
-			if (postComment == null) {
+			final JsonComment jsonComment = commentList.get(position);
+			if (jsonComment == null) {
 				return null;
 			}
 
@@ -684,6 +695,8 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 				holder.genderImageView = (ImageView) view.findViewById(R.id.gender);
 				holder.timeTextView = (TextView) view.findViewById(R.id.time);
 				holder.contentTextView = (TextView) view.findViewById(R.id.content);
+				holder.lable = (TextView) view.findViewById(R.id.label);
+				holder.toUserName = (TextView) view.findViewById(R.id.to_user_name);
 				view.setTag(holder); // 给View添加一个格外的数据 
 			} else {
 				holder = (ViewHolder) view.getTag(); // 把数据取出来  
@@ -694,7 +707,7 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					commentEditText.setHint("回复 " + postComment.getC_user_nickname() + ":");
+					commentEditText.setHint("回复 " + jsonComment.getC_user_nickname() + ":");
 				}
 			});
 
@@ -710,11 +723,9 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 
 			//设置头像
 			if (!TextUtils.isEmpty(jsonPostItem.getP_small_avatar())) {
-				//				imageLoader.displayImage(AsyncHttpClientImageSound.getAbsoluteUrl(postComment.getC_small_avatar()),
-				//						holder.headImageView, ImageLoaderTool.getHeadImageOptions(10));
-				imageLoader.displayImage(postComment.getC_user_avatar(), holder.headImageView,
-						ImageLoaderTool.getHeadImageOptions(10));
-				if (userPreference.getU_id() != postComment.getC_user_id()) {
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonComment.getC_user_avatar()),
+						holder.headImageView, ImageLoaderTool.getHeadImageOptions(10));
+				if (userPreference.getU_id() != jsonComment.getC_user_id()) {
 					//点击头像进入详情页面
 					holder.headImageView.setOnClickListener(new OnClickListener() {
 
@@ -732,20 +743,29 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 			}
 
 			//设置内容
-			holder.contentTextView.setText(postComment.getC_content());
+			holder.contentTextView.setText(jsonComment.getC_content());
 
 			//设置姓名
-			holder.nameTextView.setText(postComment.getC_user_nickname());
+			holder.nameTextView.setText(jsonComment.getC_user_nickname());
 
 			//设置性别
-			if (postComment.getC_user_gender().equals(Constants.Gender.MALE)) {
+			if (jsonComment.getC_user_gender().equals(Constants.Gender.MALE)) {
 				holder.genderImageView.setImageResource(R.drawable.male);
 			} else {
 				holder.genderImageView.setImageResource(R.drawable.female);
 			}
 
+			if (jsonComment.getComment_type().equals(CommentType.COMMENT)) {
+				holder.lable.setVisibility(View.GONE);
+				holder.toUserName.setVisibility(View.GONE);
+			} else {
+				holder.lable.setVisibility(View.VISIBLE);
+				holder.toUserName.setVisibility(View.VISIBLE);
+				holder.toUserName.setText(jsonComment.getTo_user_nickname());
+			}
+
 			//设置日期
-			holder.timeTextView.setText(DateTimeTools.getHourAndMin(postComment.getC_time()));
+			holder.timeTextView.setText(DateTimeTools.getHourAndMin(jsonComment.getC_time()));
 
 			return view;
 		}

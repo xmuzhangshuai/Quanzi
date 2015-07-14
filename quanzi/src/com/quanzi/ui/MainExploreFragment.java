@@ -83,6 +83,13 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 	}
 
 	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		schoolTextView.setText(userPreference.getSchoolName());
+	}
+
+	@Override
 	protected void initView() {
 		// TODO Auto-generated method stub
 		filterBtn.setVisibility(View.VISIBLE);
@@ -90,7 +97,6 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 		filterBtn.setOnClickListener(this);
 		searchBtn.setOnClickListener(this);
 		publishBtn.setOnClickListener(this);
-
 		mTabs = new View[2];
 		mTabs[0] = (View) rootView.findViewById(R.id.postBtn);
 		mTabs[1] = (View) rootView.findViewById(R.id.activityBtn);

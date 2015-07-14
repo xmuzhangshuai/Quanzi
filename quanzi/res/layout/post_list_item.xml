@@ -99,7 +99,7 @@
             android:gravity="center"
             android:maxHeight="@dimen/tape_margin_top"
             android:maxWidth="@dimen/tape_margin"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop" />
 
         <LinearLayout
             android:id="@+id/item_image_group1"
@@ -187,49 +187,17 @@
                 android:visibility="gone" />
         </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/comment1_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:id="@+id/comment_user_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="@dimen/personal_timecapsule_padding"
-                android:layout_marginTop="@dimen/margin_chat_activity"
-                android:text="小明："
-                android:textColor="@color/comment_name"
-                android:textSize="@dimen/comment_font_size" />
-
-            <TextView
-                android:id="@+id/comment_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="@dimen/personal_timecapsule_padding"
-                android:layout_marginTop="@dimen/margin_chat_activity"
-                android:layout_toLeftOf="@+id/time1"
-                android:layout_toRightOf="@+id/comment_user_name"
-                android:singleLine="true"
-                android:text="简约但不适华丽"
-                android:textColor="@color/unenable"
-                android:textSize="@dimen/comment_font_size" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/comment2_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:visibility="gone" >
 
             <TextView
                 android:id="@+id/comment_user_name1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_marginLeft="@dimen/personal_timecapsule_padding"
                 android:layout_marginTop="@dimen/margin_chat_activity"
                 android:text="小王："
@@ -237,23 +205,71 @@
                 android:textSize="@dimen/comment_font_size" />
 
             <TextView
-                android:id="@+id/label"
+                android:id="@+id/labe1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dp"
                 android:layout_marginTop="@dimen/margin_chat_activity"
-                android:layout_toRightOf="@+id/comment_user_name1"
                 android:text="回复"
                 android:textColor="@color/unenable"
                 android:textSize="@dimen/comment_font_size" />
 
             <TextView
-                android:id="@+id/comment_user_name2"
+                android:id="@+id/to_user_name1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dp"
                 android:layout_marginTop="@dimen/margin_chat_activity"
-                android:layout_toRightOf="@+id/label"
+                android:text="小明："
+                android:textColor="@color/comment_name"
+                android:textSize="@dimen/comment_font_size" />
+
+            <TextView
+                android:id="@+id/comment_content1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="@dimen/personal_timecapsule_padding"
+                android:layout_marginTop="@dimen/margin_chat_activity"
+                android:singleLine="true"
+                android:text="谢谢哈~！！有你真好"
+                android:textColor="@color/unenable"
+                android:textSize="@dimen/comment_font_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/comment2_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone" >
+
+            <TextView
+                android:id="@+id/comment_user_name2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/personal_timecapsule_padding"
+                android:layout_marginTop="@dimen/margin_chat_activity"
+                android:text="小王："
+                android:textColor="@color/comment_name"
+                android:textSize="@dimen/comment_font_size" />
+
+            <TextView
+                android:id="@+id/labe2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="@dimen/margin_chat_activity"
+                android:text="回复"
+                android:textColor="@color/unenable"
+                android:textSize="@dimen/comment_font_size" />
+
+            <TextView
+                android:id="@+id/to_user_name2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="@dimen/margin_chat_activity"
                 android:text="小明："
                 android:textColor="@color/comment_name"
                 android:textSize="@dimen/comment_font_size" />
@@ -265,13 +281,11 @@
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="@dimen/personal_timecapsule_padding"
                 android:layout_marginTop="@dimen/margin_chat_activity"
-                android:layout_toLeftOf="@+id/time2"
-                android:layout_toRightOf="@+id/comment_user_name2"
                 android:singleLine="true"
                 android:text="谢谢哈~！！有你真好"
                 android:textColor="@color/unenable"
                 android:textSize="@dimen/comment_font_size" />
-        </RelativeLayout>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/comment_count"

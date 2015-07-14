@@ -228,31 +228,31 @@ public class MyFavoredActivity extends BaseFragmentActivity implements OnClickLi
 		//			}
 		//		};
 		//		AsyncHttpClientTool.post(getActivity(), "getlovebridgelist", params, responseHandler);
-		JsonPostItem item1 = new JsonPostItem(1, 1, "张帅", "drawable://" + R.drawable.headimage1, "drawable://"
-				+ R.drawable.headimage1, "男", "一见倾心，再见依然痴迷", "drawable://" + R.drawable.content, "drawable://"
-				+ R.drawable.content, new Date(), 20, 2);
-
-		JsonPostItem item2 = new JsonPostItem(2, 2, "叶子", "drawable://" + R.drawable.headimage2, "drawable://"
-				+ R.drawable.headimage2, "女", "你的美丽让我情不自禁", "drawable://" + R.drawable.content2, "drawable://"
-				+ R.drawable.content2, new Date(), 45, 20);
-
-		JsonPostItem item3 = new JsonPostItem(3, 3, "荣发", "drawable://" + R.drawable.headimage3, "drawable://"
-				+ R.drawable.headimage3, "男", "这是一片很寂寞的天下着有些伤心的雨", "drawable://" + R.drawable.content, "drawable://"
-				+ R.drawable.content, new Date(), 76, 32);
-
-		JsonPostItem item4 = new JsonPostItem(4, 4, "伟强", "drawable://" + R.drawable.headimage4, "drawable://"
-				+ R.drawable.headimage4, "女", "爱上你的日子，每天都在想你", "drawable://" + R.drawable.content2, "drawable://"
-				+ R.drawable.content2, new Date(), 26, 280);
-
-		JsonPostItem item5 = new JsonPostItem(5, 5, "王坤", "drawable://" + R.drawable.headimage5, "drawable://"
-				+ R.drawable.headimage5, "女", "卡又丢了，快来点开心的事冲冲喜吧！", "drawable://" + R.drawable.content, "drawable://"
-				+ R.drawable.content, new Date(), 256, 46);
-		jsonPostItemList.add(item1);
-		jsonPostItemList.add(item2);
-		jsonPostItemList.add(item3);
-		jsonPostItemList.add(item4);
-		jsonPostItemList.add(item5);
-		postListView.onRefreshComplete();
+//		JsonPostItem item1 = new JsonPostItem(1, 1, "张帅", "drawable://" + R.drawable.headimage1, "drawable://"
+//				+ R.drawable.headimage1, "男", "一见倾心，再见依然痴迷", "drawable://" + R.drawable.content, "drawable://"
+//				+ R.drawable.content, new Date(), 20, 2);
+//
+//		JsonPostItem item2 = new JsonPostItem(2, 2, "叶子", "drawable://" + R.drawable.headimage2, "drawable://"
+//				+ R.drawable.headimage2, "女", "你的美丽让我情不自禁", "drawable://" + R.drawable.content2, "drawable://"
+//				+ R.drawable.content2, new Date(), 45, 20);
+//
+//		JsonPostItem item3 = new JsonPostItem(3, 3, "荣发", "drawable://" + R.drawable.headimage3, "drawable://"
+//				+ R.drawable.headimage3, "男", "这是一片很寂寞的天下着有些伤心的雨", "drawable://" + R.drawable.content, "drawable://"
+//				+ R.drawable.content, new Date(), 76, 32);
+//
+//		JsonPostItem item4 = new JsonPostItem(4, 4, "伟强", "drawable://" + R.drawable.headimage4, "drawable://"
+//				+ R.drawable.headimage4, "女", "爱上你的日子，每天都在想你", "drawable://" + R.drawable.content2, "drawable://"
+//				+ R.drawable.content2, new Date(), 26, 280);
+//
+//		JsonPostItem item5 = new JsonPostItem(5, 5, "王坤", "drawable://" + R.drawable.headimage5, "drawable://"
+//				+ R.drawable.headimage5, "女", "卡又丢了，快来点开心的事冲冲喜吧！", "drawable://" + R.drawable.content, "drawable://"
+//				+ R.drawable.content, new Date(), 256, 46);
+//		jsonPostItemList.add(item1);
+//		jsonPostItemList.add(item2);
+//		jsonPostItemList.add(item3);
+//		jsonPostItemList.add(item4);
+//		jsonPostItemList.add(item5);
+//		postListView.onRefreshComplete();
 	}
 
 	/**

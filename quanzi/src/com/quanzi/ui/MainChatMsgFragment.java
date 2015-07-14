@@ -323,12 +323,12 @@ public class MainChatMsgFragment extends BaseV4Fragment {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					startActivity(new Intent(getActivity(), PostDetailActivity.class).putExtra(
+//					startActivity(new Intent(getActivity(), PostDetailActivity.class).putExtra(
 
-					PostDetailActivity.POST_ITEM, new JsonPostItem(5, 5, "王坤", "drawable://" + R.drawable.headimage5,
-							"drawable://" + R.drawable.headimage5, "女", "卡又丢了，快来点开心的事冲冲喜吧！", "drawable://"
-									+ R.drawable.content, "drawable://" + R.drawable.content, new Date(), 256, 46)));
-					getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+//					PostDetailActivity.POST_ITEM, new JsonPostItem(5, 5, "王坤", "drawable://" + R.drawable.headimage5,
+//							"drawable://" + R.drawable.headimage5, "女", "卡又丢了，快来点开心的事冲冲喜吧！", "drawable://"
+//									+ R.drawable.content, "drawable://" + R.drawable.content, new Date(), 256, 46)));
+//					getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 				}
 			});
 

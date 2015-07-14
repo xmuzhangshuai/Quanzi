@@ -2,6 +2,7 @@ package com.quanzi.ui;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.Header;
 
@@ -32,8 +33,11 @@ import com.quanzi.R;
 import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseV4Fragment;
 import com.quanzi.config.Constants;
+import com.quanzi.config.Constants.CommentType;
 import com.quanzi.config.Constants.Config;
 import com.quanzi.jsonobject.JsonPostItem;
+import com.quanzi.table.CommentTable;
+import com.quanzi.table.PostCommentTable;
 import com.quanzi.table.UserTable;
 import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.DateTimeTools;
@@ -191,6 +195,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 					List<JsonPostItem> temp = FastJsonTool.getObjectList(response, JsonPostItem.class);
 					if (temp != null) {
 						LogTool.i("列表长度" + temp.size());
+						LogTool.i(response);
 						//如果是首次获取数据
 						if (page == 0) {
 							if (temp.size() < Config.PAGE_NUM) {
@@ -262,6 +267,16 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 			public ImageView itemImageView6;
 			public View imageViewGroup2;
 			public View imageViewGroup1;
+			public View comment1Container;
+			public View comment2Container;
+			public TextView commentUser1;
+			public TextView label1;
+			public TextView toUser1;
+			public TextView commentContent1;
+			public TextView commentUser2;
+			public TextView label2;
+			public TextView toUser2;
+			public TextView commentContent2;
 		}
 
 		@Override
@@ -315,6 +330,16 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 				holder.commentBtn = (ImageView) view.findViewById(R.id.comment_btn);
 				holder.commentCountTextView = (TextView) view.findViewById(R.id.comment_count);
 				holder.moreBtn = (ImageView) view.findViewById(R.id.more);
+				holder.comment1Container = view.findViewById(R.id.comment1_container);
+				holder.comment2Container = view.findViewById(R.id.comment2_container);
+				holder.commentUser1 = (TextView) view.findViewById(R.id.comment_user_name1);
+				holder.label1 = (TextView) view.findViewById(R.id.labe1);
+				holder.toUser1 = (TextView) view.findViewById(R.id.to_user_name1);
+				holder.commentContent1 = (TextView) view.findViewById(R.id.comment_content1);
+				holder.commentUser2 = (TextView) view.findViewById(R.id.comment_user_name2);
+				holder.label2 = (TextView) view.findViewById(R.id.labe2);
+				holder.toUser2 = (TextView) view.findViewById(R.id.to_user_name2);
+				holder.commentContent2 = (TextView) view.findViewById(R.id.comment_content2);
 				view.setTag(holder); // 给View添加一个格外的数据 
 			} else {
 				holder = (ViewHolder) view.getTag(); // 把数据取出来  
@@ -384,8 +409,53 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 				}
 			});
 
+			//设置评论
+			List<Map<String, String>> comments = jsonPostItem.getCommentList();
+			if (comments != null) {
+				LogTool.e("不为空");
+				for (Map<String, String> map : comments) {
+					LogTool.e("内容" + map.get(CommentTable.C_CONTENT));
+				}
+			} else {
+				LogTool.e("为空");
+			}
+
+			if (comments != null) {
+				if (comments.get(0) != null) {
+					holder.comment1Container.setVisibility(View.VISIBLE);
+					holder.commentUser1.setText(comments.get(0).get(CommentTable.C_USER_NICKNAME));
+					holder.commentContent1.setText(comments.get(0).get(CommentTable.C_CONTENT));
+					if (comments.get(0).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {//如果是评论
+						holder.toUser1.setVisibility(View.GONE);
+						holder.label1.setVisibility(View.GONE);
+					} else {//如果是回复
+						holder.toUser1.setVisibility(View.VISIBLE);
+						holder.label1.setVisibility(View.VISIBLE);
+						holder.toUser1.setText(comments.get(0).get(CommentTable.TO_USER_NICKNAME));
+					}
+				}
+				if (comments.get(1) != null) {
+					holder.comment2Container.setVisibility(View.VISIBLE);
+					holder.commentUser2.setText(comments.get(1).get(CommentTable.C_USER_NICKNAME));
+					holder.commentContent2.setText(comments.get(1).get(CommentTable.C_CONTENT));
+					if (comments.get(1).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {//如果是评论
+						holder.toUser2.setVisibility(View.GONE);
+						holder.label2.setVisibility(View.GONE);
+					} else {//如果是回复
+						holder.toUser2.setVisibility(View.VISIBLE);
+						holder.label2.setVisibility(View.VISIBLE);
+						holder.toUser2.setText(comments.get(1).get(CommentTable.TO_USER_NICKNAME));
+					}
+				}
+			}
+
 			//设置评论次数
-			holder.commentCountTextView.setText("查看全部" + jsonPostItem.getP_comment_count() + "条评论");
+			if (jsonPostItem.getP_comment_count() == 0) {
+				holder.commentCountTextView.setVisibility(View.GONE);
+			} else {
+				holder.commentCountTextView.setVisibility(View.VISIBLE);
+				holder.commentCountTextView.setText("查看全部" + jsonPostItem.getP_comment_count() + "条评论");
+			}
 
 			//评论
 			holder.commentBtn.setOnClickListener(new OnClickListener() {
@@ -546,14 +616,14 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 				}
 			}
 			final String[] bigPhotoUrls = tempBbigPhotoUrls;
-			
+
 			holder.itemImageView.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					Intent intent = new Intent(getActivity(), ImageShowerActivity.class);
-					intent.putExtra(ImageShowerActivity.SHOW_BIG_IMAGE,bigPhotoUrls[0]);
+					intent.putExtra(ImageShowerActivity.SHOW_BIG_IMAGE, bigPhotoUrls[0]);
 					startActivity(intent);
 					getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
 				}
