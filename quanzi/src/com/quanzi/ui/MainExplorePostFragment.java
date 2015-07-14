@@ -367,8 +367,8 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 						public void onClick(View v) {
 							// TODO Auto-generated method stub
 							Intent intent = new Intent(getActivity(), PersonDetailActivity.class);
-							//							intent.putExtra(PersonDetailActivity.PERSON_TYPE, Constants.PersonDetailType.SINGLE);
-							//							intent.putExtra(UserTable.U_ID, jsonPostItem.getN_userid());
+							intent.putExtra(UserTable.U_ID, jsonPostItem.getP_userid());
+							intent.putExtra(UserTable.U_NICKNAME, jsonPostItem.getP_username());
 							startActivity(intent);
 							getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
 						}

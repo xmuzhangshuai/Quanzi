@@ -71,7 +71,9 @@
         android:background="@drawable/shape_bottombar_gb"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:gravity="center_vertical" >
+        android:gravity="center_vertical"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp" >
 
         <EditText
             android:id="@+id/msg_et"
@@ -79,7 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
             android:background="@drawable/sel_comment_input"
-            android:hint="写下我的评论"
+            android:hint="评论"
             android:inputType="textMultiLine"
             android:maxHeight="200.0dip"
             android:minHeight="@dimen/sent_btn_height"

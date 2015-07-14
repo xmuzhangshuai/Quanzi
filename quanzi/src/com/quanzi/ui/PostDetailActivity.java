@@ -95,6 +95,8 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 	private CommentAdapter mAdapter;
 	private LinkedList<JsonComment> commentList;
 	private InputMethodManager inputMethodManager;
+	private boolean isReply = false;
+	private int toUserID = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +109,9 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 		inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 
 		jsonPostItem = (JsonPostItem) getIntent().getSerializableExtra(POST_ITEM);
+		if (jsonPostItem != null) {
+			toUserID = jsonPostItem.getP_userid();
+		}
 
 		findViewById();
 		initView();
@@ -523,7 +528,7 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 			refresh();
 			break;
 		case R.id.send_btn:
-			comment(commentEditText.getText().toString(), jsonPostItem.getP_userid(), CommentType.COMMENT);
+			comment(commentEditText.getText().toString());
 			break;
 		case R.id.comment_btn:
 
@@ -536,15 +541,20 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 	/**
 	 * 评论
 	 */
-	private void comment(String content, int toUserId, String type) {
+	private void comment(String content) {
 		if (jsonPostItem != null && !TextUtils.isEmpty(content)) {
 			RequestParams params = new RequestParams();
 			params.put(PostCommentTable.PC_COMMENT_USERID, userPreference.getU_id());
-			params.put(PostCommentTable.PC_TO_USERID, toUserId);
+			params.put(PostCommentTable.PC_TO_USERID, toUserID);
 			params.put(PostCommentTable.PC_CONTENT, content);
 			params.put(PostCommentTable.PC_USERID, jsonPostItem.getP_userid());
 			params.put(PostCommentTable.PC_POSTID, jsonPostItem.getP_postid());
-			params.put(PostCommentTable.PC_TYPE, type);
+			if (isReply) {
+				params.put(PostCommentTable.PC_TYPE, CommentType.REPLY);
+			} else {
+				params.put(PostCommentTable.PC_TYPE, CommentType.COMMENT);
+			}
+
 			TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
 
 				@Override
@@ -593,7 +603,7 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 		RequestParams params = new RequestParams();
 		params.put("page", pageNow);
 		//如果是单身
-		params.put(PostTable.P_ID, jsonPostItem.getP_id());
+		params.put(PostTable.P_POSTID, jsonPostItem.getP_postid());
 		params.put(PostTable.P_USERID, jsonPostItem.getP_userid());
 		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
 
@@ -601,8 +611,8 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 			public void onSuccess(int statusCode, Header[] headers, String response) {
 				// TODO Auto-generated method stub
 				if (statusCode == 200) {
-					LogTool.i("帖子详情获取评论列表", "长度" + commentList.size());
 					List<JsonComment> temp = FastJsonTool.getObjectList(response, JsonComment.class);
+					LogTool.i("帖子详情获取评论列表", "长度" + temp.size());
 					if (temp != null) {
 						//如果是首次获取数据
 						if (page == 0) {
@@ -638,7 +648,7 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 				commentListView.onRefreshComplete();
 			}
 		};
-		AsyncHttpClientTool.post(PostDetailActivity.this, "getbridgecommentlist", params, responseHandler);
+		AsyncHttpClientTool.post(PostDetailActivity.this, "post/getCommentList", params, responseHandler);
 	}
 
 	/**
@@ -709,6 +719,8 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					commentEditText.setHint("回复 " + jsonComment.getC_user_nickname() + ":");
+					isReply = true;
+					toUserID = jsonComment.getC_user_id();
 				}
 			});
 
@@ -718,6 +730,9 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 				public boolean onTouch(View v, MotionEvent event) {
 					// TODO Auto-generated method stub
 					hideKeyboard();
+					commentEditText.setHint("评论");
+					isReply = false;
+					toUserID = jsonPostItem.getP_userid();
 					return false;
 				}
 			});
@@ -762,7 +777,7 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 			} else {
 				holder.lable.setVisibility(View.VISIBLE);
 				holder.toUserName.setVisibility(View.VISIBLE);
-				holder.toUserName.setText(jsonComment.getTo_user_nickname());
+				holder.toUserName.setText(jsonComment.getTo_user_nickname()+":");
 			}
 
 			//设置日期

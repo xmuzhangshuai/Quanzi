@@ -17,7 +17,6 @@ import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.quanzi.R;
 import com.quanzi.base.BaseFragmentActivity;
-import com.quanzi.config.Constants;
 import com.quanzi.db.SchoolDbService;
 import com.quanzi.jsonobject.JsonUser;
 import com.quanzi.table.UserTable;
@@ -64,6 +63,7 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 
 		userId = getIntent().getIntExtra(UserTable.U_ID, -1);
 		userName = getIntent().getStringExtra(UserTable.U_NICKNAME);
+		getUser();//网络获取user数据
 
 		findViewById();
 		initView();
@@ -88,19 +88,6 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 		leftButton.setOnClickListener(this);
 		contactBtn.setOnClickListener(this);
 		moreBtn.setOnClickListener(this);
-
-		personDataFragment = new PersonDataFragment();
-		personDetailPostFragment = new PersonDetailPostFragment();
-		fragments = new Fragment[] { personDetailPostFragment, personDataFragment };
-
-		mTabs = new View[2];
-		mTabs[0] = (View) findViewById(R.id.postBtn);
-		mTabs[1] = (View) findViewById(R.id.dataBtn);
-		// 把第一个tab设为选中状态
-		mTabs[0].setSelected(true);
-
-		getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, personDetailPostFragment)
-				.show(personDetailPostFragment).commit();
 
 	}
 
@@ -128,6 +115,19 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 	 * 初始化个人信息
 	 */
 	private void initPersonView() {
+
+		personDataFragment = new PersonDataFragment(jsonUser);
+		personDetailPostFragment = new PersonDetailPostFragment();
+		fragments = new Fragment[] { personDetailPostFragment, personDataFragment };
+
+		mTabs = new View[2];
+		mTabs[0] = (View) findViewById(R.id.postBtn);
+		mTabs[1] = (View) findViewById(R.id.dataBtn);
+		// 把第一个tab设为选中状态
+		mTabs[0].setSelected(true);
+
+		getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, personDetailPostFragment)
+				.show(personDetailPostFragment).commit();
 
 		//设置头像
 		if (!TextUtils.isEmpty(jsonUser.getU_small_avatar())) {

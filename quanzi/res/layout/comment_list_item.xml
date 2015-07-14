@@ -21,8 +21,8 @@
 
             <ImageView
                 android:id="@+id/head_image"
-                android:layout_width="@dimen/headimage_size"
-                android:layout_height="@dimen/headimage_size"
+                android:layout_width="@dimen/day_recommend_padding"
+                android:layout_height="@dimen/day_recommend_padding"
                 android:src="@drawable/photoconor" />
 
             <RelativeLayout
@@ -92,8 +92,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/day_recommend_dot_space"
                     android:layout_marginRight="@dimen/day_recommend_dot_space"
+                    android:layout_marginTop="@dimen/margin_chat_activity"
                     android:textColor="@color/dark_gray"
-                    android:textSize="@dimen/register_font_size" />
+                    android:textSize="@dimen/comment_font_size" />
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>

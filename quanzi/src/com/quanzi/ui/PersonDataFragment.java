@@ -1,20 +1,16 @@
 package com.quanzi.ui;
 
-import java.io.File;
-
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.quanzi.R;
+import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseV4Fragment;
-import com.quanzi.ui.MainExplorePostFragment.PostAdapter;
+import com.quanzi.db.SchoolDbService;
+import com.quanzi.jsonobject.JsonUser;
 import com.quanzi.utils.DateTimeTools;
 import com.quanzi.utils.UserPreference;
 
@@ -29,6 +25,8 @@ import com.quanzi.utils.UserPreference;
  */
 public class PersonDataFragment extends BaseV4Fragment {
 	private View rootView;// 根View
+
+	private JsonUser jsonUser;
 
 	/***昵称***/
 	private View nicknameView;
@@ -70,25 +68,19 @@ public class PersonDataFragment extends BaseV4Fragment {
 	private View introView;
 	private TextView introTextView;
 
-	private String personIntro;
 	private UserPreference userPreference;
-	private File picFile;
-	private Uri photoUri;
-	private InputMethodManager imm;
-	private String nickname;
-	private final int activity_result_camara_with_data = 1006;
-	private final int activity_result_cropimage_with_data = 1007;
-	boolean nickNameChanged = false;
-	boolean ageChanged = false;
-	boolean weightChanged = false;
-	boolean heightChanged = false;
-	boolean constellChanged = false;
-	boolean personIntroChanged = false;
+
+	public PersonDataFragment(JsonUser jsonUser) {
+		super();
+		// TODO Auto-generated constructor stub
+		this.jsonUser = jsonUser;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		rootView = inflater.inflate(R.layout.fragment_person_data, container, false);
+		userPreference = BaseApplication.getInstance().getUserPreference();
 
 		findViewById();// 初始化views
 		initView();
@@ -124,42 +116,45 @@ public class PersonDataFragment extends BaseV4Fragment {
 	@Override
 	protected void initView() {
 		// TODO Auto-generated method stub
-		/***昵称***/
-		if (userPreference.getU_nickname().isEmpty()) {
-			nickNameTextView.setText("未填写");
-		}else {
-			nickNameTextView.setText(userPreference.getU_nickname());
-		}
+		if (jsonUser != null) {
+			/***昵称***/
+			if (jsonUser.getU_nickname().isEmpty()) {
+				nickNameTextView.setText("未填写");
+			} else {
+				nickNameTextView.setText(jsonUser.getU_nickname());
+			}
 
-		/***性别***/
-		genderText.setText(userPreference.getU_gender());
+			/***性别***/
+			genderText.setText(jsonUser.getU_gender());
 
-		/***生日***/
-		birthdayTextView.setText(DateTimeTools.DateToString(userPreference.getU_birthday()));
+			/***生日***/
+			birthdayTextView.setText(DateTimeTools.DateToString(jsonUser.getU_birthday()));
 
-		/***学校***/
-		 schoolTextView.setText(userPreference.getSchoolName());
+			/***学校***/
+			schoolTextView.setText(SchoolDbService.getInstance(getActivity()).getSchoolNameById(
+					jsonUser.getU_schoolid()));
 
-		/***当前身份***/
-		statusTextView.setText(userPreference.getU_identity());
+			/***当前身份***/
+			statusTextView.setText(jsonUser.getU_identity());
 
-//		/***情感状态***/
-//		loveStatusTextView;
-//
-//		/***兴趣爱好***/
-//		interestTextView;
-//
-//		/***擅长技能***/
-//		skillTextView;
-//
-//		/***所属行业***/
-//		industryTextView.setText();
+			/***情感状态***/
+			loveStatusTextView.setText(jsonUser.getU_love_tate());
+						
+			//								/***兴趣爱好***/
+			//								interestTextView.setText(jsonUser.getu);
+			//						
+			//								/***擅长技能***/
+			//								skillTextView;
 
-		/***个人签名***/
-		if (userPreference.getU_introduce().isEmpty()) {
-			introTextView.setText("未填写");
-		}else {
-			introTextView.setText(userPreference.getU_introduce());
+			/***所属行业***/
+			//					industryTextView.setText(jsonUser.);
+
+			/***个人签名***/
+			if (jsonUser.getU_introduce().isEmpty()) {
+				introTextView.setText("未填写");
+			} else {
+				introTextView.setText(jsonUser.getU_introduce());
+			}
 		}
 	}
 }
