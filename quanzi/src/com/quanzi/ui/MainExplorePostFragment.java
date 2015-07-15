@@ -18,6 +18,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -36,7 +38,9 @@ import com.quanzi.config.Constants;
 import com.quanzi.config.Constants.CommentType;
 import com.quanzi.config.Constants.Config;
 import com.quanzi.jsonobject.JsonPostItem;
+import com.quanzi.table.ActivityTable;
 import com.quanzi.table.CommentTable;
+import com.quanzi.table.PostTable;
 import com.quanzi.table.UserTable;
 import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.DateTimeTools;
@@ -251,7 +255,6 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 			public CheckBox concernBtn;
 			public TextView timeTextView;
 			public TextView contentTextView;
-			public ImageView contentImageView;
 			public CheckBox favorBtn;
 			public TextView favorCountTextView;
 			public ImageView commentBtn;
@@ -297,7 +300,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 		}
 
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
+		public View getView(final int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
 			View view = convertView;
 			final JsonPostItem jsonPostItem = jsonPostItemList.get(position);
@@ -369,6 +372,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 							Intent intent = new Intent(getActivity(), PersonDetailActivity.class);
 							intent.putExtra(UserTable.U_ID, jsonPostItem.getP_userid());
 							intent.putExtra(UserTable.U_NICKNAME, jsonPostItem.getP_username());
+							intent.putExtra(UserTable.U_SMALL_AVATAR, jsonPostItem.getP_small_avatar());
 							startActivity(intent);
 							getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
 						}
@@ -397,14 +401,20 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 
 			//设置被赞次数
 			holder.favorCountTextView.setText("" + jsonPostItem.getP_favor_count() + "赞");
+
 			holder.favorCountTextView.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					startActivity(new Intent(getActivity(), AllFavorsActivity.class).putExtra(
-							PostDetailActivity.POST_ITEM, jsonPostItem));
-					getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+					if (jsonPostItem.getP_favor_count() > 0) {
+						startActivity(new Intent(getActivity(), AllFavorsActivity.class)
+								.putExtra(AllFavorsActivity.PA_ID, jsonPostItem.getP_postid())
+								.putExtra(AllFavorsActivity.PA_USERID, jsonPostItem.getP_userid())
+								.putExtra(AllFavorsActivity.FAVOR_COUNT, jsonPostItem.getP_favor_count())
+								.putExtra(AllFavorsActivity.TYPE, "post"));
+						getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+					}
 				}
 			});
 
@@ -451,7 +461,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 						holder.label2.setVisibility(View.VISIBLE);
 						holder.toUser2.setText(comments.get(1).get(CommentTable.TO_USER_NICKNAME));
 					}
-				}else {
+				} else {
 					LogTool.e("评论有超过两个");
 				}
 			} else {
@@ -479,19 +489,69 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 				}
 			});
 
-			//			holder.flipperBtn.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			//
-			//				@Override
-			//				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-			//					// TODO Auto-generated method stub
-			//
-			//					if (isChecked) {
-			//						flipper(jsonPostItem.getN_id());
-			//						sendLoveReuest(jsonPostItem.getN_userid());
-			//					}
-			//				}
-			//			});
-			//			
+			//设置是否赞过
+			holder.favorBtn.setChecked(jsonPostItem.isLike());
+
+			holder.favorBtn.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					RequestParams params = new RequestParams();
+					params.put(PostTable.P_POSTID, jsonPostItem.getP_postid());
+					params.put(PostTable.P_USERID, jsonPostItem.getP_userid());
+					params.put(UserTable.U_ID, userPreference.getU_id());
+
+					TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
+
+						@Override
+						public void onStart() {
+							// TODO Auto-generated method stub
+							super.onStart();
+							if (!jsonPostItem.isLike()) {//喜欢
+								holder.favorCountTextView.setText("" + (jsonPostItem.getP_favor_count() + 1) + "赞");
+								jsonPostItem.setP_favor_count(jsonPostItem.getP_favor_count() + 1);
+								jsonPostItem.setLike(true);
+							} else {//喜欢变成不喜欢
+								holder.favorCountTextView.setText("" + (jsonPostItem.getP_favor_count() - 1) + "赞");
+								jsonPostItem.setP_favor_count(jsonPostItem.getP_favor_count() - 1);
+								jsonPostItem.setLike(false);
+							}
+						}
+
+						@Override
+						public void onSuccess(int statusCode, Header[] headers, String response) {
+							// TODO Auto-generated method stub
+							if (statusCode == 200) {
+								if (response.equals("1")) {
+									LogTool.i("赞成功！");
+								} else {
+									LogTool.e("学校帖子赞返回错误" + response);
+								}
+							}
+						}
+
+						@Override
+						public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+							// TODO Auto-generated method stub
+							LogTool.e("学校帖子赞失败");
+						}
+
+						@Override
+						public void onFinish() {
+							// TODO Auto-generated method stub
+							super.onFinish();
+						}
+
+					};
+					if (!jsonPostItem.isLike()) {
+						AsyncHttpClientTool.post(getActivity(), "post/like", params, responseHandler);
+					} else {
+						AsyncHttpClientTool.post(getActivity(), "post/unlike", params, responseHandler);
+					}
+				}
+			});
+
 			holder.moreBtn.setOnClickListener(new OnClickListener() {
 
 				@Override

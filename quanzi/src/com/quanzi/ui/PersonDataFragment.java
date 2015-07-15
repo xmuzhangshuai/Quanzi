@@ -117,8 +117,9 @@ public class PersonDataFragment extends BaseV4Fragment {
 	protected void initView() {
 		// TODO Auto-generated method stub
 		if (jsonUser != null) {
+
 			/***Í«≥∆***/
-			if (jsonUser.getU_nickname().isEmpty()) {
+			if (jsonUser.getU_nickname() == null || jsonUser.getU_nickname().isEmpty()) {
 				nickNameTextView.setText("Œ¥ÃÓ–¥");
 			} else {
 				nickNameTextView.setText(jsonUser.getU_nickname());
@@ -139,7 +140,7 @@ public class PersonDataFragment extends BaseV4Fragment {
 
 			/***«È∏–◊¥Ã¨***/
 			loveStatusTextView.setText(jsonUser.getU_love_tate());
-						
+
 			//								/***–À»§∞Æ∫√***/
 			//								interestTextView.setText(jsonUser.getu);
 			//						
@@ -150,7 +151,7 @@ public class PersonDataFragment extends BaseV4Fragment {
 			//					industryTextView.setText(jsonUser.);
 
 			/***∏ˆ»À«©√˚***/
-			if (jsonUser.getU_introduce().isEmpty()) {
+			if (jsonUser.getU_introduce() == null || jsonUser.getU_introduce().isEmpty()) {
 				introTextView.setText("Œ¥ÃÓ–¥");
 			} else {
 				introTextView.setText(jsonUser.getU_introduce());

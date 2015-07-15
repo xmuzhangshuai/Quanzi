@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:background="@color/white"
+    android:background="@drawable/sel_white_gray"
     android:paddingBottom="@dimen/setting_list_margin"
     android:paddingLeft="@dimen/day_recommend_help_padding"
     android:paddingRight="@dimen/day_recommend_help_padding"

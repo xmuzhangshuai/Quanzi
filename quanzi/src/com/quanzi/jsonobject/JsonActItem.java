@@ -25,6 +25,7 @@ public class JsonActItem implements Serializable {
 	private String a_act_type;
 	private int a_comment_count;
 	private int a_favor_count;
+	private boolean like;
 
 	private List<Map<String, String>> commentList;
 
@@ -207,6 +208,14 @@ public class JsonActItem implements Serializable {
 
 	public void setCommentList(List<Map<String, String>> commentList) {
 		this.commentList = commentList;
+	}
+
+	public boolean isLike() {
+		return like;
+	}
+
+	public void setLike(boolean like) {
+		this.like = like;
 	}
 
 }

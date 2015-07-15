@@ -3,6 +3,9 @@ package com.quanzi.jsonobject;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.quanzi.utils.DateTimeTools;
+import com.quanzi.utils.LogTool;
+
 /**
  * 
 * @Description: TODO(User.java类) 
@@ -37,6 +40,34 @@ public class JsonUser implements Serializable {
 
 	private String u_student_number;//学号
 	private String u_stundet_pass;//密码
+
+	//打印用户信息
+	public void printUserInfo() {
+		LogTool.i("用户ID: " + getU_id());
+		LogTool.i("昵称: " + getU_nickname());
+		LogTool.i("密码: " + getU_password());
+		LogTool.i("性别: " + getU_gender());
+		LogTool.i("手机号: " + getU_tel());
+		LogTool.i("邮箱: " + getU_email());
+		LogTool.i("生日: " + DateTimeTools.DateToString(getU_birthday()));
+		LogTool.i("年龄: " + getU_age());
+		LogTool.i("大头像: " + getU_large_avatar());
+		LogTool.i("小头像: " + getU_small_avatar());
+		LogTool.i("省份ID: " + getU_provinceid());
+		LogTool.i("城市ID: " + getU_cityid());
+		LogTool.i("学校ID: " + getU_schoolid());
+		LogTool.i("简介: " + getU_introduce());
+		LogTool.i("学号: " + getU_student_number());
+		LogTool.i("教务处密码: " + getU_stundet_pass());
+		LogTool.i("身份: " + getU_identity());
+		LogTool.i("行业: " + getU_industry_id());
+		LogTool.i("技能: " + getU_skill_ids());
+		LogTool.i("情感状态: " + getU_love_tate());
+		LogTool.i("兴趣: " + getU_interest_ids());
+		LogTool.i("关注的人数: ");
+		LogTool.i("追随者数量: ");
+		LogTool.i("赞过的帖子的数量: ");
+	}
 
 	public int getU_id() {
 		return u_id;

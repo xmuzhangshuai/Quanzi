@@ -23,6 +23,7 @@ import com.quanzi.table.UserTable;
 import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.FastJsonTool;
 import com.quanzi.utils.ImageLoaderTool;
+import com.quanzi.utils.LogTool;
 import com.quanzi.utils.ToastTool;
 
 /**
@@ -35,6 +36,7 @@ import com.quanzi.utils.ToastTool;
  *
  */
 public class PersonDetailActivity extends BaseFragmentActivity implements OnClickListener {
+	public static final String JSONUSER = "jsonuser";
 
 	private TextView leftTextView;//导航栏左侧文字
 	private View leftButton;//导航栏左侧按钮
@@ -52,6 +54,7 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 	private PersonDataFragment personDataFragment;
 
 	private int userId;
+	private String smallAvator;
 	private String userName;
 	private JsonUser jsonUser;
 
@@ -60,13 +63,21 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_person_detail);
-
+		jsonUser = (JsonUser) getIntent().getSerializableExtra(JSONUSER);
 		userId = getIntent().getIntExtra(UserTable.U_ID, -1);
 		userName = getIntent().getStringExtra(UserTable.U_NICKNAME);
-		getUser();//网络获取user数据
+		smallAvator = getIntent().getStringExtra(UserTable.U_SMALL_AVATAR);
 
 		findViewById();
 		initView();
+
+		if (jsonUser == null) {
+			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallAvator), headImageView,
+					ImageLoaderTool.getHeadImageOptions(10));
+			getUser();//网络获取user数据
+		} else {
+			initPersonView();
+		}
 	}
 
 	@Override
@@ -88,7 +99,6 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 		leftButton.setOnClickListener(this);
 		contactBtn.setOnClickListener(this);
 		moreBtn.setOnClickListener(this);
-
 	}
 
 	/**
@@ -115,7 +125,6 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 	 * 初始化个人信息
 	 */
 	private void initPersonView() {
-
 		personDataFragment = new PersonDataFragment(jsonUser);
 		personDetailPostFragment = new PersonDetailPostFragment();
 		fragments = new Fragment[] { personDetailPostFragment, personDataFragment };
@@ -176,10 +185,10 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 			@Override
 			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
 				// TODO Auto-generated method stub
-				ToastTool.showLong(PersonDetailActivity.this, "服务器错误");
+				LogTool.e("获取用户服务器错误");
 			}
 		};
-		AsyncHttpClientTool.post(PersonDetailActivity.this, "getuserbyid", params, responseHandler);
+		AsyncHttpClientTool.post(PersonDetailActivity.this, "user/getInfoByID", params, responseHandler);
 	}
 
 	/**

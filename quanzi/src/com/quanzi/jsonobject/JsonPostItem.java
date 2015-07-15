@@ -19,6 +19,7 @@ public class JsonPostItem implements Serializable {
 	private Date p_time;
 	private int p_comment_count;
 	private int p_favor_count;
+	private boolean like;
 
 	private List<Map<String, String>> commentList;
 
@@ -137,6 +138,14 @@ public class JsonPostItem implements Serializable {
 
 	public void setCommentList(List<Map<String, String>> commentList) {
 		this.commentList = commentList;
+	}
+
+	public boolean isLike() {
+		return like;
+	}
+
+	public void setLike(boolean like) {
+		this.like = like;
 	}
 
 }

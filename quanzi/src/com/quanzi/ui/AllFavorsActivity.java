@@ -1,5 +1,11 @@
 package com.quanzi.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.Header;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +17,17 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.quanzi.R;
 import com.quanzi.base.BaseActivity;
+import com.quanzi.jsonobject.JsonUser;
+import com.quanzi.table.ActivityTable;
+import com.quanzi.table.PostTable;
+import com.quanzi.utils.AsyncHttpClientTool;
+import com.quanzi.utils.FastJsonTool;
+import com.quanzi.utils.ImageLoaderTool;
+import com.quanzi.utils.LogTool;
 
 /**
  *
@@ -25,15 +40,19 @@ import com.quanzi.base.BaseActivity;
  */
 public class AllFavorsActivity extends BaseActivity implements OnClickListener {
 	/***********VIEWS************/
+	public static final String PA_ID = "pa_id";
+	public static final String PA_USERID = "pa_user_id";
+	public static final String FAVOR_COUNT = "favor_count";
+	public static final String TYPE = "type";
+
 	private ListView allFavorListView;
 	private TextView leftTextView;//导航栏左侧文字
 	private View leftButton;//导航栏左侧按钮
-
-	private String[] names = new String[] { "张帅", "刘伟强", "黄蓉发", "王坤", "张帅", "刘伟强", "黄蓉发", "王坤", "张帅", "刘伟强", "黄蓉发", "王坤" };
-	private int[] headimages = new int[] { R.drawable.headimage, R.drawable.headimage1, R.drawable.headimage2,
-			R.drawable.headimage3, R.drawable.headimage4, R.drawable.headimage5, R.drawable.headimage6,
-			R.drawable.headimage7, R.drawable.headimage, R.drawable.headimage1, R.drawable.headimage2,
-			R.drawable.headimage3 };
+	List<JsonUser> jsonUserList;
+	int pa_id;
+	int pa_userid;
+	int favor_count;
+	String type = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +60,16 @@ public class AllFavorsActivity extends BaseActivity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_all_favors);
+		pa_id = getIntent().getIntExtra(PA_ID, 0);
+		pa_userid = getIntent().getIntExtra(PA_USERID, 0);
+		favor_count = getIntent().getIntExtra(FAVOR_COUNT, 0);
+		type = getIntent().getStringExtra(TYPE);
+
+		jsonUserList = new ArrayList<JsonUser>();
+
+		if (pa_id > 0 && pa_userid > 0) {
+			getUserList();
+		}
 
 		findViewById();
 		initView();
@@ -57,10 +86,8 @@ public class AllFavorsActivity extends BaseActivity implements OnClickListener {
 	@Override
 	protected void initView() {
 		// TODO Auto-generated method stub
-		leftTextView.setText("106赞");
+		leftTextView.setText("" + favor_count + "赞");
 		leftButton.setOnClickListener(this);
-		
-		allFavorListView.setAdapter(new MyFavorsAdapter());
 	}
 
 	@Override
@@ -85,6 +112,49 @@ public class AllFavorsActivity extends BaseActivity implements OnClickListener {
 	}
 
 	/**
+	 * 	网络获取User信息
+	 */
+	private void getUserList() {
+		RequestParams params = new RequestParams();
+		if (type.equals("post")) {
+			params.put(PostTable.P_POSTID, pa_id);
+			params.put(PostTable.P_USERID, pa_userid);
+		} else if (type.equals("act")) {
+			params.put(ActivityTable.A_ACTID, pa_id);
+			params.put(ActivityTable.A_USERID, pa_userid);
+		}
+
+		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, String response) {
+				// TODO Auto-generated method stub
+				if (statusCode == 200) {
+					if (response.equals("-1")) {
+						LogTool.e("赞列表返回错误" + response);
+					} else {
+						jsonUserList = FastJsonTool.getObjectList(response, JsonUser.class);
+						if (jsonUserList != null && jsonUserList.size() > 0) {
+							allFavorListView.setAdapter(new MyFavorsAdapter());
+						}
+					}
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+				// TODO Auto-generated method stub
+				LogTool.e("获取赞的列表失败");
+			}
+		};
+		if (type.equals("act")) {
+			AsyncHttpClientTool.post(AllFavorsActivity.this, "activity/getLikeUserList", params, responseHandler);
+		} else if (type.equals("post")) {
+			AsyncHttpClientTool.post(AllFavorsActivity.this, "post/getLikeUserList", params, responseHandler);
+		}
+
+	}
+
+	/**
 	 *
 	 * 项目名称：quanzi  
 	 * 类名称：MyFavorsAdapter  
@@ -102,13 +172,13 @@ public class AllFavorsActivity extends BaseActivity implements OnClickListener {
 		@Override
 		public int getCount() {
 			// TODO Auto-generated method stub
-			return names.length;
+			return jsonUserList.size();
 		}
 
 		@Override
 		public Object getItem(int position) {
 			// TODO Auto-generated method stub
-			return names[position];
+			return jsonUserList.get(position);
 		}
 
 		@Override
@@ -121,8 +191,8 @@ public class AllFavorsActivity extends BaseActivity implements OnClickListener {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
 			View view = convertView;
-			final String name = names[position];
-			if (name == null) {
+			final JsonUser jsonUser = jsonUserList.get(position);
+			if (jsonUser == null) {
 				return null;
 			}
 
@@ -137,9 +207,22 @@ public class AllFavorsActivity extends BaseActivity implements OnClickListener {
 				holder = (ViewHolder) view.getTag(); // 把数据取出来  
 			}
 			
-			holder.headImageView.setImageResource(headimages[position]);
-			holder.nameTextView.setText(name);
+			view.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Intent intent = new Intent(AllFavorsActivity.this,PersonDetailActivity.class);
+					intent.putExtra(PersonDetailActivity.JSONUSER, jsonUser);
+					startActivity(intent);
+					overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+				}
+			});
 			
+			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonUser.getU_small_avatar()),
+					holder.headImageView, ImageLoaderTool.getHeadImageOptions(10));
+			holder.nameTextView.setText(jsonUser.getU_nickname());
+
 			return view;
 		}
 	}
