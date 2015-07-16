@@ -24,7 +24,6 @@ import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.FastJsonTool;
 import com.quanzi.utils.ImageLoaderTool;
 import com.quanzi.utils.LogTool;
-import com.quanzi.utils.ToastTool;
 
 /**
  *

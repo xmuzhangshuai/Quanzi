@@ -69,10 +69,11 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 		 * the header/footer views won't show so we use the normal method.
 		 */
 		ListAdapter adapter = mRefreshableView.getAdapter();
-		if (!mListViewExtrasEnabled || !getShowViewWhileRefreshing() || null == adapter || adapter.isEmpty()) {
-			super.onRefreshing(doScroll);
-			return;
-		}
+		
+//		if (!mListViewExtrasEnabled || !getShowViewWhileRefreshing() || null == adapter || adapter.isEmpty()) {
+//			super.onRefreshing(doScroll);
+//			return;
+//		}
 
 		super.onRefreshing(false);
 
@@ -266,7 +267,7 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 		protected boolean overScrollBy(int deltaX, int deltaY, int scrollX, int scrollY, int scrollRangeX,
 				int scrollRangeY, int maxOverScrollX, int maxOverScrollY, boolean isTouchEvent) {
 			
-			//FIXME 在快速滚动时，到达尽头时产生的弹性拉伸量。这里限制一下大小，弹得太远，难看。
+			//FIXME 鍦ㄥ揩閫熸粴鍔ㄦ椂锛屽埌杈惧敖澶存椂浜х敓鐨勫脊鎬ф媺浼搁噺銆傝繖閲岄檺鍒朵竴涓嬪ぇ灏忥紝寮瑰緱澶繙锛岄毦鐪嬨�
 			deltaY = Math.max(-MAX_SCROLLER_DISTANCE, Math.min(MAX_SCROLLER_DISTANCE, deltaY));
 			
 			final boolean returnValue = super.overScrollBy(deltaX, deltaY, scrollX, scrollY, scrollRangeX,

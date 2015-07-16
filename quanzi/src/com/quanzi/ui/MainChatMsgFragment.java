@@ -170,7 +170,7 @@ public class MainChatMsgFragment extends BaseV4Fragment {
 						}
 						mAdapter.notifyDataSetChanged();
 					} else {
-						LogTool.e("消息", "获取列表失败返回为" + response);
+						LogTool.e("消息", "获取列表失败返回为：" + response);
 					}
 				}
 			}
@@ -188,7 +188,7 @@ public class MainChatMsgFragment extends BaseV4Fragment {
 				messageListView.onRefreshComplete();
 			}
 		};
-		AsyncHttpClientTool.post(getActivity(), "getbridgemessagelist", params, responseHandler);
+		AsyncHttpClientTool.post(getActivity(), "user/getMsg", params, responseHandler);
 	}
 
 	/**
@@ -374,8 +374,8 @@ public class MainChatMsgFragment extends BaseV4Fragment {
 			holder.timeTextView.setText(DateTimeTools.getMonAndDay(jsonMyMessage.getCommenttime()));
 
 			//设置帖子或活动的信息
-			if (jsonMyMessage.getPa_iamge() != null && !jsonMyMessage.getPa_iamge().isEmpty()) {//如果有图片
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonMyMessage.getSmall_avatar()),
+			if (jsonMyMessage.getPa_image() != null && !jsonMyMessage.getPa_image().isEmpty()) {//如果有图片
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonMyMessage.getPa_image()),
 						holder.itemImageView, ImageLoaderTool.getHeadImageOptions(0));
 				holder.itemTextView.setVisibility(View.GONE);
 				holder.itemImageView.setVisibility(View.VISIBLE);

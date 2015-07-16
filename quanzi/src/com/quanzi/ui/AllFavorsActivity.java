@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.http.Header;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -115,6 +116,9 @@ public class AllFavorsActivity extends BaseActivity implements OnClickListener {
 	 * 	网络获取User信息
 	 */
 	private void getUserList() {
+		final ProgressDialog dialog = new ProgressDialog(this);
+		dialog.setMessage("正在加载...");
+
 		RequestParams params = new RequestParams();
 		if (type.equals("post")) {
 			params.put(PostTable.P_POSTID, pa_id);
@@ -125,6 +129,14 @@ public class AllFavorsActivity extends BaseActivity implements OnClickListener {
 		}
 
 		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+				dialog.show();
+			}
+
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, String response) {
 				// TODO Auto-generated method stub
@@ -144,6 +156,13 @@ public class AllFavorsActivity extends BaseActivity implements OnClickListener {
 			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
 				// TODO Auto-generated method stub
 				LogTool.e("获取赞的列表失败");
+			}
+
+			@Override
+			public void onFinish() {
+				// TODO Auto-generated method stub
+				super.onFinish();
+				dialog.dismiss();
 			}
 		};
 		if (type.equals("act")) {
@@ -220,7 +239,7 @@ public class AllFavorsActivity extends BaseActivity implements OnClickListener {
 			});
 
 			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonUser.getU_small_avatar()),
-					holder.headImageView, ImageLoaderTool.getHeadImageOptions(10));
+					holder.headImageView, ImageLoaderTool.getHeadImageOptions(0));
 			holder.nameTextView.setText(jsonUser.getU_nickname());
 
 			return view;

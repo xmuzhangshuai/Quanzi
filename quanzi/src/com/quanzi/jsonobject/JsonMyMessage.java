@@ -11,7 +11,7 @@ public class JsonMyMessage {
 	private int pa_type;//0为帖子，1为活动
 	private int pa_id;
 	private int pa_userid;
-	private String pa_iamge;//帖子或活动的第一章图片
+	private String pa_image;//帖子或活动的第一章图片
 	private String pa_content;//帖子或活动的内容
 
 	//评论人的具体内容
@@ -69,12 +69,12 @@ public class JsonMyMessage {
 		this.pa_userid = pa_userid;
 	}
 
-	public String getPa_iamge() {
-		return pa_iamge;
+	public String getPa_image() {
+		return pa_image;
 	}
 
-	public void setPa_iamge(String pa_iamge) {
-		this.pa_iamge = pa_iamge;
+	public void setPa_image(String pa_image) {
+		this.pa_image = pa_image;
 	}
 
 	public String getPa_content() {
