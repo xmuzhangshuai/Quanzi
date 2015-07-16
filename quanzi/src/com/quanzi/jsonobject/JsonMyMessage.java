@@ -5,9 +5,15 @@ import java.util.Date;
 //我的消息实体
 public class JsonMyMessage {
 
-	//我的主体
+	//消息主体
 	private int messageid;
-	private String message;
+	private int type;//0为评论，1为回复，2为赞
+	private int pa_type;//0为帖子，1为活动
+	private int pa_id;
+	private int pa_userid;
+	private String pa_iamge;//帖子或活动的第一章图片
+	private String pa_content;//帖子或活动的内容
+
 	//评论人的具体内容
 	private int userid;
 	private String username;
@@ -15,6 +21,13 @@ public class JsonMyMessage {
 	private String small_avatar;
 	private String commentcontent;
 	private Date commenttime;
+
+	private boolean read;
+
+	public JsonMyMessage() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	public int getMessageid() {
 		return messageid;
@@ -24,12 +37,52 @@ public class JsonMyMessage {
 		this.messageid = messageid;
 	}
 
-	public String getMessage() {
-		return message;
+	public int getType() {
+		return type;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public int getPa_type() {
+		return pa_type;
+	}
+
+	public void setPa_type(int pa_type) {
+		this.pa_type = pa_type;
+	}
+
+	public int getPa_id() {
+		return pa_id;
+	}
+
+	public void setPa_id(int pa_id) {
+		this.pa_id = pa_id;
+	}
+
+	public int getPa_userid() {
+		return pa_userid;
+	}
+
+	public void setPa_userid(int pa_userid) {
+		this.pa_userid = pa_userid;
+	}
+
+	public String getPa_iamge() {
+		return pa_iamge;
+	}
+
+	public void setPa_iamge(String pa_iamge) {
+		this.pa_iamge = pa_iamge;
+	}
+
+	public String getPa_content() {
+		return pa_content;
+	}
+
+	public void setPa_content(String pa_content) {
+		this.pa_content = pa_content;
 	}
 
 	public int getUserid() {
@@ -46,6 +99,14 @@ public class JsonMyMessage {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 
 	public String getSmall_avatar() {
@@ -72,30 +133,12 @@ public class JsonMyMessage {
 		this.commenttime = commenttime;
 	}
 
-	public String getGender() {
-		return gender;
+	public boolean isRead() {
+		return read;
 	}
 
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-
-	public JsonMyMessage() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public JsonMyMessage(int messageid, String message, int userid, String username, String gender,
-			String small_avatar, String commentcontent, Date commenttime) {
-		super();
-		this.messageid = messageid;
-		this.message = message;
-		this.userid = userid;
-		this.username = username;
-		this.gender = gender;
-		this.small_avatar = small_avatar;
-		this.commentcontent = commentcontent;
-		this.commenttime = commenttime;
+	public void setRead(boolean read) {
+		this.read = read;
 	}
 
 }

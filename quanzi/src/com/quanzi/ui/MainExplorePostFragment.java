@@ -112,6 +112,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 		// TODO Auto-generated method stub
 		super.onResume();
 		postListView.setOnScrollListener(new PauseOnScrollListener(imageLoader, pauseOnScroll, pauseOnFling));
+
 	}
 
 	@Override
@@ -177,8 +178,20 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 	/**
 	 * 筛选刷新
 	 */
-	public void refresh() {
-		LogTool.e("刷新！！");
+	public void ScreenToRefresh() {
+		LogTool.e("筛选刷新！！");
+		postListView.setRefreshing();
+		pageNow = 0;
+		getDataTask(pageNow);
+	}
+
+	/**
+	 * 刷新
+	 */
+	private void Refresh() {
+		postListView.setRefreshing();
+		pageNow = 0;
+		getDataTask(pageNow);
 	}
 
 	/**
@@ -191,6 +204,13 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 		params.put(UserTable.U_SCHOOLID, userPreference.getU_schoolid());
 		params.put(UserTable.U_ID, userPreference.getU_id());
 		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+				postListView.setRefreshing();
+			}
 
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, String response) {
@@ -218,7 +238,6 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 						mAdapter.notifyDataSetChanged();
 					}
 				}
-				//				postListView.onRefreshComplete();
 			}
 
 			@Override

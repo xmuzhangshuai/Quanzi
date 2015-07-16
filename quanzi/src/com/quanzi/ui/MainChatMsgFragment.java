@@ -1,8 +1,11 @@
 package com.quanzi.ui;
 
-import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 
+import org.apache.http.Header;
+
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -20,14 +23,25 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.quanzi.R;
 import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseV4Fragment;
+import com.quanzi.config.Constants.Config;
+import com.quanzi.jsonobject.JsonActItem;
 import com.quanzi.jsonobject.JsonMyMessage;
 import com.quanzi.jsonobject.JsonPostItem;
+import com.quanzi.table.ActivityTable;
+import com.quanzi.table.PostTable;
+import com.quanzi.table.UserTable;
+import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.DateTimeTools;
+import com.quanzi.utils.FastJsonTool;
 import com.quanzi.utils.ImageLoaderTool;
+import com.quanzi.utils.LogTool;
+import com.quanzi.utils.ToastTool;
 import com.quanzi.utils.UserPreference;
 
 /**
@@ -125,135 +139,125 @@ public class MainChatMsgFragment extends BaseV4Fragment {
 	 * 网络获取数据
 	 */
 	private void getDataTask(int p) {
-		//		final int page = p;
-		//		RequestParams params = new RequestParams();
-		//		params.put("page", pageNow);
-		//		params.put(LoveBridgeItemTable.N_USERID, userPreference.getU_id());
-		//		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
-		//
-		//			@Override
-		//			public void onSuccess(int statusCode, Header[] headers, String response) {
-		//				// TODO Auto-generated method stub
-		//				if (statusCode == 200) {
-		//					LogTool.i("LoveBridgeMsgFragment", "长度" + messageList.size());
-		//					List<JsonBridgeCommentMessage> temp = FastJsonTool.getObjectList(response,
-		//							JsonBridgeCommentMessage.class);
-		//					if (temp != null) {
-		//						//如果是首次获取数据
-		//						if (page == 0) {
-		//							if (temp.size() < Config.PAGE_NUM) {
-		//								pageNow = -1;
-		//							}
-		//							messageList = new LinkedList<JsonBridgeCommentMessage>();
-		//							messageList.addAll(temp);
-		//						}
-		//						//如果是获取更多
-		//						else if (page > 0) {
-		//							if (temp.size() < Config.PAGE_NUM) {
-		//								pageNow = -1;
-		//								ToastTool.showShort(getActivity(), "没有更多了！");
-		//							}
-		//							messageList.addAll(temp);
-		//						}
-		//						mAdapter.notifyDataSetChanged();
-		//					}
-		//				}
-		//				messageListView.onRefreshComplete();
-		//			}
-		//
-		//			@Override
-		//			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
-		//				// TODO Auto-generated method stub
-		//				LogTool.e("LoveBridgeMsgFragment", "获取列表失败");
-		//				messageListView.onRefreshComplete();
-		//			}
-		//		};
-		//		AsyncHttpClientTool.post(getActivity(), "getbridgemessagelist", params, responseHandler);
-		JsonMyMessage msg1 = new JsonMyMessage(1, "一见倾心，再见依然痴迷", 1, "帅哥", "一见倾心，再见依然痴迷", "drawable://"
-				+ R.drawable.headimage2, "很唯美", new Date());
-		JsonMyMessage msg2 = new JsonMyMessage(2, "这是一片很寂寞的天下着有些伤心的雨", 2, "荣发", "这是一片很寂寞的天下着有些伤心的雨", "drawable://"
-				+ R.drawable.headimage3, "嗯，很不错", new Date());
-		JsonMyMessage msg3 = new JsonMyMessage(3, "爱上你的日子，每天都在想你", 3, "伟强", "爱上你的日子，每天都在想你", "drawable://"
-				+ R.drawable.headimage4, "我是篮球宝贝被我是篮球宝贝被我是", new Date());
-		JsonMyMessage msg4 = new JsonMyMessage(4, "卡又丢了，快来点开心的事冲冲喜吧！", 4, "旗子", "卡又丢了，快来点开心的事冲冲喜吧！", "drawable://"
-				+ R.drawable.headimage7, "快来参加吧", new Date());
-		JsonMyMessage msg5 = new JsonMyMessage(5, "爱上你的日子，每天都在想你", 5, "赵默笙", "爱上你的日子，每天都在想你", "drawable://"
-				+ R.drawable.headimage6, "很唯美", new Date());
-		JsonMyMessage msg6 = new JsonMyMessage(6, "一见倾心，再见依然痴迷", 1, "帅哥", "一见倾心，再见依然痴迷", "drawable://"
-				+ R.drawable.headimage5, "我是篮球宝贝被我是篮球宝贝被我是篮球", new Date());
-		JsonMyMessage msg7 = new JsonMyMessage(7, "这是一片很寂寞的天下着有些伤心的雨", 2, "荣发", "这是一片很寂寞的天下着有些伤心的雨", "drawable://"
-				+ R.drawable.headimage1, "嗯，很不错", new Date());
-		JsonMyMessage msg8 = new JsonMyMessage(8, "爱上你的日子，每天都在想你", 3, "伟强", "爱上你的日子，每天都在想你", "drawable://"
-				+ R.drawable.headimage4, "快来参加吧", new Date());
-		JsonMyMessage msg9 = new JsonMyMessage(9, "卡又丢了，快来点开心的事冲冲喜吧！", 4, "旗子", "卡又丢了，快来点开心的事冲冲喜吧！", "drawable://"
-				+ R.drawable.headimage4, "快来参加吧", new Date());
-		JsonMyMessage msg10 = new JsonMyMessage(10, "爱上你的日子，每天都在想你", 5, "赵默笙", "爱上你的日子，每天都在想你", "drawable://"
-				+ R.drawable.headimage2, "很唯美", new Date());
-		messageList.add(msg1);
-		messageList.add(msg2);
-		messageList.add(msg3);
-		messageList.add(msg4);
-		messageList.add(msg5);
-		messageList.add(msg6);
-		messageList.add(msg7);
-		messageList.add(msg8);
-		messageList.add(msg9);
-		messageList.add(msg10);
-		messageListView.onRefreshComplete();
+		final int page = p;
+		RequestParams params = new RequestParams();
+		params.put("page", pageNow);
+		params.put(UserTable.U_ID, userPreference.getU_id());
+		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, String response) {
+				// TODO Auto-generated method stub
+				if (statusCode == 200) {
+					List<JsonMyMessage> temp = FastJsonTool.getObjectList(response, JsonMyMessage.class);
+					if (temp != null) {
+						LogTool.i("消息", "长度" + temp.size());
+						//如果是首次获取数据
+						if (page == 0) {
+							if (temp.size() < Config.PAGE_NUM) {
+								pageNow = -1;
+							}
+							messageList = new LinkedList<JsonMyMessage>();
+							messageList.addAll(temp);
+						}
+						//如果是获取更多
+						else if (page > 0) {
+							if (temp.size() < Config.PAGE_NUM) {
+								pageNow = -1;
+								ToastTool.showShort(getActivity(), "没有更多了！");
+							}
+							messageList.addAll(temp);
+						}
+						mAdapter.notifyDataSetChanged();
+					} else {
+						LogTool.e("消息", "获取列表失败返回为" + response);
+					}
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+				// TODO Auto-generated method stub
+				LogTool.e("消息", "获取列表失败");
+			}
+
+			@Override
+			public void onFinish() {
+				// TODO Auto-generated method stub
+				super.onFinish();
+				messageListView.onRefreshComplete();
+			}
+		};
+		AsyncHttpClientTool.post(getActivity(), "getbridgemessagelist", params, responseHandler);
 	}
 
 	/**
-	 * 根据ID获取JsonLoveBridgeItem数据
+	 * 进入帖子或活动详情页面
 	 */
-	private void goToDetail(int loveItemId) {
-		//		RequestParams params = new RequestParams();
-		//		LogTool.e("携带" + loveItemId);
-		//		params.put(LoveBridgeItemTable.N_ID, loveItemId);
-		//		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
-		//			ProgressDialog dialog = new ProgressDialog(getActivity());
-		//
-		//			@Override
-		//			public void onStart() {
-		//				// TODO Auto-generated method stub
-		//				super.onStart();
-		//				dialog.setMessage("请稍后...");
-		//				dialog.setCancelable(false);
-		//				dialog.show();
-		//			}
-		//
-		//			@Override
-		//			public void onSuccess(int statusCode, Header[] headers, String response) {
-		//				// TODO Auto-generated method stub
-		//				if (statusCode == 200) {
-		//					LogTool.e("结果" + response);
-		//					if (!TextUtils.isEmpty(response)) {
-		//						JsonLoveBridgeItem loveBridgeItem = FastJsonTool.getObject(response, JsonLoveBridgeItem.class);
-		//						if (loveBridgeItem != null) {
-		//							startActivity(new Intent(getActivity(), LoveBridgeDetailActivity.class).putExtra(
-		//									LoveBridgeDetailActivity.LOVE_BRIDGE_ITEM, loveBridgeItem));
-		//							getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-		//						}
-		//					}
-		//				}
-		//			}
-		//
-		//			@Override
-		//			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
-		//				// TODO Auto-generated method stub
-		//				LogTool.e("LoveBridgeMsgFragment", "获取详情失败");
-		//			}
-		//
-		//			@Override
-		//			public void onFinish() {
-		//				// TODO Auto-generated method stub
-		//				super.onFinish();
-		//				if (dialog != null && dialog.isShowing()) {
-		//					dialog.dismiss();
-		//				}
-		//			}
-		//		};
-		//		AsyncHttpClientTool.post(getActivity(), "getlovebridgeitembyid", params, responseHandler);
+	private void goToDetail(final int type, int pa_id, int pa_user_id) {
+		RequestParams params = new RequestParams();
+		final ProgressDialog dialog = new ProgressDialog(getActivity());
+		dialog.setMessage("正在加载...");
+		dialog.setCancelable(false);
+		if (type == 0) {
+			params.put(PostTable.P_POSTID, pa_id);
+			params.put(PostTable.P_USERID, pa_user_id);
+		} else if (type == 1) {
+			params.put(ActivityTable.A_ACTID, pa_id);
+			params.put(ActivityTable.A_USERID, pa_user_id);
+		} else {
+			return;
+		}
 
+		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+				dialog.show();
+			}
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, String response) {
+				// TODO Auto-generated method stub
+				if (statusCode == 200) {
+					if (type == 0) {
+						JsonPostItem jsonPostItem = FastJsonTool.getObject(response, JsonPostItem.class);
+						if (jsonPostItem != null) {
+							startActivity(new Intent(getActivity(), PostDetailActivity.class).putExtra(
+									PostDetailActivity.POST_ITEM, jsonPostItem));
+							getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+						} else {
+							LogTool.e("返回帖子数据出错" + response);
+						}
+					} else if (type == 1) {
+						JsonActItem jsonActItem = FastJsonTool.getObject(response, JsonActItem.class);
+						if (jsonActItem != null) {
+							startActivity(new Intent(getActivity(), ActDetailActivity.class).putExtra(
+									ActDetailActivity.ACT_ITEM, jsonActItem));
+							getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+						} else {
+							LogTool.e("返回帖子数据出错" + response);
+						}
+					}
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+				// TODO Auto-generated method stub
+				LogTool.e("获取学校帖子列表失败" + errorResponse);
+			}
+
+			@Override
+			public void onFinish() {
+				// TODO Auto-generated method stub
+				dialog.dismiss();
+				super.onFinish();
+			}
+
+		};
+		AsyncHttpClientTool.post(getActivity(), "post/getSchoolPosts", params, responseHandler);
 	}
 
 	/**
@@ -297,10 +301,12 @@ public class MainChatMsgFragment extends BaseV4Fragment {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
 			View view = convertView;
-			final JsonMyMessage message = messageList.get(position);
-			if (message == null) {
+			final JsonMyMessage jsonMyMessage = messageList.get(position);
+			if (jsonMyMessage == null) {
 				return null;
 			}
+
+			LogTool.i("消息是否读过：" + jsonMyMessage.isRead());
 
 			final ViewHolder holder;
 			if (convertView == null) {
@@ -323,81 +329,61 @@ public class MainChatMsgFragment extends BaseV4Fragment {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-//					startActivity(new Intent(getActivity(), PostDetailActivity.class).putExtra(
-
-//					PostDetailActivity.POST_ITEM, new JsonPostItem(5, 5, "王坤", "drawable://" + R.drawable.headimage5,
-//							"drawable://" + R.drawable.headimage5, "女", "卡又丢了，快来点开心的事冲冲喜吧！", "drawable://"
-//									+ R.drawable.content, "drawable://" + R.drawable.content, new Date(), 256, 46)));
-//					getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+					goToDetail(jsonMyMessage.getType(), jsonMyMessage.getPa_id(), jsonMyMessage.getUserid());
 				}
 			});
 
 			//设置头像
-			if (!TextUtils.isEmpty(message.getSmall_avatar())) {
-				//				imageLoader.displayImage(AsyncHttpClientImageSound.getAbsoluteUrl(message.getSmall_avatar()),
-				//						holder.headImageView, ImageLoaderTool.getHeadImageOptions(10));
+			if (!TextUtils.isEmpty(jsonMyMessage.getSmall_avatar())) {
 
-				imageLoader.displayImage(message.getSmall_avatar(), holder.headImageView,
-						ImageLoaderTool.getHeadImageOptions(10));
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonMyMessage.getSmall_avatar()),
+						holder.headImageView, ImageLoaderTool.getHeadImageOptions(10));
 
-				if (userPreference.getU_id() != message.getUserid()) {
+				if (userPreference.getU_id() != jsonMyMessage.getUserid()) {
 					//点击头像进入详情页面
 					holder.headImageView.setOnClickListener(new OnClickListener() {
 
 						@Override
 						public void onClick(View v) {
 							// TODO Auto-generated method stub
-							//							Intent intent = new Intent(getActivity(), PersonDetailActivity.class);
-							//							intent.putExtra(PersonDetailActivity.PERSON_TYPE, Constants.PersonDetailType.SINGLE);
-							//							intent.putExtra(UserTable.U_ID, message.getUserid());
-							//							startActivity(intent);
-							//							getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
+							Intent intent = new Intent(getActivity(), PersonDetailActivity.class);
+							intent.putExtra(UserTable.U_ID, jsonMyMessage.getUserid());
+							intent.putExtra(UserTable.U_NICKNAME, jsonMyMessage.getUsername());
+							intent.putExtra(UserTable.U_SMALL_AVATAR, jsonMyMessage.getSmall_avatar());
+							startActivity(intent);
+							getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
 						}
 					});
 				}
 			}
 
+			//设置姓名
+			holder.nameTextView.setText(jsonMyMessage.getUsername());
+
 			//设置内容
-			if (position % 3 == 0) {
+			if (jsonMyMessage.getType() == 2) {//赞
 				holder.commentTextView.setVisibility(View.GONE);
 				holder.favorImageView.setVisibility(View.VISIBLE);
-			} else {
-				holder.commentTextView.setText(message.getCommentcontent());
+			} else if (jsonMyMessage.getType() == 0 || jsonMyMessage.getType() == 1) {//评论或回复
+				holder.commentTextView.setText(jsonMyMessage.getCommentcontent());
 				holder.commentTextView.setVisibility(View.VISIBLE);
 				holder.favorImageView.setVisibility(View.GONE);
 			}
 
-			//设置姓名
-			holder.nameTextView.setText(message.getUsername());
-
-			//设置性别
-			//			if (message.getGender().equals(Constants.Gender.MALE)) {
-			//				holder.genderImageView.setImageResource(R.drawable.male);
-			//			} else {
-			//				holder.genderImageView.setImageResource(R.drawable.female);
-			//			}
-
 			//设置日期
-			holder.timeTextView.setText(DateTimeTools.getMonAndDay(message.getCommenttime()));
+			holder.timeTextView.setText(DateTimeTools.getMonAndDay(jsonMyMessage.getCommenttime()));
 
-			if (position % 2 == 0) {
-				holder.itemTextView.setText(message.getMessage());
-				holder.itemTextView.setVisibility(View.VISIBLE);
-				holder.itemImageView.setVisibility(View.GONE);
-			} else {
-				holder.itemImageView.setImageResource(R.drawable.content);
+			//设置帖子或活动的信息
+			if (jsonMyMessage.getPa_iamge() != null && !jsonMyMessage.getPa_iamge().isEmpty()) {//如果有图片
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonMyMessage.getSmall_avatar()),
+						holder.itemImageView, ImageLoaderTool.getHeadImageOptions(0));
 				holder.itemTextView.setVisibility(View.GONE);
 				holder.itemImageView.setVisibility(View.VISIBLE);
+			} else {
+				holder.itemTextView.setText(jsonMyMessage.getPa_content());
+				holder.itemTextView.setVisibility(View.VISIBLE);
+				holder.itemImageView.setVisibility(View.GONE);
 			}
-
-			//			holder.loveItemTextView.setOnClickListener(new OnClickListener() {
-			//
-			//				@Override
-			//				public void onClick(View v) {
-			//					// TODO Auto-generated method stub
-			//					goToDetail(message.getMessageid());
-			//				}
-			//			});
 
 			return view;
 		}

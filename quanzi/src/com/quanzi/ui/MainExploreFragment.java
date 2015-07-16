@@ -358,7 +358,7 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 				FragmentPagerAdapter f = (FragmentPagerAdapter) mViewPager.getAdapter();
 				MainExplorePostFragment mainExplorePostFragment = (MainExplorePostFragment) f.instantiateItem(
 						mViewPager, 0);
-				mainExplorePostFragment.refresh();
+				mainExplorePostFragment.ScreenToRefresh();
 				ScreenDialogFragment.this.dismiss();
 				break;
 			case R.id.cancle:
