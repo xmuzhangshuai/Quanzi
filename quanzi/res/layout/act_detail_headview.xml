@@ -288,8 +288,7 @@
                 android:layout_marginLeft="@dimen/personal_timecapsule_padding"
                 android:layout_toRightOf="@+id/participant_image"
                 android:singleLine="true"
-                android:text="19人参加"
-                android:textColor="@color/unenable"
+                android:textColor="@color/sel_color_gray_green"
                 android:textSize="@dimen/register_font_size" />
 
             <TextView

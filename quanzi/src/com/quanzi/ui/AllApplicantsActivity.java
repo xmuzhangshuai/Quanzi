@@ -23,7 +23,6 @@ import com.quanzi.R;
 import com.quanzi.base.BaseActivity;
 import com.quanzi.jsonobject.JsonUser;
 import com.quanzi.table.ActivityTable;
-import com.quanzi.table.PostTable;
 import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.FastJsonTool;
 import com.quanzi.utils.ImageLoaderTool;
@@ -32,27 +31,26 @@ import com.quanzi.utils.LogTool;
 /**
  *
  * 项目名称：quanzi  
- * 类名称：AllFavorsActivity  
- * 类描述：查看点赞者的页面
+ * 类名称：AllApplicants  
+ * 类描述：查看所有报名者
  * @author zhangshuai
- * @date 创建时间：2015-4-28 下午10:18:17 
+ * @date 创建时间：2015-7-16 上午10:36:38 
  *
  */
-public class AllFavorsActivity extends BaseActivity implements OnClickListener {
+public class AllApplicantsActivity extends BaseActivity implements OnClickListener {
+
 	/***********VIEWS************/
-	public static final String PA_ID = "pa_id";
-	public static final String PA_USERID = "pa_user_id";
-	public static final String FAVOR_COUNT = "favor_count";
-	public static final String TYPE = "type";
+	public static final String A_ACTID = "a_act_id";
+	public static final String A_USERID = "a_user_id";
+	public static final String APPLY_COUNT = "applye_count";
 
 	private ListView allFavorListView;
 	private TextView leftTextView;//导航栏左侧文字
 	private View leftButton;//导航栏左侧按钮
 	List<JsonUser> jsonUserList;
-	int pa_id;
-	int pa_userid;
-	int favor_count;
-	String type = "";
+	int a_id;
+	int a_userid;
+	int apply_count;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,14 +58,13 @@ public class AllFavorsActivity extends BaseActivity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_all_favors);
-		pa_id = getIntent().getIntExtra(PA_ID, 0);
-		pa_userid = getIntent().getIntExtra(PA_USERID, 0);
-		favor_count = getIntent().getIntExtra(FAVOR_COUNT, 0);
-		type = getIntent().getStringExtra(TYPE);
+		a_id = getIntent().getIntExtra(A_ACTID, 0);
+		a_userid = getIntent().getIntExtra(A_USERID, 0);
+		apply_count = getIntent().getIntExtra(APPLY_COUNT, 0);
 
 		jsonUserList = new ArrayList<JsonUser>();
 
-		if (pa_id > 0 && pa_userid > 0) {
+		if (a_id > 0 && a_userid > 0) {
 			getUserList();
 		}
 
@@ -86,7 +83,7 @@ public class AllFavorsActivity extends BaseActivity implements OnClickListener {
 	@Override
 	protected void initView() {
 		// TODO Auto-generated method stub
-		leftTextView.setText("" + favor_count + "赞");
+		leftTextView.setText("" + apply_count + "人报名");
 		leftButton.setOnClickListener(this);
 	}
 
@@ -116,13 +113,8 @@ public class AllFavorsActivity extends BaseActivity implements OnClickListener {
 	 */
 	private void getUserList() {
 		RequestParams params = new RequestParams();
-		if (type.equals("post")) {
-			params.put(PostTable.P_POSTID, pa_id);
-			params.put(PostTable.P_USERID, pa_userid);
-		} else if (type.equals("act")) {
-			params.put(ActivityTable.A_ACTID, pa_id);
-			params.put(ActivityTable.A_USERID, pa_userid);
-		}
+		params.put(ActivityTable.A_ACTID, a_id);
+		params.put(ActivityTable.A_USERID, a_userid);
 
 		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
 			@Override
@@ -130,7 +122,7 @@ public class AllFavorsActivity extends BaseActivity implements OnClickListener {
 				// TODO Auto-generated method stub
 				if (statusCode == 200) {
 					if (response.equals("-1")) {
-						LogTool.e("赞列表返回错误" + response);
+						LogTool.e("报名列表返回错误" + response);
 					} else {
 						jsonUserList = FastJsonTool.getObjectList(response, JsonUser.class);
 						if (jsonUserList != null && jsonUserList.size() > 0) {
@@ -143,14 +135,10 @@ public class AllFavorsActivity extends BaseActivity implements OnClickListener {
 			@Override
 			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
 				// TODO Auto-generated method stub
-				LogTool.e("获取赞的列表失败");
+				LogTool.e("获取报名的列表失败");
 			}
 		};
-		if (type.equals("act")) {
-			AsyncHttpClientTool.post(AllFavorsActivity.this, "activity/getLikeUserList", params, responseHandler);
-		} else if (type.equals("post")) {
-			AsyncHttpClientTool.post(AllFavorsActivity.this, "post/getLikeUserList", params, responseHandler);
-		}
+		AsyncHttpClientTool.post(AllApplicantsActivity.this, "activity/getApplyUsers", params, responseHandler);
 
 	}
 
@@ -198,7 +186,7 @@ public class AllFavorsActivity extends BaseActivity implements OnClickListener {
 
 			final ViewHolder holder;
 			if (convertView == null) {
-				view = LayoutInflater.from(AllFavorsActivity.this).inflate(R.layout.followers_list_item, null);
+				view = LayoutInflater.from(AllApplicantsActivity.this).inflate(R.layout.followers_list_item, null);
 				holder = new ViewHolder();
 				holder.headImageView = (ImageView) view.findViewById(R.id.head_image);
 				holder.nameTextView = (TextView) view.findViewById(R.id.name);
@@ -212,7 +200,7 @@ public class AllFavorsActivity extends BaseActivity implements OnClickListener {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					Intent intent = new Intent(AllFavorsActivity.this, PersonDetailActivity.class);
+					Intent intent = new Intent(AllApplicantsActivity.this, PersonDetailActivity.class);
 					intent.putExtra(PersonDetailActivity.JSONUSER, jsonUser);
 					startActivity(intent);
 					overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);

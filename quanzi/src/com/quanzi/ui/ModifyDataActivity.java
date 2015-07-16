@@ -590,7 +590,7 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 					myMenuDialog.dismiss();
 					break;
 				case 1:
-					updateGender("пёся");
+					updateIdentity("пёся");
 					myMenuDialog.dismiss();
 					break;
 

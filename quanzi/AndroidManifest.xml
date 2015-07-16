@@ -137,9 +137,15 @@
             android:windowSoftInputMode="stateHidden|adjustResize" >
         </activity>
 
-        <!-- 赞者图片 -->
+        <!-- 赞者页面 -->
         <activity
             android:name="com.quanzi.ui.AllFavorsActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        
+          <!-- 报名者页面 -->
+        <activity
+            android:name="com.quanzi.ui.AllApplicantsActivity"
             android:screenOrientation="portrait" >
         </activity>
 

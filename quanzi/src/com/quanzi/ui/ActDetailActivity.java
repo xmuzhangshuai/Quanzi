@@ -112,6 +112,7 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 		setContentView(R.layout.activity_act_detail);
 		userPreference = BaseApplication.getInstance().getUserPreference();
 		commentList = new LinkedList<JsonComment>();
+		commentList.add(new JsonComment());
 		inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 
 		jsonActItem = (JsonActItem) getIntent().getSerializableExtra(ACT_ITEM);
@@ -183,6 +184,12 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 		leftImageButton.setOnClickListener(this);
 		applyBtn.setOnClickListener(this);
 		sendBtn.setOnClickListener(this);
+		participantCountTextView.setOnClickListener(this);
+		if (!jsonActItem.isApply()) {
+			applyBtn.setEnabled(true);
+		} else {
+			applyBtn.setEnabled(false);
+		}
 
 		//设置上拉下拉刷新事件
 		actCommentListView.setOnRefreshListener(new OnRefreshListener2<ListView>() {
@@ -255,6 +262,8 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 
 			//设置发表日期
 			timeTextView.setText(DateTimeTools.getHourAndMin(jsonActItem.getA_time()));
+
+			participantCountTextView.setText("" + jsonActItem.getA_apply_amount() + "人参加");
 
 			commentEditText.addTextChangedListener(new TextWatcher() {
 
@@ -536,10 +545,71 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 			comment(commentEditText.getText().toString().trim());
 			break;
 		case R.id.apply_btn:
+			applyAct();
+			break;
+		case R.id.participants_count:
+			if (jsonActItem.getA_apply_amount() > 0) {
+				startActivity(new Intent(ActDetailActivity.this, AllApplicantsActivity.class)
+						.putExtra(AllApplicantsActivity.A_ACTID, jsonActItem.getA_actid())
+						.putExtra(AllApplicantsActivity.A_USERID, jsonActItem.getA_userid())
+						.putExtra(AllApplicantsActivity.APPLY_COUNT, jsonActItem.getA_apply_amount()));
+				overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+			}
 			break;
 		default:
 			break;
 		}
+	}
+
+	/**
+	 * 报名参加活动
+	 */
+	private void applyAct() {
+		RequestParams params = new RequestParams();
+		params.put(ActivityTable.A_ACTID, jsonActItem.getA_actid());
+		params.put(ActivityTable.A_USERID, jsonActItem.getA_userid());
+		params.put(UserTable.U_ID, userPreference.getU_id());
+
+		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+				sendBtn.setEnabled(false);
+			}
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, String response) {
+				// TODO Auto-generated method stub
+				if (statusCode == 200) {
+					if (response.equals("1")) {
+						LogTool.i("报名成功");
+						ToastTool.showLong(ActDetailActivity.this, "报名成功");
+						applyBtn.setEnabled(false);
+						participantCountTextView.setText("" + (jsonActItem.getA_apply_amount() + 1) + "人参加");
+						jsonActItem.setA_apply_amount(jsonActItem.getA_apply_amount() + 1);
+					} else {
+						LogTool.e("报名返回" + response);
+					}
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+				// TODO Auto-generated method stub
+				LogTool.e("报名失败");
+			}
+
+			@Override
+			public void onFinish() {
+				// TODO Auto-generated method stub
+				super.onFinish();
+				sendBtn.setEnabled(true);
+			}
+
+		};
+		AsyncHttpClientTool.post("activity/join", params, responseHandler);
 	}
 
 	/**
@@ -625,6 +695,7 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 								pageNow = -1;
 							}
 							commentList = new LinkedList<JsonComment>();
+							commentList.add(new JsonComment());
 							commentList.addAll(temp);
 						}
 						//如果是获取更多
@@ -696,6 +767,9 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
+			if (position == 0) {
+				return LayoutInflater.from(ActDetailActivity.this).inflate(R.layout.emptyview, null);
+			}
 			View view = convertView;
 			final JsonComment jsonComment = commentList.get(position);
 			if (jsonComment == null) {

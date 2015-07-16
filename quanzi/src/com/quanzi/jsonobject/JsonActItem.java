@@ -25,9 +25,13 @@ public class JsonActItem implements Serializable {
 	private String a_act_type;
 	private int a_comment_count;
 	private int a_favor_count;
+	private int a_apply_amount;
+	
 	private boolean like;
-
-	private List<Map<String, String>> commentList;
+	
+	private boolean apply;
+	
+	private List<Map<String,String>> commentList;
 
 	public JsonActItem() {
 		super();
@@ -65,7 +69,6 @@ public class JsonActItem implements Serializable {
 	public void setA_id(int a_id) {
 		this.a_id = a_id;
 	}
-
 	public int getA_actid() {
 		return a_actid;
 	}
@@ -73,7 +76,6 @@ public class JsonActItem implements Serializable {
 	public void setA_actid(int a_actid) {
 		this.a_actid = a_actid;
 	}
-
 	public String getA_title() {
 		return a_title;
 	}
@@ -216,6 +218,22 @@ public class JsonActItem implements Serializable {
 
 	public void setLike(boolean like) {
 		this.like = like;
+	}
+
+	public int getA_apply_amount() {
+		return a_apply_amount;
+	}
+
+	public void setA_apply_amount(int a_apply_amount) {
+		this.a_apply_amount = a_apply_amount;
+	}
+
+	public boolean isApply() {
+		return apply;
+	}
+
+	public void setApply(boolean apply) {
+		this.apply = apply;
 	}
 
 }
