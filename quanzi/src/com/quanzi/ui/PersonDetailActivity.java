@@ -2,6 +2,7 @@ package com.quanzi.ui;
 
 import org.apache.http.Header;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -186,10 +187,19 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 	 * 	网络获取User信息
 	 */
 	private void getUser() {
+		final ProgressDialog dialog = new ProgressDialog(PersonDetailActivity.this);
+		dialog.setMessage("正在加载...");
+		dialog.setCancelable(false);
 		RequestParams params = new RequestParams();
 		params.put(UserTable.U_ID, userId);
 
 		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+				dialog.show();
+			}
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, String response) {
 				// TODO Auto-generated method stub
@@ -205,6 +215,13 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
 				// TODO Auto-generated method stub
 				LogTool.e("获取用户服务器错误");
+			}
+			
+			@Override
+			public void onFinish() {
+				// TODO Auto-generated method stub
+				super.onFinish();
+				dialog.dismiss();
 			}
 		};
 		AsyncHttpClientTool.post(PersonDetailActivity.this, "user/getInfoByID", params, responseHandler);

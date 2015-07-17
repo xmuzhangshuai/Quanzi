@@ -165,7 +165,7 @@ public class MyPersonDetailActivity extends BaseFragmentActivity implements OnCl
 			}
 
 		};
-		AsyncHttpClientTool.post(MyPersonDetailActivity.this, "post/getSchoolPosts", params, responseHandler);
+		AsyncHttpClientTool.post(MyPersonDetailActivity.this, "post/getPostsByUserID", params, responseHandler);
 	}
 
 	/**

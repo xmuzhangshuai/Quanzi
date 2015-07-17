@@ -133,7 +133,7 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 			}
 
 		};
-		AsyncHttpClientTool.post(getActivity(), "post/getSchoolPosts", params, responseHandler);
+		AsyncHttpClientTool.post(getActivity(), "post/getPostsByUserID", params, responseHandler);
 	}
 
 	/**
