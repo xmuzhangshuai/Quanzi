@@ -60,7 +60,7 @@ public class MainChatMsgFragment extends BaseV4Fragment {
 	protected boolean pauseOnScroll = false;
 	protected boolean pauseOnFling = true;
 	private int pageNow = 0;//控制页数
-	private MessageAdapter mAdapter;
+	private MyMessageAdapter mAdapter;
 	private UserPreference userPreference;
 	private LinkedList<JsonMyMessage> messageList;
 
@@ -84,7 +84,7 @@ public class MainChatMsgFragment extends BaseV4Fragment {
 		getDataTask(pageNow);
 
 		messageListView.setMode(Mode.BOTH);
-		mAdapter = new MessageAdapter();
+		mAdapter = new MyMessageAdapter();
 		messageListView.setAdapter(mAdapter);
 		return rootView;
 	}
@@ -268,7 +268,7 @@ public class MainChatMsgFragment extends BaseV4Fragment {
 	 * 创建时间：2014年9月14日 下午3:41:15
 	 *
 	 */
-	class MessageAdapter extends BaseAdapter {
+	class MyMessageAdapter extends BaseAdapter {
 		private class ViewHolder {
 			public ImageView headImageView;
 			public TextView nameTextView;

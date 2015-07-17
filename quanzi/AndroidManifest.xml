@@ -142,8 +142,8 @@
             android:name="com.quanzi.ui.AllFavorsActivity"
             android:screenOrientation="portrait" >
         </activity>
-        
-          <!-- 报名者页面 -->
+
+        <!-- 报名者页面 -->
         <activity
             android:name="com.quanzi.ui.AllApplicantsActivity"
             android:screenOrientation="portrait" >
@@ -291,6 +291,49 @@
 
         <!-- 图片浏览页面 -->
         <activity android:name="com.quanzi.ui.GalleryPictureActivity" >
+        </activity>
+
+        <!-- 聊天页面 -->
+        <activity
+            android:name="com.quanzi.ui.ChatActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="locale|keyboardHidden|orientation"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" >
+            <intent-filter>
+                <action android:name="com.yixianqian.chat" />
+            </intent-filter>
+        </activity>
+        <!-- 聊天时预览图片 -->
+        <activity
+            android:name="com.quanzi.ui.ChatImagePreviewActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <!-- 自定义的alertdialog -->
+        <activity
+            android:name="com.quanzi.customewidget.ChatAlertDialog"
+            android:theme="@style/ChatDialogStyle" >
+        </activity>
+
+        <!-- 显示下载大图页面 -->
+        <activity
+            android:name="com.quanzi.ui.ShowBigImageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide" >
+        </activity>
+
+        <!-- 聊天信息页面 -->
+        <activity
+            android:name="com.quanzi.ui.ChatInfoActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <!-- 处理投诉页面 -->
+        <activity
+            android:name="com.quanzi.ui.HandleComplainActivity"
+            android:screenOrientation="portrait" >
         </activity>
 
         <service

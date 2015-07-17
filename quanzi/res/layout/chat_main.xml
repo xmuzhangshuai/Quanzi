@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <include
+        layout="@layout/top_navigation2"
+        android:focusable="true" />
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0.0dip"
+        android:layout_weight="1.0"
+        android:background="@color/system_back" >
+
+        <com.quanzi.xlistview.MsgListView
+            android:id="@+id/msg_listView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:divider="@null"
+            android:listSelector="@android:color/transparent"
+            android:transcriptMode="normal" />
+
+        <RelativeLayout
+            android:id="@+id/recording_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/recording_hint_bg"
+            android:padding="10dp"
+            android:visibility="invisible" >
+
+            <ImageView
+                android:id="@+id/mic_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/record_animate_01" />
+
+            <TextView
+                android:id="@+id/recording_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/mic_image"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:padding="2dp"
+                android:text="@string/move_up_to_cancel"
+                android:textSize="10sp" />
+        </RelativeLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/inputBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_bottombar_gb"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="center_vertical"
+        android:padding="7dp" >
+
+        <ImageView
+            android:id="@+id/voice_btn"
+            android:layout_width="@dimen/day_recommend_padding"
+            android:layout_height="@dimen/day_recommend_padding"
+            android:background="@android:color/transparent"
+            android:padding="@dimen/day_recommend_viewpager_padding_top"
+            android:src="@drawable/sel_chat_voice" />
+
+        <ImageView
+            android:id="@+id/face_btn"
+            android:layout_width="@dimen/day_recommend_padding"
+            android:layout_height="@dimen/day_recommend_padding"
+            android:layout_marginLeft="@dimen/day_recommend_viewpager_padding_top"
+            android:background="@android:color/transparent"
+            android:padding="@dimen/day_recommend_viewpager_padding_top"
+            android:src="@drawable/pop_btn_face_selector" />
+
+        <ImageView
+            android:id="@+id/btn_set_mode_keyboard"
+            android:layout_width="@dimen/day_recommend_help_padding"
+            android:layout_height="@dimen/day_recommend_help_padding"
+            android:layout_marginLeft="@dimen/day_recommend_viewpager_padding_top"
+            android:layout_marginRight="@dimen/day_recommend_viewpager_padding_top"
+            android:background="@drawable/chatting_setmode_keyboard_btn"
+            android:onClick="setModeKeyboard"
+            android:padding="@dimen/day_recommend_viewpager_padding_top"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/msg_et"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/day_recommend_viewpager_padding_top"
+            android:layout_marginLeft="@dimen/day_recommend_viewpager_padding_top"
+            android:layout_marginTop="@dimen/day_recommend_viewpager_padding_top"
+            android:layout_weight="1.0"
+            android:background="@drawable/sel_chat_input"
+            android:inputType="textMultiLine"
+            android:maxHeight="200.0dip"
+            android:paddingLeft="@dimen/day_recommend_dot_space"
+            android:paddingRight="@dimen/day_recommend_dot_space"
+            android:textSize="@dimen/day_recommend_font_info" />
+
+        <LinearLayout
+            android:id="@+id/btn_press_to_speak"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/day_recommend_padding"
+            android:layout_marginLeft="@dimen/day_recommend_viewpager_padding_top"
+            android:layout_marginRight="@dimen/day_recommend_viewpager_padding_top"
+            android:layout_weight="1"
+            android:background="@drawable/chat_press_speak_btn"
+            android:gravity="center"
+            android:visibility="gone" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/day_recommend_viewpager_padding_top"
+                android:text="@string/button_pushtotalk"
+                android:textColor="@drawable/sel_chat_pressed_to_talk"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/send_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="left|center"
+            android:clickable="true"
+            android:gravity="center_vertical" >
+
+            <ImageView
+                android:id="@+id/more_btn"
+                android:layout_width="@dimen/day_recommend_padding"
+                android:layout_height="@dimen/day_recommend_padding"
+                android:background="@android:color/transparent"
+                android:padding="3dp"
+                android:src="@drawable/pop_btn_selector" />
+
+            <Button
+                android:id="@+id/send_btn"
+                android:layout_width="@dimen/size_avatar"
+                android:layout_height="@dimen/sent_btn_height"
+                android:layout_marginBottom="3dp"
+                android:layout_marginLeft="@dimen/day_recommend_viewpager_padding_top"
+                android:layout_marginTop="3dp"
+                android:background="@drawable/chat_press_speak_btn"
+                android:enabled="false"
+                android:text="发送"
+                android:textColor="@drawable/sel_chat_pressed_to_talk"
+                android:textSize="@dimen/day_recommend_font_info"
+                android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/panelLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="220.0dip"
+        android:background="@color/white"
+        android:visibility="gone" >
+
+        <GridView
+            android:id="@+id/panel"
+            android:layout_width="fill_parent"
+            android:layout_height="220.0dip"
+            android:gravity="center"
+            android:listSelector="#00000000"
+            android:numColumns="4"
+            android:paddingLeft="11.0dip"
+            android:paddingRight="11.0dip"
+            android:paddingTop="14.0dip"
+            android:scrollbars="none"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="14.0dip" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/face_ll"
+        android:layout_width="fill_parent"
+        android:layout_height="220dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingBottom="5dip"
+        android:paddingTop="5dip"
+        android:visibility="gone" >
+
+        <com.quanzi.customewidget.JazzyViewPager
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/face_pager"
+            app:style="cubeout"
+            android:layout_width="fill_parent"
+            android:layout_height="180.0dip"
+            android:layout_marginLeft="5dip"
+            android:layout_marginRight="5dip"
+            android:background="#0000"
+            android:flipInterval="30"
+            android:persistentDrawingCache="animation" />
+
+        <com.quanzi.customewidget.CirclePageIndicator
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/indicator"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dip" />
+    </LinearLayout>
+
+</LinearLayout>

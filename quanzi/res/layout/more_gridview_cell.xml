@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/cellimage"
+        android:layout_width="@dimen/get_image_btn_padding"
+        android:layout_height="@dimen/get_image_btn_padding" />
+
+    <TextView
+        android:id="@+id/celltext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:textColor="@color/dark_gray"
+        android:textSize="14sp" />
+
+</LinearLayout>

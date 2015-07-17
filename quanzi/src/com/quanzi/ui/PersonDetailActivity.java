@@ -112,8 +112,6 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 		// TODO Auto-generated method stub
 		leftTextView.setText(userName);
 		leftButton.setOnClickListener(this);
-		contactBtn.setOnClickListener(this);
-		moreBtn.setOnClickListener(this);
 		concernBtn.setOnClickListener(this);
 		concernBtn.setVisibility(View.GONE);
 	}
@@ -157,6 +155,8 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 
 		postBtn.setOnClickListener(this);
 		dataBtn.setOnClickListener(this);
+		contactBtn.setOnClickListener(this);
+		moreBtn.setOnClickListener(this);
 
 		//设置头像
 		if (!TextUtils.isEmpty(jsonUser.getU_small_avatar())) {
@@ -200,6 +200,7 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 				super.onStart();
 				dialog.show();
 			}
+
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, String response) {
 				// TODO Auto-generated method stub
@@ -216,7 +217,7 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 				// TODO Auto-generated method stub
 				LogTool.e("获取用户服务器错误");
 			}
-			
+
 			@Override
 			public void onFinish() {
 				// TODO Auto-generated method stub
@@ -355,6 +356,11 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 			overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
 			break;
 		case R.id.nav_right_btn2://私信
+			Intent toChatIntent = new Intent(PersonDetailActivity.this, ChatActivity.class);
+			toChatIntent.putExtra("userId", "" + jsonUser.getU_id());
+			toChatIntent.putExtra("jsonuser", jsonUser);
+			startActivity(toChatIntent);
+			overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 			break;
 		case R.id.nav_right_btn1://更多
 			showMoreDialog();
