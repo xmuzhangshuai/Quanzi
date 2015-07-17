@@ -10,20 +10,24 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.quanzi.R;
+import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseFragmentActivity;
 import com.quanzi.db.SchoolDbService;
 import com.quanzi.jsonobject.JsonUser;
+import com.quanzi.table.QuanziTable;
 import com.quanzi.table.UserTable;
 import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.FastJsonTool;
 import com.quanzi.utils.ImageLoaderTool;
 import com.quanzi.utils.LogTool;
+import com.quanzi.utils.UserPreference;
 
 /**
  *
@@ -41,6 +45,9 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 	private View leftButton;//导航栏左侧按钮
 	private View contactBtn;//私信按钮
 	private View moreBtn;//更多按钮
+	private CheckBox concernBtn;
+	private View postBtn;
+	private View dataBtn;
 	private ImageView headImageView;
 	private TextView basicInfo;
 	private TextView introduce;
@@ -55,13 +62,16 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 	private int userId;
 	private String smallAvator;
 	private String userName;
+	private UserPreference userPreference;
 	private JsonUser jsonUser;
+	private boolean isConcerned = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_person_detail);
+		userPreference = BaseApplication.getInstance().getUserPreference();
 		jsonUser = (JsonUser) getIntent().getSerializableExtra(JSONUSER);
 		userId = getIntent().getIntExtra(UserTable.U_ID, -1);
 		userName = getIntent().getStringExtra(UserTable.U_NICKNAME);
@@ -75,8 +85,10 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 					ImageLoaderTool.getHeadImageOptions(10));
 			getUser();//网络获取user数据
 		} else {
+			userId = jsonUser.getU_id();
 			initPersonView();
 		}
+		getConcerned(userId);
 	}
 
 	@Override
@@ -89,6 +101,9 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 		headImageView = (ImageView) findViewById(R.id.head_image);
 		basicInfo = (TextView) findViewById(R.id.basic_info);
 		introduce = (TextView) findViewById(R.id.person_intro);
+		postBtn = findViewById(R.id.postBtn);
+		dataBtn = findViewById(R.id.dataBtn);
+		concernBtn = (CheckBox) findViewById(R.id.concern_btn);
 	}
 
 	@Override
@@ -98,6 +113,8 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 		leftButton.setOnClickListener(this);
 		contactBtn.setOnClickListener(this);
 		moreBtn.setOnClickListener(this);
+		concernBtn.setOnClickListener(this);
+		concernBtn.setVisibility(View.GONE);
 	}
 
 	/**
@@ -125,7 +142,7 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 	 */
 	private void initPersonView() {
 		personDataFragment = new PersonDataFragment(jsonUser);
-		personDetailPostFragment = new PersonDetailPostFragment();
+		personDetailPostFragment = new PersonDetailPostFragment(userId);
 		fragments = new Fragment[] { personDetailPostFragment, personDataFragment };
 
 		mTabs = new View[2];
@@ -136,6 +153,9 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 
 		getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, personDetailPostFragment)
 				.show(personDetailPostFragment).commit();
+
+		postBtn.setOnClickListener(this);
+		dataBtn.setOnClickListener(this);
 
 		//设置头像
 		if (!TextUtils.isEmpty(jsonUser.getU_small_avatar())) {
@@ -156,9 +176,9 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 		}
 		//设置姓名、省份、及学校
 
-		basicInfo.setText(jsonUser.getU_gender() + "|"
+		basicInfo.setText(jsonUser.getU_gender() + " | "
 				+ SchoolDbService.getInstance(getApplicationContext()).getSchoolNameById(jsonUser.getU_schoolid())
-				+ "|" + jsonUser.getU_identity() + "|" + jsonUser.getU_love_tate());
+				+ " | " + jsonUser.getU_identity() + " | " + jsonUser.getU_love_tate());
 		introduce.setText(jsonUser.getU_introduce());
 	}
 
@@ -188,6 +208,97 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 			}
 		};
 		AsyncHttpClientTool.post(PersonDetailActivity.this, "user/getInfoByID", params, responseHandler);
+	}
+
+	/**
+	 * 是否关注过此人
+	 */
+	private void getConcerned(int userID) {
+		RequestParams params = new RequestParams();
+		params.put(QuanziTable.C_BECONCERNED_USERID, userID);
+		params.put(QuanziTable.C_USERID, userPreference.getU_id());
+
+		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, String response) {
+				// TODO Auto-generated method stub
+				if (statusCode == 200) {
+					if (response.equals("1")) {
+						isConcerned = true;
+						concernBtn.setVisibility(View.VISIBLE);
+						concernBtn.setChecked(true);
+					} else if (response.equals("0")) {
+						isConcerned = false;
+						concernBtn.setVisibility(View.VISIBLE);
+						concernBtn.setChecked(false);
+					} else {
+						LogTool.e("个人主页", "获取关注状态返回错误" + response);
+					}
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+				// TODO Auto-generated method stub
+				LogTool.e("个人主页", "获取关注状态失败");
+			}
+
+			@Override
+			public void onFinish() {
+				// TODO Auto-generated method stub
+				super.onFinish();
+			}
+
+		};
+		AsyncHttpClientTool.post(PersonDetailActivity.this, "quanzi/isConcerned", params, responseHandler);
+	}
+
+	/**
+	 * 关注
+	 */
+	private void concern(int userID) {
+
+		// TODO Auto-generated method stub
+		RequestParams params = new RequestParams();
+		params.put(QuanziTable.C_BECONCERNED_USERID, userID);
+		params.put(QuanziTable.C_USERID, userPreference.getU_id());
+
+		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, String response) {
+				// TODO Auto-generated method stub
+				if (statusCode == 200) {
+					if (response.equals("1")) {
+						LogTool.i("关注成功！");
+						isConcerned = !isConcerned;
+					} else if (response.equals("-2")) {
+						LogTool.i("已经关注过了！");
+					} else {
+						LogTool.e("学校帖子", "关注返回错误" + response);
+					}
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+				// TODO Auto-generated method stub
+				LogTool.e("学校帖子", "关注失败");
+			}
+
+			@Override
+			public void onFinish() {
+				// TODO Auto-generated method stub
+				super.onFinish();
+			}
+
+		};
+		if (!isConcerned) {
+			AsyncHttpClientTool.post(PersonDetailActivity.this, "quanzi/concern", params, responseHandler);
+		} else {
+			AsyncHttpClientTool.post(PersonDetailActivity.this, "quanzi/undoConcern", params, responseHandler);
+		}
 	}
 
 	/**
@@ -230,6 +341,15 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 			break;
 		case R.id.nav_right_btn1://更多
 			showMoreDialog();
+			break;
+		case R.id.postBtn:
+			onTabClicked(v);
+			break;
+		case R.id.dataBtn:
+			onTabClicked(v);
+			break;
+		case R.id.concern_btn:
+			concern(userId);
 			break;
 		default:
 			break;

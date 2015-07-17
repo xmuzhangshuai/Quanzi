@@ -14,6 +14,8 @@ public class JsonMyMessage {
 	private String pa_image;//帖子或活动的第一章图片
 	private String pa_content;//帖子或活动的内容
 
+	private int to_userid;
+
 	//评论人的具体内容
 	private int userid;
 	private String username;
@@ -27,6 +29,14 @@ public class JsonMyMessage {
 	public JsonMyMessage() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+
+	public int getTo_userid() {
+		return to_userid;
+	}
+
+	public void setTo_userid(int to_userid) {
+		this.to_userid = to_userid;
 	}
 
 	public int getMessageid() {

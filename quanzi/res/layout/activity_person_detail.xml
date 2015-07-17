@@ -115,8 +115,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/sel_green_gray_nav_bg"
-                    android:onClick="onTabClicked" >
+                    android:background="@drawable/sel_green_gray_nav_bg" >
 
                     <TextView
                         android:layout_width="fill_parent"
@@ -136,8 +135,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/sel_green_gray_nav_bg"
-                    android:onClick="onTabClicked" >
+                    android:background="@drawable/sel_green_gray_nav_bg" >
 
                     <TextView
                         android:layout_width="fill_parent"
@@ -152,7 +150,8 @@
                         android:textStyle="bold" />
                 </RelativeLayout>
             </LinearLayout>
-            <RelativeLayout
+
+            <RelativeLayout
                 android:id="@+id/fragment_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

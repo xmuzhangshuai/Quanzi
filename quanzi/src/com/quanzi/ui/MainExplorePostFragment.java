@@ -38,6 +38,7 @@ import com.quanzi.config.Constants.Config;
 import com.quanzi.jsonobject.JsonPostItem;
 import com.quanzi.table.CommentTable;
 import com.quanzi.table.PostTable;
+import com.quanzi.table.QuanziTable;
 import com.quanzi.table.UserTable;
 import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.DateTimeTools;
@@ -109,7 +110,6 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 		// TODO Auto-generated method stub
 		super.onResume();
 		postListView.setOnScrollListener(new PauseOnScrollListener(imageLoader, pauseOnScroll, pauseOnFling));
-
 	}
 
 	@Override
@@ -175,7 +175,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 	/**
 	 * 筛选刷新
 	 */
-	public void ScreenToRefresh() {
+	public void screenToRefresh() {
 		LogTool.e("筛选刷新！！");
 		postListView.setRefreshing();
 		pageNow = 0;
@@ -185,7 +185,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 	/**
 	 * 刷新
 	 */
-	private void Refresh() {
+	private void refresh() {
 		postListView.setRefreshing();
 		pageNow = 0;
 		getDataTask(pageNow);
@@ -403,7 +403,68 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 			holder.nameTextView.setText(jsonPostItem.getP_username());
 
 			//显示关注
-			holder.concernBtn.setVisibility(View.VISIBLE);
+			if (jsonPostItem.getP_userid() != userPreference.getU_id()) {
+				holder.concernBtn.setVisibility(View.VISIBLE);
+				holder.concernBtn.setChecked(jsonPostItem.isConcerned());
+				holder.concernBtn.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						RequestParams params = new RequestParams();
+						params.put(QuanziTable.C_BECONCERNED_USERID, jsonPostItem.getP_userid());
+						params.put(QuanziTable.C_USERID, userPreference.getU_id());
+
+						TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
+
+							@Override
+							public void onStart() {
+								// TODO Auto-generated method stub
+								super.onStart();
+								if (!jsonPostItem.isConcerned()) {//没有关注过
+									jsonPostItem.setConcerned(true);
+								} else {//已经关注了
+									jsonPostItem.setConcerned(false);
+								}
+							}
+
+							@Override
+							public void onSuccess(int statusCode, Header[] headers, String response) {
+								// TODO Auto-generated method stub
+								if (statusCode == 200) {
+									if (response.equals("1")) {
+										LogTool.i("关注成功！");
+									} else if (response.equals("-2")) {
+										LogTool.i("已经关注过了！");
+									} else {
+										LogTool.e("学校帖子", "关注返回错误" + response);
+									}
+								}
+							}
+
+							@Override
+							public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+								// TODO Auto-generated method stub
+								LogTool.e("学校帖子", "关注失败");
+							}
+
+							@Override
+							public void onFinish() {
+								// TODO Auto-generated method stub
+								super.onFinish();
+							}
+
+						};
+						if (!jsonPostItem.isConcerned()) {
+							AsyncHttpClientTool.post(getActivity(), "quanzi/concern", params, responseHandler);
+						} else {
+							AsyncHttpClientTool.post(getActivity(), "quanzi/undoConcern", params, responseHandler);
+						}
+					}
+				});
+			} else {
+				holder.concernBtn.setVisibility(View.GONE);
+			}
 
 			//设置性别
 			if (jsonPostItem.getP_gender().equals(Constants.Gender.MALE)) {

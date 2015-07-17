@@ -112,7 +112,7 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 		setContentView(R.layout.activity_act_detail);
 		userPreference = BaseApplication.getInstance().getUserPreference();
 		commentList = new LinkedList<JsonComment>();
-		commentList.add(new JsonComment());
+		//		commentList.add(new JsonComment());
 		inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 
 		jsonActItem = (JsonActItem) getIntent().getSerializableExtra(ACT_ITEM);
@@ -770,27 +770,21 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 			if (position == 0) {
 				return LayoutInflater.from(ActDetailActivity.this).inflate(R.layout.emptyview, null);
 			}
-			View view = convertView;
 			final JsonComment jsonComment = commentList.get(position);
 			if (jsonComment == null) {
 				return null;
 			}
 
 			final ViewHolder holder;
-			if (convertView == null) {
-				view = LayoutInflater.from(ActDetailActivity.this).inflate(R.layout.comment_list_item, null);
-				holder = new ViewHolder();
-				holder.headImageView = (ImageView) view.findViewById(R.id.head_image);
-				holder.nameTextView = (TextView) view.findViewById(R.id.name);
-				holder.genderImageView = (ImageView) view.findViewById(R.id.gender);
-				holder.timeTextView = (TextView) view.findViewById(R.id.time);
-				holder.contentTextView = (TextView) view.findViewById(R.id.content);
-				holder.lable = (TextView) view.findViewById(R.id.label);
-				holder.toUserName = (TextView) view.findViewById(R.id.to_user_name);
-				view.setTag(holder); // 给View添加一个格外的数据 
-			} else {
-				holder = (ViewHolder) view.getTag(); // 把数据取出来  
-			}
+			View view = LayoutInflater.from(ActDetailActivity.this).inflate(R.layout.comment_list_item, null);
+			holder = new ViewHolder();
+			holder.headImageView = (ImageView) view.findViewById(R.id.head_image);
+			holder.nameTextView = (TextView) view.findViewById(R.id.name);
+			holder.genderImageView = (ImageView) view.findViewById(R.id.gender);
+			holder.timeTextView = (TextView) view.findViewById(R.id.time);
+			holder.contentTextView = (TextView) view.findViewById(R.id.content);
+			holder.lable = (TextView) view.findViewById(R.id.label);
+			holder.toUserName = (TextView) view.findViewById(R.id.to_user_name);
 
 			view.setOnClickListener(new OnClickListener() {
 

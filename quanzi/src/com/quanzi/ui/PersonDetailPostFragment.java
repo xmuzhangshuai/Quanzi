@@ -52,6 +52,11 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 	private TableLayout tableLayout;
 	private LinkedList<JsonPostItem> jsonPostItemList;
 	private UserPreference userPreference;
+	private int userId;
+
+	public PersonDetailPostFragment(int userId) {
+		this.userId = userId;
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -93,9 +98,7 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 	 */
 	private void getDataTask() {
 		RequestParams params = new RequestParams();
-		params.put("page", 0);
-		params.put(UserTable.U_SCHOOLID, userPreference.getU_schoolid());
-		params.put(UserTable.U_ID, userPreference.getU_id());
+		params.put(UserTable.U_ID, userId);
 		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
 
 			@Override
@@ -251,7 +254,7 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 		holder.nameTextView.setText(jsonPostItem.getP_username());
 
 		//显示关注
-		holder.concernBtn.setVisibility(View.VISIBLE);
+		holder.concernBtn.setVisibility(View.GONE);
 
 		//设置性别
 		if (jsonPostItem.getP_gender().equals(Constants.Gender.MALE)) {
