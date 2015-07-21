@@ -67,25 +67,6 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//环信用户名和密码
-	public void setHuanXinUserName(String username) {
-		editor.putString("huanxin_username", username);
-		editor.commit();
-	}
-
-	public String getHuanXinUserName() {
-		return sp.getString("huanxin_username", "");
-	}
-
-	public void setHuanXinPassword(String password) {
-		editor.putString("huanxin_password", password);
-		editor.commit();
-	}
-
-	public String getHuanXinPassword() {
-		return sp.getString("huanxin_password", "");
-	}
-
 	//记录用户是否登录
 	public boolean getUserLogin() {
 		return sp.getBoolean("login", false);
@@ -351,6 +332,34 @@ public class UserPreference {
 	}
 
 	//我关注的人数
-	//我的追随者
+	public int getMyConcerned_count() {
+		return sp.getInt("my_concerned_count", -1);
+	}
+
+	public void setMyConcerned_count(int count) {
+		editor.putInt("my_concerned_count", count);
+		editor.commit();
+	}
+
+	
+	//我的追随者数量
+	public int getMyFollower_count() {
+		return sp.getInt("my_follower_count", -1);
+	}
+
+	public void setMyFollower_count(int count) {
+		editor.putInt("my_follower_count", count);
+		editor.commit();
+	}
+	
 	//我赞过的帖子的数量
+	public int getMyFavor_count() {
+		return sp.getInt("my_favor_count", -1);
+	}
+
+	public void setMyMyFavor_count(int count) {
+		editor.putInt("my_favor_count", count);
+		editor.commit();
+	}
+	
 }

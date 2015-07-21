@@ -179,7 +179,7 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 
 		basicInfo.setText(jsonUser.getU_gender() + " | "
 				+ SchoolDbService.getInstance(getApplicationContext()).getSchoolNameById(jsonUser.getU_schoolid())
-				+ " | " + jsonUser.getU_identity() + " | " + jsonUser.getU_love_tate());
+				+ " | " + jsonUser.getU_identity() + " | " + jsonUser.getU_love_state());
 		introduce.setText(jsonUser.getU_introduce());
 	}
 

@@ -1,9 +1,9 @@
 package com.quanzi.entities;
 
+import com.quanzi.dao.DaoSession;
 import de.greenrobot.dao.DaoException;
 
 import com.quanzi.dao.CityDao;
-import com.quanzi.dao.DaoSession;
 import com.quanzi.dao.ProvinceDao;
 import com.quanzi.dao.SchoolDao;
 import com.quanzi.dao.UserDao;
@@ -17,28 +17,17 @@ import com.quanzi.dao.UserDao;
  */
 public class User {
 
-    private Long userID;
-    private String bpushUserID;
-    private String bpushChannelID;
+    private Integer user_id;
     private String nickname;
-    private String realname;
-    private String password;
     private String gender;
     private String tel;
     private String email;
     private String large_avatar;
     private String small_avatar;
-    private String address;
-    private String blood_type;
-    private String constell;
     private String introduce;
+    private String identity;
+    private String love_state;
     private Integer age;
-    private Integer vocationid;
-    private Integer stateid;
-    private Integer height;
-    private Integer weight;
-    private Integer image_pass;
-    private Double salary;
     private java.util.Date birthday;
     private long schoolID;
     private long cityID;
@@ -66,29 +55,18 @@ public class User {
     public User() {
     }
 
-    public User(Long userID, String bpushUserID, String bpushChannelID, String nickname, String realname, String password, String gender, String tel, String email, String large_avatar, String small_avatar, String address, String blood_type, String constell, String introduce, Integer age, Integer vocationid, Integer stateid, Integer height, Integer weight, Integer image_pass, Double salary, java.util.Date birthday, long schoolID, long cityID, long provinceID) {
-        this.userID = userID;
-        this.bpushUserID = bpushUserID;
-        this.bpushChannelID = bpushChannelID;
+    public User(Integer user_id, String nickname, String gender, String tel, String email, String large_avatar, String small_avatar, String introduce, String identity, String love_state, Integer age, java.util.Date birthday, long schoolID, long cityID, long provinceID) {
+        this.user_id = user_id;
         this.nickname = nickname;
-        this.realname = realname;
-        this.password = password;
         this.gender = gender;
         this.tel = tel;
         this.email = email;
         this.large_avatar = large_avatar;
         this.small_avatar = small_avatar;
-        this.address = address;
-        this.blood_type = blood_type;
-        this.constell = constell;
         this.introduce = introduce;
+        this.identity = identity;
+        this.love_state = love_state;
         this.age = age;
-        this.vocationid = vocationid;
-        this.stateid = stateid;
-        this.height = height;
-        this.weight = weight;
-        this.image_pass = image_pass;
-        this.salary = salary;
         this.birthday = birthday;
         this.schoolID = schoolID;
         this.cityID = cityID;
@@ -101,28 +79,12 @@ public class User {
         myDao = daoSession != null ? daoSession.getUserDao() : null;
     }
 
-    public Long getUserID() {
-        return userID;
+    public Integer getUser_id() {
+        return user_id;
     }
 
-    public void setUserID(Long userID) {
-        this.userID = userID;
-    }
-
-    public String getBpushUserID() {
-        return bpushUserID;
-    }
-
-    public void setBpushUserID(String bpushUserID) {
-        this.bpushUserID = bpushUserID;
-    }
-
-    public String getBpushChannelID() {
-        return bpushChannelID;
-    }
-
-    public void setBpushChannelID(String bpushChannelID) {
-        this.bpushChannelID = bpushChannelID;
+    public void setUser_id(Integer user_id) {
+        this.user_id = user_id;
     }
 
     public String getNickname() {
@@ -131,22 +93,6 @@ public class User {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-    }
-
-    public String getRealname() {
-        return realname;
-    }
-
-    public void setRealname(String realname) {
-        this.realname = realname;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getGender() {
@@ -189,30 +135,6 @@ public class User {
         this.small_avatar = small_avatar;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getBlood_type() {
-        return blood_type;
-    }
-
-    public void setBlood_type(String blood_type) {
-        this.blood_type = blood_type;
-    }
-
-    public String getConstell() {
-        return constell;
-    }
-
-    public void setConstell(String constell) {
-        this.constell = constell;
-    }
-
     public String getIntroduce() {
         return introduce;
     }
@@ -221,60 +143,28 @@ public class User {
         this.introduce = introduce;
     }
 
+    public String getIdentity() {
+        return identity;
+    }
+
+    public void setIdentity(String identity) {
+        this.identity = identity;
+    }
+
+    public String getLove_state() {
+        return love_state;
+    }
+
+    public void setLove_state(String love_state) {
+        this.love_state = love_state;
+    }
+
     public Integer getAge() {
         return age;
     }
 
     public void setAge(Integer age) {
         this.age = age;
-    }
-
-    public Integer getVocationid() {
-        return vocationid;
-    }
-
-    public void setVocationid(Integer vocationid) {
-        this.vocationid = vocationid;
-    }
-
-    public Integer getStateid() {
-        return stateid;
-    }
-
-    public void setStateid(Integer stateid) {
-        this.stateid = stateid;
-    }
-
-    public Integer getHeight() {
-        return height;
-    }
-
-    public void setHeight(Integer height) {
-        this.height = height;
-    }
-
-    public Integer getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Integer weight) {
-        this.weight = weight;
-    }
-
-    public Integer getImage_pass() {
-        return image_pass;
-    }
-
-    public void setImage_pass(Integer image_pass) {
-        this.image_pass = image_pass;
-    }
-
-    public Double getSalary() {
-        return salary;
-    }
-
-    public void setSalary(Double salary) {
-        this.salary = salary;
     }
 
     public java.util.Date getBirthday() {

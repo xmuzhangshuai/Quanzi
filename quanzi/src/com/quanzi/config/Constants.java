@@ -13,11 +13,11 @@ public class Constants {
 	//域名或者是IP
 	//	public static String AppliactionServerIP = "http://121.40.101.36/";
 
-	public static String AppliactionServerDomain = "http://192.168.1.105:8080/XiaoYuanQuanQuan/";
+	public static String AppliactionServerDomain = "http://192.168.1.106:8080/XiaoYuanQuanQuan/";
 
 	//	public static String ImageServerIP = "http://121.40.92.222/";
 
-	public static String ImageServerDomain = "http://image.yixianqian.me/YXQServer/";
+	//	public static String ImageServerDomain = "http://image.yixianqian.me/YXQServer/";
 
 	public static class Config {
 		//是否处于开发模式
@@ -59,7 +59,6 @@ public class Constants {
 		public static final String REPLY = "REPLY";
 	}
 
-	
 	//身份
 	public static class Identity {
 		//学生

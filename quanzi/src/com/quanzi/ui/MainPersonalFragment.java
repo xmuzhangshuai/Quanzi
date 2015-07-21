@@ -31,8 +31,11 @@ public class MainPersonalFragment extends BaseV4Fragment implements OnClickListe
 	private TextView leftTextView;//导航栏左侧文字
 	private View personImageView;//个人头像
 	private View circleView;//圈子
+	private TextView my_concern_count;
 	private View followerView;//追随者
+	private TextView my_follower_count;
 	private View favourView;//赞
+	private TextView my_favor_count;
 	private View persondataView;//资料
 	private View settingView;//设置
 	private ImageView headImageView;//头像
@@ -76,6 +79,9 @@ public class MainPersonalFragment extends BaseV4Fragment implements OnClickListe
 		settingView = rootView.findViewById(R.id.setting);
 		headImageView = (ImageView) rootView.findViewById(R.id.head_image);
 		nameTextView = (TextView) rootView.findViewById(R.id.name);
+		my_concern_count = (TextView) rootView.findViewById(R.id.my_concren_count);
+		my_follower_count = (TextView) rootView.findViewById(R.id.my_follower_count);
+		my_favor_count = (TextView) rootView.findViewById(R.id.my_favor_count);
 	}
 
 	@Override
@@ -89,6 +95,15 @@ public class MainPersonalFragment extends BaseV4Fragment implements OnClickListe
 		persondataView.setOnClickListener(this);
 		settingView.setOnClickListener(this);
 		headImageView.setOnClickListener(this);
+		if (userPreference.getMyConcerned_count() > 0) {
+			my_concern_count.setText("" + userPreference.getMyConcerned_count());
+		}
+		if (userPreference.getMyFollower_count() > 0) {
+			my_follower_count.setText("" + userPreference.getMyFollower_count());
+		}
+		if (userPreference.getMyFavor_count() > 0) {
+			my_favor_count.setText("" + userPreference.getMyFavor_count());
+		}
 	}
 
 	@Override

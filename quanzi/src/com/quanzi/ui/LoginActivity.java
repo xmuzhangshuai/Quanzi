@@ -250,7 +250,7 @@ public class LoginActivity extends BaseActivity {
 		userPreference.setU_large_avatar(user.getU_large_avatar());
 		userPreference.setU_small_avatar(user.getU_small_avatar());
 		userPreference.setU_identity(user.getU_identity());
-		userPreference.setU_love_state(user.getU_love_tate());
+		userPreference.setU_love_state(user.getU_love_state());
 		userPreference.setU_provinceid(user.getU_provinceid());
 		userPreference.setU_cityid(user.getU_cityid());
 		userPreference.setU_schoolid(user.getU_schoolid());

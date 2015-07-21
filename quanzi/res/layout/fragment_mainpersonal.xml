@@ -63,11 +63,11 @@
             android:text="人脉圈" />
 
         <TextView
+            android:id="@+id/my_concren_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/day_recommend_help_padding"
-            android:text="123"
             android:textColor="@color/gray_normal" />
     </RelativeLayout>
 
@@ -114,12 +114,12 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/my_follower_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/day_recommend_help_padding"
-            android:text="296"
             android:textColor="@color/gray_normal" />
     </RelativeLayout>
 
@@ -150,11 +150,11 @@
             android:text="赞" />
 
         <TextView
+            android:id="@+id/my_favor_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/day_recommend_help_padding"
-            android:text="45"
             android:textColor="@color/gray_normal" />
     </RelativeLayout>
 

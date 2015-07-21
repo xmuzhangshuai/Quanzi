@@ -1,11 +1,11 @@
 package com.quanzi.entities;
 
 import java.util.List;
+import com.quanzi.dao.DaoSession;
 import de.greenrobot.dao.DaoException;
 
 import com.quanzi.dao.CityDao;
 import com.quanzi.dao.CometentDao;
-import com.quanzi.dao.DaoSession;
 import com.quanzi.dao.SchoolDao;
 import com.quanzi.dao.TodayRecommendDao;
 

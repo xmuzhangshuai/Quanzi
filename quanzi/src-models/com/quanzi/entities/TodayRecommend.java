@@ -1,8 +1,8 @@
 package com.quanzi.entities;
 
+import com.quanzi.dao.DaoSession;
 import de.greenrobot.dao.DaoException;
 
-import com.quanzi.dao.DaoSession;
 import com.quanzi.dao.SchoolDao;
 import com.quanzi.dao.TodayRecommendDao;
 

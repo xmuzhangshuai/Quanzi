@@ -37,6 +37,9 @@ public class JsonUser implements Serializable {
 	private String u_introduce;
 	private int u_post_amount;
 	private int u_act_amount;
+	private int u_my_concern_count;
+	private int u_my_follower_count;
+	private int u_my_favor_count;
 
 	private String u_student_number;//学号
 	private String u_stundet_pass;//密码
@@ -62,11 +65,11 @@ public class JsonUser implements Serializable {
 		LogTool.i("身份: " + getU_identity());
 		LogTool.i("行业: " + getU_industry_id());
 		LogTool.i("技能: " + getU_skill_ids());
-		LogTool.i("情感状态: " + getU_love_tate());
+		LogTool.i("情感状态: " + getU_love_state());
 		LogTool.i("兴趣: " + getU_interest_ids());
-		LogTool.i("关注的人数: ");
-		LogTool.i("追随者数量: ");
-		LogTool.i("赞过的帖子的数量: ");
+		LogTool.i("关注的人数: " + getU_my_concern_count());
+		LogTool.i("追随者数量: " + getU_my_follower_count());
+		LogTool.i("赞过的帖子的数量: " + getU_my_favor_count());
 	}
 
 	public int getU_id() {
@@ -157,14 +160,6 @@ public class JsonUser implements Serializable {
 		this.u_identity = u_identity;
 	}
 
-	public String getU_love_tate() {
-		return u_love_state;
-	}
-
-	public void setU_love_tate(String u_love_state) {
-		this.u_love_state = u_love_state;
-	}
-
 	public int getU_provinceid() {
 		return u_provinceid;
 	}
@@ -251,6 +246,38 @@ public class JsonUser implements Serializable {
 
 	public void setU_stundet_pass(String u_stundet_pass) {
 		this.u_stundet_pass = u_stundet_pass;
+	}
+
+	public String getU_love_state() {
+		return u_love_state;
+	}
+
+	public void setU_love_state(String u_love_state) {
+		this.u_love_state = u_love_state;
+	}
+
+	public int getU_my_concern_count() {
+		return u_my_concern_count;
+	}
+
+	public void setU_my_concern_count(int u_my_concern_count) {
+		this.u_my_concern_count = u_my_concern_count;
+	}
+
+	public int getU_my_follower_count() {
+		return u_my_follower_count;
+	}
+
+	public void setU_my_follower_count(int u_my_follower_count) {
+		this.u_my_follower_count = u_my_follower_count;
+	}
+
+	public int getU_my_favor_count() {
+		return u_my_favor_count;
+	}
+
+	public void setU_my_favor_count(int u_my_favor_count) {
+		this.u_my_favor_count = u_my_favor_count;
 	}
 
 	public JsonUser() {

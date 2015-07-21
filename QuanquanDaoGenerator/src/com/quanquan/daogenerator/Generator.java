@@ -12,11 +12,11 @@ public class Generator {
 	 */
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
-		Schema schema = new Schema(1, "com.quanquan.entities");
-		schema.setDefaultJavaPackageDao("com.quanquan.dao");
+		Schema schema = new Schema(1, "com.quanzi.entities");
+		schema.setDefaultJavaPackageDao("com.quanzi.dao");
 		schema.enableKeepSectionsByDefault();
 		addData(schema);
-		new DaoGenerator().generateAll(schema, "../quanquan/src-models");
+		new DaoGenerator().generateAll(schema, "../quanzi/src-models");
 	}
 
 	private static void addData(Schema schema) {
@@ -126,29 +126,19 @@ public class Generator {
 
 		/***********用户*************/
 		Entity userEntity = schema.addEntity("User");
-		userEntity.addLongProperty("userID");
-		userEntity.addStringProperty("bpushUserID");
-		userEntity.addStringProperty("bpushChannelID");
+		userEntity.addIntProperty("user_id");
 		userEntity.addStringProperty("nickname");
-		userEntity.addStringProperty("realname");
-		userEntity.addStringProperty("password");
 		userEntity.addStringProperty("gender");
 		userEntity.addStringProperty("tel");
 		userEntity.addStringProperty("email");
 		userEntity.addStringProperty("large_avatar");
 		userEntity.addStringProperty("small_avatar");
-		userEntity.addStringProperty("address");
-		userEntity.addStringProperty("blood_type");
-		userEntity.addStringProperty("constell");
 		userEntity.addStringProperty("introduce");
+		userEntity.addStringProperty("identity");
+		userEntity.addStringProperty("love_state");
 		userEntity.addIntProperty("age");
-		userEntity.addIntProperty("vocationid");
-		userEntity.addIntProperty("stateid");
-		userEntity.addIntProperty("height");
-		userEntity.addIntProperty("weight");
-		userEntity.addIntProperty("image_pass");//头像审核的字段
-		userEntity.addDoubleProperty("salary");
 		userEntity.addDateProperty("birthday");
+
 		//学校外键
 		Property user_school = userEntity.addLongProperty("schoolID").notNull().getProperty();
 		userEntity.addToOne(schoolEntity, user_school);

@@ -139,7 +139,7 @@ public class PersonDataFragment extends BaseV4Fragment {
 			statusTextView.setText(jsonUser.getU_identity());
 
 			/***情感状态***/
-			loveStatusTextView.setText(jsonUser.getU_love_tate());
+			loveStatusTextView.setText(jsonUser.getU_love_state());
 
 			//								/***兴趣爱好***/
 			//								interestTextView.setText(jsonUser.getu);

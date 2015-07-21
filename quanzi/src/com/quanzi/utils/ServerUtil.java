@@ -115,7 +115,7 @@ public class ServerUtil {
 		instance.userPreference.setU_large_avatar(user.getU_large_avatar());
 		instance.userPreference.setU_small_avatar(user.getU_small_avatar());
 		instance.userPreference.setU_identity(user.getU_identity());
-		instance.userPreference.setU_love_state(user.getU_love_tate());
+		instance.userPreference.setU_love_state(user.getU_love_state());
 		instance.userPreference.setU_provinceid(user.getU_provinceid());
 		instance.userPreference.setU_cityid(user.getU_cityid());
 		instance.userPreference.setU_schoolid(user.getU_schoolid());

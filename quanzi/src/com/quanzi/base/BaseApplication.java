@@ -164,6 +164,11 @@ public class BaseApplication extends Application {
 		return mNotificationManager;
 	}
 
+	/**
+	 * 获取APP的名字
+	 * @param pID
+	 * @return
+	 */
 	private String getAppName(int pID) {
 		String processName = null;
 		ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
@@ -196,7 +201,7 @@ public class BaseApplication extends Application {
 	 */
 	public String getHuanXinUserName() {
 		if (huanXinUserName == null) {
-			userPreference.getHuanXinUserName();
+			userPreference.getU_id();
 		}
 		return huanXinUserName;
 	}
@@ -208,30 +213,9 @@ public class BaseApplication extends Application {
 	 */
 	public String getHuanXinPassword() {
 		if (huanxinPassword == null) {
-			userPreference.getHuanXinPassword();
+			userPreference.getU_password();
 		}
 		return huanxinPassword;
-	}
-
-	/**
-	 * 设置用户名
-	 * 
-	 * @param user
-	 */
-	public void setHuanXinUserName(String username) {
-		if (username != null) {
-			userPreference.setHuanXinUserName(username);
-		}
-	}
-
-	/**
-	 * 设置密码
-	 * 下面的实例代码 只是demo，实际的应用中需要加password 加密后存入 preference
-	 * 环信sdk 内部的自动登录需要的密码，已经加密存储了
-	 * @param pwd
-	 */
-	public void setHuanXinPassword(String pwd) {
-		userPreference.setHuanXinPassword(pwd);
 	}
 
 	/**
@@ -240,8 +224,6 @@ public class BaseApplication extends Application {
 	public void logout() {
 		// 先调用sdk logout，在清理app中自己的数据
 		EMChatManager.getInstance().logout();
-		userPreference.setHuanXinUserName(null);
-		userPreference.setHuanXinPassword(null);
 	}
 
 	/**
