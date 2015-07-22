@@ -17,7 +17,7 @@ import com.quanzi.dao.UserDao;
  */
 public class User {
 
-    private Integer user_id;
+    private Long user_id;
     private String nickname;
     private String gender;
     private String tel;
@@ -55,7 +55,11 @@ public class User {
     public User() {
     }
 
-    public User(Integer user_id, String nickname, String gender, String tel, String email, String large_avatar, String small_avatar, String introduce, String identity, String love_state, Integer age, java.util.Date birthday, long schoolID, long cityID, long provinceID) {
+    public User(Long user_id) {
+        this.user_id = user_id;
+    }
+
+    public User(Long user_id, String nickname, String gender, String tel, String email, String large_avatar, String small_avatar, String introduce, String identity, String love_state, Integer age, java.util.Date birthday, long schoolID, long cityID, long provinceID) {
         this.user_id = user_id;
         this.nickname = nickname;
         this.gender = gender;
@@ -79,11 +83,11 @@ public class User {
         myDao = daoSession != null ? daoSession.getUserDao() : null;
     }
 
-    public Integer getUser_id() {
+    public Long getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(Integer user_id) {
+    public void setUser_id(Long user_id) {
         this.user_id = user_id;
     }
 

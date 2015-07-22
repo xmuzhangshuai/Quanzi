@@ -1,9 +1,9 @@
 package com.quanzi.utils;
 
 import java.util.Date;
+
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.text.TextUtils;
 
 import com.quanzi.dao.CityDao.Properties;
 import com.quanzi.db.CityDbService;
@@ -52,9 +52,9 @@ public class UserPreference {
 		LogTool.i("技能: " + getU_skill_ids());
 		LogTool.i("情感状态: " + getU_love_state());
 		LogTool.i("兴趣: " + getU_interest_ids());
-		LogTool.i("关注的人数: ");
-		LogTool.i("追随者数量: ");
-		LogTool.i("赞过的帖子的数量: ");
+		LogTool.i("关注的人数: " + getMyConcerned_count());
+		LogTool.i("追随者数量: " + getMyFollower_count());
+		LogTool.i("赞过的帖子的数量: " + getMyFavor_count());
 	}
 
 	/**
@@ -341,7 +341,6 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	
 	//我的追随者数量
 	public int getMyFollower_count() {
 		return sp.getInt("my_follower_count", -1);
@@ -351,7 +350,7 @@ public class UserPreference {
 		editor.putInt("my_follower_count", count);
 		editor.commit();
 	}
-	
+
 	//我赞过的帖子的数量
 	public int getMyFavor_count() {
 		return sp.getInt("my_favor_count", -1);
@@ -361,5 +360,5 @@ public class UserPreference {
 		editor.putInt("my_favor_count", count);
 		editor.commit();
 	}
-	
+
 }

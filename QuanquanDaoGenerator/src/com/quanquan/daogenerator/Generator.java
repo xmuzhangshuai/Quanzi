@@ -126,7 +126,7 @@ public class Generator {
 
 		/***********”√ªß*************/
 		Entity userEntity = schema.addEntity("User");
-		userEntity.addIntProperty("user_id");
+		userEntity.addLongProperty("user_id").primaryKey();
 		userEntity.addStringProperty("nickname");
 		userEntity.addStringProperty("gender");
 		userEntity.addStringProperty("tel");

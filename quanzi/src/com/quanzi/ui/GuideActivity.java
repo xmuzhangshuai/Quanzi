@@ -16,11 +16,13 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
+import com.easemob.chat.EMChatManager;
 import com.quanzi.R;
 import com.quanzi.base.BaseActivity;
 import com.quanzi.base.BaseApplication;
 import com.quanzi.config.DefaultKeys;
 import com.quanzi.db.CopyDataBase;
+import com.quanzi.db.SchoolDbService;
 import com.quanzi.utils.NetworkUtils;
 import com.quanzi.utils.ServerUtil;
 import com.quanzi.utils.SharePreferenceUtil;
@@ -61,6 +63,7 @@ public class GuideActivity extends BaseActivity {
 
 		// 获取定位
 		initLocation();
+		
 		// 开启百度推送服务
 		//		PushManager.startWork(getApplicationContext(), PushConstants.LOGIN_TYPE_API_KEY,
 		//				Constants.BaiduPushConfig.API_KEY);
@@ -90,10 +93,9 @@ public class GuideActivity extends BaseActivity {
 				findViewById();
 				initView();
 				ServerUtil.getInstance().login(GuideActivity.this, MainActivity.class);
-//				startActivity(new Intent(GuideActivity.this, MainActivity.class));
-//				GuideActivity.this.finish();
 			} else {// 如果用户没有登录过或者已经注销
 				startActivity(new Intent(GuideActivity.this, LoginOrRegisterActivity.class));
+//				SchoolDbService.getInstance(getApplication()).getSchoolNameById(831);
 			}
 			sharePreferenceUtil.setUseCount(++count);// 次数加1
 		}

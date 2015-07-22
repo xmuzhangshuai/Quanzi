@@ -1,5 +1,7 @@
 package com.quanzi.ui;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
@@ -31,7 +33,9 @@ import com.quanzi.R;
 import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseV4Fragment;
 import com.quanzi.config.Constants.Config;
+import com.quanzi.table.UserTable;
 import com.quanzi.utils.CommonTools;
+import com.quanzi.utils.HttpUtil;
 import com.quanzi.utils.MD5For32;
 import com.quanzi.utils.SIMCardInfo;
 import com.quanzi.utils.UserPreference;
@@ -61,7 +65,6 @@ public class RegAccountFragment extends BaseV4Fragment {
 	private String mPhone;
 	private String mPassword;
 	private String mConformPass;
-	private boolean phoneAvailable;//手机号是否可用
 	private String mAuthcode;
 	private String responseAuthcode;//手机获取到的验证码
 
@@ -69,13 +72,12 @@ public class RegAccountFragment extends BaseV4Fragment {
 	private Button authCodeButton;
 	private EditText authCodeView;
 	private Timer timer;
-//	private String huanxinUsername;
-//	private String huanxinaPassword;
 	ProgressDialog dialog;
 	private BroadcastReceiver smsReceiver;
 	private IntentFilter filter2;
 	private Handler handler;
 	private String strContent;
+	View focusView = null;
 
 	private String patternCoder = "(?<!\\d)\\d{6}(?!\\d)";
 
@@ -167,12 +169,6 @@ public class RegAccountFragment extends BaseV4Fragment {
 		mPhoneView.setText(siminfo.getNativePhoneNumber());
 		mPhone = mPhoneView.getText().toString();
 
-		if ((!mPhone.isEmpty()) && mPhone.length() == 11) {
-			//检查手机号是否被注册
-			mCheckPhoneTask = new CheckPhoneTask();
-			mCheckPhoneTask.execute();
-		}
-
 		topNavigation.setText("账户");
 		leftNavigation.setText("2/4");
 		leftImageButton.setOnClickListener(new OnClickListener() {
@@ -189,32 +185,6 @@ public class RegAccountFragment extends BaseV4Fragment {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				attepmtAccount();
-			}
-		});
-
-		mPhoneView.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
-				mPhone = mPhoneView.getText().toString();
-				if ((!mPhone.isEmpty()) && mPhone.length() == 11) {
-					//检查手机号是否被注册
-					mCheckPhoneTask = new CheckPhoneTask();
-					mCheckPhoneTask.execute();
-				}
 			}
 		});
 
@@ -259,7 +229,6 @@ public class RegAccountFragment extends BaseV4Fragment {
 		mConformPass = mConformPassView.getText().toString();
 		mAuthcode = authCodeView.getText().toString();
 		boolean cancel = false;
-		View focusView = null;
 
 		// 检查手机号
 		if (TextUtils.isEmpty(mPhone)) {
@@ -309,12 +278,6 @@ public class RegAccountFragment extends BaseV4Fragment {
 			cancel = true;
 		}
 
-		else if (!phoneAvailable) {
-			mPhoneView.setError("该手机号已被注册！");
-			focusView = mPhoneView;
-			cancel = true;
-		}
-
 		if (cancel) {
 			// 如果错误，则提示错误
 			focusView.requestFocus();
@@ -322,11 +285,9 @@ public class RegAccountFragment extends BaseV4Fragment {
 			//			//获取验证码
 			//			getAuthCode();
 
-			// 没有错误，则存储值
-			userPreference.setU_tel(mPhone);
-			userPreference.setU_password(MD5For32.GetMD5Code(mPassword));
-			next();
-
+			//检查手机号是否被注册
+			mCheckPhoneTask = new CheckPhoneTask();
+			mCheckPhoneTask.execute();
 		}
 	}
 
@@ -420,34 +381,42 @@ public class RegAccountFragment extends BaseV4Fragment {
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
 			super.onPreExecute();
-			phoneAvailable = false;
 		}
 
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			// TODO Auto-generated method stub
-			//			try {
-			//				String url = "existtel";
-			//				Map<String, String> map = new HashMap<String, String>();
-			//				map.put(UserTable.U_TEL, mPhoneView.getText().toString());
-			//
-			//				String result = HttpUtil.postRequest(url, map);
-			//				if (result.equals(DefaultKeys.TEL_OK)) {
-			//					return true;
-			//				}
-			//			} catch (Exception e) {
-			//				e.printStackTrace();
-			//				return false;
-			//			}
-			//			return false;
-			return true;
+			try {
+				String url = "regist/telrepeat";
+				Map<String, String> map = new HashMap<String, String>();
+				map.put(UserTable.U_TEL, mPhoneView.getText().toString());
+
+				String result = HttpUtil.postRequest(url, map);
+				if (result.equals("1")) {
+					return true;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+			return false;
 		}
 
 		@Override
 		protected void onPostExecute(Boolean result) {
 			// TODO Auto-generated method stub
 			mCheckPhoneTask = null;
-			phoneAvailable = result;
+
+			if (result) {
+				// 没有错误，则存储值
+				userPreference.setU_tel(mPhone);
+				userPreference.setU_password(MD5For32.GetMD5Code(mPassword));
+				next();
+			} else {
+				mPhoneView.setError("该手机号码已被注册");
+				focusView = mPhoneView;
+				focusView.requestFocus();
+			}
 		}
 
 		@Override

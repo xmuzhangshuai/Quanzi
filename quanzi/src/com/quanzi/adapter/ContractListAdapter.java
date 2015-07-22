@@ -1,7 +1,7 @@
 package com.quanzi.adapter;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
-import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
@@ -38,7 +37,7 @@ import com.quanzi.utils.LogTool;
 
 public class ContractListAdapter extends BaseAdapter {
 	private LayoutInflater mInflater;
-	private List<EMConversation> conversationList;
+	private List<EMConversation> conversationList = new ArrayList<EMConversation>();
 	private Context mContext;
 	public static final Pattern EMOTION_URL = Pattern.compile("\\[(\\S+?)\\]");
 
@@ -108,14 +107,12 @@ public class ContractListAdapter extends BaseAdapter {
 		try {
 			user = UserDbService.getInstance(mContext).getUserById(Integer.parseInt(conversation.getUserName()));
 			if (user == null) {
-				return null;
+				return convertView;
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
-			return null;
+			return convertView;
 		}
-
-		//		EMConversation emCconversation = EMChatManager.getInstance().getConversation("" + conversation.getUserName());
 
 		holder.name.setText(user.getNickname());
 
@@ -162,13 +159,13 @@ public class ContractListAdapter extends BaseAdapter {
 		}
 	}
 
-//	public void addFirst(Conversation item) {
-//		if (conversationList.contains(item)) {
-//			conversationList.remove(item);
-//		}
-//		conversationList.addFirst(item);
-//		notifyDataSetChanged();
-//	}
+	//	public void addFirst(Conversation item) {
+	//		if (conversationList.contains(item)) {
+	//			conversationList.remove(item);
+	//		}
+	//		conversationList.addFirst(item);
+	//		notifyDataSetChanged();
+	//	}
 
 	/**
 	 * 根据消息内容和消息类型获取消息内容提示

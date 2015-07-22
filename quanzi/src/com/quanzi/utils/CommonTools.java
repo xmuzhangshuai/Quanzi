@@ -35,20 +35,20 @@ public class CommonTools {
 	* @param context
 	* @return
 	*/
-//	public static boolean isAppRunning(Context context) {
-//		boolean isAppRunning = false;
-//		ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-//		List<RunningTaskInfo> list = am.getRunningTasks(100);
-//		for (RunningTaskInfo info : list) {
-//			if (info.topActivity.getPackageName().equals(Constants.PACKAGENAME)
-//					&& info.baseActivity.getPackageName().equals(Constants.PACKAGENAME)) {
-//				isAppRunning = true;
-//				//find it, break 
-//				break;
-//			}
-//		}
-//		return isAppRunning;
-//	}
+	//	public static boolean isAppRunning(Context context) {
+	//		boolean isAppRunning = false;
+	//		ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+	//		List<RunningTaskInfo> list = am.getRunningTasks(100);
+	//		for (RunningTaskInfo info : list) {
+	//			if (info.topActivity.getPackageName().equals(Constants.PACKAGENAME)
+	//					&& info.baseActivity.getPackageName().equals(Constants.PACKAGENAME)) {
+	//				isAppRunning = true;
+	//				//find it, break 
+	//				break;
+	//			}
+	//		}
+	//		return isAppRunning;
+	//	}
 
 	/**
 	 * 检测Sdcard是否存在
@@ -99,11 +99,14 @@ public class CommonTools {
 		Matcher matcher = pattern.matcher(stuNumber);
 		return matcher.matches();
 	}
-	
+
 	/**
 	* 判断手机号码
 	*/
 	public static boolean isMobileNO(String mobiles) {
+		if (mobiles == null) {
+			return false;
+		}
 		Pattern pattern = Pattern.compile("^((13[0-9])|(15[0-9])|(18[0-9])|(17[0-9]))\\d{8}$");
 		Matcher matcher = pattern.matcher(mobiles);
 		return matcher.matches();
@@ -113,12 +116,12 @@ public class CommonTools {
 	 * 判断邀请码格式
 	 * @return
 	 */
-	public static boolean isInviteCode(String code){
+	public static boolean isInviteCode(String code) {
 		Pattern pattern = Pattern.compile("^[0-9a-zA-Z]{6}$");
 		Matcher matcher = pattern.matcher(code);
 		return matcher.matches();
 	}
-	
+
 	/**
 	 * 验证密码是否符合要求
 	 * 以字母开头，长度在6~18之间，只能包含字符、数字和下划线

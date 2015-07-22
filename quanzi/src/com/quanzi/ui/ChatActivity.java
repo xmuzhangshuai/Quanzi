@@ -75,10 +75,14 @@ import com.quanzi.config.Constants.Config;
 import com.quanzi.customewidget.CirclePageIndicator;
 import com.quanzi.customewidget.JazzyViewPager;
 import com.quanzi.customewidget.JazzyViewPager.TransitionEffect;
+import com.quanzi.db.UserDbService;
+import com.quanzi.entities.User;
 import com.quanzi.jsonobject.JsonUser;
 import com.quanzi.listener.VoicePlayClickListener;
+import com.quanzi.table.UserTable;
 import com.quanzi.utils.CommonTools;
 import com.quanzi.utils.DensityUtil;
+import com.quanzi.utils.LogTool;
 import com.quanzi.utils.ToastTool;
 import com.quanzi.utils.UserPreference;
 import com.quanzi.xlistview.MsgListView;
@@ -158,7 +162,8 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 	private File cameraFile;//相机文件
 	private String selectedImagePath;
 	public static ChatActivity activityInstance = null;
-	private JsonUser jsonUser;
+	private int userId;
+	private User user;
 
 	private Handler micImageHandler = new Handler() {
 		@Override
@@ -173,13 +178,21 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.chat_main);
-		jsonUser = (JsonUser) getIntent().getSerializableExtra("jsonuser");
+		userId = getIntent().getIntExtra(UserTable.U_ID, 0);
+		if (userId > 0) {
+			user = UserDbService.getInstance(this).getUserById(userId);
+		}
 
 		findViewById();
-		initData();
-		initView();
-		initFacePage();
-		initMorePage();
+		if (user != null) {
+			initData();
+			initView();
+			initFacePage();
+			initMorePage();
+		} else {
+			LogTool.e("chatActivity", "user 为空");
+			finish();
+		}
 	}
 
 	@Override
@@ -211,7 +224,7 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 	@Override
 	protected void onNewIntent(Intent intent) {
 		// 点击notification bar进入聊天页面，保证只有一个聊天页面
-		String username = intent.getStringExtra("userId");
+		String username = "" + userId;
 		if (toChatUsername.equals(username))
 			super.onNewIntent(intent);
 		else {
@@ -285,15 +298,15 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 				getResources().getDrawable(R.drawable.record_animate_13),
 				getResources().getDrawable(R.drawable.record_animate_14), };
 
-		toChatUsername = getIntent().getStringExtra("userId");
+		toChatUsername = "" + userId;
 		emConversation = EMChatManager.getInstance().getConversation(toChatUsername);
 		// 把此会话的未读数置为0
 		emConversation.resetUnsetMsgCount();
 
-		adapter = new MessageAdapter(this, toChatUsername);
+		adapter = new MessageAdapter(this, toChatUsername, user.getSmall_avatar());
 
 		wakeLock = ((PowerManager) getSystemService(Context.POWER_SERVICE)).newWakeLock(
-				PowerManager.SCREEN_DIM_WAKE_LOCK, "yixianqian");
+				PowerManager.SCREEN_DIM_WAKE_LOCK, "quanzi");
 		voiceRecorder = new VoiceRecorder(micImageHandler);
 		clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
 		activityInstance = this;
@@ -302,7 +315,7 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 	@Override
 	protected void initView() {
 		// TODO Auto-generated method stub
-		topNavText.setText(jsonUser.getU_nickname());
+		topNavText.setText(user.getNickname());
 		topNavRightImage.setImageResource(R.drawable.icon_persional);
 		inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 		params = getWindow().getAttributes();

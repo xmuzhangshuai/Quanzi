@@ -21,6 +21,7 @@ import com.quanzi.R;
 import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseFragmentActivity;
 import com.quanzi.db.SchoolDbService;
+import com.quanzi.db.UserDbService;
 import com.quanzi.jsonobject.JsonUser;
 import com.quanzi.table.QuanziTable;
 import com.quanzi.table.UserTable;
@@ -208,6 +209,7 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 					jsonUser = FastJsonTool.getObject(response, JsonUser.class);
 					if (jsonUser != null) {
 						initPersonView();
+						UserDbService.getInstance(PersonDetailActivity.this).saveUser(jsonUser);
 					}
 				}
 			}
@@ -357,8 +359,7 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 			break;
 		case R.id.nav_right_btn2://к╫пе
 			Intent toChatIntent = new Intent(PersonDetailActivity.this, ChatActivity.class);
-			toChatIntent.putExtra("userId", "" + jsonUser.getU_id());
-			toChatIntent.putExtra("jsonuser", jsonUser);
+			toChatIntent.putExtra(UserTable.U_ID, jsonUser.getU_id());
 			startActivity(toChatIntent);
 			overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 			break;

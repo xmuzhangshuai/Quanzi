@@ -7,13 +7,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import com.easemob.chat.EMChatManager;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.quanzi.R;
-import com.quanzi.base.BaseActivity;
 import com.quanzi.base.BaseApplication;
 import com.quanzi.jsonobject.JsonUser;
 import com.quanzi.table.UserTable;
+import com.quanzi.ui.LoginActivity;
 import com.quanzi.ui.LoginOrRegisterActivity;
 
 /**
@@ -62,22 +63,38 @@ public class ServerUtil {
 			public void onSuccess(int statusCode, Header[] headers, String response) {
 				// TODO Auto-generated method stub
 				if (statusCode == 200 && !TextUtils.isEmpty(response)) {
-					JsonUser jsonUser = FastJsonTool.getObject(response, JsonUser.class);
-					if (jsonUser != null) {
-						LogTool.i("ServerUtil", "登录成功！");
-						saveUser(jsonUser);
-						//登录环信
-						//attempLoginHuanXin(1);
-						Intent intent = new Intent(context, cls);
+					if (response.equals("-1")) {
+						LogTool.e("ServerUtil", "返回-1，用户名或密码错误");
+						BaseApplication.getInstance().logout();
+						userPreference.clear();
+						Intent intent = new Intent(context, LoginActivity.class);
 						context.startActivity(intent);
 						((Activity) context).overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 						((Activity) context).finish();
 					} else {
-						LogTool.e("ServerUtil", "jsonUsers长度为0");
-						Intent intent = new Intent(context, LoginOrRegisterActivity.class);
-						context.startActivity(intent);
-						((Activity) context).overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+						JsonUser jsonUser = FastJsonTool.getObject(response, JsonUser.class);
+						if (jsonUser != null) {
+							LogTool.i("ServerUtil", "登录成功！");
+							saveUser(jsonUser);
+
+							//从本地数据库加载聊天记录到内存
+							try {
+								EMChatManager.getInstance().loadAllConversations();
+							} catch (Exception e) {
+								// TODO: handle exception
+							}
+							Intent intent = new Intent(context, cls);
+							context.startActivity(intent);
+							((Activity) context).overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+							((Activity) context).finish();
+						} else {
+							LogTool.e("ServerUtil", "jsonUser为空");
+							Intent intent = new Intent(context, LoginOrRegisterActivity.class);
+							context.startActivity(intent);
+							((Activity) context).overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+						}
 					}
+
 				} else {
 					LogTool.e("ServerUtil", "登录返回为空");
 				}
@@ -86,6 +103,7 @@ public class ServerUtil {
 			@Override
 			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
 				// TODO Auto-generated method stub
+				LogTool.e("ServerUtil", "登录服务器失败");
 			}
 		};
 		if (NetworkUtils.isNetworkAvailable(context)) {
@@ -125,6 +143,9 @@ public class ServerUtil {
 		instance.userPreference.setU_introduce(user.getU_introduce());
 		instance.userPreference.setU_student_number(user.getU_student_number());
 		instance.userPreference.setU_student_pass(user.getU_stundet_pass());
+		instance.userPreference.setMyConcerned_count(user.getU_my_concern_count());
+		instance.userPreference.setMyFollower_count(user.getU_my_follower_count());
+		instance.userPreference.setMyMyFavor_count(user.getU_my_favor_count());
 		instance.userPreference.setUserLogin(true);
 	}
 }

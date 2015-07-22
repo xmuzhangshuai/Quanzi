@@ -43,12 +43,12 @@ public class UserDbService {
 	 */
 	public void saveUser(JsonUser jsonUser) {
 		if (jsonUser != null) {
-			User user = new User(jsonUser.getU_id(), jsonUser.getU_nickname(), jsonUser.getU_gender(),
+			User newuser = new User(Long.valueOf(jsonUser.getU_id()), jsonUser.getU_nickname(), jsonUser.getU_gender(),
 					jsonUser.getU_tel(), jsonUser.getU_email(), jsonUser.getU_large_avatar(),
 					jsonUser.getU_small_avatar(), jsonUser.getU_introduce(), jsonUser.getU_identity(),
 					jsonUser.getU_love_state(), jsonUser.getU_age(), jsonUser.getU_birthday(),
 					jsonUser.getU_schoolid(), jsonUser.getU_cityid(), jsonUser.getU_provinceid());
-			userDao.insertOrReplace(user);
+			userDao.insertOrReplace(newuser);
 		}
 	}
 

@@ -21,7 +21,7 @@ import com.quanzi.entities.User;
 /** 
  * DAO for table USER.
 */
-public class UserDao extends AbstractDao<User, Void> {
+public class UserDao extends AbstractDao<User, Long> {
 
     public static final String TABLENAME = "USER";
 
@@ -30,7 +30,7 @@ public class UserDao extends AbstractDao<User, Void> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property User_id = new Property(0, Integer.class, "user_id", false, "USER_ID");
+        public final static Property User_id = new Property(0, Long.class, "user_id", true, "USER_ID");
         public final static Property Nickname = new Property(1, String.class, "nickname", false, "NICKNAME");
         public final static Property Gender = new Property(2, String.class, "gender", false, "GENDER");
         public final static Property Tel = new Property(3, String.class, "tel", false, "TEL");
@@ -63,7 +63,7 @@ public class UserDao extends AbstractDao<User, Void> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'USER' (" + //
-                "'USER_ID' INTEGER," + // 0: user_id
+                "'USER_ID' INTEGER PRIMARY KEY ," + // 0: user_id
                 "'NICKNAME' TEXT," + // 1: nickname
                 "'GENDER' TEXT," + // 2: gender
                 "'TEL' TEXT," + // 3: tel
@@ -91,7 +91,7 @@ public class UserDao extends AbstractDao<User, Void> {
     protected void bindValues(SQLiteStatement stmt, User entity) {
         stmt.clearBindings();
  
-        Integer user_id = entity.getUser_id();
+        Long user_id = entity.getUser_id();
         if (user_id != null) {
             stmt.bindLong(1, user_id);
         }
@@ -163,15 +163,15 @@ public class UserDao extends AbstractDao<User, Void> {
 
     /** @inheritdoc */
     @Override
-    public Void readKey(Cursor cursor, int offset) {
-        return null;
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public User readEntity(Cursor cursor, int offset) {
         User entity = new User( //
-            cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0), // user_id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // user_id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // nickname
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // gender
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // tel
@@ -193,7 +193,7 @@ public class UserDao extends AbstractDao<User, Void> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, User entity, int offset) {
-        entity.setUser_id(cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0));
+        entity.setUser_id(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setNickname(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setGender(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setTel(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
@@ -212,15 +212,19 @@ public class UserDao extends AbstractDao<User, Void> {
     
     /** @inheritdoc */
     @Override
-    protected Void updateKeyAfterInsert(User entity, long rowId) {
-        // Unsupported or missing PK type
-        return null;
+    protected Long updateKeyAfterInsert(User entity, long rowId) {
+        entity.setUser_id(rowId);
+        return rowId;
     }
     
     /** @inheritdoc */
     @Override
-    public Void getKey(User entity) {
-        return null;
+    public Long getKey(User entity) {
+        if(entity != null) {
+            return entity.getUser_id();
+        } else {
+            return null;
+        }
     }
 
     /** @inheritdoc */

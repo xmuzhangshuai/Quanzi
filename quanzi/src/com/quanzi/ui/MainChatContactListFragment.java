@@ -44,7 +44,9 @@ import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseV4Fragment;
 import com.quanzi.customewidget.MyAlertDialog;
 import com.quanzi.entities.Conversation;
+import com.quanzi.table.UserTable;
 import com.quanzi.utils.AsyncHttpClientTool;
+import com.quanzi.utils.LogTool;
 import com.quanzi.utils.ToastTool;
 import com.quanzi.utils.UserPreference;
 
@@ -59,12 +61,8 @@ import com.quanzi.utils.UserPreference;
  */
 public class MainChatContactListFragment extends BaseV4Fragment {
 	private View rootView;// 根View
-	private ImageView topNavLeftBtn;//导航条左边按钮
-	private ImageView topNavRightBtn;//导航条右边按钮
-	private TextView topNavText;//导航条文字
 	private ImageView newMsg;
-	private View right_btn_bg;
-	private ListView mHomeListView;
+	private ListView mContactListView;
 	private TextView mEmpty;
 	private ContractListAdapter mAdapter;
 	private UserPreference userPreference;
@@ -84,16 +82,8 @@ public class MainChatContactListFragment extends BaseV4Fragment {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		userPreference = BaseApplication.getInstance().getUserPreference();
-		//		conversationDbService = ConversationDbService.getInstance(getActivity());
-		//		conversationList = new LinkedList<Conversation>();
 		conversationList.addAll(loadConversationsWithRecentChat());
-
-		//		if (userPreference.getU_stateid() == 2 || userPreference.getU_stateid() == 3) {
-		//			conversationList.addAll(conversationDbService.conversationDao.loadAll());
-		//		} else {
-		conversationList.clear();
-		//			conversationDbService.conversationDao.deleteAll();
-		//		}
+		LogTool.i("长度" + conversationList.size());
 
 		/**震动服务*/
 		vib = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
@@ -108,7 +98,7 @@ public class MainChatContactListFragment extends BaseV4Fragment {
 		initView();
 
 		mAdapter = new ContractListAdapter(getActivity(), conversationList);
-		mHomeListView.setAdapter(mAdapter);
+		mContactListView.setAdapter(mAdapter);
 		return rootView;
 	}
 
@@ -129,28 +119,16 @@ public class MainChatContactListFragment extends BaseV4Fragment {
 	@Override
 	protected void findViewById() {
 		// TODO Auto-generated method stub
-		topNavLeftBtn = (ImageView) rootView.findViewById(R.id.nav_left_btn);
-		topNavRightBtn = (ImageView) rootView.findViewById(R.id.nav_right_btn);
-		right_btn_bg = (View) rootView.findViewById(R.id.right_btn_bg);
-		mHomeListView = (ListView) rootView.findViewById(R.id.recent_listview);
+		mContactListView = (ListView) rootView.findViewById(R.id.recent_listview);
 		mEmpty = (TextView) rootView.findViewById(R.id.empty);
-		topNavText = (TextView) rootView.findViewById(R.id.nav_text);
 		errorItem = (RelativeLayout) rootView.findViewById(R.id.rl_error_item);
 		errorText = (TextView) errorItem.findViewById(R.id.tv_connect_errormsg);
-		//		newMsg = (ImageView) rootView.findViewById(R.id.newmsg);
 	}
 
 	@Override
 	protected void initView() {
 		// TODO Auto-generated method stub
-		topNavText.setText("会话");
 		//如果没有对话
-		if (conversationList.size() < 1) {
-			mEmpty.setVisibility(View.VISIBLE);
-		}
-		topNavLeftBtn.setImageResource(R.drawable.home);
-		topNavRightBtn.setImageResource(R.drawable.ic_action_overflow);
-		right_btn_bg.setBackgroundResource(R.drawable.sel_topnav_btn_bg);
 		final View popView = getActivity().getLayoutInflater().inflate(R.layout.popup, null);
 		popBtn = popView.findViewById(R.id.popup_btn);
 		final PopupWindow popup = new PopupWindow(popView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, true);
@@ -160,31 +138,27 @@ public class MainChatContactListFragment extends BaseV4Fragment {
 		popup.setOutsideTouchable(true);
 		popup.setFocusable(true);
 
-		right_btn_bg.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				showDialog();
-			}
-		});
-
-		mHomeListView.setOnItemClickListener(new OnItemClickListener() {
+		mContactListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// TODO Auto-generated method stub
-				Intent toChatIntent = new Intent(getActivity(), ChatActivity.class);
-				toChatIntent.putExtra("userId", "" + conversationList.get(position).getUserName());
-				startActivity(toChatIntent);
-				getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+				try {
+					Intent toChatIntent = new Intent(getActivity(), ChatActivity.class);
+					toChatIntent.putExtra(UserTable.U_ID,
+							Integer.parseInt(conversationList.get(position).getUserName()));
+					startActivity(toChatIntent);
+					getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
 			}
 		});
 
 		/**
 		 * 长按事件
 		 */
-		mHomeListView.setOnItemLongClickListener(new OnItemLongClickListener() {
+		mContactListView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -217,25 +191,30 @@ public class MainChatContactListFragment extends BaseV4Fragment {
 	public void refresh() {
 		conversationList.clear();
 		conversationList.addAll(loadConversationsWithRecentChat());
-		if(mAdapter != null)
+		if (conversationList.size() < 1) {
+			mEmpty.setVisibility(View.VISIBLE);
+		} else {
+			mEmpty.setVisibility(View.GONE);
+		}
+		if (mAdapter != null)
 			mAdapter.notifyDataSetChanged();
-//		try {
-			// 可能会在子线程中调到这方法
-			//			getActivity().runOnUiThread(new Runnable() {
-			//				public void run() {
-			//					conversationList.clear();
-			//					conversationList.addAll(conversationDbService.conversationDao.loadAll());
-			//					mAdapter.notifyDataSetChanged();
-			//					if (conversationList.size() < 1) {
-			//						mEmpty.setVisibility(View.VISIBLE);
-			//					} else {
-			//						mEmpty.setVisibility(View.GONE);
-			//					}
-			//				}
-			//			});
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		//		try {
+		// 可能会在子线程中调到这方法
+		//			getActivity().runOnUiThread(new Runnable() {
+		//				public void run() {
+		//					conversationList.clear();
+		//					conversationList.addAll(conversationDbService.conversationDao.loadAll());
+		//					mAdapter.notifyDataSetChanged();
+		//					if (conversationList.size() < 1) {
+		//						mEmpty.setVisibility(View.VISIBLE);
+		//					} else {
+		//						mEmpty.setVisibility(View.GONE);
+		//					}
+		//				}
+		//			});
+		//		} catch (Exception e) {
+		//			e.printStackTrace();
+		//		}
 	}
 
 	/**
@@ -243,7 +222,7 @@ public class MainChatContactListFragment extends BaseV4Fragment {
 	 */
 	public void refreshConversation() {
 		mAdapter = new ContractListAdapter(getActivity(), conversationList);
-		mHomeListView.setAdapter(mAdapter);
+		mContactListView.setAdapter(mAdapter);
 		mAdapter.notifyDataSetChanged();
 	}
 
@@ -469,19 +448,4 @@ public class MainChatContactListFragment extends BaseV4Fragment {
 		});
 	}
 
-	/**
-	 * 菜单显示
-	 */
-	void showDialog() {
-		//		FragmentTransaction ft = getFragmentManager().beginTransaction();
-		//		Fragment fragment = getFragmentManager().findFragmentByTag("dialog");
-		//		if (fragment != null) {
-		//			ft.remove(fragment);
-		//		}
-		//		ft.addToBackStack(null);
-		//
-		//		// Create and show the dialog.
-		//		HomeDialogFragment newFragment = HomeDialogFragment.newInstance();
-		//		newFragment.show(ft, "dialog");
-	}
 }

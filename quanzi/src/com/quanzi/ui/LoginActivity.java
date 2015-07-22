@@ -19,6 +19,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.easemob.EMCallBack;
+import com.easemob.chat.EMChatManager;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.quanzi.R;
@@ -32,7 +34,6 @@ import com.quanzi.utils.FastJsonTool;
 import com.quanzi.utils.LogTool;
 import com.quanzi.utils.MD5For32;
 import com.quanzi.utils.SIMCardInfo;
-import com.quanzi.utils.ToastTool;
 import com.quanzi.utils.UserPreference;
 
 /**
@@ -203,7 +204,6 @@ public class LoginActivity extends BaseActivity {
 			public void onSuccess(int statusCode, Header[] headers, String response) {
 				// TODO Auto-generated method stub
 				if (statusCode == 200) {
-					LogTool.i("返回的信息:", response);
 					if (!response.isEmpty()) {
 						if (response.equals("-1")) {
 							mPasswordView.setError("电话或密码错误！");
@@ -213,9 +213,7 @@ public class LoginActivity extends BaseActivity {
 							JsonUser user = FastJsonTool.getObject(response, JsonUser.class);
 							if (user != null) {
 								saveUser(user);//更新用户信息
-								Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-								startActivity(intent);
-								overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+								loginHuanxin("" + user.getU_id(), user.getU_password());
 							} else {
 								LogTool.e("登录返回出错,user为空");
 							}
@@ -260,7 +258,37 @@ public class LoginActivity extends BaseActivity {
 		userPreference.setU_introduce(user.getU_introduce());
 		userPreference.setU_student_number(user.getU_student_number());
 		userPreference.setU_student_pass(user.getU_stundet_pass());
+		userPreference.setMyConcerned_count(user.getU_my_concern_count());
+		userPreference.setMyFollower_count(user.getU_my_follower_count());
+		userPreference.setMyMyFavor_count(user.getU_my_favor_count());
 		userPreference.setUserLogin(true);
+	}
+
+	/**
+	 * 登录环信
+	 */
+	private void loginHuanxin(String userName, String password) {
+		EMChatManager.getInstance().login(userName, password, new EMCallBack() {//回调
+					@Override
+					public void onSuccess() {
+						LogTool.i("环信", "登陆环信成功！");
+						Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+						startActivity(intent);
+						overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+						showProgress(false);
+					}
+
+					@Override
+					public void onProgress(int progress, String status) {
+
+					}
+
+					@Override
+					public void onError(int code, String message) {
+						LogTool.e("环信", "登陆聊天服务器失败！");
+						showProgress(false);
+					}
+				});
 	}
 
 	/**

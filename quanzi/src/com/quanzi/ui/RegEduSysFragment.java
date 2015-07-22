@@ -18,6 +18,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.easemob.EMCallBack;
+import com.easemob.chat.EMChatManager;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.quanzi.R;
@@ -189,9 +191,7 @@ public class RegEduSysFragment extends BaseV4Fragment {
 						if (userID > 0) {
 							userPreference.setU_id(userID);
 							userPreference.setUserLogin(true);
-							Intent intent = new Intent(getActivity(), RegSuccessActivity.class);
-							startActivity(intent);
-							getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+							loginHuanxin("" + userID, userPreference.getU_password());
 						} else {
 							LogTool.e("注册时返回负数" + response);
 						}
@@ -206,9 +206,42 @@ public class RegEduSysFragment extends BaseV4Fragment {
 				// TODO Auto-generated method stub
 				ToastTool.showLong(getActivity(), "注册失败");
 				LogTool.e("注册时服务器错误");
+				showProgress(false);
 			}
 		};
 		AsyncHttpClientTool.post("user/regist", params, responseHandler);
+	}
+
+	/**
+	 * 登录环信
+	 */
+	private void loginHuanxin(String userName, String password) {
+		EMChatManager.getInstance().login(userName, password, new EMCallBack() {//回调
+					@Override
+					public void onSuccess() {
+						EMChatManager.getInstance().loadAllConversations();
+
+						LogTool.i("环信", "登陆聊天服务器成功！");
+
+						getActivity().runOnUiThread(new Runnable() {
+							public void run() {
+								Intent intent = new Intent(getActivity(), RegSuccessActivity.class);
+								startActivity(intent);
+								getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+							}
+						});
+					}
+
+					@Override
+					public void onProgress(int progress, String status) {
+
+					}
+
+					@Override
+					public void onError(int code, String message) {
+						LogTool.e("环信", "登陆聊天服务器失败！" + message);
+					}
+				});
 	}
 
 	/**

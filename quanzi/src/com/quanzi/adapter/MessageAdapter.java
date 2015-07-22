@@ -87,6 +87,7 @@ public class MessageAdapter extends BaseAdapter {
 	public static final String VOICE_DIR = "chat/audio/";
 
 	private String username;
+	private String smallAvatar;
 	private LayoutInflater inflater;
 	private Activity activity;
 
@@ -95,19 +96,16 @@ public class MessageAdapter extends BaseAdapter {
 	private ImageLoader imageLoader;
 	private Context context;
 	private UserPreference userPreference;
-//	private ConversationDbService conversationDbService;
-	private Conversation myConversation;
 
-	public MessageAdapter(Context context, String username) {
+	public MessageAdapter(Context context, String username, String smallAvatar) {
 		this.username = username;
 		this.context = context;
+		this.smallAvatar = smallAvatar;
 		inflater = LayoutInflater.from(context);
 		activity = (Activity) context;
 		userPreference = BaseApplication.getInstance().getUserPreference();
 		imageLoader = ImageLoader.getInstance();
-//		conversationDbService = ConversationDbService.getInstance(context);
 		this.emConversation = EMChatManager.getInstance().getConversation(username);
-//		myConversation = conversationDbService.getConversationByUser(Integer.parseInt(username));
 	}
 
 	public int getCount() {
@@ -287,11 +285,11 @@ public class MessageAdapter extends BaseAdapter {
 
 		}
 
-		if (myConversation != null) {
+		if (emConversation != null) {
 			//如果是收到消息
 			if (message.direct == EMMessage.Direct.RECEIVE) {
-//				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(friendPreference.getF_small_avatar()),
-//						holder.head_iv, ImageLoaderTool.getHeadImageOptions(10));
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallAvatar), holder.head_iv,
+						ImageLoaderTool.getHeadImageOptions(10));
 				//点击头像进入对方主页
 				holder.head_iv.setOnClickListener(new OnClickListener() {
 					@Override
@@ -303,6 +301,7 @@ public class MessageAdapter extends BaseAdapter {
 					}
 				});
 			} else {
+				LogTool.i("显示图片" + AsyncHttpClientTool.getAbsoluteUrl(userPreference.getU_small_avatar()));
 				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(userPreference.getU_small_avatar()),
 						holder.head_iv, ImageLoaderTool.getHeadImageOptions(10));
 			}
@@ -926,13 +925,13 @@ public class MessageAdapter extends BaseAdapter {
 
 		@Override
 		public void onClick(View v) {
-//			Intent intent;
-//			intent = new Intent(context, BaiduMapActivity.class);
-//			intent.putExtra("latitude", location.latitude);
-//			intent.putExtra("longitude", location.longitude);
-//			intent.putExtra("address", address);
-//			activity.startActivity(intent);
-//			activity.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+			//			Intent intent;
+			//			intent = new Intent(context, BaiduMapActivity.class);
+			//			intent.putExtra("latitude", location.latitude);
+			//			intent.putExtra("longitude", location.longitude);
+			//			intent.putExtra("address", address);
+			//			activity.startActivity(intent);
+			//			activity.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 		}
 	}
 }
