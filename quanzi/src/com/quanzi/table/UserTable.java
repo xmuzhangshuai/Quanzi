@@ -2,18 +2,18 @@ package com.quanzi.table;
 
 /**
  * 
-* @Description: TODO(UserTable.javaÀà)User±í°þÀë³öÀ´µÄ×Ö¶Î 
+* @Description: TODO(UserTable.javaï¿½ï¿½)Userï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½ 
 * @author lks   
-* @date 2014Äê7ÔÂ7ÈÕ ÏÂÎç9:05:44 
+* @date 2014ï¿½ï¿½7ï¿½ï¿½7ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½9:05:44 
 * @version V1.0
  */
 public class UserTable {
 
 	public static final String U_IDENTITY = "u_identity";
 	public static final String U_LOVE_STATE = "u_love_state";
-	public static final String U_INTEREST_IDS = "u_interest_ids";
-	public static final String U_SKILL_IDS = "u_skill_ids";
-	public static final String U_INDUSTRY_ID = "u_industry_id";
+	public static final String U_INTEREST_ITEMS = "u_interest_items";
+	public static final String U_SKILL_ITEMS = "u_skill_items";
+	public static final String U_INDUSTRY_ITEM = "u_industry_item";
 	public static final String U_POST_AMOUNT = "u_post_amount";
 	public static final String U_ACT_AMOUNT = "u_act_amount";
 	public static final String TABLE_NAME = "u_user";
@@ -34,5 +34,6 @@ public class UserTable {
 	public static final String U_GENDER = "u_gender";
 	public static final String U_STUDENT_NUMBER = "u_student_number";
 	public static final String U_STUDENT_PASS = "u_stundet_pass";
+
 
 }

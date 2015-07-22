@@ -137,9 +137,9 @@ public class ServerUtil {
 		instance.userPreference.setU_provinceid(user.getU_provinceid());
 		instance.userPreference.setU_cityid(user.getU_cityid());
 		instance.userPreference.setU_schoolid(user.getU_schoolid());
-		instance.userPreference.setU_interest_ids(user.getU_interest_ids());
-		instance.userPreference.setU_skill_ids(user.getU_skill_ids());
-		instance.userPreference.setU_industry_id(user.getU_industry_id());
+		instance.userPreference.setU_interests(user.getU_interest_items());
+		instance.userPreference.setU_skills(user.getU_skill_items());
+		instance.userPreference.setU_industry(user.getU_industry_item());
 		instance.userPreference.setU_introduce(user.getU_introduce());
 		instance.userPreference.setU_student_number(user.getU_student_number());
 		instance.userPreference.setU_student_pass(user.getU_stundet_pass());

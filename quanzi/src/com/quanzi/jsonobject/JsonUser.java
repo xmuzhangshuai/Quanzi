@@ -31,9 +31,9 @@ public class JsonUser implements Serializable {
 	private int u_provinceid;
 	private int u_cityid;
 	private int u_schoolid;
-	private String u_interest_ids;
-	private String u_skill_ids;
-	private int u_industry_id;
+	private String u_interest_items;
+	private String u_skill_items;
+	private String u_industry_item;
 	private String u_introduce;
 	private int u_post_amount;
 	private int u_act_amount;
@@ -64,10 +64,10 @@ public class JsonUser implements Serializable {
 		LogTool.i("学号: " + getU_student_number());
 		LogTool.i("教务处密码: " + getU_stundet_pass());
 		LogTool.i("身份: " + getU_identity());
-		LogTool.i("行业: " + getU_industry_id());
-		LogTool.i("技能: " + getU_skill_ids());
+		LogTool.i("行业: " + getU_industry_item());
+		LogTool.i("技能: " + getU_skill_items());
 		LogTool.i("情感状态: " + getU_love_state());
-		LogTool.i("兴趣: " + getU_interest_ids());
+		LogTool.i("兴趣: " + getU_interest_items());
 		LogTool.i("关注的人数: " + getU_my_concern_count());
 		LogTool.i("追随者数量: " + getU_my_follower_count());
 		LogTool.i("赞过的帖子的数量: " + getU_my_favor_count());
@@ -185,28 +185,28 @@ public class JsonUser implements Serializable {
 		this.u_schoolid = u_schoolid;
 	}
 
-	public String getU_interest_ids() {
-		return u_interest_ids;
+	public String getU_interest_items() {
+		return u_interest_items;
 	}
 
-	public void setU_interest_ids(String u_interest_ids) {
-		this.u_interest_ids = u_interest_ids;
+	public void setU_interest_items(String u_interest_items) {
+		this.u_interest_items = u_interest_items;
 	}
 
-	public String getU_skill_ids() {
-		return u_skill_ids;
+	public String getU_skill_items() {
+		return u_skill_items;
 	}
 
-	public void setU_skill_ids(String u_skill_ids) {
-		this.u_skill_ids = u_skill_ids;
+	public void setU_skill_items(String u_skill_items) {
+		this.u_skill_items = u_skill_items;
 	}
 
-	public int getU_industry_id() {
-		return u_industry_id;
+	public String getU_industry_item() {
+		return u_industry_item;
 	}
 
-	public void setU_industry_id(int u_industry_id) {
-		this.u_industry_id = u_industry_id;
+	public void setU_industry_item(String u_industry_item) {
+		this.u_industry_item = u_industry_item;
 	}
 
 	public String getU_introduce() {

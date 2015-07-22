@@ -252,9 +252,9 @@ public class LoginActivity extends BaseActivity {
 		userPreference.setU_provinceid(user.getU_provinceid());
 		userPreference.setU_cityid(user.getU_cityid());
 		userPreference.setU_schoolid(user.getU_schoolid());
-		userPreference.setU_interest_ids(user.getU_interest_ids());
-		userPreference.setU_skill_ids(user.getU_skill_ids());
-		userPreference.setU_industry_id(user.getU_industry_id());
+		userPreference.setU_interests(user.getU_interest_items());
+		userPreference.setU_skills(user.getU_skill_items());
+		userPreference.setU_industry(user.getU_industry_item());
 		userPreference.setU_introduce(user.getU_introduce());
 		userPreference.setU_student_number(user.getU_student_number());
 		userPreference.setU_student_pass(user.getU_stundet_pass());

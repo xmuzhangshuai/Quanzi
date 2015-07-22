@@ -25,7 +25,6 @@ import com.quanzi.base.BaseFragmentActivity;
 import com.quanzi.config.DefaultKeys;
 import com.quanzi.huanxin.HXSDKHelper;
 import com.quanzi.utils.CommonTools;
-import com.quanzi.utils.LogTool;
 
 /**
  *

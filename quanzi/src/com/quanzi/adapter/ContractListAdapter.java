@@ -23,6 +23,7 @@ import android.widget.TextView.BufferType;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
+import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.DateUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.quanzi.R;
@@ -103,18 +104,14 @@ public class ContractListAdapter extends BaseAdapter {
 
 		// 获取与此用户/群组的会话
 		EMConversation conversation = conversationList.get(position);
-		User user;
-		try {
-			user = UserDbService.getInstance(mContext).getUserById(Integer.parseInt(conversation.getUserName()));
-			if (user == null) {
-				return convertView;
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-			return convertView;
-		}
+		User user = UserDbService.getInstance(mContext).getUserById(Integer.parseInt(conversation.getUserName()));
 
-		holder.name.setText(user.getNickname());
+		try {
+			holder.name.setText(conversation.getLastMessage().getStringAttribute("username"));
+		} catch (EaseMobException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		if (conversation.getUnreadMsgCount() > 0) {
 			// 显示与此用户的消息未读数
@@ -139,8 +136,10 @@ public class ContractListAdapter extends BaseAdapter {
 		}
 
 		ImageLoader imageLoader = ImageLoader.getInstance();
-		imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(user.getSmall_avatar()), holder.avatar,
-				ImageLoaderTool.getHeadImageOptions(10));
+		if (user != null) {
+			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(user.getSmall_avatar()), holder.avatar,
+					ImageLoaderTool.getHeadImageOptions(10));
+		}
 
 		return convertView;
 	}

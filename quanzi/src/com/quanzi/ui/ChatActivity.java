@@ -191,6 +191,7 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 		} else {
 			LogTool.e("chatActivity", "userID<0");
 			finish();
+			return;
 		}
 
 		findViewById();
@@ -209,7 +210,9 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		adapter.refresh();
+		if (adapter != null) {
+			adapter.refresh();
+		}
 	}
 
 	@Override

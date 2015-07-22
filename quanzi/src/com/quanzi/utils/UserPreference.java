@@ -48,10 +48,10 @@ public class UserPreference {
 		LogTool.i("学号: " + getU_student_number());
 		LogTool.i("教务处密码: " + getU_student_pass());
 		LogTool.i("身份: " + getU_identity());
-		LogTool.i("行业: " + getU_industry_id());
-		LogTool.i("技能: " + getU_skill_ids());
+		LogTool.i("行业: " + getU_industry());
+		LogTool.i("技能: " + getU_skills());
 		LogTool.i("情感状态: " + getU_love_state());
-		LogTool.i("兴趣: " + getU_interest_ids());
+		LogTool.i("兴趣: " + getU_interests());
 		LogTool.i("关注的人数: " + getMyConcerned_count());
 		LogTool.i("追随者数量: " + getMyFollower_count());
 		LogTool.i("赞过的帖子的数量: " + getMyFavor_count());
@@ -292,22 +292,22 @@ public class UserPreference {
 	}
 
 	//行业
-	public int getU_industry_id() {
-		return sp.getInt(UserTable.U_INDUSTRY_ID, -1);
+	public String getU_industry() {
+		return sp.getString(UserTable.U_INDUSTRY_ITEM, "");
 	}
 
-	public void setU_industry_id(int industry_id) {
-		editor.putInt(UserTable.U_INDUSTRY_ID, industry_id);
+	public void setU_industry(String industry) {
+		editor.putString(UserTable.U_INDUSTRY_ITEM, industry);
 		editor.commit();
 	}
 
 	//技能
-	public String getU_skill_ids() {
-		return sp.getString(UserTable.U_SKILL_IDS, "");
+	public String getU_skills() {
+		return sp.getString(UserTable.U_SKILL_ITEMS, "");
 	}
 
-	public void setU_skill_ids(String skill_ids) {
-		editor.putString(UserTable.U_SKILL_IDS, skill_ids);
+	public void setU_skills(String skills) {
+		editor.putString(UserTable.U_SKILL_ITEMS, skills);
 		editor.commit();
 	}
 
@@ -322,12 +322,12 @@ public class UserPreference {
 	}
 
 	//兴趣
-	public String getU_interest_ids() {
-		return sp.getString(UserTable.U_INTEREST_IDS, "");
+	public String getU_interests() {
+		return sp.getString(UserTable.U_INTEREST_ITEMS, "");
 	}
 
-	public void setU_interest_ids(String interest_ids) {
-		editor.putString(UserTable.U_INTEREST_IDS, interest_ids);
+	public void setU_interests(String interests) {
+		editor.putString(UserTable.U_INTEREST_ITEMS, interests);
 		editor.commit();
 	}
 

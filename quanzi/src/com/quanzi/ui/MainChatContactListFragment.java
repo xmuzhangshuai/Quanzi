@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Hashtable;
-import java.util.LinkedList;
 import java.util.List;
-
-import org.apache.http.Header;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,8 +12,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,21 +28,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMContactManager;
 import com.easemob.chat.EMConversation;
-import com.easemob.exceptions.EaseMobException;
-import com.loopj.android.http.RequestParams;
-import com.loopj.android.http.TextHttpResponseHandler;
 import com.quanzi.R;
 import com.quanzi.adapter.ContractListAdapter;
 import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseV4Fragment;
 import com.quanzi.customewidget.MyAlertDialog;
-import com.quanzi.entities.Conversation;
 import com.quanzi.table.UserTable;
-import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.LogTool;
-import com.quanzi.utils.ToastTool;
 import com.quanzi.utils.UserPreference;
 
 /**
@@ -65,15 +53,11 @@ public class MainChatContactListFragment extends BaseV4Fragment {
 	private ListView mContactListView;
 	private TextView mEmpty;
 	private ContractListAdapter mAdapter;
-	private UserPreference userPreference;
-	//	private ConversationDbService conversationDbService;
-	//	private LinkedList<Conversation> conversationList;
 	private List<EMConversation> conversationList = new ArrayList<EMConversation>();
 
 	private Vibrator vib;
 	private View popBtn;//删除按钮
 	private int currentItem = -1;
-	private MyAlertDialog myAlertDialog;
 	public RelativeLayout errorItem;//无法连接到网络提示
 	public TextView errorText;
 
@@ -81,9 +65,7 @@ public class MainChatContactListFragment extends BaseV4Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		userPreference = BaseApplication.getInstance().getUserPreference();
 		conversationList.addAll(loadConversationsWithRecentChat());
-		LogTool.i("长度" + conversationList.size());
 
 		/**震动服务*/
 		vib = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
@@ -219,75 +201,10 @@ public class MainChatContactListFragment extends BaseV4Fragment {
 
 	//显示删除心动或情侣对话窗口
 	void showDeletDialog() {
-		//		//如果是情侣
-		//		if (userPreference.getU_stateid() == 2) {
-		//			myAlertDialog = new MyAlertDialog(getActivity());
-		//			myAlertDialog.setTitle("提示");
-		//			myAlertDialog.setMessage("是否解除情侣关系？解除后您和\"" + friendPreference.getName() + "\"将不能再取得联系。系统会继续为您牵线搭桥。");
-		//			View.OnClickListener comfirm = new OnClickListener() {
-		//
-		//				@Override
-		//				public void onClick(View v) {
-		//					// TODO Auto-generated method stub
-		//					myAlertDialog.dismiss();
-		//					if (currentItem > -1) {
-		//
-		//						RequestParams params = new RequestParams();
-		//						params.put(LoversTable.L_USERID, userPreference.getU_id());
-		//						params.put(LoversTable.L_LOVERID, friendPreference.getF_id());
-		//						TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
-		//
-		//							@Override
-		//							public void onSuccess(int statusCode, Header[] headers, String response) {
-		//								// TODO Auto-generated method stub
-		//								conversationDbService.conversationDao.delete(conversationList.get(currentItem));
-		//								conversationList.remove(currentItem);
-		//								mAdapter.notifyDataSetChanged();
-		//								currentItem = -1;
-		//
-		//								new SendNotifyTask(userPreference.getName() + "和您解除了情侣关系", userPreference.getName(),
-		//										friendPreference.getBpush_UserID()).send();
-		//
-		//								//删除好友
-		//								try {
-		//									EMContactManager.getInstance().deleteContact("" + friendPreference.getF_id());
-		//								} catch (EaseMobException e) {
-		//									// TODO Auto-generated catch block
-		//									e.printStackTrace();
-		//								}
-		//
-		//								//删除会话
-		//								//EMChatManager.getInstance().deleteConversation("" + friendPreference.getF_id());
-		//								friendPreference.clear();
-		//								userPreference.setU_stateid(4);
-		//
-		//								MainActivity activity = (MainActivity) getActivity();
-		//								activity.refresh();
-		//							}
-		//
-		//							@Override
-		//							public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
-		//								// TODO Auto-generated method stub
-		//								ToastTool.showShort(getActivity(), "解除情侣失败！");
-		//							}
-		//						};
-		//						AsyncHttpClientTool.post("deletelover", params, responseHandler);
-		//					}
-		//				}
-		//			};
-		//			View.OnClickListener cancle = new OnClickListener() {
-		//
-		//				@Override
-		//				public void onClick(View v) {
-		//					// TODO Auto-generated method stub
-		//					myAlertDialog.dismiss();
-		//
-		//				}
-		//			};
-		//			myAlertDialog.setPositiveButton("解除", comfirm);
-		//			myAlertDialog.setNegativeButton("取消", cancle);
-		//			myAlertDialog.show();
-		//		}
+		EMChatManager.getInstance().deleteConversation(conversationList.get(currentItem).getUserName(), false);
+		conversationList.remove(currentItem);
+		mAdapter.notifyDataSetChanged();
+		currentItem = -1;
 	}
 
 	/**

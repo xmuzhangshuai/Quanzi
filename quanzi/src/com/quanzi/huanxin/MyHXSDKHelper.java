@@ -17,37 +17,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.easemob.EMCallBack;
-import com.easemob.EMChatRoomChangeListener;
 import com.easemob.EMEventListener;
 import com.easemob.EMNotifierEvent;
 import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMChatOptions;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
-import com.easemob.chat.EMMessage.Type;
 import com.easemob.util.EMLog;
 import com.easemob.util.EasyUtils;
-import com.quanzi.R;
 import com.quanzi.config.DefaultKeys;
 import com.quanzi.entities.User;
 import com.quanzi.huanxin.HXNotifier.HXNotificationInfoProvider;
 import com.quanzi.table.UserTable;
 import com.quanzi.ui.ChatActivity;
 import com.quanzi.ui.MainActivity;
-import com.quanzi.utils.LogTool;
 
 /**
  * Demo UI HX SDK helper class which subclass HXSDKHelper
@@ -241,9 +232,9 @@ public class MyHXSDKHelper extends HXSDKHelper {
 				//                }else{
 				ChatType chatType = message.getChatType();
 				if (chatType == ChatType.Chat) { // 单聊信息
-					intent.putExtra(UserTable.U_ID, message.getFrom());
+					intent.putExtra(UserTable.U_ID, Integer.parseInt(message.getFrom()));
 					intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
-					
+
 				}
 				//                }
 				return intent;
