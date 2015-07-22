@@ -111,7 +111,7 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 	@Override
 	protected void initView() {
 		// TODO Auto-generated method stub
-		leftTextView.setText(userName);
+		//		leftTextView.setText(userName);
 		leftButton.setOnClickListener(this);
 		concernBtn.setOnClickListener(this);
 		concernBtn.setVisibility(View.GONE);
@@ -159,6 +159,7 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 		contactBtn.setOnClickListener(this);
 		moreBtn.setOnClickListener(this);
 
+		leftTextView.setText(jsonUser.getU_nickname());
 		//…Ë÷√Õ∑œÒ
 		if (!TextUtils.isEmpty(jsonUser.getU_small_avatar())) {
 			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonUser.getU_small_avatar()), headImageView,

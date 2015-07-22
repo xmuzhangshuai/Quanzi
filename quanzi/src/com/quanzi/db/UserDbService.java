@@ -41,7 +41,7 @@ public class UserDbService {
 	 * ≤Â»ÎUser
 	 * @param jsonUser
 	 */
-	public void saveUser(JsonUser jsonUser) {
+	public User saveUser(JsonUser jsonUser) {
 		if (jsonUser != null) {
 			User newuser = new User(Long.valueOf(jsonUser.getU_id()), jsonUser.getU_nickname(), jsonUser.getU_gender(),
 					jsonUser.getU_tel(), jsonUser.getU_email(), jsonUser.getU_large_avatar(),
@@ -49,6 +49,9 @@ public class UserDbService {
 					jsonUser.getU_love_state(), jsonUser.getU_age(), jsonUser.getU_birthday(),
 					jsonUser.getU_schoolid(), jsonUser.getU_cityid(), jsonUser.getU_provinceid());
 			userDao.insertOrReplace(newuser);
+			return newuser;
+		} else {
+			return null;
 		}
 	}
 

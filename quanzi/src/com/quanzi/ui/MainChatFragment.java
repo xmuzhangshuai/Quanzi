@@ -87,6 +87,16 @@ public class MainChatFragment extends BaseV4Fragment implements OnClickListener 
 	}
 
 	/**
+	 * 刷新页面
+	 */
+	public void refresh() {
+		FragmentPagerAdapter f = (FragmentPagerAdapter) mViewPager.getAdapter();
+		MainChatContactListFragment mainChatContactListFragment = (MainChatContactListFragment) f.instantiateItem(
+				mViewPager, 0);
+		mainChatContactListFragment.refreshConversation();
+	}
+
+	/**
 	 * button点击事件
 	 * 
 	 * @param view

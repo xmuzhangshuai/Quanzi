@@ -9,12 +9,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMChatOptions;
 import com.quanzi.R;
-import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseV4Fragment;
 import com.quanzi.customewidget.MyAlertDialog;
-import com.quanzi.utils.LogTool;
-import com.quanzi.utils.ToastTool;
+import com.quanzi.utils.PreferenceUtils;
 
 /**
  * 类名称：SettingChatFragment
@@ -31,8 +31,7 @@ public class SettingChatFragment extends BaseV4Fragment implements OnClickListen
 	private ImageView iv_switch_close_speaker;//关闭扬声器播放语音
 	private RelativeLayout rl_switch_speaker;//设置扬声器布局
 	private View clearChatRedcord;//清空聊天记录
-	//	private EMChatOptions chatOptions;
-	//	private FriendPreference friendPreference;
+	private EMChatOptions chatOptions;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -70,14 +69,14 @@ public class SettingChatFragment extends BaseV4Fragment implements OnClickListen
 		clearChatRedcord.setOnClickListener(this);
 		rl_switch_speaker.setOnClickListener(this);
 
-		//		chatOptions = EMChatManager.getInstance().getChatOptions();
-		//		if (chatOptions.getUseSpeaker()) {
-		//			iv_switch_open_speaker.setVisibility(View.VISIBLE);
-		//			iv_switch_close_speaker.setVisibility(View.INVISIBLE);
-		//		} else {
-		//			iv_switch_open_speaker.setVisibility(View.INVISIBLE);
-		//			iv_switch_close_speaker.setVisibility(View.VISIBLE);
-		//		}
+		chatOptions = EMChatManager.getInstance().getChatOptions();
+		if (chatOptions.getUseSpeaker()) {
+			iv_switch_open_speaker.setVisibility(View.VISIBLE);
+			iv_switch_close_speaker.setVisibility(View.INVISIBLE);
+		} else {
+			iv_switch_open_speaker.setVisibility(View.INVISIBLE);
+			iv_switch_close_speaker.setVisibility(View.VISIBLE);
+		}
 	}
 
 	/**
@@ -93,17 +92,7 @@ public class SettingChatFragment extends BaseV4Fragment implements OnClickListen
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				myAlertDialog.dismiss();
-				//				int userId = friendPreference.getF_id();
-				//				if (userId > -1) {
-				//					if (EMChatManager.getInstance().getConversation("" + userId) != null) {
-				//						EMChatManager.getInstance().clearConversation("" + userId);
-				//						ToastTool.showShort(getActivity(), "清除聊天记录成功！");
-				//					} else {
-				//						LogTool.i("settingChatFragment", "会话为null");
-				//					}
-				//				} else {
-				//					LogTool.i("settingChatFragment", "另一半不存在");
-				//				}
+				EMChatManager.getInstance().getAllConversations().clear();
 			}
 		};
 		View.OnClickListener cancle = new OnClickListener() {
@@ -127,15 +116,15 @@ public class SettingChatFragment extends BaseV4Fragment implements OnClickListen
 			if (iv_switch_open_speaker.getVisibility() == View.VISIBLE) {
 				iv_switch_open_speaker.setVisibility(View.INVISIBLE);
 				iv_switch_close_speaker.setVisibility(View.VISIBLE);
-				//				chatOptions.setUseSpeaker(false);
-				//				EMChatManager.getInstance().setChatOptions(chatOptions);
-				//				PreferenceUtils.getInstance(getActivity()).setSettingMsgSpeaker(false);
+								chatOptions.setUseSpeaker(false);
+								EMChatManager.getInstance().setChatOptions(chatOptions);
+								PreferenceUtils.getInstance(getActivity()).setSettingMsgSpeaker(false);
 			} else {
 				iv_switch_open_speaker.setVisibility(View.VISIBLE);
 				iv_switch_close_speaker.setVisibility(View.INVISIBLE);
-				//				chatOptions.setUseSpeaker(true);
-				//				EMChatManager.getInstance().setChatOptions(chatOptions);
-				//				PreferenceUtils.getInstance(getActivity()).setSettingMsgVibrate(true);
+				chatOptions.setUseSpeaker(true);
+				EMChatManager.getInstance().setChatOptions(chatOptions);
+				PreferenceUtils.getInstance(getActivity()).setSettingMsgVibrate(true);
 			}
 			break;
 		case R.id.clear_chat_record:

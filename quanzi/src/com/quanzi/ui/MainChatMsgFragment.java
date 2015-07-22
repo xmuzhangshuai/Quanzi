@@ -306,8 +306,6 @@ public class MainChatMsgFragment extends BaseV4Fragment {
 				return null;
 			}
 
-			LogTool.i("消息是否读过：" + jsonMyMessage.isRead());
-
 			final ViewHolder holder;
 			if (convertView == null) {
 				view = LayoutInflater.from(getActivity()).inflate(R.layout.my_msg_list_item, null);

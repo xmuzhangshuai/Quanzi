@@ -336,6 +336,13 @@
             android:screenOrientation="portrait" >
         </activity>
 
+          <!-- 菜单页面 -->
+        <activity
+            android:name="com.quanzi.ui.ContextMenu"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyDialogStyle" >
+        </activity>
+        
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"

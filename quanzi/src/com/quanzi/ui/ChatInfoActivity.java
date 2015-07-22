@@ -19,11 +19,11 @@ import com.easemob.chat.EMChatOptions;
 import com.quanzi.R;
 import com.quanzi.base.BaseActivity;
 import com.quanzi.base.BaseApplication;
-import com.quanzi.config.Constants;
 import com.quanzi.customewidget.MyAlertDialog;
 import com.quanzi.db.ProvinceDbService;
-import com.quanzi.db.SchoolDbService;
-import com.quanzi.jsonobject.JsonUser;
+import com.quanzi.db.UserDbService;
+import com.quanzi.entities.User;
+import com.quanzi.table.UserTable;
 import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.ImageLoaderTool;
 import com.quanzi.utils.LogTool;
@@ -58,13 +58,14 @@ public class ChatInfoActivity extends BaseActivity implements OnClickListener {
 	private ImageView iv_switch_open_speaker;//打开扬声器播放语音
 	private ImageView iv_switch_close_speaker;//关闭扬声器播放语音
 	private RelativeLayout rl_switch_speaker;//设置扬声器布局
-	private View complain;//投诉
+//	private View complain;//投诉
 	private View clearChatRedcord;//清空聊天记录
 
 	private View divider1, divider2, divider3;
 	private EMChatOptions chatOptions;
 	private UserPreference userPreference;
-	private JsonUser jsonUser;
+	private User user;
+	private int userId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,12 +73,21 @@ public class ChatInfoActivity extends BaseActivity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_chat_info);
-
-//		friendPreference = BaseApplication.getInstance().getFriendPreference();
 		userPreference = BaseApplication.getInstance().getUserPreference();
+		userId = getIntent().getIntExtra(UserTable.U_ID, 0);
+		if (userId > 0) {
+			user = UserDbService.getInstance(this).getUserById(userId);
+		} else {
+			LogTool.e("chatInfoActivity", "userID<0");
+			finish();
+		}
 
-		findViewById();
-		initView();
+		if (user != null) {
+			findViewById();
+			initView();
+		} else {
+			LogTool.e("chatInfoActivity", "user为空");
+		}
 	}
 
 	@Override
@@ -96,7 +106,7 @@ public class ChatInfoActivity extends BaseActivity implements OnClickListener {
 		iv_switch_close_speaker = (ImageView) findViewById(R.id.iv_switch_close_speaker);
 		clearChatRedcord = findViewById(R.id.clear_chat_record);
 		rl_switch_speaker = (RelativeLayout) findViewById(R.id.rl_switch_speaker);
-		complain = findViewById(R.id.complain);
+//		complain = findViewById(R.id.complain);
 
 		divider1 = findViewById(R.id.divider1);
 		divider2 = findViewById(R.id.divider2);
@@ -116,29 +126,28 @@ public class ChatInfoActivity extends BaseActivity implements OnClickListener {
 		topNavigation.setText("聊天信息");
 		rightBtnBg.setVisibility(View.GONE);
 		//设置头像
-		if (!TextUtils.isEmpty(jsonUser.getU_small_avatar())) {
-			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonUser.getU_small_avatar()),
-					headImageView, ImageLoaderTool.getHeadImageOptions(10));
+		if (!TextUtils.isEmpty(user.getSmall_avatar())) {
+			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(user.getSmall_avatar()), headImageView,
+					ImageLoaderTool.getHeadImageOptions(10));
 
 			//点击进入详情
 			headImageView.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-//					Intent intent = new Intent(ChatInfoActivity.this, PersonDetailActivity.class);
-//					if (userPreference.getU_stateid() == 3) {//如果是心动
-//						intent.putExtra(PersonDetailActivity.PERSON_TYPE, Constants.PersonDetailType.FLIPPER);
-//					} else if (userPreference.getU_stateid() == 2) {//如果是情侣
-//						intent.putExtra(PersonDetailActivity.PERSON_TYPE, Constants.PersonDetailType.LOVER);
-//					}
-//					ChatInfoActivity.this.startActivity(intent);
-//					ChatInfoActivity.this.overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
+					Intent intent = new Intent(ChatInfoActivity.this, PersonDetailActivity.class);
+					intent.putExtra(UserTable.U_ID, userId);
+					intent.putExtra(UserTable.U_NICKNAME, user.getNickname());
+					intent.putExtra(UserTable.U_SMALL_AVATAR, user.getSmall_avatar());
+					startActivity(intent);
+					ChatInfoActivity.this.overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
 				}
 			});
 		}
-		nameTextView.setText(jsonUser.getU_nickname());
-		schoolTextView.setText(SchoolDbService.getInstance(this).getSchoolNameById(jsonUser.getU_schoolid()));
-		provinceTextView.setText(ProvinceDbService.getInstance(this).getProNameById(jsonUser.getU_provinceid()));
+		nameTextView.setText(user.getNickname());
+		schoolTextView.setText(user.getSchool().getSchoolName());
+		provinceTextView.setText(ProvinceDbService.getInstance(this).getProNameById(
+				new Long(user.getProvinceID()).intValue()));
 
 		rl_switch_notification.setOnClickListener(this);
 		rl_switch_sound.setOnClickListener(this);
@@ -146,7 +155,7 @@ public class ChatInfoActivity extends BaseActivity implements OnClickListener {
 		leftImageButton.setOnClickListener(this);
 		clearChatRedcord.setOnClickListener(this);
 		rl_switch_speaker.setOnClickListener(this);
-		complain.setOnClickListener(this);
+//		complain.setOnClickListener(this);
 
 		chatOptions = EMChatManager.getInstance().getChatOptions();
 		if (chatOptions.getNotificationEnable()) {
@@ -205,7 +214,6 @@ public class ChatInfoActivity extends BaseActivity implements OnClickListener {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				myAlertDialog.dismiss();
-				int userId = jsonUser.getU_id();
 				if (userId > -1) {
 					if (EMChatManager.getInstance().getConversation("" + userId) != null) {
 						EMChatManager.getInstance().clearConversation("" + userId);
@@ -234,68 +242,68 @@ public class ChatInfoActivity extends BaseActivity implements OnClickListener {
 	/**
 	 * 从相册选择图片
 	 */
-	private void choosePhoto() {
-		Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-		startActivityForResult(intent, 2);
-	}
-
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode != Activity.RESULT_OK)
-			return;
-
-		switch (requestCode) {
-		case 2://从相册选择
-			try {
-				Uri selectedImage = data.getData();
-				String[] filePathColumn = { MediaStore.Images.Media.DATA };
-				Cursor cursor = ChatInfoActivity.this.getContentResolver().query(selectedImage, filePathColumn, null,
-						null, null);
-				cursor.moveToFirst();
-				int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-				String picturePath = cursor.getString(columnIndex);
-				cursor.close();
-
-				startActivity(new Intent(ChatInfoActivity.this, HandleComplainActivity.class).putExtra(
-						HandleComplainActivity.COMPLAIN_IMAGE_PAHT, picturePath));
-			} catch (Exception e) {
-				// TODO: handle exception   
-				e.printStackTrace();
-			}
-			break;
-		}
-	}
+//	private void choosePhoto() {
+//		Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//		startActivityForResult(intent, 2);
+//	}
+//
+//	@Override
+//	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//		// TODO Auto-generated method stub
+//		super.onActivityResult(requestCode, resultCode, data);
+//		if (resultCode != Activity.RESULT_OK)
+//			return;
+//
+//		switch (requestCode) {
+//		case 2://从相册选择
+//			try {
+//				Uri selectedImage = data.getData();
+//				String[] filePathColumn = { MediaStore.Images.Media.DATA };
+//				Cursor cursor = ChatInfoActivity.this.getContentResolver().query(selectedImage, filePathColumn, null,
+//						null, null);
+//				cursor.moveToFirst();
+//				int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//				String picturePath = cursor.getString(columnIndex);
+//				cursor.close();
+//
+//				startActivity(new Intent(ChatInfoActivity.this, HandleComplainActivity.class).putExtra(
+//						HandleComplainActivity.COMPLAIN_IMAGE_PAHT, picturePath));
+//			} catch (Exception e) {
+//				// TODO: handle exception   
+//				e.printStackTrace();
+//			}
+//			break;
+//		}
+//	}
 
 	/**
 	 * 处理投诉
 	 */
-	private void handleComplain() {
-		final MyAlertDialog myAlertDialog = new MyAlertDialog(ChatInfoActivity.this);
-		myAlertDialog.setTitle("提示");
-		myAlertDialog.setMessage("请您提供聊天记录截屏证据");
-		View.OnClickListener comfirm = new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				myAlertDialog.dismiss();
-				choosePhoto();
-			}
-		};
-		View.OnClickListener cancle = new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				myAlertDialog.dismiss();
-			}
-		};
-		myAlertDialog.setPositiveButton("去相册", comfirm);
-		myAlertDialog.setNegativeButton("取消", cancle);
-		myAlertDialog.show();
-	}
+//	private void handleComplain() {
+//		final MyAlertDialog myAlertDialog = new MyAlertDialog(ChatInfoActivity.this);
+//		myAlertDialog.setTitle("提示");
+//		myAlertDialog.setMessage("请您提供聊天记录截屏证据");
+//		View.OnClickListener comfirm = new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				myAlertDialog.dismiss();
+//				choosePhoto();
+//			}
+//		};
+//		View.OnClickListener cancle = new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				myAlertDialog.dismiss();
+//			}
+//		};
+//		myAlertDialog.setPositiveButton("去相册", comfirm);
+//		myAlertDialog.setNegativeButton("取消", cancle);
+//		myAlertDialog.show();
+//	}
 
 	@Override
 	public void onClick(View v) {
@@ -377,9 +385,9 @@ public class ChatInfoActivity extends BaseActivity implements OnClickListener {
 			finish();
 			overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
 			break;
-		case R.id.complain:
-			handleComplain();
-			break;
+//		case R.id.complain:
+//			handleComplain();
+//			break;
 		default:
 			break;
 		}

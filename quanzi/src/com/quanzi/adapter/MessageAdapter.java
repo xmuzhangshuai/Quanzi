@@ -18,7 +18,6 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -47,19 +46,18 @@ import com.easemob.util.LatLng;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.quanzi.R;
 import com.quanzi.base.BaseApplication;
-import com.quanzi.config.Constants;
 import com.quanzi.customewidget.ChatAlertDialog;
-import com.quanzi.entities.Conversation;
 import com.quanzi.listener.VoicePlayClickListener;
+import com.quanzi.table.UserTable;
 import com.quanzi.task.LoadImageTask;
 import com.quanzi.ui.ChatActivity;
+import com.quanzi.ui.ContextMenu;
 import com.quanzi.ui.PersonDetailActivity;
 import com.quanzi.ui.ShowBigImageActivity;
 import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.ImageCache;
 import com.quanzi.utils.ImageLoaderTool;
 import com.quanzi.utils.ImageTools;
-import com.quanzi.utils.LogTool;
 import com.quanzi.utils.ToastTool;
 import com.quanzi.utils.UserPreference;
 
@@ -296,12 +294,13 @@ public class MessageAdapter extends BaseAdapter {
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
 						Intent intent = new Intent(context, PersonDetailActivity.class);
+						intent.putExtra(UserTable.U_ID, Integer.parseInt(username));
+						intent.putExtra(UserTable.U_SMALL_AVATAR, smallAvatar);
 						context.startActivity(intent);
 						((Activity) context).overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
 					}
 				});
 			} else {
-				LogTool.i("œ‘ æÕº∆¨" + AsyncHttpClientTool.getAbsoluteUrl(userPreference.getU_small_avatar()));
 				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(userPreference.getU_small_avatar()),
 						holder.head_iv, ImageLoaderTool.getHeadImageOptions(10));
 			}
@@ -843,7 +842,6 @@ public class MessageAdapter extends BaseAdapter {
 			});
 			return true;
 		} else {
-			LogTool.e("chat", "œ¬‘ÿÀı¬‘Õº");
 			new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, message.getChatType(), iv,
 					activity, message);
 			return true;

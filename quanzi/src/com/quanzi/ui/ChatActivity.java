@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.http.Header;
+
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -65,6 +68,8 @@ import com.easemob.chat.TextMessageBody;
 import com.easemob.chat.VoiceMessageBody;
 import com.easemob.util.PathUtil;
 import com.easemob.util.VoiceRecorder;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.quanzi.R;
 import com.quanzi.adapter.FaceAdapter;
 import com.quanzi.adapter.FacePageAdeapter;
@@ -80,8 +85,10 @@ import com.quanzi.entities.User;
 import com.quanzi.jsonobject.JsonUser;
 import com.quanzi.listener.VoicePlayClickListener;
 import com.quanzi.table.UserTable;
+import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.CommonTools;
 import com.quanzi.utils.DensityUtil;
+import com.quanzi.utils.FastJsonTool;
 import com.quanzi.utils.LogTool;
 import com.quanzi.utils.ToastTool;
 import com.quanzi.utils.UserPreference;
@@ -181,6 +188,9 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 		userId = getIntent().getIntExtra(UserTable.U_ID, 0);
 		if (userId > 0) {
 			user = UserDbService.getInstance(this).getUserById(userId);
+		} else {
+			LogTool.e("chatActivity", "userID<0");
+			finish();
 		}
 
 		findViewById();
@@ -190,8 +200,8 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 			initFacePage();
 			initMorePage();
 		} else {
-			LogTool.e("chatActivity", "user 为空");
-			finish();
+			LogTool.e("chatActivity", "user 为空,重新获取");
+			getUser(userId);
 		}
 	}
 
@@ -493,6 +503,55 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 				setResult(RESULT_OK);
 			}
 		}
+	}
+
+	/**
+	 * 	网络获取User信息
+	 */
+	private void getUser(int userId) {
+		final ProgressDialog dialog = new ProgressDialog(ChatActivity.this);
+		dialog.setMessage("正在加载...");
+		dialog.setCancelable(false);
+		RequestParams params = new RequestParams();
+		params.put(UserTable.U_ID, userId);
+
+		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+				dialog.show();
+			}
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, String response) {
+				// TODO Auto-generated method stub
+				if (statusCode == 200) {
+					JsonUser jsonUser = FastJsonTool.getObject(response, JsonUser.class);
+					if (jsonUser != null) {
+						user = UserDbService.getInstance(ChatActivity.this).saveUser(jsonUser);
+						initData();
+						initView();
+						initFacePage();
+						initMorePage();
+					}
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+				// TODO Auto-generated method stub
+				LogTool.e("获取用户服务器错误");
+			}
+
+			@Override
+			public void onFinish() {
+				// TODO Auto-generated method stub
+				super.onFinish();
+				dialog.dismiss();
+			}
+		};
+		AsyncHttpClientTool.post(ChatActivity.this, "user/getInfoByID", params, responseHandler);
 	}
 
 	/**
@@ -967,7 +1026,7 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 			setModeKeyboard();
 			break;
 		case R.id.right_btn_bg:
-			startActivity(new Intent(ChatActivity.this, ChatInfoActivity.class));
+			startActivity(new Intent(ChatActivity.this, ChatInfoActivity.class).putExtra(UserTable.U_ID, userId));
 			overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 			break;
 		default:

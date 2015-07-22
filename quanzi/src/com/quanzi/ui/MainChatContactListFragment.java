@@ -189,32 +189,23 @@ public class MainChatContactListFragment extends BaseV4Fragment {
 	 * 刷新对话列表
 	 */
 	public void refresh() {
-		conversationList.clear();
-		conversationList.addAll(loadConversationsWithRecentChat());
-		if (conversationList.size() < 1) {
-			mEmpty.setVisibility(View.VISIBLE);
-		} else {
-			mEmpty.setVisibility(View.GONE);
+		try {
+			//		 可能会在子线程中调到这方法
+			getActivity().runOnUiThread(new Runnable() {
+				public void run() {
+					conversationList.clear();
+					conversationList.addAll(loadConversationsWithRecentChat());
+					mAdapter.notifyDataSetChanged();
+					if (conversationList.size() < 1) {
+						mEmpty.setVisibility(View.VISIBLE);
+					} else {
+						mEmpty.setVisibility(View.GONE);
+					}
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		if (mAdapter != null)
-			mAdapter.notifyDataSetChanged();
-		//		try {
-		// 可能会在子线程中调到这方法
-		//			getActivity().runOnUiThread(new Runnable() {
-		//				public void run() {
-		//					conversationList.clear();
-		//					conversationList.addAll(conversationDbService.conversationDao.loadAll());
-		//					mAdapter.notifyDataSetChanged();
-		//					if (conversationList.size() < 1) {
-		//						mEmpty.setVisibility(View.VISIBLE);
-		//					} else {
-		//						mEmpty.setVisibility(View.GONE);
-		//					}
-		//				}
-		//			});
-		//		} catch (Exception e) {
-		//			e.printStackTrace();
-		//		}
 	}
 
 	/**
@@ -228,77 +219,6 @@ public class MainChatContactListFragment extends BaseV4Fragment {
 
 	//显示删除心动或情侣对话窗口
 	void showDeletDialog() {
-		//		//如果是心动关系
-		//		if (userPreference.getU_stateid() == 3) {
-		//			myAlertDialog = new MyAlertDialog(getActivity());
-		//			myAlertDialog.setTitle("提示");
-		//			myAlertDialog.setMessage("是否解除您和\"" + friendPreference.getName() + "\"的心动关系？解除后你们将不能再取得联系。系统会继续为您牵线搭桥。");
-		//			View.OnClickListener comfirm = new OnClickListener() {
-		//
-		//				@Override
-		//				public void onClick(View v) {
-		//					// TODO Auto-generated method stub
-		//					myAlertDialog.dismiss();
-		//					if (currentItem > -1) {
-		//
-		//						RequestParams params = new RequestParams();
-		//						params.put(FlipperTable.F_USERID, userPreference.getU_id());
-		//						params.put(FlipperTable.F_FLIPPERID, friendPreference.getF_id());
-		//						TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
-		//
-		//							@Override
-		//							public void onSuccess(int statusCode, Header[] headers, String response) {
-		//								// TODO Auto-generated method stub
-		//								FlipperDbService flipperDbService = FlipperDbService.getInstance(getActivity());
-		//								flipperDbService.deleteFlipperByUserId(conversationList.get(currentItem).getUserID()
-		//										.intValue());
-		//
-		//								conversationDbService.conversationDao.delete(conversationList.get(currentItem));
-		//								conversationList.remove(currentItem);
-		//								mAdapter.notifyDataSetChanged();
-		//								currentItem = -1;
-		//								//								new SendNotifyTask(userPreference.getName() + "和您解除了心动关系", userPreference.getName(),
-		//								//										friendPreference.getBpush_UserID()).send();
-		//
-		//								//删除好友
-		//								try {
-		//									EMContactManager.getInstance().deleteContact("" + friendPreference.getF_id());
-		//								} catch (EaseMobException e) {
-		//									// TODO Auto-generated catch block
-		//									e.printStackTrace();
-		//								}
-		//								//删除会话
-		//								//								EMChatManager.getInstance().deleteConversation("" + friendPreference.getF_id());
-		//
-		//								friendPreference.clear();
-		//								userPreference.setU_stateid(4);
-		//
-		//								MainActivity activity = (MainActivity) getActivity();
-		//								activity.refresh();
-		//							}
-		//
-		//							@Override
-		//							public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
-		//								// TODO Auto-generated method stub
-		//								ToastTool.showShort(getActivity(), "解除心动关系失败！");
-		//							}
-		//						};
-		//						AsyncHttpClientTool.post("deleteflipper", params, responseHandler);
-		//					}
-		//				}
-		//			};
-		//			View.OnClickListener cancle = new OnClickListener() {
-		//
-		//				@Override
-		//				public void onClick(View v) {
-		//					// TODO Auto-generated method stub
-		//					myAlertDialog.dismiss();
-		//				}
-		//			};
-		//			myAlertDialog.setPositiveButton("解除", comfirm);
-		//			myAlertDialog.setNegativeButton("取消", cancle);
-		//			myAlertDialog.show();
-		//		}
 		//		//如果是情侣
 		//		if (userPreference.getU_stateid() == 2) {
 		//			myAlertDialog = new MyAlertDialog(getActivity());

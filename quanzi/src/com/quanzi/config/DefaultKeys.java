@@ -8,7 +8,7 @@ package com.quanzi.config;
  *
  */
 public class DefaultKeys {
-
+	public static final String ACCOUNT_REMOVED = "account_removed";
 	/*************位置信息*******************/
 	public static final String USER_PROVINCE = "province";// 用户省份
 	public static final String USER_CITY = "city";// 用户省份
@@ -16,10 +16,9 @@ public class DefaultKeys {
 
 	/***************照片地址*****************/
 	public static final String PHOTO_URI = "photo_uri";//照片地址
-	
-	/*************网络状态******************/
-	public static final String TEL_OK ="ok";
-	public static final String TEL_FAIL ="fail";
 
-	
+	/*************网络状态******************/
+	public static final String TEL_OK = "ok";
+	public static final String TEL_FAIL = "fail";
+
 }

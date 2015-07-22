@@ -15,10 +15,6 @@ public class Constants {
 
 	public static String AppliactionServerDomain = "http://192.168.1.106:8080/XiaoYuanQuanQuan/";
 
-	//	public static String ImageServerIP = "http://121.40.92.222/";
-
-	//	public static String ImageServerDomain = "http://image.yixianqian.me/YXQServer/";
-
 	public static class Config {
 		//是否处于开发模式
 		public static final boolean DEVELOPER_MODE = true;

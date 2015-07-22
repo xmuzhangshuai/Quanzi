@@ -261,7 +261,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.1dip"
                 android:background="@color/system_gray" />
-
+<!--
             <RelativeLayout
                 android:id="@+id/complain"
                 android:layout_width="match_parent"
@@ -285,6 +285,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.1dip"
                 android:background="@color/system_gray" />
+                  -->
         </LinearLayout>
     </ScrollView>
 
