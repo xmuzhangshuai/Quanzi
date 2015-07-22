@@ -145,7 +145,8 @@ public class ServerUtil {
 		instance.userPreference.setU_student_pass(user.getU_stundet_pass());
 		instance.userPreference.setMyConcerned_count(user.getU_my_concern_count());
 		instance.userPreference.setMyFollower_count(user.getU_my_follower_count());
-		instance.userPreference.setMyMyFavor_count(user.getU_my_favor_count());
+		instance.userPreference.setMyFavor_count(user.getU_my_favor_count());
+		instance.userPreference.setNewMyFollower_count(user.getU_new_follower_count());
 		instance.userPreference.setUserLogin(true);
 	}
 }

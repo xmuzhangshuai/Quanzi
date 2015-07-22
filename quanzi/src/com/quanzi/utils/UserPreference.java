@@ -351,12 +351,22 @@ public class UserPreference {
 		editor.commit();
 	}
 
+	//新的追随者数量
+	public int getNewMyFollower_count() {
+		return sp.getInt("new_my_follower_count", -1);
+	}
+
+	public void setNewMyFollower_count(int count) {
+		editor.putInt("new_my_follower_count", count);
+		editor.commit();
+	}
+
 	//我赞过的帖子的数量
 	public int getMyFavor_count() {
 		return sp.getInt("my_favor_count", -1);
 	}
 
-	public void setMyMyFavor_count(int count) {
+	public void setMyFavor_count(int count) {
 		editor.putInt("my_favor_count", count);
 		editor.commit();
 	}

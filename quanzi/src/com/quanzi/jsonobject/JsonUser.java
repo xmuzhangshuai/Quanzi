@@ -40,6 +40,7 @@ public class JsonUser implements Serializable {
 	private int u_my_concern_count;
 	private int u_my_follower_count;
 	private int u_my_favor_count;
+	private int u_new_follower_count;
 
 	private String u_student_number;//—ß∫≈
 	private String u_stundet_pass;//√‹¬Î
@@ -278,6 +279,14 @@ public class JsonUser implements Serializable {
 
 	public void setU_my_favor_count(int u_my_favor_count) {
 		this.u_my_favor_count = u_my_favor_count;
+	}
+
+	public int getU_new_follower_count() {
+		return u_new_follower_count;
+	}
+
+	public void setU_new_follower_count(int u_new_follower_count) {
+		this.u_new_follower_count = u_new_follower_count;
 	}
 
 	public JsonUser() {

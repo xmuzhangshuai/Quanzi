@@ -206,7 +206,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 			public void onStart() {
 				// TODO Auto-generated method stub
 				super.onStart();
-				postListView.setRefreshing();
+//				postListView.setRefreshing();
 			}
 
 			@Override
@@ -247,7 +247,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 			public void onFinish() {
 				// TODO Auto-generated method stub
 				super.onFinish();
-				postListView.onRefreshComplete();
+//				postListView.onRefreshComplete();
 			}
 
 		};

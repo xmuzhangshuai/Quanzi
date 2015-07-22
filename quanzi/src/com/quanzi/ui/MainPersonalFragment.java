@@ -34,6 +34,7 @@ public class MainPersonalFragment extends BaseV4Fragment implements OnClickListe
 	private TextView my_concern_count;
 	private View followerView;//追随者
 	private TextView my_follower_count;
+	private TextView new_follower_count;
 	private View favourView;//赞
 	private TextView my_favor_count;
 	private View persondataView;//资料
@@ -47,7 +48,6 @@ public class MainPersonalFragment extends BaseV4Fragment implements OnClickListe
 		// TODO Auto-generated method stub
 		rootView = inflater.inflate(R.layout.fragment_mainpersonal, container, false);
 		userPreference = BaseApplication.getInstance().getUserPreference();
-		userPreference.printUserInfo();//打印用户信息
 		findViewById();// 初始化views
 		initView();
 
@@ -65,6 +65,21 @@ public class MainPersonalFragment extends BaseV4Fragment implements OnClickListe
 					ImageLoaderTool.getHeadImageOptions(10));
 		}
 		nameTextView.setText(userPreference.getU_nickname());
+		if (userPreference.getMyConcerned_count() > 0) {
+			my_concern_count.setText("" + userPreference.getMyConcerned_count());
+		}
+		if (userPreference.getMyFollower_count() > 0) {
+			my_follower_count.setText("" + userPreference.getMyFollower_count());
+		}
+		if (userPreference.getMyFavor_count() > 0) {
+			my_favor_count.setText("" + userPreference.getMyFavor_count());
+		}
+		if (userPreference.getNewMyFollower_count() > 0) {
+			new_follower_count.setText("" + userPreference.getNewMyFollower_count());
+			new_follower_count.setVisibility(View.VISIBLE);
+		} else {
+			new_follower_count.setVisibility(View.GONE);
+		}
 	}
 
 	@Override
@@ -82,6 +97,7 @@ public class MainPersonalFragment extends BaseV4Fragment implements OnClickListe
 		my_concern_count = (TextView) rootView.findViewById(R.id.my_concren_count);
 		my_follower_count = (TextView) rootView.findViewById(R.id.my_follower_count);
 		my_favor_count = (TextView) rootView.findViewById(R.id.my_favor_count);
+		new_follower_count = (TextView) rootView.findViewById(R.id.new_follows);
 	}
 
 	@Override
@@ -95,15 +111,6 @@ public class MainPersonalFragment extends BaseV4Fragment implements OnClickListe
 		persondataView.setOnClickListener(this);
 		settingView.setOnClickListener(this);
 		headImageView.setOnClickListener(this);
-		if (userPreference.getMyConcerned_count() > 0) {
-			my_concern_count.setText("" + userPreference.getMyConcerned_count());
-		}
-		if (userPreference.getMyFollower_count() > 0) {
-			my_follower_count.setText("" + userPreference.getMyFollower_count());
-		}
-		if (userPreference.getMyFavor_count() > 0) {
-			my_favor_count.setText("" + userPreference.getMyFavor_count());
-		}
 	}
 
 	@Override

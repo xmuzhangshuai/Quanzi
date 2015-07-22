@@ -109,7 +109,6 @@
             android:layout_toRightOf="@+id/f_text"
             android:background="@drawable/shape_like_count"
             android:gravity="center"
-            android:text="2"
             android:textColor="@color/white"
             android:textStyle="bold" />
 

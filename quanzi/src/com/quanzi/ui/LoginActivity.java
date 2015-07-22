@@ -260,7 +260,8 @@ public class LoginActivity extends BaseActivity {
 		userPreference.setU_student_pass(user.getU_stundet_pass());
 		userPreference.setMyConcerned_count(user.getU_my_concern_count());
 		userPreference.setMyFollower_count(user.getU_my_follower_count());
-		userPreference.setMyMyFavor_count(user.getU_my_favor_count());
+		userPreference.setMyFavor_count(user.getU_my_favor_count());
+		userPreference.setNewMyFollower_count(user.getU_new_follower_count());
 		userPreference.setUserLogin(true);
 	}
 
@@ -291,74 +292,6 @@ public class LoginActivity extends BaseActivity {
 				});
 	}
 
-	/**
-	 * 登录环信
-	 */
-	//	private void loginHuanXin() {
-	//		EMChatManager.getInstance().login(userPreference.getHuanXinUserName(), userPreference.getHuanXinPassword(),
-	//				new EMCallBack() {
-	//
-	//					@Override
-	//					public void onSuccess() {
-	//						userPreference.setUserLogin(true);
-	//						//更新环信昵称
-	//						if (EMChatManager.getInstance().updateCurrentUserNick(userPreference.getName())) {
-	//							LogTool.i("LoginActivity", "更新环信昵称成功");
-	//						} else {
-	//							LogTool.e("LoginActivity", "更新环信昵称失败");
-	//						}
-	//						runOnUiThread(new Runnable() {
-	//							public void run() {
-	//								ServerUtil.getInstance().getTodayRecommend(LoginActivity.this, true);
-	//								showProgress(false);
-	//							}
-	//						});
-	//					}
-	//
-	//					@Override
-	//					public void onProgress(int progress, String status) {
-	//					}
-	//
-	//					@Override
-	//					public void onError(int code, final String message) {
-	//						LogTool.e("登录环信", "code:" + code + "   message:" + message);
-	//						userPreference.clear();
-	//						runOnUiThread(new Runnable() {
-	//							public void run() {
-	//								ToastTool.showShort(LoginActivity.this, "登录聊天服务器失败");
-	//								showProgress(false);
-	//							}
-	//						});
-	//					}
-	//				});
-	//
-	//	}
-
-	/**
-	 * 登陆
-	 * 
-	 * @param view
-	 */
-	//	public void attempLoginHuanXin(int time) {
-	//		if (!NetworkUtils.isNetworkAvailable(this)) {
-	//			NetworkUtils.networkStateTips(this);
-	//			return;
-	//		}
-	//
-	//		// 调用sdk登陆方法登陆聊天服务器
-	//		if (!TextUtils.isEmpty(userPreference.getHuanXinUserName())
-	//				&& !TextUtils.isEmpty(userPreference.getHuanXinPassword())) {
-	//			loginHuanXin();
-	//		} else {
-	//			if (time == 1) {
-	//				userPreference.setHuanXinUserName("" + userPreference.getU_id());
-	//				userPreference.setHuanXinPassword(MD5For16.GetMD5CodeToLower(userPreference.getU_password()));
-	//				attempLoginHuanXin(2);
-	//			} else {
-	//				showProgress(false);
-	//			}
-	//		}
-	//	}
 	/**
 	 * Shows the progress UI and hides the login form.
 	 */

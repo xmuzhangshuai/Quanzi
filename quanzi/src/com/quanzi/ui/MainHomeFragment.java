@@ -1,14 +1,13 @@
 package com.quanzi.ui;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
-import android.app.ProgressDialog;
+import org.apache.http.Header;
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceActivity.Header;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
@@ -18,9 +17,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,15 +26,23 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.quanzi.R;
 import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseV4Fragment;
 import com.quanzi.config.Constants;
+import com.quanzi.config.Constants.CommentType;
+import com.quanzi.config.Constants.Config;
 import com.quanzi.jsonobject.JsonPostItem;
+import com.quanzi.table.CommentTable;
+import com.quanzi.table.PostTable;
+import com.quanzi.table.QuanziTable;
+import com.quanzi.table.UserTable;
 import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.DateTimeTools;
-import com.quanzi.utils.DensityUtil;
+import com.quanzi.utils.FastJsonTool;
 import com.quanzi.utils.ImageLoaderTool;
 import com.quanzi.utils.LogTool;
 import com.quanzi.utils.ToastTool;
@@ -67,9 +72,6 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 	private LinkedList<JsonPostItem> jsonPostItemList;
 	private int pageNow = 0;//控制页数
 	private PostAdapter mAdapter;
-	private ProgressDialog progressDialog;
-
-	private List<String> imageList;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -77,13 +79,6 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 		super.onCreate(savedInstanceState);
 		userPreference = BaseApplication.getInstance().getUserPreference();
 		jsonPostItemList = new LinkedList<JsonPostItem>();
-		imageList = new ArrayList<String>();
-		imageList.add("drawable://" + R.drawable.content);
-		imageList.add("drawable://" + R.drawable.content2);
-		imageList.add("drawable://" + R.drawable.content3);
-		imageList.add("drawable://" + R.drawable.content4);
-		imageList.add("drawable://" + R.drawable.content5);
-		imageList.add("drawable://" + R.drawable.content6);
 	}
 
 	@Override
@@ -108,13 +103,6 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 		// TODO Auto-generated method stub
 		super.onResume();
 		postListView.setOnScrollListener(new PauseOnScrollListener(imageLoader, pauseOnScroll, pauseOnFling));
-		if (jsonPostItemList.size() > 0) {
-			emptyView.setVisibility(View.GONE);
-			postListView.setVisibility(View.VISIBLE);
-		} else {
-			emptyView.setVisibility(View.VISIBLE);
-			postListView.setVisibility(View.GONE);
-		}
 	}
 
 	@Override
@@ -221,86 +209,79 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 	}
 
 	/**
+	 * 刷新
+	 */
+	private void refresh() {
+		if (jsonPostItemList.size() > 0) {
+			emptyView.setVisibility(View.GONE);
+			postListView.setVisibility(View.VISIBLE);
+		} else {
+			emptyView.setVisibility(View.VISIBLE);
+			postListView.setVisibility(View.GONE);
+		}
+	}
+
+	/**
 	 * 网络获取数据
 	 */
 	private void getDataTask(int p) {
-		//		final int page = p;
-		//		RequestParams params = new RequestParams();
-		//		params.put("page", pageNow);
-		//		params.put(UserTable.U_SCHOOLID, userPreference.getU_schoolid());
-		//		params.put(UserTable.U_STATEID, userPreference.getU_stateid());
-		//		params.put(UserTable.U_GENDER, userPreference.getU_gender());
-		//		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
-		//
-		//			@Override
-		//			public void onSuccess(int statusCode, Header[] headers, String response) {
-		//				// TODO Auto-generated method stub
-		//				if (statusCode == 200) {
-		//					List<JsonPostItem> temp = FastJsonTool.getObjectList(response, JsonPostItem.class);
-		//					if (temp != null) {
-		//						//如果是首次获取数据
-		//						if (page == 0) {
-		//							if (temp.size() < Config.PAGE_NUM) {
-		//								pageNow = -1;
-		//							}
-		//							jsonPostItemList = new LinkedList<JsonPostItem>();
-		//							jsonPostItemList.addAll(temp);
-		//						}
-		//						//如果是获取更多
-		//						else if (page > 0) {
-		//							if (temp.size() < Config.PAGE_NUM) {
-		//								pageNow = -1;
-		//								ToastTool.showShort(getActivity(), "没有更多了！");
-		//							}
-		//							jsonPostItemList.addAll(temp);
-		//						}
-		//						mAdapter.notifyDataSetChanged();
-		//					}
-		//				}
-		//				postListView.onRefreshComplete();
-		//			}
-		//
-		//			@Override
-		//			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
-		//				// TODO Auto-generated method stub
-		//				LogTool.e("LoveBridgeSchoolFragment", "获取列表失败");
-		//				postListView.onRefreshComplete();
-		//			}
-		//		};
-		//		AsyncHttpClientTool.post(getActivity(), "getlovebridgelist", params, responseHandler);
-		//		JsonPostItem item1 = new JsonPostItem(1, 1, "张帅", "drawable://" + R.drawable.headimage1, "drawable://"
-		//				+ R.drawable.headimage1, "男", "一见倾心，再见依然痴迷", "drawable://" + R.drawable.content, "drawable://"
-		//				+ R.drawable.content, new Date(), 20, 2);
-		//
-		//		JsonPostItem item2 = new JsonPostItem(2, 2, "叶子", "drawable://" + R.drawable.headimage2, "drawable://"
-		//				+ R.drawable.headimage2, "女", "你的美丽让我情不自禁", "drawable://" + R.drawable.content2, "drawable://"
-		//				+ R.drawable.content2, new Date(), 45, 20);
-		//
-		//		JsonPostItem item3 = new JsonPostItem(3, 3, "荣发", "drawable://" + R.drawable.headimage3, "drawable://"
-		//				+ R.drawable.headimage3, "男", "这是一片很寂寞的天下着有些伤心的雨", "drawable://" + R.drawable.content + "|"
-		//				+ "drawable://" + R.drawable.content2, "drawable://" + R.drawable.content + "|" + "drawable://"
-		//				+ R.drawable.content2, new Date(), 76, 32);
-		//
-		//		JsonPostItem item4 = new JsonPostItem(4, 4, "伟强", "drawable://" + R.drawable.headimage4, "drawable://"
-		//				+ R.drawable.headimage4, "女", "爱上你的日子，每天都在想你", "drawable://" + R.drawable.content2, "drawable://"
-		//				+ R.drawable.content2, new Date(), 26, 280);
-		//
-		//		JsonPostItem item5 = new JsonPostItem(5, 5, "王坤", "drawable://" + R.drawable.headimage5, "drawable://"
-		//				+ R.drawable.headimage5, "女", "卡又丢了，快来点开心的事冲冲喜吧！", "drawable://" + R.drawable.content, "drawable://"
-		//				+ R.drawable.content, new Date(), 256, 46);
-		//		jsonPostItemList.add(item1);
-		//		jsonPostItemList.add(item2);
-		//		jsonPostItemList.add(item3);
-		//		jsonPostItemList.add(item4);
-		//		jsonPostItemList.add(item5);
-		//		jsonPostItemList.add(item2);
-		//		jsonPostItemList.add(item1);
-		//		jsonPostItemList.add(item2);
-		//		jsonPostItemList.add(item3);
-		//		jsonPostItemList.add(item4);
-		//		jsonPostItemList.add(item5);
-		//		jsonPostItemList.add(item2);
-		postListView.onRefreshComplete();
+		final int page = p;
+		RequestParams params = new RequestParams();
+		params.put("page", pageNow);
+		params.put(UserTable.U_ID, userPreference.getU_id());
+		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+//				postListView.setRefreshing();
+			}
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, String response) {
+				// TODO Auto-generated method stub
+				if (statusCode == 200) {
+					List<JsonPostItem> temp = FastJsonTool.getObjectList(response, JsonPostItem.class);
+					if (temp != null) {
+						LogTool.i("获取圈子帖子列表长度" + temp.size());
+						//如果是首次获取数据
+						if (page == 0) {
+							if (temp.size() < Config.PAGE_NUM) {
+								pageNow = -1;
+							}
+							jsonPostItemList = new LinkedList<JsonPostItem>();
+							jsonPostItemList.addAll(temp);
+							refresh();
+						}
+						//如果是获取更多
+						else if (page > 0) {
+							if (temp.size() < Config.PAGE_NUM) {
+								pageNow = -1;
+								ToastTool.showShort(getActivity(), "没有更多了！");
+							}
+							jsonPostItemList.addAll(temp);
+						}
+						mAdapter.notifyDataSetChanged();
+					}
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+				// TODO Auto-generated method stub
+				LogTool.e("获取圈子帖子列表失败" + errorResponse);
+			}
+
+			@Override
+			public void onFinish() {
+				// TODO Auto-generated method stub
+				super.onFinish();
+//				postListView.onRefreshComplete();
+			}
+
+		};
+		AsyncHttpClientTool.post(getActivity(), "post/getQuanziPost", params, responseHandler);
 	}
 
 	/**
@@ -317,8 +298,14 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 			public ImageView headImageView;
 			public TextView nameTextView;
 			public ImageView genderImageView;
+			public CheckBox concernBtn;
 			public TextView timeTextView;
 			public TextView contentTextView;
+			public CheckBox favorBtn;
+			public TextView favorCountTextView;
+			public ImageView commentBtn;
+			public TextView commentCountTextView;
+			public ImageView moreBtn;
 			public ImageView itemImageView;
 			public ImageView itemImageView1;
 			public ImageView itemImageView2;
@@ -328,11 +315,16 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 			public ImageView itemImageView6;
 			public View imageViewGroup2;
 			public View imageViewGroup1;
-			public CheckBox favorBtn;
-			public TextView favorCountTextView;
-			public ImageView commentBtn;
-			public TextView commentCountTextView;
-			public ImageView moreBtn;
+			public View comment1Container;
+			public View comment2Container;
+			public TextView commentUser1;
+			public TextView label1;
+			public TextView toUser1;
+			public TextView commentContent1;
+			public TextView commentUser2;
+			public TextView label2;
+			public TextView toUser2;
+			public TextView commentContent2;
 		}
 
 		@Override
@@ -381,10 +373,21 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 				holder.imageViewGroup2 = view.findViewById(R.id.item_image_group2);
 				holder.imageViewGroup1 = view.findViewById(R.id.item_image_group1);
 				holder.favorBtn = (CheckBox) view.findViewById(R.id.favor_btn);
+				holder.concernBtn = (CheckBox) view.findViewById(R.id.concern_btn);
 				holder.favorCountTextView = (TextView) view.findViewById(R.id.favor_count);
 				holder.commentBtn = (ImageView) view.findViewById(R.id.comment_btn);
 				holder.commentCountTextView = (TextView) view.findViewById(R.id.comment_count);
 				holder.moreBtn = (ImageView) view.findViewById(R.id.more);
+				holder.comment1Container = view.findViewById(R.id.comment1_container);
+				holder.comment2Container = view.findViewById(R.id.comment2_container);
+				holder.commentUser1 = (TextView) view.findViewById(R.id.comment_user_name1);
+				holder.label1 = (TextView) view.findViewById(R.id.labe1);
+				holder.toUser1 = (TextView) view.findViewById(R.id.to_user_name1);
+				holder.commentContent1 = (TextView) view.findViewById(R.id.comment_content1);
+				holder.commentUser2 = (TextView) view.findViewById(R.id.comment_user_name2);
+				holder.label2 = (TextView) view.findViewById(R.id.labe2);
+				holder.toUser2 = (TextView) view.findViewById(R.id.to_user_name2);
+				holder.commentContent2 = (TextView) view.findViewById(R.id.comment_content2);
 				view.setTag(holder); // 给View添加一个格外的数据 
 			} else {
 				holder = (ViewHolder) view.getTag(); // 把数据取出来  
@@ -403,10 +406,8 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 
 			//设置头像
 			if (!TextUtils.isEmpty(jsonPostItem.getP_small_avatar())) {
-				//	imageLoader.displayImage(AsyncHttpClientImageSound.getAbsoluteUrl(jsonPostItem.getN_small_avatar()),
-				//	holder.headImageView, ImageLoaderTool.getHeadImageOptions(10));
-				imageLoader.displayImage(jsonPostItem.getP_small_avatar(), holder.headImageView,
-						ImageLoaderTool.getHeadImageOptions(10));
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonPostItem.getP_small_avatar()),
+						holder.headImageView, ImageLoaderTool.getHeadImageOptions(10));
 				if (userPreference.getU_id() != jsonPostItem.getP_userid()) {
 					//点击头像进入详情页面
 					holder.headImageView.setOnClickListener(new OnClickListener() {
@@ -415,8 +416,9 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 						public void onClick(View v) {
 							// TODO Auto-generated method stub
 							Intent intent = new Intent(getActivity(), PersonDetailActivity.class);
-							//	intent.putExtra(PersonDetailActivity.PERSON_TYPE, Constants.PersonDetailType.SINGLE);
-							//	intent.putExtra(UserTable.U_ID, jsonPostItem.getN_userid());
+							intent.putExtra(UserTable.U_ID, jsonPostItem.getP_userid());
+							intent.putExtra(UserTable.U_NICKNAME, jsonPostItem.getP_username());
+							intent.putExtra(UserTable.U_SMALL_AVATAR, jsonPostItem.getP_small_avatar());
 							startActivity(intent);
 							getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
 						}
@@ -438,7 +440,7 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 			}
 
 			//设置日期
-			holder.timeTextView.setText(DateTimeTools.getMonAndDay(jsonPostItem.getP_time()));
+			holder.timeTextView.setText(DateTimeTools.getHourAndMin(jsonPostItem.getP_time()));
 
 			//设置被赞次数
 			holder.favorCountTextView.setText("" + jsonPostItem.getP_favor_count() + "赞");
@@ -448,14 +450,75 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					startActivity(new Intent(getActivity(), AllFavorsActivity.class).putExtra(
-							PostDetailActivity.POST_ITEM, jsonPostItem));
-					getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+					if (jsonPostItem.getP_favor_count() > 0) {
+						startActivity(new Intent(getActivity(), AllFavorsActivity.class)
+								.putExtra(AllFavorsActivity.PA_ID, jsonPostItem.getP_postid())
+								.putExtra(AllFavorsActivity.PA_USERID, jsonPostItem.getP_userid())
+								.putExtra(AllFavorsActivity.FAVOR_COUNT, jsonPostItem.getP_favor_count())
+								.putExtra(AllFavorsActivity.TYPE, "post"));
+						getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+					}
 				}
 			});
 
+			List<Map<String, String>> comments = jsonPostItem.getCommentList();
+
+			//设置评论
+			if (comments != null) {
+				if (comments.size() == 0) {
+					holder.comment1Container.setVisibility(View.GONE);
+					holder.comment2Container.setVisibility(View.GONE);
+				} else if (comments.size() == 1) {
+					holder.comment1Container.setVisibility(View.VISIBLE);
+					holder.comment2Container.setVisibility(View.GONE);
+					holder.commentUser1.setText(comments.get(0).get(CommentTable.C_USER_NICKNAME) + ":");
+					holder.commentContent1.setText(comments.get(0).get(CommentTable.C_CONTENT));
+					if (comments.get(0).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {//如果是评论
+						holder.toUser1.setVisibility(View.GONE);
+						holder.label1.setVisibility(View.GONE);
+					} else {//如果是回复
+						holder.toUser1.setVisibility(View.VISIBLE);
+						holder.label1.setVisibility(View.VISIBLE);
+						holder.toUser1.setText(comments.get(0).get(CommentTable.TO_USER_NICKNAME));
+					}
+				} else if (comments.size() == 2) {
+					holder.comment1Container.setVisibility(View.VISIBLE);
+					holder.commentUser1.setText(comments.get(0).get(CommentTable.C_USER_NICKNAME) + ":");
+					holder.commentContent1.setText(comments.get(0).get(CommentTable.C_CONTENT));
+					if (comments.get(0).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {//如果是评论
+						holder.toUser1.setVisibility(View.GONE);
+						holder.label1.setVisibility(View.GONE);
+					} else {//如果是回复
+						holder.toUser1.setVisibility(View.VISIBLE);
+						holder.label1.setVisibility(View.VISIBLE);
+						holder.toUser1.setText(comments.get(0).get(CommentTable.TO_USER_NICKNAME));
+					}
+					holder.comment2Container.setVisibility(View.VISIBLE);
+					holder.commentUser2.setText(comments.get(1).get(CommentTable.C_USER_NICKNAME) + ":");
+					holder.commentContent2.setText(comments.get(1).get(CommentTable.C_CONTENT));
+					if (comments.get(1).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {//如果是评论
+						holder.toUser2.setVisibility(View.GONE);
+						holder.label2.setVisibility(View.GONE);
+					} else {//如果是回复
+						holder.toUser2.setVisibility(View.VISIBLE);
+						holder.label2.setVisibility(View.VISIBLE);
+						holder.toUser2.setText(comments.get(1).get(CommentTable.TO_USER_NICKNAME));
+					}
+				} else {
+					LogTool.e("评论有超过两个");
+				}
+			} else {
+				holder.comment1Container.setVisibility(View.GONE);
+				holder.comment2Container.setVisibility(View.GONE);
+			}
+
 			//设置评论次数
-			holder.commentCountTextView.setText("查看全部" + jsonPostItem.getP_comment_count() + "条评论");
+			if (jsonPostItem.getP_comment_count() == 0) {
+				holder.commentCountTextView.setVisibility(View.GONE);
+			} else {
+				holder.commentCountTextView.setVisibility(View.VISIBLE);
+				holder.commentCountTextView.setText("查看全部" + jsonPostItem.getP_comment_count() + "条评论");
+			}
 
 			//评论
 			holder.commentBtn.setOnClickListener(new OnClickListener() {
@@ -469,19 +532,69 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 				}
 			});
 
-			//			holder.flipperBtn.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			//
-			//				@Override
-			//				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-			//					// TODO Auto-generated method stub
-			//
-			//					if (isChecked) {
-			//						flipper(jsonPostItem.getN_id());
-			//						sendLoveReuest(jsonPostItem.getN_userid());
-			//					}
-			//				}
-			//			});
-			//			
+			//设置是否赞过
+			holder.favorBtn.setChecked(jsonPostItem.isLike());
+
+			holder.favorBtn.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					RequestParams params = new RequestParams();
+					params.put(PostTable.P_POSTID, jsonPostItem.getP_postid());
+					params.put(PostTable.P_USERID, jsonPostItem.getP_userid());
+					params.put(UserTable.U_ID, userPreference.getU_id());
+
+					TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
+
+						@Override
+						public void onStart() {
+							// TODO Auto-generated method stub
+							super.onStart();
+							if (!jsonPostItem.isLike()) {//喜欢
+								holder.favorCountTextView.setText("" + (jsonPostItem.getP_favor_count() + 1) + "赞");
+								jsonPostItem.setP_favor_count(jsonPostItem.getP_favor_count() + 1);
+								jsonPostItem.setLike(true);
+							} else {//喜欢变成不喜欢
+								holder.favorCountTextView.setText("" + (jsonPostItem.getP_favor_count() - 1) + "赞");
+								jsonPostItem.setP_favor_count(jsonPostItem.getP_favor_count() - 1);
+								jsonPostItem.setLike(false);
+							}
+						}
+
+						@Override
+						public void onSuccess(int statusCode, Header[] headers, String response) {
+							// TODO Auto-generated method stub
+							if (statusCode == 200) {
+								if (response.equals("1")) {
+									LogTool.i("赞成功！");
+								} else {
+									LogTool.e("学校帖子赞返回错误" + response);
+								}
+							}
+						}
+
+						@Override
+						public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+							// TODO Auto-generated method stub
+							LogTool.e("学校帖子赞失败");
+						}
+
+						@Override
+						public void onFinish() {
+							// TODO Auto-generated method stub
+							super.onFinish();
+						}
+
+					};
+					if (!jsonPostItem.isLike()) {
+						AsyncHttpClientTool.post(getActivity(), "post/like", params, responseHandler);
+					} else {
+						AsyncHttpClientTool.post(getActivity(), "post/unlike", params, responseHandler);
+					}
+				}
+			});
+
 			holder.moreBtn.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -496,7 +609,6 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 			if (!jsonPostItem.getP_thumbnail().isEmpty()) {
 				smallPhotos = jsonPostItem.getP_thumbnail().split("\\|");
 			}
-			LogTool.e("缩略图数量" + smallPhotos.length + "——————————" + jsonPostItem.getP_thumbnail());
 
 			if (smallPhotos != null && smallPhotos.length > 0) {
 				switch (smallPhotos.length) {
@@ -617,7 +729,7 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 				}
 			}
 			final String[] bigPhotoUrls = tempBbigPhotoUrls;
-			
+
 			holder.itemImageView.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -629,6 +741,7 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 					getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
 				}
 			});
+
 			holder.itemImageView1.setOnClickListener(new OnClickListener() {
 
 				@Override

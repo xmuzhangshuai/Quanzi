@@ -1,26 +1,13 @@
 package com.quanzi.base;
 
-import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
-import android.app.ActivityManager;
 import android.app.Application;
-import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 
-import com.easemob.chat.ConnectionListener;
-import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMChatOptions;
-import com.easemob.chat.EMMessage;
-import com.easemob.chat.EMMessage.ChatType;
-import com.easemob.chat.OnMessageNotifyListener;
-import com.easemob.chat.OnNotificationClickListener;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -30,10 +17,6 @@ import com.quanzi.dao.DaoMaster;
 import com.quanzi.dao.DaoMaster.OpenHelper;
 import com.quanzi.dao.DaoSession;
 import com.quanzi.huanxin.MyHXSDKHelper;
-import com.quanzi.ui.ChatActivity;
-import com.quanzi.ui.MainActivity;
-import com.quanzi.utils.LogTool;
-import com.quanzi.utils.PreferenceUtils;
 import com.quanzi.utils.UserPreference;
 
 /**   
@@ -56,7 +39,6 @@ public class BaseApplication extends Application {
 	private Map<String, Integer> mFaceMap = new LinkedHashMap<String, Integer>();
 	private UserPreference userPreference;
 	private MediaPlayer messagePlayer;
-//	private NotificationManager mNotificationManager;
 	private String huanXinUserName;
 	private String huanxinPassword;
 	public static MyHXSDKHelper hxSDKHelper = new MyHXSDKHelper();
@@ -78,142 +60,13 @@ public class BaseApplication extends Application {
 		initFaceMap();
 		initData();
 
-		//如果使用到百度地图或者类似启动remote service的第三方库，这个if判断不能少
-//		int pid = android.os.Process.myPid();
-//		String processAppName = getAppName(pid);
-		// 如果app启用了远程的service，此application:onCreate会被调用2次
-		// 为了防止环信SDK被初始化2次，加此判断会保证SDK被初始化1次
-		// 默认的app会在以包名为默认的process name下运行，如果查到的process name不是app的process name就立即返回
-//
-//		if (processAppName == null || !processAppName.equalsIgnoreCase("com.quanzi")) {
-//			LogTool.e("enter the service process!");
-//			//"com.easemob.chatuidemo"为demo的包名，换到自己项目中要改成自己包名
-//			// 则此application::onCreate 是被service 调用的，直接返回
-//			return;
-//		}
-
 		hxSDKHelper.onInit(myApplication);
-
-		//		// 初始化环信SDK,一定要先调用init()
-		//		EMChat.getInstance().init(myApplication);
-		//		// 获取到EMChatOptions对象
-		//		EMChatOptions options = EMChatManager.getInstance().getChatOptions();
-		//		// 默认添加好友时，是不需要验证的，改成需要验证
-		//		options.setAcceptInvitationAlways(false);
-		//	
-		//
-		//		//设置notification消息点击时，跳转的intent为自定义的intent
-		//		options.setOnNotificationClickListener(new OnNotificationClickListener() {
-		//
-		//			@Override
-		//			public Intent onNotificationClick(EMMessage message) {
-		//				Intent intent;
-		//				intent = new Intent(myApplication, ChatActivity.class);
-		//				ChatType chatType = message.getChatType();
-		//				if (chatType == ChatType.Chat) { //单聊信息
-		//					intent.putExtra("userId", message.getFrom());
-		//					intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
-		//				}
-		//				return intent;
-		//			}
-		//		});
-		//
-		//		//设置一个connectionlistener监听账户重复登陆
-		//		EMChatManager.getInstance().addConnectionListener(new MyConnectionListener());
-		//
-		//		//后台，有新消息来时，状态栏的消息提示换成自己写的
-		//		options.setNotifyText(new OnMessageNotifyListener() {
-		//
-		//			@Override
-		//			public String onNewMessageNotify(EMMessage message) {
-		//				//可以根据message的类型提示不同文字，demo简单的覆盖了原来的提示
-		//				return message.getStringAttribute("username", "") + "发来了一条消息哦~";
-		//			}
-		//
-		//			@Override
-		//			public String onLatestMessageNotify(EMMessage message, int fromUsersNum, int messageNum) {
-		//				return fromUsersNum + "个人，发来了" + messageNum + "条消息";
-		//			}
-		//
-		//			@Override
-		//			public String onSetNotificationTitle(EMMessage arg0) {
-		//				// TODO Auto-generated method stub
-		//				return "新消息";
-		//			}
-		//
-		//			@Override
-		//			public int onSetSmallIcon(EMMessage arg0) {
-		//				// TODO Auto-generated method stub
-		//				return 0;
-		//			}
-		//		});
 	}
 
 	private void initData() {
 		userPreference = new UserPreference(this);
 		messagePlayer = MediaPlayer.create(this, R.raw.office);
-//		mNotificationManager = (NotificationManager) getSystemService(android.content.Context.NOTIFICATION_SERVICE);
 	}
-
-//	public NotificationManager getNotificationManager() {
-//		if (mNotificationManager == null)
-//			mNotificationManager = (NotificationManager) getSystemService(android.content.Context.NOTIFICATION_SERVICE);
-//		return mNotificationManager;
-//	}
-
-	/**
-	 * 获取APP的名字
-	 * @param pID
-	 * @return
-	 */
-//	private String getAppName(int pID) {
-//		String processName = null;
-//		ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
-//		List l = am.getRunningAppProcesses();
-//		Iterator i = l.iterator();
-//		PackageManager pm = this.getPackageManager();
-//		while (i.hasNext()) {
-//			ActivityManager.RunningAppProcessInfo info = (ActivityManager.RunningAppProcessInfo) (i.next());
-//			try {
-//				if (info.pid == pID) {
-//					CharSequence c = pm.getApplicationLabel(pm.getApplicationInfo(info.processName,
-//							PackageManager.GET_META_DATA));
-//					//					LogTool.d("Process",
-//					//							"Id: " + info.pid + " ProcessName: " + info.processName + "  Label: " + c.toString());
-//					processName = c.toString();
-//					processName = info.processName;
-//					return processName;
-//				}
-//			} catch (Exception e) {
-//				LogTool.d("Process", "Error>> :" + e.toString());
-//			}
-//		}
-//		return processName;
-//	}
-
-	/**
-	 * 获取当前登陆用户名
-	 * 
-	 * @return
-	 */
-//	public String getHuanXinUserName() {
-//		if (huanXinUserName == null) {
-//			userPreference.getU_id();
-//		}
-//		return huanXinUserName;
-//	}
-//
-//	/**
-//	 * 获取密码
-//	 * 
-//	 * @return
-//	 */
-//	public String getHuanXinPassword() {
-//		if (huanxinPassword == null) {
-//			userPreference.getU_password();
-//		}
-//		return huanxinPassword;
-//	}
 
 	/**
 	 * 退出登录,清空数据
@@ -286,36 +139,6 @@ public class BaseApplication extends Application {
 			return mFaceMap;
 		return null;
 	}
-
-//	class MyConnectionListener implements ConnectionListener {
-//		@Override
-//		public void onReConnecting() {
-//		}
-//
-//		@Override
-//		public void onReConnected() {
-//		}
-//
-//		@Override
-//		public void onDisConnected(String errorString) {
-//			if (errorString != null && errorString.contains("conflict")) {
-//				Intent intent = new Intent(myApplication, MainActivity.class);
-//				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//				intent.putExtra("conflict", true);
-//				startActivity(intent);
-//			}
-//
-//		}
-//
-//		@Override
-//		public void onConnecting(String progress) {
-//
-//		}
-//
-//		@Override
-//		public void onConnected() {
-//		}
-//	}
 
 	/**
 	 * 初始化表情
