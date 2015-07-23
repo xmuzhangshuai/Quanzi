@@ -156,7 +156,9 @@ public class ModifySkillActivity extends BaseActivity implements OnClickListener
 			for (String s : mySkillList) {
 				skillString = skillString + "|" + s;
 			}
-			skillString = skillString.substring(1, skillString.length());
+			if (skillString.length() > 0) {
+				skillString = skillString.substring(1, skillString.length());
+			}
 			updateSkill(skillString);
 			break;
 		default:
