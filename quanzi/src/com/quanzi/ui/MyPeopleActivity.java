@@ -53,7 +53,6 @@ public class MyPeopleActivity extends BaseActivity implements OnClickListener {
 	List<JsonConcern> jsonConcernList;
 	private String industry_name;
 	int pa_userid;
-	//	int favor_count;
 	String type = "";
 	private UserPreference userPreference;
 
@@ -122,13 +121,8 @@ public class MyPeopleActivity extends BaseActivity implements OnClickListener {
 		dialog.setMessage("ÕýÔÚ¼ÓÔØ...");
 
 		RequestParams params = new RequestParams();
-		if (type.equals(MYQUANZI)) {
-			params.put(UserTable.U_ID, userPreference.getU_id());
-			params.put(IndustryTable.I_NAME, industry_name);
-		} else if (type.equals(MYFOLLOWER)) {
-			//			params.put(ActivityTable.A_ACTID, pa_id);
-			//			params.put(ActivityTable.A_USERID, pa_userid);
-		}
+		params.put(UserTable.U_ID, userPreference.getU_id());
+		params.put(IndustryTable.I_NAME, industry_name);
 
 		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
 
@@ -145,7 +139,6 @@ public class MyPeopleActivity extends BaseActivity implements OnClickListener {
 				if (statusCode == 200) {
 					if (response.equals("-1")) {
 					} else {
-						LogTool.e(response);
 						jsonConcernList = FastJsonTool.getObjectList(response, JsonConcern.class);
 						if (jsonConcernList != null && jsonConcernList.size() > 0) {
 							allFavorListView.setAdapter(new MyFavorsAdapter());
@@ -171,7 +164,7 @@ public class MyPeopleActivity extends BaseActivity implements OnClickListener {
 			AsyncHttpClientTool.post(MyPeopleActivity.this, "quanzi/getQuanziUserListByIndustry", params,
 					responseHandler);
 		} else if (type.equals(MYFOLLOWER)) {
-			AsyncHttpClientTool.post(MyPeopleActivity.this, "post/getLikeUserList", params, responseHandler);
+			AsyncHttpClientTool.post(MyPeopleActivity.this, "quanzi/getFollowersByIndustryID", params, responseHandler);
 		}
 
 	}
