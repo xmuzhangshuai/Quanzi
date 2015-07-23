@@ -64,7 +64,7 @@ public class PersonDetailMoreDialogFragment extends DialogFragment implements On
 		menuitemList = new ArrayList<String>();
 
 		menuitemList.add("加黑名单");
-		menuitemList.add("取消关注");
+//		menuitemList.add("取消关注");
 
 		menuitemListView.setAdapter(new PublishDialogAdapter());
 		menuitemListView.setOnItemClickListener(this);

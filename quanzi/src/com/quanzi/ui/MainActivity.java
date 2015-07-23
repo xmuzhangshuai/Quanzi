@@ -24,6 +24,7 @@ import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseFragmentActivity;
 import com.quanzi.config.DefaultKeys;
 import com.quanzi.huanxin.HXSDKHelper;
+import com.quanzi.huanxin.MyHXSDKHelper;
 import com.quanzi.utils.CommonTools;
 
 /**
@@ -142,8 +143,8 @@ public class MainActivity extends BaseFragmentActivity implements EMEventListene
 
 		// unregister this event listener when this activity enters the
 		// background
-		//		DemoHXSDKHelper sdkHelper = (DemoHXSDKHelper) DemoHXSDKHelper.getInstance();
-		//		sdkHelper.pushActivity(this);
+		MyHXSDKHelper sdkHelper = (MyHXSDKHelper) MyHXSDKHelper.getInstance();
+		sdkHelper.pushActivity(this);
 
 		// register the event listener when enter the foreground
 		EMChatManager.getInstance()
@@ -157,8 +158,8 @@ public class MainActivity extends BaseFragmentActivity implements EMEventListene
 	@Override
 	protected void onStop() {
 		EMChatManager.getInstance().unregisterEventListener(this);
-		//		DemoHXSDKHelper sdkHelper = (DemoHXSDKHelper) DemoHXSDKHelper.getInstance();
-		//		sdkHelper.popActivity(this);
+		MyHXSDKHelper sdkHelper = (MyHXSDKHelper) MyHXSDKHelper.getInstance();
+		sdkHelper.popActivity(this);
 
 		super.onStop();
 	}
@@ -286,7 +287,7 @@ public class MainActivity extends BaseFragmentActivity implements EMEventListene
 	public void exit() {
 		if (!isExit) {
 			isExit = true;
-			CommonTools.showShortToast(MainActivity.this, "再按一次退出程序");
+			CommonTools.showShortToast(getBaseContext(), "再按一次退出程序");
 			mHandler.sendEmptyMessageDelayed(0, 2000);
 		} else {
 			close();

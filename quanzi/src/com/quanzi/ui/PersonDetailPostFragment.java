@@ -229,22 +229,22 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 		if (!TextUtils.isEmpty(jsonPostItem.getP_small_avatar())) {
 			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonPostItem.getP_small_avatar()),
 					holder.headImageView, ImageLoaderTool.getHeadImageOptions(10));
-			if (userPreference.getU_id() != jsonPostItem.getP_userid()) {
-				//点击头像进入详情页面
-				holder.headImageView.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						Intent intent = new Intent(getActivity(), PersonDetailActivity.class);
-						intent.putExtra(UserTable.U_ID, jsonPostItem.getP_userid());
-						intent.putExtra(UserTable.U_NICKNAME, jsonPostItem.getP_username());
-						intent.putExtra(UserTable.U_SMALL_AVATAR, jsonPostItem.getP_small_avatar());
-						startActivity(intent);
-						getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
-					}
-				});
-			}
+//			if (userPreference.getU_id() != jsonPostItem.getP_userid()) {
+//				//点击头像进入详情页面
+//				holder.headImageView.setOnClickListener(new OnClickListener() {
+//
+//					@Override
+//					public void onClick(View v) {
+//						// TODO Auto-generated method stub
+//						Intent intent = new Intent(getActivity(), PersonDetailActivity.class);
+//						intent.putExtra(UserTable.U_ID, jsonPostItem.getP_userid());
+//						intent.putExtra(UserTable.U_NICKNAME, jsonPostItem.getP_username());
+//						intent.putExtra(UserTable.U_SMALL_AVATAR, jsonPostItem.getP_small_avatar());
+//						startActivity(intent);
+//						getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
+//					}
+//				});
+//			}
 		}
 
 		//设置内容

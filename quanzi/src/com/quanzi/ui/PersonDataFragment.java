@@ -141,14 +141,14 @@ public class PersonDataFragment extends BaseV4Fragment {
 			/***情感状态***/
 			loveStatusTextView.setText(jsonUser.getU_love_state());
 
-			//								/***兴趣爱好***/
-			//								interestTextView.setText(jsonUser.getu);
-			//						
-			//								/***擅长技能***/
-			//								skillTextView;
+			/***兴趣爱好***/
+			interestTextView.setText(jsonUser.getU_interest_items());
+
+			/***擅长技能***/
+			skillTextView.setText(jsonUser.getU_skill_items());
 
 			/***所属行业***/
-			//					industryTextView.setText(jsonUser.);
+			industryTextView.setText(jsonUser.getU_industry_item());
 
 			/***个人签名***/
 			if (jsonUser.getU_introduce() == null || jsonUser.getU_introduce().isEmpty()) {
