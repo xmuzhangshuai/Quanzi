@@ -336,13 +336,19 @@
             android:screenOrientation="portrait" >
         </activity>
 
-          <!-- 菜单页面 -->
+        <!-- 菜单页面 -->
         <activity
             android:name="com.quanzi.ui.ContextMenu"
             android:screenOrientation="portrait"
             android:theme="@style/MyDialogStyle" >
         </activity>
-        
+
+        <!-- 我的人脈圈或者我的追隨者页面 -->
+        <activity
+            android:name="com.quanzi.ui.MyPeopleActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
