@@ -53,7 +53,7 @@ public class MyPeopleActivity extends BaseActivity implements OnClickListener {
 	List<JsonConcern> jsonConcernList;
 	private String industry_name;
 	int pa_userid;
-	int favor_count;
+	//	int favor_count;
 	String type = "";
 	private UserPreference userPreference;
 
@@ -87,7 +87,9 @@ public class MyPeopleActivity extends BaseActivity implements OnClickListener {
 	@Override
 	protected void initView() {
 		// TODO Auto-generated method stub
-		leftTextView.setText("" + favor_count + "ÔÞ");
+		if (industry_name != null) {
+			leftTextView.setText("" + industry_name);
+		}
 		leftButton.setOnClickListener(this);
 	}
 
@@ -142,8 +144,8 @@ public class MyPeopleActivity extends BaseActivity implements OnClickListener {
 				// TODO Auto-generated method stub
 				if (statusCode == 200) {
 					if (response.equals("-1")) {
-						LogTool.e("ÁÐ±í·µ»Ø´íÎó" + response);
 					} else {
+						LogTool.e(response);
 						jsonConcernList = FastJsonTool.getObjectList(response, JsonConcern.class);
 						if (jsonConcernList != null && jsonConcernList.size() > 0) {
 							allFavorListView.setAdapter(new MyFavorsAdapter());

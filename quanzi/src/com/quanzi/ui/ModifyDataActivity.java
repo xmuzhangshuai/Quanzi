@@ -12,8 +12,8 @@ import java.util.Map;
 import org.apache.http.Header;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -22,9 +22,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.SystemClock;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -154,6 +152,25 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 		} else {
 			introTextView.setText(userPreference.getU_introduce());
 		}
+
+		/***行业***/
+		if (userPreference.getU_industry().isEmpty()) {
+			industryTextView.setText("未填写");
+		} else {
+			industryTextView.setText(userPreference.getU_industry());
+		}
+		/***技能***/
+		if (userPreference.getU_skills().isEmpty()) {
+			skillTextView.setText("未填写");
+		} else {
+			skillTextView.setText(userPreference.getU_skills());
+		}
+		/***爱好***/
+		if (userPreference.getU_interests().isEmpty()) {
+			interestTextView.setText("未填写");
+		} else {
+			interestTextView.setText(userPreference.getU_interests());
+		}
 	}
 
 	@Override
@@ -214,7 +231,7 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 
 		/***当前身份***/
 		statusTextView.setText(userPreference.getU_identity());
-		
+
 		/***情感状况***/
 		loveStatusTextView.setText(userPreference.getU_love_state());
 
@@ -237,7 +254,7 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 		//设置生日
 		if (userPreference.getU_birthday() != null) {
 			birthdayTextView.setText(DateTimeTools.getDateString(userPreference.getU_birthday()));
-		}else {
+		} else {
 			birthdayTextView.setText("未填写");
 		}
 	}
@@ -404,34 +421,6 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 			ImageTools.deleteImageByPath(filePath);
 		}
 	}
-
-	/**
-	 * 登录环信
-	 */
-	//	private void loginHuanXin() {
-	//		EMChatManager.getInstance().login(userPreference.getHuanXinUserName(), userPreference.getHuanXinPassword(),
-	//				new EMCallBack() {
-	//					@Override
-	//					public void onSuccess() {
-	//						LogTool.i("ModifyDataActivity", "登录环信成功");
-	//						//更新环信昵称
-	//						if (EMChatManager.getInstance().updateCurrentUserNick(userPreference.getName())) {
-	//							LogTool.i("ModifyDataActivity", "更新环信昵称成功");
-	//						} else {
-	//							LogTool.e("ModifyDataActivity", "更新环信昵称失败");
-	//						}
-	//					}
-	//
-	//					@Override
-	//					public void onProgress(int progress, String status) {
-	//					}
-	//
-	//					@Override
-	//					public void onError(int code, final String message) {
-	//						LogTool.e("ModifyDataActivity", "登录环信失败：code:" + code + "   message:" + message);
-	//					}
-	//				});
-	//	}
 
 	/**
 	 * 修改生日
@@ -731,7 +720,7 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 
 		}
 	}
-	
+
 	/**
 	 * 修改身份
 	 * @param name
@@ -785,7 +774,7 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 
 		}
 	}
-	
+
 	/**
 	 * 修改情感状况
 	 * @param name

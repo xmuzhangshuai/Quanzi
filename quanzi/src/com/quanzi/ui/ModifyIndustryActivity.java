@@ -1,19 +1,33 @@
 package com.quanzi.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.Header;
+
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.quanzi.R;
 import com.quanzi.base.BaseActivity;
+import com.quanzi.base.BaseApplication;
+import com.quanzi.table.UserTable;
+import com.quanzi.utils.AsyncHttpClientTool;
+import com.quanzi.utils.FastJsonTool;
+import com.quanzi.utils.LogTool;
+import com.quanzi.utils.ToastTool;
+import com.quanzi.utils.UserPreference;
 
 /**
  *
@@ -29,8 +43,8 @@ public class ModifyIndustryActivity extends BaseActivity {
 	private ListView industryListView;
 	private TextView leftTextView;//导航栏左侧文字
 	private View leftButton;//导航栏左侧按钮
-
-	private String[] industry = new String[] { "保险", "程序开发", "保险", "教育", "互联网", "摄影", "医疗" };
+	private UserPreference userPreference;
+	private List<String> industryList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +52,10 @@ public class ModifyIndustryActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_modify_industry);
+		userPreference = BaseApplication.getInstance().getUserPreference();
+		industryList = new ArrayList<String>();
+
+		getIndustryList();
 
 		findViewById();
 		initView();
@@ -65,12 +83,110 @@ public class ModifyIndustryActivity extends BaseActivity {
 			}
 		});
 
-		industryListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice,
-				industry));
+	}
 
-		int position = industryListView.getCheckedItemPosition(); // 即获取选中位置  
-		if (ListView.INVALID_POSITION != position) {
-			Toast.makeText(ModifyIndustryActivity.this, industry[position], 0).show();
+	/**
+	 * 	网络获取行业列表
+	 */
+	private void getIndustryList() {
+		final ProgressDialog dialog = new ProgressDialog(this);
+		dialog.setMessage("正在加载...");
+
+		RequestParams params = new RequestParams();
+		params.put(UserTable.U_ID, userPreference.getU_id());
+
+		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+				dialog.show();
+			}
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, String response) {
+				// TODO Auto-generated method stub
+				if (statusCode == 200) {
+					if (response.equals("-1")) {
+					} else {
+						industryList = FastJsonTool.getObjectList(response, String.class);
+						if (industryList != null && industryList.size() > 0) {
+							industryListView.setAdapter(new IndustryAdapter());
+						}
+					}
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+				// TODO Auto-generated method stub
+				LogTool.e("获取列表失败");
+			}
+
+			@Override
+			public void onFinish() {
+				// TODO Auto-generated method stub
+				super.onFinish();
+				dialog.dismiss();
+			}
+		};
+		AsyncHttpClientTool.post(ModifyIndustryActivity.this, "quanzi/getIndustryList", params, responseHandler);
+	}
+
+	/**
+	* 修改行业
+	* 
+	* @param context
+	* @param isCrop
+	*/
+	public void updateIndustry(final String industry) {
+		if (!industry.equals(userPreference.getU_industry())) {
+			// 没有错误，则修改
+			RequestParams params = new RequestParams();
+			params.put(UserTable.U_ID, userPreference.getU_id());
+			params.put(UserTable.U_INDUSTRY_ITEM, industry);
+
+			TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
+				Dialog dialog;
+
+				@Override
+				public void onStart() {
+					// TODO Auto-generated method stub
+					super.onStart();
+					dialog = showProgressDialog("请稍后...");
+				}
+
+				@Override
+				public void onFinish() {
+					// TODO Auto-generated method stub
+					dialog.dismiss();
+					super.onFinish();
+				}
+
+				@Override
+				public void onSuccess(int statusCode, Header[] headers, String response) {
+					// TODO Auto-generated method stub
+					if (statusCode == 200) {
+						if (response.equals("1")) {
+							ToastTool.showShort(ModifyIndustryActivity.this, "修改成功！");
+							userPreference.setU_industry(industry);
+							finish();
+						} else if (response.equals("-1")) {
+							LogTool.e("修改行业返回-1");
+						}
+					}
+				}
+
+				@Override
+				public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+					// TODO Auto-generated method stub
+					LogTool.e("修改行业服务器错误");
+				}
+			};
+			AsyncHttpClientTool.post("user/infoUpdate", params, responseHandler);
+		} else {
+
 		}
 	}
 
@@ -83,7 +199,7 @@ public class ModifyIndustryActivity extends BaseActivity {
 	 * @date 创建时间：2015-4-29 下午2:37:23 
 	 *
 	 */
-	private class QuaiziAdapter extends BaseAdapter {
+	private class IndustryAdapter extends BaseAdapter {
 		private class ViewHolder {
 			public TextView nameTextView;
 			public TextView countTextView;
@@ -92,13 +208,13 @@ public class ModifyIndustryActivity extends BaseActivity {
 		@Override
 		public int getCount() {
 			// TODO Auto-generated method stub
-			return industry.length;
+			return industryList.size();
 		}
 
 		@Override
 		public Object getItem(int position) {
 			// TODO Auto-generated method stub
-			return industry[position];
+			return industryList.get(position);
 		}
 
 		@Override
@@ -111,7 +227,7 @@ public class ModifyIndustryActivity extends BaseActivity {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
 			View view = convertView;
-			final String name = industry[position];
+			final String name = industryList.get(position);
 			if (name == null) {
 				return null;
 			}
@@ -128,7 +244,16 @@ public class ModifyIndustryActivity extends BaseActivity {
 			}
 
 			holder.nameTextView.setText(name);
-
+			holder.countTextView.setVisibility(View.GONE);
+			
+			view.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					updateIndustry(name);
+				}
+			});
 			return view;
 		}
 	}

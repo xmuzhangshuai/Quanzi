@@ -327,7 +327,6 @@
                     android:layout_marginRight="5dp"
                     android:layout_toRightOf="@+id/industrylabel"
                     android:gravity="right"
-                    android:text="互联网"
                     android:textColor="@color/system_green"
                     android:textSize="@dimen/day_recommend_font_info" />
             </RelativeLayout>
@@ -368,7 +367,6 @@
                     android:layout_marginRight="5dp"
                     android:layout_toRightOf="@+id/skilllabel"
                     android:gravity="right"
-                    android:text="Photoshop | 口译"
                     android:textSize="@dimen/day_recommend_font_info" />
             </RelativeLayout>
 
@@ -408,7 +406,6 @@
                     android:layout_marginRight="5dp"
                     android:layout_toRightOf="@+id/interestlabel"
                     android:gravity="right"
-                    android:text="游泳 | 健身 | 读书 | 电影"
                     android:textColor="@color/system_green"
                     android:textSize="@dimen/day_recommend_font_info" />
             </RelativeLayout>
