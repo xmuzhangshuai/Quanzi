@@ -157,9 +157,8 @@ public class MainExploreActFragment extends BaseV4Fragment {
 	 */
 	public void screenType(String type) {
 		this.actType = type;
-		actListView.setRefreshing();
 		pageNow = 0;
-		getDataTask(pageNow);
+		actListView.setRefreshing();
 	}
 
 	/**
@@ -193,6 +192,12 @@ public class MainExploreActFragment extends BaseV4Fragment {
 		params.put(UserTable.U_ID, userPreference.getU_id());
 		params.put(ActivityTable.A_ACT_TYPE, actType);
 		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+			}
 
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, String response) {

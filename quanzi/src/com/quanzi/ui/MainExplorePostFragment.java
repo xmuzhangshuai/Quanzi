@@ -181,9 +181,8 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 	public void screenToRefresh(String gender, String love_state) {
 		this.gender = gender;
 		this.love_state = love_state;
-		postListView.setRefreshing();
 		pageNow = 0;
-		getDataTask(pageNow);
+		postListView.setRefreshing();
 	}
 
 	/**
@@ -206,14 +205,9 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 		params.put(UserTable.U_ID, userPreference.getU_id());
 		params.put(UserTable.U_GENDER, gender);
 		params.put(UserTable.U_LOVE_STATE, love_state);
+		LogTool.e("gender" + gender);
+		LogTool.e("love_state" + love_state);
 		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
-
-			@Override
-			public void onStart() {
-				// TODO Auto-generated method stub
-				super.onStart();
-				//				postListView.setRefreshing();
-			}
 
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, String response) {
@@ -253,7 +247,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 			public void onFinish() {
 				// TODO Auto-generated method stub
 				super.onFinish();
-				//				postListView.onRefreshComplete();
+				postListView.onRefreshComplete();
 			}
 
 		};

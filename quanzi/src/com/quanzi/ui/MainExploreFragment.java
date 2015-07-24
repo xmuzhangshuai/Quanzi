@@ -40,7 +40,6 @@ import com.quanzi.utils.UserPreference;
  */
 public class MainExploreFragment extends BaseV4Fragment implements OnClickListener {
 	private View rootView;// 根View
-	private TextView leftTextView;//导航栏左侧文字
 	private TextView schoolTextView;//学校
 	private View filterBtn;//筛选按钮
 	private View searchBtn;//查找按钮
@@ -52,6 +51,8 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 	private View[] mTabs;
 	ViewPager mViewPager;
 	MainExplorePagerAdapter mPagerAdapter;
+	private String gender = "全部";
+	private String love_stateString = "全部";
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,7 +72,6 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 	@Override
 	protected void findViewById() {
 		// TODO Auto-generated method stub
-		leftTextView = (TextView) rootView.findViewById(R.id.left_text1);
 		schoolTextView = (TextView) rootView.findViewById(R.id.left_text2);
 		filterBtn = rootView.findViewById(R.id.nav_right_btn3);
 		searchBtn = rootView.findViewById(R.id.nav_right_btn2);
@@ -305,8 +305,6 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 		private RadioButton genderFemaleBtn;//女性
 		private RadioButton allStateBtn;//状态全部
 		private RadioButton stateSingleBtn;//单身
-		private String gender = "全部";
-		private String love_stateString = "全部";
 		private TextView confirmBtn;//确定
 		private TextView cancleBtn;//取消
 
@@ -348,6 +346,19 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 			stateSingleBtn.setOnClickListener(this);
 			confirmBtn.setOnClickListener(this);
 			cancleBtn.setOnClickListener(this);
+			if (gender.equals("全部")) {
+				allGenderBtn.setChecked(true);
+			} else if (gender.equals("男")) {
+				genderMaleBtn.setChecked(true);
+			} else if (gender.equals("女")) {
+				genderFemaleBtn.setChecked(true);
+			}
+
+			if (love_stateString.equals("全部")) {
+				allStateBtn.setChecked(true);
+			} else if (love_stateString.equals("单身")) {
+				stateSingleBtn.setChecked(true);
+			}
 		}
 
 		/**
@@ -357,9 +368,9 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 			if (allGenderBtn.isChecked()) {
 				gender = "全部";
 			} else if (genderFemaleBtn.isChecked()) {
-				gender = "男";
-			} else if (genderMaleBtn.isChecked()) {
 				gender = "女";
+			} else if (genderMaleBtn.isChecked()) {
+				gender = "男";
 			}
 
 			if (allStateBtn.isChecked()) {
