@@ -91,6 +91,7 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 	protected void initView() {
 		// TODO Auto-generated method stub
 		filterBtn.setVisibility(View.VISIBLE);
+		searchBtn.setVisibility(View.GONE);
 		schoolTextView.setVisibility(View.VISIBLE);
 		filterBtn.setOnClickListener(this);
 		searchBtn.setOnClickListener(this);
@@ -115,11 +116,11 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 				currentTabIndex = position;
 				mTabs[currentTabIndex].setSelected(true);
 
-				if (position == 0) {
-					searchBtn.setVisibility(View.VISIBLE);
-				} else {
-					searchBtn.setVisibility(View.GONE);
-				}
+//				if (position == 0) {
+//					searchBtn.setVisibility(View.VISIBLE);
+//				} else {
+//					searchBtn.setVisibility(View.GONE);
+//				}
 			}
 		});
 	}

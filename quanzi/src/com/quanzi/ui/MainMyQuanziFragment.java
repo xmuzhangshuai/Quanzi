@@ -121,6 +121,7 @@ public class MainMyQuanziFragment extends BaseV4Fragment implements OnClickListe
 		leftTextView.setText("圈子");
 		searchBtn.setOnClickListener(this);
 		publishBtn.setOnClickListener(this);
+		searchBtn.setVisibility(View.GONE);
 
 		//设置上拉下拉刷新事件
 		postListView.setOnRefreshListener(new OnRefreshListener2<ListView>() {
@@ -235,7 +236,7 @@ public class MainMyQuanziFragment extends BaseV4Fragment implements OnClickListe
 			public void onStart() {
 				// TODO Auto-generated method stub
 				super.onStart();
-//				postListView.setRefreshing();
+				//				postListView.setRefreshing();
 			}
 
 			@Override
