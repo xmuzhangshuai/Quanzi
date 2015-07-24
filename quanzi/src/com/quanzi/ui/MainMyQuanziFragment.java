@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,7 +39,6 @@ import com.quanzi.config.Constants.Config;
 import com.quanzi.jsonobject.JsonPostItem;
 import com.quanzi.table.CommentTable;
 import com.quanzi.table.PostTable;
-import com.quanzi.table.QuanziTable;
 import com.quanzi.table.UserTable;
 import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.DateTimeTools;
@@ -57,7 +57,7 @@ import com.quanzi.utils.UserPreference;
  * @date 创建时间：2015-4-12 下午8:53:06 
  *
  */
-public class MainHomeFragment extends BaseV4Fragment implements OnClickListener {
+public class MainMyQuanziFragment extends BaseV4Fragment implements OnClickListener {
 	private View rootView;// 根View
 	private TextView leftTextView;//导航栏左侧文字
 	private View searchBtn;//查找按钮
@@ -277,7 +277,7 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 			public void onFinish() {
 				// TODO Auto-generated method stub
 				super.onFinish();
-//				postListView.onRefreshComplete();
+				postListView.onRefreshComplete();
 			}
 
 		};
@@ -298,7 +298,6 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 			public ImageView headImageView;
 			public TextView nameTextView;
 			public ImageView genderImageView;
-			public CheckBox concernBtn;
 			public TextView timeTextView;
 			public TextView contentTextView;
 			public CheckBox favorBtn;
@@ -373,7 +372,6 @@ public class MainHomeFragment extends BaseV4Fragment implements OnClickListener 
 				holder.imageViewGroup2 = view.findViewById(R.id.item_image_group2);
 				holder.imageViewGroup1 = view.findViewById(R.id.item_image_group1);
 				holder.favorBtn = (CheckBox) view.findViewById(R.id.favor_btn);
-				holder.concernBtn = (CheckBox) view.findViewById(R.id.concern_btn);
 				holder.favorCountTextView = (TextView) view.findViewById(R.id.favor_count);
 				holder.commentBtn = (ImageView) view.findViewById(R.id.comment_btn);
 				holder.commentCountTextView = (TextView) view.findViewById(R.id.comment_count);

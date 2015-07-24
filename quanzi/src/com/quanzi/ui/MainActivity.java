@@ -20,6 +20,7 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.util.EMLog;
 import com.quanzi.R;
+import com.quanzi.base.AppManager;
 import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseFragmentActivity;
 import com.quanzi.config.DefaultKeys;
@@ -39,7 +40,7 @@ import com.quanzi.utils.CommonTools;
  */
 public class MainActivity extends BaseFragmentActivity implements EMEventListener {
 	private View[] mTabs;
-	private MainHomeFragment homeFragment;//圈子动态页面
+	private MainMyQuanziFragment homeFragment;//圈子动态页面
 	private MainExploreFragment exploreFragment;//探索页面
 	private MainChatFragment chatFragment;//消息页面
 	private MainPersonalFragment personalFragment;//个人中心页面
@@ -93,7 +94,7 @@ public class MainActivity extends BaseFragmentActivity implements EMEventListene
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 
-		homeFragment = new MainHomeFragment();
+		homeFragment = new MainMyQuanziFragment();
 		exploreFragment = new MainExploreFragment();
 		chatFragment = new MainChatFragment();
 		personalFragment = new MainPersonalFragment();
@@ -290,7 +291,8 @@ public class MainActivity extends BaseFragmentActivity implements EMEventListene
 			CommonTools.showShortToast(getBaseContext(), "再按一次退出程序");
 			mHandler.sendEmptyMessageDelayed(0, 2000);
 		} else {
-			close();
+//			close();
+			AppManager.getInstance().AppExit(getApplicationContext());
 		}
 	}
 

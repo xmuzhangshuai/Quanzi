@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.apache.http.Header;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -67,7 +66,6 @@ public class MainExploreActFragment extends BaseV4Fragment {
 	private LinkedList<JsonActItem> jsonActItemList;
 	private int pageNow = 0;//控制页数
 	private PostAdapter mAdapter;
-	private ProgressDialog progressDialog;
 	private String actType = "全部";
 	private static MainExploreActFragment mainExploreActFragment;
 

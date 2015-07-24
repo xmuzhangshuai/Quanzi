@@ -193,11 +193,11 @@ public class MainChatContactListFragment extends BaseV4Fragment {
 	/**
 	 * 更新对话列表内容
 	 */
-	public void refreshConversation() {
-		mAdapter = new ContractListAdapter(getActivity(), conversationList);
-		mContactListView.setAdapter(mAdapter);
-		mAdapter.notifyDataSetChanged();
-	}
+//	public void refreshConversation() {
+//		mAdapter = new ContractListAdapter(getActivity(), conversationList);
+//		mContactListView.setAdapter(mAdapter);
+//		mAdapter.notifyDataSetChanged();
+//	}
 
 	//显示删除心动或情侣对话窗口
 	void showDeletDialog() {

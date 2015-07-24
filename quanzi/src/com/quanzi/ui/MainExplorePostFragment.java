@@ -205,8 +205,6 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 		params.put(UserTable.U_ID, userPreference.getU_id());
 		params.put(UserTable.U_GENDER, gender);
 		params.put(UserTable.U_LOVE_STATE, love_state);
-		LogTool.e("gender" + gender);
-		LogTool.e("love_state" + love_state);
 		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
 
 			@Override

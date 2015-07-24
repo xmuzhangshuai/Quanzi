@@ -93,7 +93,7 @@ public class MainChatFragment extends BaseV4Fragment implements OnClickListener 
 		FragmentPagerAdapter f = (FragmentPagerAdapter) mViewPager.getAdapter();
 		MainChatContactListFragment mainChatContactListFragment = (MainChatContactListFragment) f.instantiateItem(
 				mViewPager, 0);
-		mainChatContactListFragment.refreshConversation();
+		mainChatContactListFragment.refresh();
 	}
 
 	/**
