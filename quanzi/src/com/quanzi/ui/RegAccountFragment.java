@@ -7,6 +7,8 @@ import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.http.Header;
+
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -18,9 +20,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentTransaction;
 import android.telephony.SmsMessage;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,15 +29,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.quanzi.R;
 import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseV4Fragment;
 import com.quanzi.config.Constants.Config;
 import com.quanzi.table.UserTable;
+import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.CommonTools;
 import com.quanzi.utils.HttpUtil;
+import com.quanzi.utils.LogTool;
 import com.quanzi.utils.MD5For32;
 import com.quanzi.utils.SIMCardInfo;
+import com.quanzi.utils.ToastTool;
 import com.quanzi.utils.UserPreference;
 
 /**
@@ -72,7 +77,6 @@ public class RegAccountFragment extends BaseV4Fragment {
 	private Button authCodeButton;
 	private EditText authCodeView;
 	private Timer timer;
-	ProgressDialog dialog;
 	private BroadcastReceiver smsReceiver;
 	private IntentFilter filter2;
 	private Handler handler;
@@ -193,24 +197,49 @@ public class RegAccountFragment extends BaseV4Fragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				recLen = Config.AUTN_CODE_TIME;
-				authCodeButton.setEnabled(false);
-				getAuthCode();
-				timer = new Timer();
-				timer.schedule(new TimerTask() {
-
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						recLen--;
-						Message message = new Message();
-						message.what = 1;
-						timeHandler.sendMessage(message);
-					}
-				}, 1000, 1000);
+				attemptAuthCode();
 			}
 		});
 
+	}
+
+	private void attemptAuthCode() {
+		mPhoneView.setError(null);
+		mPhone = mPhoneView.getText().toString();
+		boolean cancel = false;
+		// 检查手机号
+		if (TextUtils.isEmpty(mPhone)) {
+			mPhoneView.setError(getString(R.string.error_field_required));
+			focusView = mPhoneView;
+			cancel = true;
+		} else if (!CommonTools.isMobileNO(mPhone)) {
+			mPhoneView.setError(getString(R.string.error_phone));
+			focusView = mPhoneView;
+			cancel = true;
+		}
+		if (cancel) {
+			// 如果错误，则提示错误
+			focusView.requestFocus();
+			return;
+		}
+
+		getAuthCode();//获取验证码
+
+		recLen = Config.AUTN_CODE_TIME;
+		authCodeButton.setEnabled(false);
+
+		timer = new Timer();
+		timer.schedule(new TimerTask() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				recLen--;
+				Message message = new Message();
+				message.what = 1;
+				timeHandler.sendMessage(message);
+			}
+		}, 1000, 1000);
 	}
 
 	/**
@@ -282,9 +311,6 @@ public class RegAccountFragment extends BaseV4Fragment {
 			// 如果错误，则提示错误
 			focusView.requestFocus();
 		} else {
-			//			//获取验证码
-			//			getAuthCode();
-
 			//检查手机号是否被注册
 			mCheckPhoneTask = new CheckPhoneTask();
 			mCheckPhoneTask.execute();
@@ -309,63 +335,46 @@ public class RegAccountFragment extends BaseV4Fragment {
 	 * @return
 	 */
 	private void getAuthCode() {
-		//		RequestParams params = new RequestParams();
-		//		params.put(UserTable.U_TEL, mPhone);
-		//		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
-		//			ProgressDialog dialog = new ProgressDialog(getActivity());
-		//
-		//			@Override
-		//			public void onStart() {
-		//				// TODO Auto-generated method stub
-		//				super.onStart();
-		//				rightImageButton.setEnabled(false);
-		//				dialog.setMessage("正在验证，请稍后...");
-		//				dialog.setCancelable(false);
-		//				dialog.show();
-		//			}
-		//
-		//			@Override
-		//			public void onSuccess(int statusCode, Header[] headers, String response) {
-		//				// TODO Auto-generated method stub
-		//
-		//				if (response.length() == 6) {
-		//					RegAuthCodeFragment fragment = new RegAuthCodeFragment();
-		//					Bundle bundle = new Bundle();
-		//					bundle.putString(RegAuthCodeFragment.AUTHCODE, response);
-		//					fragment.setArguments(bundle);
-		//					FragmentTransaction transaction = getFragmentManager().beginTransaction();
-		//					transaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_left_out, R.anim.push_right_in,
-		//							R.anim.push_right_out);
-		//					transaction.replace(R.id.fragment_container, fragment);
-		//					transaction.addToBackStack(null);
-		//					transaction.commit();
-		//					ToastTool.showShort(RegPhoneFragment.this.getActivity(), "验证码已发送");
-		//					rightImageButton.setEnabled(true);
-		//
-		//				} else if (response.endsWith("-1")) {
-		//					ToastTool.showLong(RegPhoneFragment.this.getActivity(), "服务器出现异常，请稍后再试");
-		//				} else if (response.endsWith("1")) {
-		//					ToastTool.showShort(RegPhoneFragment.this.getActivity(), "手机号码为空");
-		//				} else {
-		//					ToastTool.showShort(RegPhoneFragment.this.getActivity(), "服务器错误");
-		//				}
-		//			}
-		//
-		//			@Override
-		//			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
-		//				// TODO Auto-generated method stub
-		//				ToastTool.showShort(RegPhoneFragment.this.getActivity(), "服务器错误");
-		//				LogTool.e("验证码", "服务器错误,错误代码" + statusCode + "，  原因" + errorResponse);
-		//			}
-		//
-		//			@Override
-		//			public void onFinish() {
-		//				// TODO Auto-generated method stub
-		//				super.onFinish();
-		//				dialog.dismiss();
-		//			}
-		//		};
-		//		AsyncHttpClientTool.post("getmessage", params, responseHandler);
+		RequestParams params = new RequestParams();
+		params.put(UserTable.U_TEL, mPhone);
+		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+				rightImageButton.setEnabled(false);
+			}
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, String response) {
+				// TODO Auto-generated method stub
+
+				if (response.length() == 6) {
+					responseAuthcode = response;
+				} else if (response.endsWith("-1")) {
+					ToastTool.showLong(getActivity(), "服务器出现异常，请稍后再试");
+					LogTool.e("获取验证码服务器返回-1");
+				} else if (response.endsWith("1")) {
+					ToastTool.showShort(getActivity(), "手机号码为空");
+				} else {
+					LogTool.e("获取验证码服务器错误");
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+				// TODO Auto-generated method stub
+				LogTool.e("验证码", "服务器错误,错误代码" + statusCode + "，  原因" + errorResponse);
+			}
+
+			@Override
+			public void onFinish() {
+				// TODO Auto-generated method stub
+				super.onFinish();
+			}
+		};
+		AsyncHttpClientTool.post("user/getValidateCode", params, responseHandler);
 	}
 
 	/**
@@ -463,16 +472,15 @@ public class RegAccountFragment extends BaseV4Fragment {
 	 * @return
 	 */
 	private boolean vertifyAuthCode(String myAuthCode, String response) {
-		//		if (!TextUtils.isEmpty(response)) {
-		//			if (response.equals(myAuthCode)) {
-		//				return true;
-		//			} else {
-		//				return false;
-		//			}
-		//		} else {
-		//			return false;
-		//		}
-		return true;
+		if (!TextUtils.isEmpty(response)) {
+			if (response.equals(myAuthCode)) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
 	}
 
 	/**
