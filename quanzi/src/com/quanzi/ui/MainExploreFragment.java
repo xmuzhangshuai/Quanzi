@@ -10,7 +10,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -19,16 +18,15 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.quanzi.R;
 import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseV4Fragment;
 import com.quanzi.config.Constants;
 import com.quanzi.customewidget.MyMenuDialog;
-import com.quanzi.utils.LogTool;
 import com.quanzi.utils.UserPreference;
 
 /**
@@ -307,6 +305,8 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 		private RadioButton genderFemaleBtn;//女性
 		private RadioButton allStateBtn;//状态全部
 		private RadioButton stateSingleBtn;//单身
+		private String gender = "全部";
+		private String love_stateString = "全部";
 		private TextView confirmBtn;//确定
 		private TextView cancleBtn;//取消
 
@@ -350,15 +350,35 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 			cancleBtn.setOnClickListener(this);
 		}
 
+		/**
+		 * 获取选择状态
+		 */
+		private void getChooseState() {
+			if (allGenderBtn.isChecked()) {
+				gender = "全部";
+			} else if (genderFemaleBtn.isChecked()) {
+				gender = "男";
+			} else if (genderMaleBtn.isChecked()) {
+				gender = "女";
+			}
+
+			if (allStateBtn.isChecked()) {
+				love_stateString = "全部";
+			} else if (stateSingleBtn.isChecked()) {
+				love_stateString = "单身";
+			}
+		}
+
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			switch (v.getId()) {
 			case R.id.confirm:
+				getChooseState();
 				FragmentPagerAdapter f = (FragmentPagerAdapter) mViewPager.getAdapter();
 				MainExplorePostFragment mainExplorePostFragment = (MainExplorePostFragment) f.instantiateItem(
 						mViewPager, 0);
-				mainExplorePostFragment.screenToRefresh();
+				mainExplorePostFragment.screenToRefresh(gender, love_stateString);
 				ScreenDialogFragment.this.dismiss();
 				break;
 			case R.id.cancle:

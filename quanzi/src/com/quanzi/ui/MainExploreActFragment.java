@@ -68,6 +68,7 @@ public class MainExploreActFragment extends BaseV4Fragment {
 	private int pageNow = 0;//控制页数
 	private PostAdapter mAdapter;
 	private ProgressDialog progressDialog;
+	private String actType = "全部";
 	private static MainExploreActFragment mainExploreActFragment;
 
 	//创建实例
@@ -155,7 +156,10 @@ public class MainExploreActFragment extends BaseV4Fragment {
 	 * 筛选刷新
 	 */
 	public void screenType(String type) {
-		LogTool.e("筛选类型" + type);
+		this.actType = type;
+		actListView.setRefreshing();
+		pageNow = 0;
+		getDataTask(pageNow);
 	}
 
 	/**
@@ -187,6 +191,7 @@ public class MainExploreActFragment extends BaseV4Fragment {
 		params.put("page", pageNow);
 		params.put(UserTable.U_SCHOOLID, userPreference.getU_schoolid());
 		params.put(UserTable.U_ID, userPreference.getU_id());
+		params.put(ActivityTable.A_ACT_TYPE, actType);
 		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
 
 			@Override

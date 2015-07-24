@@ -70,6 +70,9 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 	private PostAdapter mAdapter;
 	private static MainExplorePostFragment mainExplorePostFragment;
 
+	private String gender = "全部";
+	private String love_state = "全部";
+
 	//创建实例
 	static MainExplorePostFragment newInstance() {
 		if (mainExplorePostFragment == null) {
@@ -175,8 +178,9 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 	/**
 	 * 筛选刷新
 	 */
-	public void screenToRefresh() {
-		LogTool.e("筛选刷新！！");
+	public void screenToRefresh(String gender, String love_state) {
+		this.gender = gender;
+		this.love_state = love_state;
 		postListView.setRefreshing();
 		pageNow = 0;
 		getDataTask(pageNow);
@@ -200,13 +204,15 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 		params.put("page", pageNow);
 		params.put(UserTable.U_SCHOOLID, userPreference.getU_schoolid());
 		params.put(UserTable.U_ID, userPreference.getU_id());
+		params.put(UserTable.U_GENDER, gender);
+		params.put(UserTable.U_LOVE_STATE, love_state);
 		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
 
 			@Override
 			public void onStart() {
 				// TODO Auto-generated method stub
 				super.onStart();
-//				postListView.setRefreshing();
+				//				postListView.setRefreshing();
 			}
 
 			@Override
@@ -247,7 +253,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 			public void onFinish() {
 				// TODO Auto-generated method stub
 				super.onFinish();
-//				postListView.onRefreshComplete();
+				//				postListView.onRefreshComplete();
 			}
 
 		};
