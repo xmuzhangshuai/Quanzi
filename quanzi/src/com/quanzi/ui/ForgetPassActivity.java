@@ -263,7 +263,7 @@ public class ForgetPassActivity extends BaseActivity implements OnClickListener 
 				public void onSuccess(int arg0, Header[] arg1, String arg2) {
 					// TODO Auto-generated method stub
 					if (arg0 == 200) {
-						if (arg2.equals(DefaultKeys.TEL_FAIL)) {
+						if (arg2.equals("-1")) {
 							getAuthCode();
 
 							recLen = Config.AUTN_CODE_TIME;
@@ -293,7 +293,7 @@ public class ForgetPassActivity extends BaseActivity implements OnClickListener 
 					ToastTool.showLong(ForgetPassActivity.this, "服务器错误");
 				}
 			};
-			AsyncHttpClientTool.post("existtel", params, responseHandler);
+			AsyncHttpClientTool.post("regist/telrepeat", params, responseHandler);
 
 		}
 
@@ -347,14 +347,13 @@ public class ForgetPassActivity extends BaseActivity implements OnClickListener 
 				} else if (response.endsWith("1")) {
 					ToastTool.showShort(ForgetPassActivity.this, "手机号码为空");
 				} else {
-					ToastTool.showShort(ForgetPassActivity.this, "服务器错误");
+					LogTool.e("服务器返回错误");
 				}
 			}
 
 			@Override
 			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
 				// TODO Auto-generated method stub
-				ToastTool.showShort(ForgetPassActivity.this, "服务器错误");
 				LogTool.e("验证码", "服务器错误,错误代码" + statusCode + "，  原因" + errorResponse);
 			}
 
@@ -364,7 +363,7 @@ public class ForgetPassActivity extends BaseActivity implements OnClickListener 
 				super.onFinish();
 			}
 		};
-		AsyncHttpClientTool.post("getmessage", params, responseHandler);
+		AsyncHttpClientTool.post("user/getValidateCode", params, responseHandler);
 	}
 
 	/**

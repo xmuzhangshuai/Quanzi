@@ -150,8 +150,6 @@ public class ModifyPassActivity extends BaseActivity implements OnClickListener 
 						if (arg2.equals("1")) {
 							ToastTool.showShort(ModifyPassActivity.this, "修改成功！");
 							reLogin();
-							//							userPreference.setU_password(newPass);
-							//							finish();
 						} else if (arg2.equals("-1")) {
 							mOldPassView.setError("旧密码不正确");
 							focusView = mOldPassView;

@@ -122,6 +122,7 @@ public class ResetPassActivity extends BaseActivity implements OnClickListener {
 			RequestParams params = new RequestParams();
 			params.put(UserTable.U_NEW_PASSWORD, MD5For32.GetMD5Code(newPass));
 			params.put(UserTable.U_TEL, mPhone);
+			params.put(UserTable.U_ID, userPreference.getU_id());
 			TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
 				Dialog dialog;
 

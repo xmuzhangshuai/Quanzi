@@ -9,7 +9,6 @@ import java.util.regex.Pattern;
 
 import org.apache.http.Header;
 
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
