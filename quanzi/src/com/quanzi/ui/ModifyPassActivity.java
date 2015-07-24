@@ -20,6 +20,7 @@ import com.quanzi.base.BaseApplication;
 import com.quanzi.table.UserTable;
 import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.CommonTools;
+import com.quanzi.utils.LogTool;
 import com.quanzi.utils.MD5For32;
 import com.quanzi.utils.ToastTool;
 import com.quanzi.utils.UserPreference;
@@ -154,6 +155,8 @@ public class ModifyPassActivity extends BaseActivity implements OnClickListener 
 							mOldPassView.setError("旧密码不正确");
 							focusView = mOldPassView;
 							focusView.requestFocus();
+						}else {
+							LogTool.e("返回错误"+arg2);
 						}
 					}
 				}
@@ -161,10 +164,10 @@ public class ModifyPassActivity extends BaseActivity implements OnClickListener 
 				@Override
 				public void onFailure(int arg0, Header[] arg1, String arg2, Throwable arg3) {
 					// TODO Auto-generated method stub
-					ToastTool.showLong(ModifyPassActivity.this, "服务器错误");
+					LogTool.e("服务器错误");
 				}
 			};
-			AsyncHttpClientTool.post("updateuserpwd", params, responseHandler);
+			AsyncHttpClientTool.post("user/updatePwd", params, responseHandler);
 		}
 	}
 

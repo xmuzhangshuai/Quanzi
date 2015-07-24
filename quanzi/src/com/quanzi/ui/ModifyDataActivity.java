@@ -26,7 +26,6 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.DatePicker;
@@ -105,12 +104,9 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 	private View introView;
 	private TextView introTextView;
 
-	private String personIntro;
 	private UserPreference userPreference;
 	private File picFile;
 	private Uri photoUri;
-	private InputMethodManager imm;
-	private String nickname;
 	private final int activity_result_camara_with_data = 1006;
 	private final int activity_result_cropimage_with_data = 1007;
 	boolean nickNameChanged = false;
@@ -127,7 +123,6 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_modify_data);
 
-		imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		userPreference = BaseApplication.getInstance().getUserPreference();
 		findViewById();
 		initView();
@@ -163,13 +158,13 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 		if (userPreference.getU_skills().isEmpty()) {
 			skillTextView.setText("未填写");
 		} else {
-			skillTextView.setText(userPreference.getU_skills());
+			skillTextView.setText(userPreference.getU_skills().replace("|", " | "));
 		}
 		/***爱好***/
 		if (userPreference.getU_interests().isEmpty()) {
 			interestTextView.setText("未填写");
 		} else {
-			interestTextView.setText(userPreference.getU_interests());
+			interestTextView.setText(userPreference.getU_interests().replace("|", "\n"));
 		}
 	}
 
@@ -234,18 +229,6 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 
 		/***情感状况***/
 		loveStatusTextView.setText(userPreference.getU_love_state());
-
-		//		/***情感状态***/
-		//		loveStatusTextView;
-		//
-		//		/***兴趣爱好***/
-		//		interestTextView;
-		//
-		//		/***擅长技能***/
-		//		skillTextView;
-		//
-		//		/***所属行业***/
-		//		industryTextView.setText();
 
 		//显示头像
 		ImageLoader.getInstance().displayImage(AsyncHttpClientTool.getAbsoluteUrl(userPreference.getU_small_avatar()),

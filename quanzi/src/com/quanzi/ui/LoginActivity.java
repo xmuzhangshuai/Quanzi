@@ -215,7 +215,7 @@ public class LoginActivity extends BaseActivity {
 								saveUser(user);//更新用户信息
 								loginHuanxin("" + user.getU_id(), user.getU_password());
 							} else {
-								LogTool.e("登录返回出错,user为空");
+								LogTool.e("登录返回出错,user为空"+response);
 							}
 						}
 					}

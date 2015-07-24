@@ -31,7 +31,6 @@ import com.quanzi.R;
 import com.quanzi.base.BaseActivity;
 import com.quanzi.base.BaseApplication;
 import com.quanzi.config.Constants.Config;
-import com.quanzi.config.DefaultKeys;
 import com.quanzi.table.UserTable;
 import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.CommonTools;

@@ -20,6 +20,7 @@ import com.quanzi.base.BaseApplication;
 import com.quanzi.table.UserTable;
 import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.CommonTools;
+import com.quanzi.utils.LogTool;
 import com.quanzi.utils.MD5For32;
 import com.quanzi.utils.ToastTool;
 import com.quanzi.utils.UserPreference;
@@ -39,9 +40,9 @@ public class ResetPassActivity extends BaseActivity implements OnClickListener {
 	private EditText mConformPassView;//»∑»œ√‹¬Î
 	private UserPreference userPreference;
 
-	private String mPhone;
 	private String newPass;
 	private String confirmPass;
+	private String mPhone;
 	View focusView = null;
 
 	@Override
@@ -50,8 +51,11 @@ public class ResetPassActivity extends BaseActivity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_reset_pass);
-		mPhone = getIntent().getStringExtra(UserTable.U_TEL);
 		userPreference = BaseApplication.getInstance().getUserPreference();
+		mPhone = getIntent().getStringExtra(UserTable.U_TEL);
+		if (mPhone == null || mPhone.isEmpty()) {
+			finish();
+		}
 
 		findViewById();
 		initView();
@@ -122,7 +126,6 @@ public class ResetPassActivity extends BaseActivity implements OnClickListener {
 			RequestParams params = new RequestParams();
 			params.put(UserTable.U_NEW_PASSWORD, MD5For32.GetMD5Code(newPass));
 			params.put(UserTable.U_TEL, mPhone);
-			params.put(UserTable.U_ID, userPreference.getU_id());
 			TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
 				Dialog dialog;
 
@@ -148,7 +151,7 @@ public class ResetPassActivity extends BaseActivity implements OnClickListener {
 							ToastTool.showShort(ResetPassActivity.this, "÷ÿ÷√√‹¬Î≥…π¶£°");
 							reLogin();
 						} else {
-							ToastTool.showShort(ResetPassActivity.this, "÷ÿ÷√√‹¬Î ß∞‹£°");
+							LogTool.e("÷ÿ÷√√‹¬Î ß∞‹£°");
 						}
 					}
 				}
@@ -159,7 +162,7 @@ public class ResetPassActivity extends BaseActivity implements OnClickListener {
 					ToastTool.showLong(ResetPassActivity.this, "∑˛ŒÒ∆˜¥ÌŒÛ");
 				}
 			};
-			AsyncHttpClientTool.post("resetuserpassword", params, responseHandler);
+			AsyncHttpClientTool.post("user/resetPwd", params, responseHandler);
 		}
 	}
 

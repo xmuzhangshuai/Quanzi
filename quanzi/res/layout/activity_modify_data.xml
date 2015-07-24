@@ -92,7 +92,7 @@
                     android:layout_marginLeft="@dimen/personal_photo_margin"
                     android:layout_marginRight="5dp"
                     android:layout_toRightOf="@+id/nicknamelabel"
-                    android:gravity="right"
+                    android:gravity="left"
                     android:textSize="@dimen/day_recommend_font_info" />
             </RelativeLayout>
 
@@ -131,7 +131,7 @@
                     android:layout_marginLeft="@dimen/personal_photo_margin"
                     android:layout_marginRight="5dp"
                     android:layout_toRightOf="@+id/genderlabel"
-                    android:gravity="right"
+                    android:gravity="left"
                     android:textSize="@dimen/day_recommend_font_info" />
             </RelativeLayout>
 
@@ -170,7 +170,7 @@
                     android:layout_marginLeft="@dimen/personal_photo_margin"
                     android:layout_marginRight="5dp"
                     android:layout_toRightOf="@+id/birthdaylabel"
-                    android:gravity="right"
+                    android:gravity="left"
                     android:textSize="@dimen/day_recommend_font_info" />
             </RelativeLayout>
 
@@ -209,7 +209,7 @@
                     android:layout_marginLeft="@dimen/personal_photo_margin"
                     android:layout_marginRight="5dp"
                     android:layout_toRightOf="@+id/schoollabel"
-                    android:gravity="right"
+                    android:gravity="left"
                     android:textSize="@dimen/day_recommend_font_info" />
             </RelativeLayout>
 
@@ -248,7 +248,7 @@
                     android:layout_marginLeft="@dimen/personal_photo_margin"
                     android:layout_marginRight="5dp"
                     android:layout_toRightOf="@+id/statuslabel"
-                    android:gravity="right"
+                    android:gravity="left"
                     android:textSize="@dimen/day_recommend_font_info" />
             </RelativeLayout>
 
@@ -287,11 +287,11 @@
                     android:layout_marginLeft="@dimen/personal_photo_margin"
                     android:layout_marginRight="5dp"
                     android:layout_toRightOf="@+id/lovestatuslabel"
-                    android:gravity="right"
+                    android:gravity="left"
                     android:textSize="@dimen/day_recommend_font_info" />
             </RelativeLayout>
 
-             <View
+            <View
                 android:id="@+id/view7"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
@@ -326,7 +326,7 @@
                     android:layout_marginLeft="@dimen/personal_photo_margin"
                     android:layout_marginRight="5dp"
                     android:layout_toRightOf="@+id/industrylabel"
-                    android:gravity="right"
+                    android:gravity="left"
                     android:textColor="@color/system_green"
                     android:textSize="@dimen/day_recommend_font_info" />
             </RelativeLayout>
@@ -366,7 +366,7 @@
                     android:layout_marginLeft="@dimen/personal_photo_margin"
                     android:layout_marginRight="5dp"
                     android:layout_toRightOf="@+id/skilllabel"
-                    android:gravity="right"
+                    android:gravity="left"
                     android:textSize="@dimen/day_recommend_font_info" />
             </RelativeLayout>
 
@@ -388,10 +388,11 @@
                 <TextView
                     android:id="@+id/interestlabel"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginTop="@dimen/motify_data_space"
+                    android:gravity="top"
                     android:text="兴趣爱好"
                     android:textColor="@color/unenable"
                     android:textSize="@dimen/day_recommend_font_info" />
@@ -401,11 +402,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
+                    android:layout_alignTop="@+id/interestlabel"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/personal_photo_margin"
                     android:layout_marginRight="5dp"
                     android:layout_toRightOf="@+id/interestlabel"
-                    android:gravity="right"
+                    android:gravity="left"
                     android:textColor="@color/system_green"
                     android:textSize="@dimen/day_recommend_font_info" />
             </RelativeLayout>
@@ -445,13 +447,13 @@
                     android:layout_marginLeft="@dimen/personal_photo_margin"
                     android:layout_marginRight="5dp"
                     android:layout_toRightOf="@+id/personIntrolabel"
-                    android:gravity="right"
+                    android:gravity="left"
                     android:textSize="@dimen/day_recommend_font_info" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:layout_below="@+id/personIntrolabel"
+                    android:layout_below="@+id/personIntro"
                     android:layout_marginTop="3dp"
                     android:background="@color/unenable_font" />
             </RelativeLayout>
