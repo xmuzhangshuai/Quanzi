@@ -63,7 +63,6 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 
 	private int userId;
 	private String smallAvator;
-	private String userName;
 	private UserPreference userPreference;
 	private JsonUser jsonUser;
 	private boolean isConcerned = false;
@@ -76,7 +75,6 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 		userPreference = BaseApplication.getInstance().getUserPreference();
 		jsonUser = (JsonUser) getIntent().getSerializableExtra(JSONUSER);
 		userId = getIntent().getIntExtra(UserTable.U_ID, -1);
-		userName = getIntent().getStringExtra(UserTable.U_NICKNAME);
 		smallAvator = getIntent().getStringExtra(UserTable.U_SMALL_AVATAR);
 
 		findViewById();
@@ -111,10 +109,15 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 	@Override
 	protected void initView() {
 		// TODO Auto-generated method stub
-		//		leftTextView.setText(userName);
 		leftButton.setOnClickListener(this);
 		concernBtn.setOnClickListener(this);
 		concernBtn.setVisibility(View.GONE);
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
 	}
 
 	/**
@@ -133,7 +136,7 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 		ft.addToBackStack(null);
 
 		// Create and show the dialog.
-		PersonDetailMoreDialogFragment newFragment = PersonDetailMoreDialogFragment.newInstance();
+		PersonDetailMoreDialogFragment newFragment = PersonDetailMoreDialogFragment.newInstance(userId);
 		newFragment.show(ft, "dialog");
 	}
 

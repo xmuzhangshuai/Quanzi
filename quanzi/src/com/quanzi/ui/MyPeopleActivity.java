@@ -44,8 +44,8 @@ public class MyPeopleActivity extends BaseActivity implements OnClickListener {
 
 	/***********VIEWS************/
 	public static final String TYPE = "type";//
-	public static final String MYQUANZI = "myquanzi";
-	public static final String MYFOLLOWER = "myfollower";
+	public static final String MYQUANZI = "myquanzi";//我的圈子
+	public static final String MYFOLLOWER = "myfollower";//我的追随者
 
 	private ListView allFavorListView;
 	private TextView leftTextView;//导航栏左侧文字
@@ -122,7 +122,9 @@ public class MyPeopleActivity extends BaseActivity implements OnClickListener {
 
 		RequestParams params = new RequestParams();
 		params.put(UserTable.U_ID, userPreference.getU_id());
-		params.put(IndustryTable.I_NAME, industry_name);
+		if (type.equals(MYQUANZI) || type.equals(MYFOLLOWER)) {
+			params.put(IndustryTable.I_NAME, industry_name);
+		}
 
 		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
 
@@ -166,7 +168,6 @@ public class MyPeopleActivity extends BaseActivity implements OnClickListener {
 		} else if (type.equals(MYFOLLOWER)) {
 			AsyncHttpClientTool.post(MyPeopleActivity.this, "quanzi/getFollowersByIndustryID", params, responseHandler);
 		}
-
 	}
 
 	/**
