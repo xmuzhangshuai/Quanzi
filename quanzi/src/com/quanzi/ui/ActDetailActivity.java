@@ -65,6 +65,7 @@ import com.quanzi.utils.UserPreference;
  */
 public class ActDetailActivity extends BaseFragmentActivity implements OnClickListener {
 	public static final String ACT_ITEM = "act_item";
+	
 	protected boolean pauseOnScroll = false;
 	protected boolean pauseOnFling = true;
 
