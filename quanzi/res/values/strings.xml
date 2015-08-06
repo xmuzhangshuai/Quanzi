@@ -42,8 +42,7 @@
     <string name="connect_conflict">同一帐号已在其他设备登录</string>
     <string name="version_name">当前版本：v-</string>
     <string name="can_not_find_version_name">获取版本号失败</string>
-
-      <string name="title_activity_login">登录</string>
+    <string name="title_activity_login">登录</string>
 
     <!-- Strings related to login -->
     <string name="prompt_phone">手机号</string>
@@ -69,6 +68,5 @@
     <string name="school">学校</string>
     <string name="reg_now">立即注册>></string>
     <string name="edu_sys_note">为确保用户的学生身份，请使用教务系统进行登录验证，账号一般是学号，密码是登录教务系统的密码。</string>
-    
-    
+
 </resources>
