@@ -19,7 +19,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -58,13 +60,13 @@ public class PublishPostActivity extends BaseActivity implements OnClickListener
 	private View backBtn;
 	private ImageView[] publishImageViews;
 	private ImageView[] addPublishImageViews;
+	private TextView textCountTextView;
 
-	private String[] photoUris;//图片地址
+	private String[] photoUris;// 图片地址
 	private UserPreference userPreference;
 
 	/**************用户变量**************/
-	public static final int NUM = 250;
-	private int minCount = 10;
+	public static final int NUM = 200;
 	Dialog dialog;
 
 	@Override
@@ -82,18 +84,17 @@ public class PublishPostActivity extends BaseActivity implements OnClickListener
 	@Override
 	protected void findViewById() {
 		// TODO Auto-generated method stub
-		publishImageViews = new ImageView[] { (ImageView) findViewById(R.id.publish_image1),
-				(ImageView) findViewById(R.id.publish_image2), (ImageView) findViewById(R.id.publish_image3),
-				(ImageView) findViewById(R.id.publish_image4), (ImageView) findViewById(R.id.publish_image5),
+		publishImageViews = new ImageView[] { (ImageView) findViewById(R.id.publish_image1), (ImageView) findViewById(R.id.publish_image2),
+				(ImageView) findViewById(R.id.publish_image3), (ImageView) findViewById(R.id.publish_image4), (ImageView) findViewById(R.id.publish_image5),
 				(ImageView) findViewById(R.id.publish_image6) };
-		addPublishImageViews = new ImageView[] { (ImageView) findViewById(R.id.publish_addiamge1),
-				(ImageView) findViewById(R.id.publish_addiamge2), (ImageView) findViewById(R.id.publish_addiamge3),
-				(ImageView) findViewById(R.id.publish_addiamge4), (ImageView) findViewById(R.id.publish_addiamge5),
-				(ImageView) findViewById(R.id.publish_addiamge6) };
+		addPublishImageViews = new ImageView[] { (ImageView) findViewById(R.id.publish_addiamge1), (ImageView) findViewById(R.id.publish_addiamge2),
+				(ImageView) findViewById(R.id.publish_addiamge3), (ImageView) findViewById(R.id.publish_addiamge4),
+				(ImageView) findViewById(R.id.publish_addiamge5), (ImageView) findViewById(R.id.publish_addiamge6) };
 		photoUris = new String[6];
 		publishEditeEditText = (EditText) findViewById(R.id.publish_content);
 		publishBtn = (TextView) findViewById(R.id.publish_btn);
 		backBtn = findViewById(R.id.left_btn_bg);
+		textCountTextView = (TextView) findViewById(R.id.count);
 	}
 
 	@Override
@@ -107,6 +108,35 @@ public class PublishPostActivity extends BaseActivity implements OnClickListener
 		publishBtn.setOnClickListener(this);
 		backBtn.setOnClickListener(this);
 
+		// 设置编辑框事件
+		publishEditeEditText.addTextChangedListener(new TextWatcher() {
+			private CharSequence temp;
+			private int selectionStart;
+			private int selectionEnd;
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				temp = s;
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				int number = NUM - s.length();
+				textCountTextView.setText("" + number + "字");
+				selectionStart = publishEditeEditText.getSelectionStart();
+				selectionEnd = publishEditeEditText.getSelectionEnd();
+				if (temp.length() > NUM) {
+					s.delete(selectionStart - 1, selectionEnd);
+					int tempSelection = selectionStart;
+					publishEditeEditText.setText(s);
+					publishEditeEditText.setSelection(tempSelection);// 设置光标在最后
+				}
+			}
+		});
 	}
 
 	@Override
@@ -247,14 +277,13 @@ public class PublishPostActivity extends BaseActivity implements OnClickListener
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode != Activity.RESULT_OK)
 			return;
-		if (requestCode < 6) {//拍照
+		if (requestCode < 6) {// 拍照
 			showPicture(requestCode);
-		} else if (requestCode < 12 && requestCode > 5) {//相册
+		} else if (requestCode < 12 && requestCode > 5) {// 相册
 			try {
 				Uri selectedImage = data.getData();
 				String[] filePathColumn = { MediaStore.Images.Media.DATA };
-				Cursor cursor = PublishPostActivity.this.getContentResolver().query(selectedImage, filePathColumn,
-						null, null, null);
+				Cursor cursor = PublishPostActivity.this.getContentResolver().query(selectedImage, filePathColumn, null, null, null);
 				cursor.moveToFirst();
 				int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
 				photoUris[requestCode - 6] = cursor.getString(columnIndex);
@@ -262,7 +291,7 @@ public class PublishPostActivity extends BaseActivity implements OnClickListener
 				cursor.close();
 				showPicture(requestCode - 6);
 			} catch (Exception e) {
-				// TODO: handle exception   
+				// TODO: handle exception
 				e.printStackTrace();
 			}
 		} else {
@@ -276,7 +305,7 @@ public class PublishPostActivity extends BaseActivity implements OnClickListener
 	private void publish() {
 		String content = publishEditeEditText.getText().toString().trim();
 		List<File> photoFiles = new ArrayList<File>();
-		//		File[] photoFiles = new File[] {};
+		// File[] photoFiles = new File[] {};
 		for (int i = 0; i < 6; i++) {
 			if (!TextUtils.isEmpty(photoUris[i])) {
 				LogTool.i("地址", photoUris[i]);
@@ -347,10 +376,10 @@ public class PublishPostActivity extends BaseActivity implements OnClickListener
 		if (!content.isEmpty() || photoFiles.size() > 0) {
 			if (photoFiles.size() > 0) {
 				AsyncHttpClientTool.post("post/add", params, responseHandler);
-			}else {
+			} else {
 				AsyncHttpClientTool.post("post/add_no_pic", params, responseHandler);
 			}
-			
+
 		} else {
 			ToastTool.showLong(PublishPostActivity.this, "请填写内容或图片");
 			dialog.dismiss();

@@ -24,7 +24,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -76,14 +78,14 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 	private View backBtn;
 	private ImageView[] publishImageViews;
 	private ImageView[] addPublishImageViews;
+	private TextView textCountTextView;
 
 	private String[] photoUris;// 图片地址
 	private UserPreference userPreference;
 	Calendar choosenCalendar = Calendar.getInstance(Locale.CHINA);
 
 	/**************用户变量**************/
-	public static final int NUM = 250;
-	private int minCount = 10;
+	public static final int NUM = 200;
 	Dialog dialog;
 
 	@Override
@@ -120,6 +122,7 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 		typeTextView = (TextView) findViewById(R.id.publish_act_type);
 		titleEditText = (EditText) findViewById(R.id.publish_act_title);
 		detailEditText = (EditText) findViewById(R.id.publish_content);
+		textCountTextView = (TextView) findViewById(R.id.count);
 	}
 
 	@Override
@@ -138,6 +141,35 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 
 		choosenCalendar.setTime(new Date());
 		timeTextView.setText(DateTimeTools.DateToString(new Date()));
+		// 设置编辑框事件
+		detailEditText.addTextChangedListener(new TextWatcher() {
+			private CharSequence temp;
+			private int selectionStart;
+			private int selectionEnd;
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				temp = s;
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				int number = NUM - s.length();
+				textCountTextView.setText("" + number + "字");
+				selectionStart = detailEditText.getSelectionStart();
+				selectionEnd = detailEditText.getSelectionEnd();
+				if (temp.length() > NUM) {
+					s.delete(selectionStart - 1, selectionEnd);
+					int tempSelection = selectionStart;
+					detailEditText.setText(s);
+					detailEditText.setSelection(tempSelection);// 设置光标在最后
+				}
+			}
+		});
 	}
 
 	@Override
