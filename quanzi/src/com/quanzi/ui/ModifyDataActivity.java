@@ -158,7 +158,7 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 		if (userPreference.getU_skills().isEmpty()) {
 			skillTextView.setText("Œ¥ÃÓ–¥");
 		} else {
-			skillTextView.setText(userPreference.getU_skills().replace("|", " | "));
+			skillTextView.setText(userPreference.getU_skills().replace("|", "\n"));
 		}
 		/***∞Æ∫√***/
 		if (userPreference.getU_interests().isEmpty()) {

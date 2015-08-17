@@ -408,7 +408,6 @@
                     android:layout_marginRight="5dp"
                     android:layout_toRightOf="@+id/interestlabel"
                     android:gravity="left"
-                    android:textColor="@color/system_green"
                     android:textSize="@dimen/day_recommend_font_info" />
             </RelativeLayout>
 
@@ -449,14 +448,14 @@
                     android:layout_toRightOf="@+id/personIntrolabel"
                     android:gravity="left"
                     android:textSize="@dimen/day_recommend_font_info" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_below="@+id/personIntro"
-                    android:layout_marginTop="3dp"
-                    android:background="@color/unenable_font" />
             </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_below="@+id/personIntroview"
+                android:layout_marginTop="3dp"
+                android:background="@color/unenable_font" />
         </RelativeLayout>
     </ScrollView>
 

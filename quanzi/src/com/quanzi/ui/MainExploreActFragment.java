@@ -380,7 +380,7 @@ public class MainExploreActFragment extends BaseV4Fragment {
 			holder.nameTextView.setText(jsonActItem.getA_username());
 
 			// 设置日期
-			holder.timeTextView.setText(DateTimeTools.getHourAndMin(jsonActItem.getA_time()));
+			holder.timeTextView.setText(DateTimeTools.getInterval(jsonActItem.getA_time()));
 
 			// 设置活动日期
 			holder.actTimeTextView.setText(DateTimeTools.DateToStringForCN(jsonActItem.getA_act_date()));

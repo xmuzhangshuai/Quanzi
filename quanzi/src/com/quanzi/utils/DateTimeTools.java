@@ -146,10 +146,8 @@ public class DateTimeTools {
 		// 获取时间差
 		Map<String, Integer> interval = DateTimeTools.compareTo(DateTimeTools.getCurrentDateTime(), date);
 		// 根据时间先后设置人性化时间提醒
-		if (interval.get("year") >= 1) {
-			intervalString = interval.get("year") + "年前";
-		} else if (interval.get("month") >= 1) {
-			intervalString = interval.get("month") + "月前";
+		if (interval.get("day") >= 7) {
+			intervalString = DateToString(date);
 		} else if (interval.get("day") >= 1) {
 			intervalString = interval.get("day") + "天前";
 		} else if (interval.get("hour") >= 1) {
@@ -175,8 +173,7 @@ public class DateTimeTools {
 		long mim1 = date1.getTime();
 		long mim2 = date2.getTime();
 		if (mim1 < mim2) {
-			throw new IllegalArgumentException(String.format("date1[%s] not be less than date2[%s].", mim1 + "", mim2
-					+ ""));
+			throw new IllegalArgumentException(String.format("date1[%s] not be less than date2[%s].", mim1 + "", mim2 + ""));
 		}
 		long m = (mim1 - mim2 + 1) / 1000l;
 		long mday = 24 * 3600;

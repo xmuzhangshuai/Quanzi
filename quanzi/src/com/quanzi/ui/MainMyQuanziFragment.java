@@ -450,7 +450,7 @@ public class MainMyQuanziFragment extends BaseV4Fragment implements OnClickListe
 			}
 
 			// 设置日期
-			holder.timeTextView.setText(DateTimeTools.getHourAndMin(jsonPostItem.getP_time()));
+			holder.timeTextView.setText(DateTimeTools.getInterval(jsonPostItem.getP_time()));
 
 			// 设置被赞次数
 			if (jsonPostItem.getP_favor_count() > 0) {
