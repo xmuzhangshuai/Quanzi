@@ -432,7 +432,12 @@ public class MainMyQuanziFragment extends BaseV4Fragment implements OnClickListe
 			}
 
 			// 设置内容
-			holder.contentTextView.setText(jsonPostItem.getP_text_content());
+			if (jsonPostItem.getP_text_content() == null || jsonPostItem.getP_text_content().length() < 1) {
+				holder.contentTextView.setVisibility(View.GONE);
+			} else {
+				holder.contentTextView.setText(jsonPostItem.getP_text_content());
+				holder.contentTextView.setVisibility(View.VISIBLE);
+			}
 
 			// 设置姓名
 			holder.nameTextView.setText(jsonPostItem.getP_username());
@@ -447,7 +452,6 @@ public class MainMyQuanziFragment extends BaseV4Fragment implements OnClickListe
 			// 设置日期
 			holder.timeTextView.setText(DateTimeTools.getHourAndMin(jsonPostItem.getP_time()));
 
-			// 设置被赞次数
 			// 设置被赞次数
 			if (jsonPostItem.getP_favor_count() > 0) {
 				holder.favorCountTextView.setText("" + jsonPostItem.getP_favor_count() + "赞");

@@ -142,7 +142,7 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 	void showMoreDialog() {
 
 		// DialogFragment.show() will take care of adding the fragment
-		// in a transaction.  We also want to remove any currently showing
+		// in a transaction. We also want to remove any currently showing
 		// dialog, so make our own transaction and take care of that here.
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
 		Fragment prev = getFragmentManager().findFragmentByTag("dialog");
@@ -156,7 +156,7 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 		newFragment.show(ft, "dialog");
 	}
 
-	//查看大图
+	// 查看大图
 	public void goBigPhoto(String[] urls, int postion) {
 		Intent intent = new Intent(getActivity(), GalleryPictureActivity.class);
 		intent.putExtra(GalleryPictureActivity.IMAGE_URLS, urls);
@@ -209,9 +209,9 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 			holder.label2 = (TextView) view.findViewById(R.id.labe2);
 			holder.toUser2 = (TextView) view.findViewById(R.id.to_user_name2);
 			holder.commentContent2 = (TextView) view.findViewById(R.id.comment_content2);
-			view.setTag(holder); // 给View添加一个格外的数据 
+			view.setTag(holder); // 给View添加一个格外的数据
 		} else {
-			holder = (ViewHolder) view.getTag(); // 把数据取出来  
+			holder = (ViewHolder) view.getTag(); // 把数据取出来
 		}
 
 		view.setOnClickListener(new OnClickListener() {
@@ -219,55 +219,68 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				startActivity(new Intent(getActivity(), PostDetailActivity.class).putExtra(
-						PostDetailActivity.POST_ITEM, jsonPostItem));
+				startActivity(new Intent(getActivity(), PostDetailActivity.class).putExtra(PostDetailActivity.POST_ITEM, jsonPostItem));
 				getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 			}
 		});
 
-		//设置头像
+		// 设置头像
 		if (!TextUtils.isEmpty(jsonPostItem.getP_small_avatar())) {
-			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonPostItem.getP_small_avatar()),
-					holder.headImageView, ImageLoaderTool.getHeadImageOptions(10));
-//			if (userPreference.getU_id() != jsonPostItem.getP_userid()) {
-//				//点击头像进入详情页面
-//				holder.headImageView.setOnClickListener(new OnClickListener() {
-//
-//					@Override
-//					public void onClick(View v) {
-//						// TODO Auto-generated method stub
-//						Intent intent = new Intent(getActivity(), PersonDetailActivity.class);
-//						intent.putExtra(UserTable.U_ID, jsonPostItem.getP_userid());
-//						intent.putExtra(UserTable.U_NICKNAME, jsonPostItem.getP_username());
-//						intent.putExtra(UserTable.U_SMALL_AVATAR, jsonPostItem.getP_small_avatar());
-//						startActivity(intent);
-//						getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
-//					}
-//				});
-//			}
+			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonPostItem.getP_small_avatar()), holder.headImageView,
+					ImageLoaderTool.getHeadImageOptions(10));
+			// if (userPreference.getU_id() != jsonPostItem.getP_userid()) {
+			// //点击头像进入详情页面
+			// holder.headImageView.setOnClickListener(new OnClickListener() {
+			//
+			// @Override
+			// public void onClick(View v) {
+			// // TODO Auto-generated method stub
+			// Intent intent = new Intent(getActivity(),
+			// PersonDetailActivity.class);
+			// intent.putExtra(UserTable.U_ID, jsonPostItem.getP_userid());
+			// intent.putExtra(UserTable.U_NICKNAME,
+			// jsonPostItem.getP_username());
+			// intent.putExtra(UserTable.U_SMALL_AVATAR,
+			// jsonPostItem.getP_small_avatar());
+			// startActivity(intent);
+			// getActivity().overridePendingTransition(R.anim.zoomin2,
+			// R.anim.zoomout);
+			// }
+			// });
+			// }
 		}
 
-		//设置内容
-		holder.contentTextView.setText(jsonPostItem.getP_text_content());
+		// 设置内容
+		if (jsonPostItem.getP_text_content() == null || jsonPostItem.getP_text_content().length() < 1) {
+			holder.contentTextView.setVisibility(View.GONE);
+		} else {
+			holder.contentTextView.setText(jsonPostItem.getP_text_content());
+			holder.contentTextView.setVisibility(View.VISIBLE);
+		}
 
-		//设置姓名
+		// 设置姓名
 		holder.nameTextView.setText(jsonPostItem.getP_username());
 
-		//显示关注
+		// 显示关注
 		holder.concernBtn.setVisibility(View.GONE);
 
-		//设置性别
+		// 设置性别
 		if (jsonPostItem.getP_gender().equals(Constants.Gender.MALE)) {
 			holder.genderImageView.setImageResource(R.drawable.male);
 		} else {
 			holder.genderImageView.setImageResource(R.drawable.female);
 		}
 
-		//设置日期
+		// 设置日期
 		holder.timeTextView.setText(DateTimeTools.getHourAndMin(jsonPostItem.getP_time()));
 
-		//设置被赞次数
-		holder.favorCountTextView.setText("" + jsonPostItem.getP_favor_count() + "赞");
+		// 设置被赞次数
+		if (jsonPostItem.getP_favor_count() > 0) {
+			holder.favorCountTextView.setText("" + jsonPostItem.getP_favor_count() + "赞");
+			holder.favorCountTextView.setVisibility(View.VISIBLE);
+		} else {
+			holder.favorCountTextView.setVisibility(View.GONE);
+		}
 
 		holder.favorCountTextView.setOnClickListener(new OnClickListener() {
 
@@ -275,11 +288,9 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				if (jsonPostItem.getP_favor_count() > 0) {
-					startActivity(new Intent(getActivity(), AllFavorsActivity.class)
-							.putExtra(AllFavorsActivity.PA_ID, jsonPostItem.getP_postid())
+					startActivity(new Intent(getActivity(), AllFavorsActivity.class).putExtra(AllFavorsActivity.PA_ID, jsonPostItem.getP_postid())
 							.putExtra(AllFavorsActivity.PA_USERID, jsonPostItem.getP_userid())
-							.putExtra(AllFavorsActivity.FAVOR_COUNT, jsonPostItem.getP_favor_count())
-							.putExtra(AllFavorsActivity.TYPE, "post"));
+							.putExtra(AllFavorsActivity.FAVOR_COUNT, jsonPostItem.getP_favor_count()).putExtra(AllFavorsActivity.TYPE, "post"));
 					getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 				}
 			}
@@ -287,7 +298,7 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 
 		List<Map<String, String>> comments = jsonPostItem.getCommentList();
 
-		//设置评论
+		// 设置评论
 		if (comments != null) {
 			if (comments.size() == 0) {
 				holder.comment1Container.setVisibility(View.GONE);
@@ -297,10 +308,10 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 				holder.comment2Container.setVisibility(View.GONE);
 				holder.commentUser1.setText(comments.get(0).get(CommentTable.C_USER_NICKNAME) + ":");
 				holder.commentContent1.setText(comments.get(0).get(CommentTable.C_CONTENT));
-				if (comments.get(0).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {//如果是评论
+				if (comments.get(0).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {// 如果是评论
 					holder.toUser1.setVisibility(View.GONE);
 					holder.label1.setVisibility(View.GONE);
-				} else {//如果是回复
+				} else {// 如果是回复
 					holder.toUser1.setVisibility(View.VISIBLE);
 					holder.label1.setVisibility(View.VISIBLE);
 					holder.toUser1.setText(comments.get(0).get(CommentTable.TO_USER_NICKNAME));
@@ -309,10 +320,10 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 				holder.comment1Container.setVisibility(View.VISIBLE);
 				holder.commentUser1.setText(comments.get(0).get(CommentTable.C_USER_NICKNAME) + ":");
 				holder.commentContent1.setText(comments.get(0).get(CommentTable.C_CONTENT));
-				if (comments.get(0).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {//如果是评论
+				if (comments.get(0).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {// 如果是评论
 					holder.toUser1.setVisibility(View.GONE);
 					holder.label1.setVisibility(View.GONE);
-				} else {//如果是回复
+				} else {// 如果是回复
 					holder.toUser1.setVisibility(View.VISIBLE);
 					holder.label1.setVisibility(View.VISIBLE);
 					holder.toUser1.setText(comments.get(0).get(CommentTable.TO_USER_NICKNAME));
@@ -320,10 +331,10 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 				holder.comment2Container.setVisibility(View.VISIBLE);
 				holder.commentUser2.setText(comments.get(1).get(CommentTable.C_USER_NICKNAME) + ":");
 				holder.commentContent2.setText(comments.get(1).get(CommentTable.C_CONTENT));
-				if (comments.get(1).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {//如果是评论
+				if (comments.get(1).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {// 如果是评论
 					holder.toUser2.setVisibility(View.GONE);
 					holder.label2.setVisibility(View.GONE);
-				} else {//如果是回复
+				} else {// 如果是回复
 					holder.toUser2.setVisibility(View.VISIBLE);
 					holder.label2.setVisibility(View.VISIBLE);
 					holder.toUser2.setText(comments.get(1).get(CommentTable.TO_USER_NICKNAME));
@@ -336,7 +347,7 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 			holder.comment2Container.setVisibility(View.GONE);
 		}
 
-		//设置评论次数
+		// 设置评论次数
 		if (jsonPostItem.getP_comment_count() == 0) {
 			holder.commentCountTextView.setVisibility(View.GONE);
 		} else {
@@ -344,19 +355,18 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 			holder.commentCountTextView.setText("查看全部" + jsonPostItem.getP_comment_count() + "条评论");
 		}
 
-		//评论
+		// 评论
 		holder.commentBtn.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				startActivity(new Intent(getActivity(), PostDetailActivity.class).putExtra(
-						PostDetailActivity.POST_ITEM, jsonPostItem));
+				startActivity(new Intent(getActivity(), PostDetailActivity.class).putExtra(PostDetailActivity.POST_ITEM, jsonPostItem));
 				getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 			}
 		});
 
-		//设置是否赞过
+		// 设置是否赞过
 		holder.favorBtn.setChecked(jsonPostItem.isLike());
 
 		holder.favorBtn.setOnClickListener(new OnClickListener() {
@@ -375,11 +385,11 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 					public void onStart() {
 						// TODO Auto-generated method stub
 						super.onStart();
-						if (!jsonPostItem.isLike()) {//喜欢
+						if (!jsonPostItem.isLike()) {// 喜欢
 							holder.favorCountTextView.setText("" + (jsonPostItem.getP_favor_count() + 1) + "赞");
 							jsonPostItem.setP_favor_count(jsonPostItem.getP_favor_count() + 1);
 							jsonPostItem.setLike(true);
-						} else {//喜欢变成不喜欢
+						} else {// 喜欢变成不喜欢
 							holder.favorCountTextView.setText("" + (jsonPostItem.getP_favor_count() - 1) + "赞");
 							jsonPostItem.setP_favor_count(jsonPostItem.getP_favor_count() - 1);
 							jsonPostItem.setLike(false);
@@ -429,47 +439,41 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 		});
 
 		String[] smallPhotos = null;
-		//设置缩略图
+		// 设置缩略图
 		if (!jsonPostItem.getP_thumbnail().isEmpty()) {
 			smallPhotos = jsonPostItem.getP_thumbnail().split("\\|");
 		}
 
 		if (smallPhotos != null && smallPhotos.length > 0) {
 			switch (smallPhotos.length) {
-			case 1://只有一张图片
+			case 1:// 只有一张图片
 				holder.imageViewGroup1.setVisibility(View.GONE);
 				holder.imageViewGroup2.setVisibility(View.GONE);
 				holder.itemImageView.setVisibility(View.VISIBLE);
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView,
-						ImageLoaderTool.getImageOptions());
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView, ImageLoaderTool.getImageOptions());
 				break;
-			case 2://有两张图片
+			case 2:// 有两张图片
 				holder.itemImageView.setVisibility(View.GONE);
 				holder.imageViewGroup2.setVisibility(View.GONE);
 				holder.imageViewGroup1.setVisibility(View.VISIBLE);
 				holder.itemImageView1.setVisibility(View.VISIBLE);
 				holder.itemImageView2.setVisibility(View.VISIBLE);
 				holder.itemImageView3.setVisibility(View.INVISIBLE);
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2,
-						ImageLoaderTool.getImageOptions());
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1, ImageLoaderTool.getImageOptions());
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2, ImageLoaderTool.getImageOptions());
 				break;
-			case 3://有三张图片
+			case 3:// 有三张图片
 				holder.itemImageView.setVisibility(View.GONE);
 				holder.imageViewGroup2.setVisibility(View.GONE);
 				holder.imageViewGroup1.setVisibility(View.VISIBLE);
 				holder.itemImageView1.setVisibility(View.VISIBLE);
 				holder.itemImageView2.setVisibility(View.VISIBLE);
 				holder.itemImageView3.setVisibility(View.VISIBLE);
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), holder.itemImageView3,
-						ImageLoaderTool.getImageOptions());
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1, ImageLoaderTool.getImageOptions());
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2, ImageLoaderTool.getImageOptions());
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), holder.itemImageView3, ImageLoaderTool.getImageOptions());
 				break;
-			case 4://有四张图片
+			case 4:// 有四张图片
 				holder.itemImageView.setVisibility(View.GONE);
 				holder.imageViewGroup2.setVisibility(View.VISIBLE);
 				holder.imageViewGroup1.setVisibility(View.VISIBLE);
@@ -479,16 +483,12 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 				holder.itemImageView4.setVisibility(View.VISIBLE);
 				holder.itemImageView5.setVisibility(View.VISIBLE);
 				holder.itemImageView6.setVisibility(View.INVISIBLE);
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), holder.itemImageView4,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[3]), holder.itemImageView5,
-						ImageLoaderTool.getImageOptions());
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1, ImageLoaderTool.getImageOptions());
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2, ImageLoaderTool.getImageOptions());
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), holder.itemImageView4, ImageLoaderTool.getImageOptions());
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[3]), holder.itemImageView5, ImageLoaderTool.getImageOptions());
 				break;
-			case 5://有五张图片
+			case 5:// 有五张图片
 				holder.itemImageView.setVisibility(View.GONE);
 				holder.imageViewGroup2.setVisibility(View.VISIBLE);
 				holder.imageViewGroup1.setVisibility(View.VISIBLE);
@@ -498,18 +498,13 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 				holder.itemImageView4.setVisibility(View.VISIBLE);
 				holder.itemImageView5.setVisibility(View.VISIBLE);
 				holder.itemImageView6.setVisibility(View.INVISIBLE);
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), holder.itemImageView3,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[3]), holder.itemImageView4,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[4]), holder.itemImageView5,
-						ImageLoaderTool.getImageOptions());
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1, ImageLoaderTool.getImageOptions());
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2, ImageLoaderTool.getImageOptions());
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), holder.itemImageView3, ImageLoaderTool.getImageOptions());
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[3]), holder.itemImageView4, ImageLoaderTool.getImageOptions());
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[4]), holder.itemImageView5, ImageLoaderTool.getImageOptions());
 				break;
-			case 6://有六张图片
+			case 6:// 有六张图片
 				holder.itemImageView.setVisibility(View.GONE);
 				holder.imageViewGroup2.setVisibility(View.VISIBLE);
 				holder.imageViewGroup1.setVisibility(View.VISIBLE);
@@ -519,18 +514,12 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 				holder.itemImageView4.setVisibility(View.VISIBLE);
 				holder.itemImageView5.setVisibility(View.VISIBLE);
 				holder.itemImageView6.setVisibility(View.VISIBLE);
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), holder.itemImageView3,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[3]), holder.itemImageView4,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[4]), holder.itemImageView5,
-						ImageLoaderTool.getImageOptions());
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[5]), holder.itemImageView6,
-						ImageLoaderTool.getImageOptions());
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1, ImageLoaderTool.getImageOptions());
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2, ImageLoaderTool.getImageOptions());
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), holder.itemImageView3, ImageLoaderTool.getImageOptions());
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[3]), holder.itemImageView4, ImageLoaderTool.getImageOptions());
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[4]), holder.itemImageView5, ImageLoaderTool.getImageOptions());
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[5]), holder.itemImageView6, ImageLoaderTool.getImageOptions());
 				break;
 			default:
 				holder.itemImageView.setVisibility(View.GONE);

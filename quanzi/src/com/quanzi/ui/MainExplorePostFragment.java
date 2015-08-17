@@ -15,6 +15,7 @@ import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
@@ -35,6 +36,7 @@ import com.quanzi.base.BaseV4Fragment;
 import com.quanzi.config.Constants;
 import com.quanzi.config.Constants.CommentType;
 import com.quanzi.config.Constants.Config;
+import com.quanzi.customewidget.MyAlertDialog;
 import com.quanzi.jsonobject.JsonPostItem;
 import com.quanzi.table.CommentTable;
 import com.quanzi.table.PostTable;
@@ -372,6 +374,18 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 				}
 			});
 
+			view.setOnLongClickListener(new OnLongClickListener() {
+
+				@Override
+				public boolean onLongClick(View v) {
+					// TODO Auto-generated method stub
+					if (userPreference.getU_id() == jsonPostItem.getP_userid()) {
+						deleteComment(position);
+					}
+					return false;
+				}
+			});
+
 			// 设置头像
 			if (!TextUtils.isEmpty(jsonPostItem.getP_small_avatar())) {
 				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonPostItem.getP_small_avatar()), holder.headImageView,
@@ -395,7 +409,12 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 			}
 
 			// 设置内容
-			holder.contentTextView.setText(jsonPostItem.getP_text_content());
+			if (jsonPostItem.getP_text_content() == null || jsonPostItem.getP_text_content().length() < 1) {
+				holder.contentTextView.setVisibility(View.GONE);
+			} else {
+				holder.contentTextView.setText(jsonPostItem.getP_text_content());
+				holder.contentTextView.setVisibility(View.VISIBLE);
+			}
 
 			// 设置姓名
 			holder.nameTextView.setText(jsonPostItem.getP_username());
@@ -827,6 +846,56 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 			intent.putExtra(GalleryPictureActivity.POSITON, postion);
 			startActivity(intent);
 			getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
+		}
+
+		/**
+		 * 删帖子
+		 */
+		private void deleteComment(final int position) {
+			final MyAlertDialog dialog = new MyAlertDialog(getActivity());
+			dialog.setTitle("删除");
+			dialog.setMessage("删除评论不可逆");
+			View.OnClickListener comfirm = new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					dialog.dismiss();
+					RequestParams params = new RequestParams();
+					params.put(UserTable.U_ID, userPreference.getU_id());
+					TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
+
+						@Override
+						public void onSuccess(int statusCode, Header[] headers, String response) {
+							// TODO Auto-generated method stub
+							if (statusCode == 200) {
+								if (response.equals("1")) {
+									jsonPostItemList.remove(position);
+									mAdapter.notifyDataSetChanged();
+								}
+							}
+						}
+
+						@Override
+						public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+							// TODO Auto-generated method stub
+						}
+
+					};
+					AsyncHttpClientTool.post(getActivity(), "", params, responseHandler);
+				}
+			};
+			View.OnClickListener cancle = new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					dialog.dismiss();
+				}
+			};
+			dialog.setPositiveButton("确定", comfirm);
+			dialog.setNegativeButton("取消", cancle);
+			dialog.show();
 		}
 	}
 
