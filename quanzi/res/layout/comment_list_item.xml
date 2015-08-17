@@ -26,6 +26,7 @@
                 android:src="@drawable/photoconor" />
 
             <RelativeLayout
+                android:id="@+id/top_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/head_image"
@@ -63,7 +64,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/head_image"
+                android:layout_below="@+id/top_container"
                 android:layout_toRightOf="@+id/head_image"
                 android:orientation="horizontal" >
 
@@ -83,6 +84,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="2dp"
                     android:layout_marginTop="@dimen/margin_chat_activity"
+                    android:ellipsize="end"
+                    android:maxLength="5"
                     android:textColor="@color/comment_name"
                     android:textSize="@dimen/comment_font_size" />
 

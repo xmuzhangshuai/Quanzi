@@ -84,6 +84,7 @@
             android:hint="评论"
             android:inputType="textMultiLine"
             android:maxHeight="200.0dip"
+            android:maxLength="200"
             android:minHeight="@dimen/sent_btn_height"
             android:paddingLeft="@dimen/day_recommend_dot_space"
             android:paddingRight="@dimen/day_recommend_dot_space"

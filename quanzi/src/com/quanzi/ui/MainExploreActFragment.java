@@ -56,20 +56,21 @@ import com.quanzi.utils.UserPreference;
  *
  */
 public class MainExploreActFragment extends BaseV4Fragment {
-	private View rootView;// 根View
+	public final static String TAG = "MainExploreActFragment";
 
+	private View rootView;// 根View
 	private PullToRefreshListView actListView;
 
 	protected boolean pauseOnScroll = false;
 	protected boolean pauseOnFling = true;
 	private UserPreference userPreference;
 	private LinkedList<JsonActItem> jsonActItemList;
-	private int pageNow = 0;//控制页数
+	private int pageNow = 0;// 控制页数
 	private PostAdapter mAdapter;
 	private String actType = "全部";
 	private static MainExploreActFragment mainExploreActFragment;
 
-	//创建实例
+	// 创建实例
 	static MainExploreActFragment newInstance() {
 		if (mainExploreActFragment == null) {
 			return new MainExploreActFragment();
@@ -93,7 +94,7 @@ public class MainExploreActFragment extends BaseV4Fragment {
 
 		findViewById();// 初始化views
 		initView();
-		//获取数据
+		// 获取数据
 		getDataTask(pageNow);
 
 		actListView.setMode(Mode.BOTH);
@@ -120,15 +121,14 @@ public class MainExploreActFragment extends BaseV4Fragment {
 	protected void initView() {
 		// TODO Auto-generated method stub
 
-		//设置上拉下拉刷新事件
+		// 设置上拉下拉刷新事件
 		actListView.setOnRefreshListener(new OnRefreshListener2<ListView>() {
 
 			@Override
 			public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
 				// TODO Auto-generated method stub
-				String label = DateUtils.formatDateTime(getActivity().getApplicationContext(),
-						System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE
-								| DateUtils.FORMAT_ABBREV_ALL);
+				String label = DateUtils.formatDateTime(getActivity().getApplicationContext(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME
+						| DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 
 				pageNow = 0;
@@ -138,9 +138,8 @@ public class MainExploreActFragment extends BaseV4Fragment {
 			@Override
 			public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
 				// TODO Auto-generated method stub
-				String label = DateUtils.formatDateTime(getActivity().getApplicationContext(),
-						System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE
-								| DateUtils.FORMAT_ABBREV_ALL);
+				String label = DateUtils.formatDateTime(getActivity().getApplicationContext(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME
+						| DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 
 				if (pageNow >= 0)
@@ -159,13 +158,20 @@ public class MainExploreActFragment extends BaseV4Fragment {
 		actListView.setRefreshing();
 	}
 
+	public void refresh() {
+		pageNow = 0;
+		if (actListView != null) {
+			actListView.setRefreshing();
+		}
+	}
+
 	/**
 	 * 显示更多操作的对话窗口
 	 */
 	void showMoreDialog() {
 
 		// DialogFragment.show() will take care of adding the fragment
-		// in a transaction.  We also want to remove any currently showing
+		// in a transaction. We also want to remove any currently showing
 		// dialog, so make our own transaction and take care of that here.
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
 		Fragment prev = getFragmentManager().findFragmentByTag("dialog");
@@ -204,7 +210,7 @@ public class MainExploreActFragment extends BaseV4Fragment {
 					List<JsonActItem> temp = FastJsonTool.getObjectList(response, JsonActItem.class);
 					if (temp != null) {
 						LogTool.i("获取学校活动列表长度" + temp.size());
-						//如果是首次获取数据
+						// 如果是首次获取数据
 						if (page == 0) {
 							if (temp.size() < Config.PAGE_NUM) {
 								pageNow = -1;
@@ -212,7 +218,7 @@ public class MainExploreActFragment extends BaseV4Fragment {
 							jsonActItemList = new LinkedList<JsonActItem>();
 							jsonActItemList.addAll(temp);
 						}
-						//如果是获取更多
+						// 如果是获取更多
 						else if (page > 0) {
 							if (temp.size() < Config.PAGE_NUM) {
 								pageNow = -1;
@@ -257,10 +263,10 @@ public class MainExploreActFragment extends BaseV4Fragment {
 			public TextView nameTextView;
 			public TextView timeTextView;
 			public ImageView contentImageView;
-			public TextView actTimeTextView;//活动时间
-			public TextView actLocationTextView;//活动地点
-			public TextView actGenderTextView;//活动性别要求
-			public TextView actContentTextView;//活动内容介绍
+			public TextView actTimeTextView;// 活动时间
+			public TextView actLocationTextView;// 活动地点
+			public TextView actGenderTextView;// 活动性别要求
+			public TextView actContentTextView;// 活动内容介绍
 			public CheckBox favorBtn;
 			public TextView favorCountTextView;
 			public ImageView moreBtn;
@@ -333,9 +339,9 @@ public class MainExploreActFragment extends BaseV4Fragment {
 				holder.label2 = (TextView) view.findViewById(R.id.labe2);
 				holder.toUser2 = (TextView) view.findViewById(R.id.to_user_name2);
 				holder.commentContent2 = (TextView) view.findViewById(R.id.comment_content2);
-				view.setTag(holder); // 给View添加一个格外的数据 
+				view.setTag(holder); // 给View添加一个格外的数据
 			} else {
-				holder = (ViewHolder) view.getTag(); // 把数据取出来  
+				holder = (ViewHolder) view.getTag(); // 把数据取出来
 			}
 
 			view.setOnClickListener(new OnClickListener() {
@@ -343,20 +349,19 @@ public class MainExploreActFragment extends BaseV4Fragment {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					startActivity(new Intent(getActivity(), ActDetailActivity.class).putExtra(
-							ActDetailActivity.ACT_ITEM, jsonActItem));
+					startActivity(new Intent(getActivity(), ActDetailActivity.class).putExtra(ActDetailActivity.ACT_ITEM, jsonActItem));
 					getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 				}
 			});
 
 			holder.titleTextView.setText(jsonActItem.getA_title());
 
-			//设置头像
+			// 设置头像
 			if (!TextUtils.isEmpty(jsonActItem.getA_small_avatar())) {
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonActItem.getA_small_avatar()),
-						holder.headImageView, ImageLoaderTool.getHeadImageOptions(6));
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonActItem.getA_small_avatar()), holder.headImageView,
+						ImageLoaderTool.getHeadImageOptions(6));
 				if (userPreference.getU_id() != jsonActItem.getA_userid()) {
-					//点击头像进入详情页面
+					// 点击头像进入详情页面
 					holder.headImageView.setOnClickListener(new OnClickListener() {
 
 						@Override
@@ -371,34 +376,33 @@ public class MainExploreActFragment extends BaseV4Fragment {
 				}
 			}
 
-			//设置姓名
+			// 设置姓名
 			holder.nameTextView.setText(jsonActItem.getA_username());
 
-			//设置日期
+			// 设置日期
 			holder.timeTextView.setText(DateTimeTools.getHourAndMin(jsonActItem.getA_time()));
 
-			//设置活动日期
+			// 设置活动日期
 			holder.actTimeTextView.setText(DateTimeTools.DateToStringForCN(jsonActItem.getA_act_date()));
 
-			//设置活动地点
+			// 设置活动地点
 			holder.actLocationTextView.setText(jsonActItem.getA_act_location());
 
-			//设置活动对象
+			// 设置活动对象
 			holder.actGenderTextView.setText(jsonActItem.getA_act_target());
 
-			//设置活动详情
+			// 设置活动详情
 			holder.actContentTextView.setText(jsonActItem.getA_detail_content());
 
 			String[] smallPhotos = null;
-			//设置缩略图
+			// 设置缩略图
 			if (!jsonActItem.getA_thumbnail().isEmpty()) {
 				smallPhotos = jsonActItem.getA_thumbnail().split("\\|");
 			}
 
-			//设置照片
+			// 设置照片
 			if (smallPhotos != null && !smallPhotos[0].isEmpty()) {
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.contentImageView,
-						ImageLoaderTool.getImageOptions());
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.contentImageView, ImageLoaderTool.getImageOptions());
 				holder.contentImageView.setVisibility(View.VISIBLE);
 				holder.contentImageView.setOnClickListener(new OnClickListener() {
 
@@ -422,7 +426,7 @@ public class MainExploreActFragment extends BaseV4Fragment {
 
 			List<Map<String, String>> comments = jsonActItem.getCommentList();
 
-			//设置评论
+			// 设置评论
 			if (comments != null) {
 				if (comments.size() == 0) {
 					holder.comment1Container.setVisibility(View.GONE);
@@ -431,10 +435,10 @@ public class MainExploreActFragment extends BaseV4Fragment {
 					holder.comment1Container.setVisibility(View.VISIBLE);
 					holder.commentUser1.setText(comments.get(0).get(CommentTable.C_USER_NICKNAME) + ":");
 					holder.commentContent1.setText(comments.get(0).get(CommentTable.C_CONTENT));
-					if (comments.get(0).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {//如果是评论
+					if (comments.get(0).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {// 如果是评论
 						holder.toUser1.setVisibility(View.GONE);
 						holder.label1.setVisibility(View.GONE);
-					} else {//如果是回复
+					} else {// 如果是回复
 						holder.toUser1.setVisibility(View.VISIBLE);
 						holder.label1.setVisibility(View.VISIBLE);
 						holder.toUser1.setText(comments.get(0).get(CommentTable.TO_USER_NICKNAME));
@@ -443,10 +447,10 @@ public class MainExploreActFragment extends BaseV4Fragment {
 					holder.comment1Container.setVisibility(View.VISIBLE);
 					holder.commentUser1.setText(comments.get(0).get(CommentTable.C_USER_NICKNAME) + ":");
 					holder.commentContent1.setText(comments.get(0).get(CommentTable.C_CONTENT));
-					if (comments.get(0).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {//如果是评论
+					if (comments.get(0).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {// 如果是评论
 						holder.toUser1.setVisibility(View.GONE);
 						holder.label1.setVisibility(View.GONE);
-					} else {//如果是回复
+					} else {// 如果是回复
 						holder.toUser1.setVisibility(View.VISIBLE);
 						holder.label1.setVisibility(View.VISIBLE);
 						holder.toUser1.setText(comments.get(0).get(CommentTable.TO_USER_NICKNAME));
@@ -454,10 +458,10 @@ public class MainExploreActFragment extends BaseV4Fragment {
 					holder.comment2Container.setVisibility(View.VISIBLE);
 					holder.commentUser2.setText(comments.get(1).get(CommentTable.C_USER_NICKNAME) + ":");
 					holder.commentContent2.setText(comments.get(1).get(CommentTable.C_CONTENT));
-					if (comments.get(1).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {//如果是评论
+					if (comments.get(1).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {// 如果是评论
 						holder.toUser2.setVisibility(View.GONE);
 						holder.label2.setVisibility(View.GONE);
-					} else {//如果是回复
+					} else {// 如果是回复
 						holder.toUser2.setVisibility(View.VISIBLE);
 						holder.label2.setVisibility(View.VISIBLE);
 						holder.toUser2.setText(comments.get(1).get(CommentTable.TO_USER_NICKNAME));
@@ -468,7 +472,7 @@ public class MainExploreActFragment extends BaseV4Fragment {
 				holder.comment2Container.setVisibility(View.GONE);
 			}
 
-			//设置评论次数
+			// 设置评论次数
 			if (jsonActItem.getA_comment_count() == 0) {
 				holder.commentCountTextView.setVisibility(View.GONE);
 			} else {
@@ -476,35 +480,37 @@ public class MainExploreActFragment extends BaseV4Fragment {
 				holder.commentCountTextView.setText("查看全部" + jsonActItem.getA_comment_count() + "条评论");
 			}
 
-			//评论
+			// 评论
 			holder.commentBtn.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					startActivity(new Intent(getActivity(), ActDetailActivity.class).putExtra(
-							ActDetailActivity.ACT_ITEM, jsonActItem));
+					startActivity(new Intent(getActivity(), ActDetailActivity.class).putExtra(ActDetailActivity.ACT_ITEM, jsonActItem));
 					getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 				}
 			});
 
-			//设置被赞次数
-			holder.favorCountTextView.setText("" + jsonActItem.getA_favor_count() + "赞");
+			// 设置被赞次数
+			if (jsonActItem.getA_favor_count() > 0) {
+				holder.favorCountTextView.setText("" + jsonActItem.getA_favor_count() + "赞");
+				holder.favorCountTextView.setVisibility(View.VISIBLE);
+			} else {
+				holder.favorCountTextView.setVisibility(View.GONE);
+			}
 			holder.favorCountTextView.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					startActivity(new Intent(getActivity(), AllFavorsActivity.class)
-							.putExtra(AllFavorsActivity.PA_ID, jsonActItem.getA_actid())
+					startActivity(new Intent(getActivity(), AllFavorsActivity.class).putExtra(AllFavorsActivity.PA_ID, jsonActItem.getA_actid())
 							.putExtra(AllFavorsActivity.PA_USERID, jsonActItem.getA_userid())
-							.putExtra(AllFavorsActivity.FAVOR_COUNT, jsonActItem.getA_favor_count())
-							.putExtra(AllFavorsActivity.TYPE, "act"));
+							.putExtra(AllFavorsActivity.FAVOR_COUNT, jsonActItem.getA_favor_count()).putExtra(AllFavorsActivity.TYPE, "act"));
 					getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 				}
 			});
 
-			//设置是否赞过
+			// 设置是否赞过
 			holder.favorBtn.setChecked(jsonActItem.isLike());
 
 			holder.favorBtn.setOnClickListener(new OnClickListener() {
@@ -523,14 +529,21 @@ public class MainExploreActFragment extends BaseV4Fragment {
 						public void onStart() {
 							// TODO Auto-generated method stub
 							super.onStart();
-							if (!jsonActItem.isLike()) {//喜欢
+							if (!jsonActItem.isLike()) {// 喜欢
 								holder.favorCountTextView.setText("" + (jsonActItem.getA_favor_count() + 1) + "赞");
 								jsonActItem.setA_favor_count(jsonActItem.getA_favor_count() + 1);
 								jsonActItem.setLike(true);
-							} else {//喜欢变成不喜欢
+
+							} else {// 喜欢变成不喜欢
 								holder.favorCountTextView.setText("" + (jsonActItem.getA_favor_count() - 1) + "赞");
 								jsonActItem.setA_favor_count(jsonActItem.getA_favor_count() - 1);
 								jsonActItem.setLike(false);
+							}
+							// 设置被赞次数
+							if (jsonActItem.getA_favor_count() > 0) {
+								holder.favorCountTextView.setVisibility(View.VISIBLE);
+							} else {
+								holder.favorCountTextView.setVisibility(View.GONE);
 							}
 						}
 
@@ -576,32 +589,36 @@ public class MainExploreActFragment extends BaseV4Fragment {
 				}
 			});
 			//
-			//			if (userPreference.getU_id() == jsonPostItem.getN_userid() || holder.flipperBtn.isChecked()) {
-			//				holder.flipperBtn.setEnabled(false);
-			//			} else {
-			//				//心动
-			//				holder.flipperBtn.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			// if (userPreference.getU_id() == jsonPostItem.getN_userid() ||
+			// holder.flipperBtn.isChecked()) {
+			// holder.flipperBtn.setEnabled(false);
+			// } else {
+			// //心动
+			// holder.flipperBtn.setOnCheckedChangeListener(new
+			// OnCheckedChangeListener() {
 			//
-			//					@Override
-			//					public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-			//						// TODO Auto-generated method stub
-			//						if (userPreference.getU_id() != jsonPostItem.getN_userid()) {
-			//							if (isChecked) {
-			//								flipper(jsonPostItem.getN_id());
-			//								sendLoveReuest(jsonPostItem.getN_userid());
-			//								holder.flipperCountTextView.setText("" + (jsonPostItem.getN_flipcount() + 1));
-			//								holder.flipperBtn.setEnabled(false);
-			//							}
-			//						} else {
-			//							ToastTool.showShort(getActivity(), "不能对自己心动哦~");
-			//						}
-			//					}
-			//				});
-			//			}
+			// @Override
+			// public void onCheckedChanged(CompoundButton buttonView, boolean
+			// isChecked) {
+			// // TODO Auto-generated method stub
+			// if (userPreference.getU_id() != jsonPostItem.getN_userid()) {
+			// if (isChecked) {
+			// flipper(jsonPostItem.getN_id());
+			// sendLoveReuest(jsonPostItem.getN_userid());
+			// holder.flipperCountTextView.setText("" +
+			// (jsonPostItem.getN_flipcount() + 1));
+			// holder.flipperBtn.setEnabled(false);
+			// }
+			// } else {
+			// ToastTool.showShort(getActivity(), "不能对自己心动哦~");
+			// }
+			// }
+			// });
+			// }
 			return view;
 		}
 
-		//查看大图
+		// 查看大图
 		public void goBigPhoto(String[] urls, int postion) {
 			Intent intent = new Intent(getActivity(), GalleryPictureActivity.class);
 			intent.putExtra(GalleryPictureActivity.IMAGE_URLS, urls);

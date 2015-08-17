@@ -39,11 +39,13 @@ import com.quanzi.utils.UserPreference;
  *
  */
 public class MainExploreFragment extends BaseV4Fragment implements OnClickListener {
+	public final static String TAG = "MainExploreFragment";
+
 	private View rootView;// 根View
-	private TextView schoolTextView;//学校
-	private View filterBtn;//筛选按钮
-	private View searchBtn;//查找按钮
-	private View publishBtn;//发布按钮
+	private TextView schoolTextView;// 学校
+	private View filterBtn;// 筛选按钮
+	private View searchBtn;// 查找按钮
+	private View publishBtn;// 发布按钮
 	private UserPreference userPreference;
 	private int index;
 	private int currentTabIndex;
@@ -116,11 +118,11 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 				currentTabIndex = position;
 				mTabs[currentTabIndex].setSelected(true);
 
-//				if (position == 0) {
-//					searchBtn.setVisibility(View.VISIBLE);
-//				} else {
-//					searchBtn.setVisibility(View.GONE);
-//				}
+				// if (position == 0) {
+				// searchBtn.setVisibility(View.VISIBLE);
+				// } else {
+				// searchBtn.setVisibility(View.GONE);
+				// }
 			}
 		});
 	}
@@ -131,7 +133,7 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 	void showPublishDialog() {
 
 		// DialogFragment.show() will take care of adding the fragment
-		// in a transaction.  We also want to remove any currently showing
+		// in a transaction. We also want to remove any currently showing
 		// dialog, so make our own transaction and take care of that here.
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
 		Fragment prev = getFragmentManager().findFragmentByTag("publish_dialog");
@@ -165,8 +167,7 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// TODO Auto-generated method stub
 				FragmentPagerAdapter f = (FragmentPagerAdapter) mViewPager.getAdapter();
-				MainExploreActFragment mainExploreActFragment = (MainExploreActFragment) f.instantiateItem(mViewPager,
-						1);
+				MainExploreActFragment mainExploreActFragment = (MainExploreActFragment) f.instantiateItem(mViewPager, 1);
 				mainExploreActFragment.screenType(list.get(position));
 				myMenuDialog.dismiss();
 			}
@@ -180,7 +181,7 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 	 */
 	void showScreenPostDialog() {
 		// DialogFragment.show() will take care of adding the fragment
-		// in a transaction.  We also want to remove any currently showing
+		// in a transaction. We also want to remove any currently showing
 		// dialog, so make our own transaction and take care of that here.
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
 		Fragment prev = getFragmentManager().findFragmentByTag("screen_dialog");
@@ -192,6 +193,25 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 		// Create and show the dialog.
 		ScreenDialogFragment newFragment = new ScreenDialogFragment();
 		newFragment.show(ft, "screen_dialog");
+	}
+
+	/**
+	 * 刷新
+	 */
+	public void refresh() {
+		if (currentTabIndex == 0) {
+			MainExplorePostFragment mainExplorePostFragment = (MainExplorePostFragment) getFragmentManager().findFragmentByTag(
+					"android:switcher:" + R.id.main_explore_pager + ":0");
+			if (mainExplorePostFragment != null) {
+				mainExplorePostFragment.refresh();
+			}
+		} else if (currentTabIndex == 1) {
+			MainExploreActFragment mainExploreActFragment = (MainExploreActFragment) getFragmentManager().findFragmentByTag(
+					"android:switcher:" + R.id.main_explore_pager + ":1");
+			if (mainExploreActFragment != null) {
+				mainExploreActFragment.refresh();
+			}
+		}
 	}
 
 	/**
@@ -221,14 +241,14 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
-		case R.id.nav_right_btn1://发布
+		case R.id.nav_right_btn1:// 发布
 			showPublishDialog();
 			break;
-		case R.id.nav_right_btn2://查找
+		case R.id.nav_right_btn2:// 查找
 			getActivity().startActivity(new Intent(getActivity(), SearchActivity.class));
 			getActivity().overridePendingTransition(R.anim.splash_fade_in, R.anim.splash_fade_out);
 			break;
-		case R.id.nav_right_btn3://筛选
+		case R.id.nav_right_btn3:// 筛选
 			if (mViewPager.getCurrentItem() == 0) {
 				showScreenPostDialog();
 			} else {
@@ -301,13 +321,13 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 
 		private View rootView;
 
-		private RadioButton allGenderBtn;//性别全部
-		private RadioButton genderMaleBtn;//男性
-		private RadioButton genderFemaleBtn;//女性
-		private RadioButton allStateBtn;//状态全部
-		private RadioButton stateSingleBtn;//单身
-		private TextView confirmBtn;//确定
-		private TextView cancleBtn;//取消
+		private RadioButton allGenderBtn;// 性别全部
+		private RadioButton genderMaleBtn;// 男性
+		private RadioButton genderFemaleBtn;// 女性
+		private RadioButton allStateBtn;// 状态全部
+		private RadioButton stateSingleBtn;// 单身
+		private TextView confirmBtn;// 确定
+		private TextView cancleBtn;// 取消
 
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
@@ -388,8 +408,7 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 			case R.id.confirm:
 				getChooseState();
 				FragmentPagerAdapter f = (FragmentPagerAdapter) mViewPager.getAdapter();
-				MainExplorePostFragment mainExplorePostFragment = (MainExplorePostFragment) f.instantiateItem(
-						mViewPager, 0);
+				MainExplorePostFragment mainExplorePostFragment = (MainExplorePostFragment) f.instantiateItem(mViewPager, 0);
 				mainExplorePostFragment.screenToRefresh(gender, love_stateString);
 				ScreenDialogFragment.this.dismiss();
 				break;

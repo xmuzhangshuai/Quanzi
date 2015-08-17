@@ -13,7 +13,7 @@ public class Constants {
 	//域名或者是IP
 	//	public static String AppliactionServerIP = "http://121.40.101.36/";
 
-	public static String AppliactionServerDomain = "http://192.168.1.106:8080/XiaoYuanQuanQuan/";
+	public static String AppliactionServerDomain = "http://192.168.1.100:8080/XiaoYuanQuanQuan/";
 
 	public static class Config {
 		//是否处于开发模式

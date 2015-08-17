@@ -57,20 +57,20 @@ public class RegAccountFragment extends BaseV4Fragment {
 
 	/*************Views************/
 	private View rootView;// 根View
-	private TextView topNavigation;//导航栏文字
-	private View leftImageButton;//导航栏左侧按钮
-	private View rightImageButton;//导航栏右侧按钮
-	private EditText mPhoneView;//手机号
-	private EditText mPasswordView;//密码
-	private EditText mConformPassView;//确认密码
+	private TextView topNavigation;// 导航栏文字
+	private View leftImageButton;// 导航栏左侧按钮
+	private View rightImageButton;// 导航栏右侧按钮
+	private EditText mPhoneView;// 手机号
+	private EditText mPasswordView;// 密码
+	private EditText mConformPassView;// 确认密码
 	private UserPreference userPreference;
-	private TextView leftNavigation;//步骤
+	private TextView leftNavigation;// 步骤
 
 	private String mPhone;
 	private String mPassword;
 	private String mConformPass;
 	private String mAuthcode;
-	private String responseAuthcode;//手机获取到的验证码
+	private String responseAuthcode;// 手机获取到的验证码
 
 	private int recLen;
 	private Button authCodeButton;
@@ -84,14 +84,14 @@ public class RegAccountFragment extends BaseV4Fragment {
 
 	private String patternCoder = "(?<!\\d)\\d{6}(?!\\d)";
 
-	private CheckPhoneTask mCheckPhoneTask = null;//检查电话号码
+	private CheckPhoneTask mCheckPhoneTask = null;// 检查电话号码
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 
-		//拦截短信内容
+		// 拦截短信内容
 		handler = new Handler() {
 			public void handleMessage(android.os.Message msg) {
 				authCodeView.setText(strContent);
@@ -167,7 +167,7 @@ public class RegAccountFragment extends BaseV4Fragment {
 	@Override
 	protected void initView() {
 		// TODO Auto-generated method stub
-		//显示用户手机号
+		// 显示用户手机号
 		SIMCardInfo siminfo = new SIMCardInfo(getActivity());
 		mPhoneView.setText(siminfo.getNativePhoneNumber());
 		mPhone = mPhoneView.getText().toString();
@@ -222,7 +222,7 @@ public class RegAccountFragment extends BaseV4Fragment {
 			return;
 		}
 
-		getAuthCode();//获取验证码
+		getAuthCode();// 获取验证码
 
 		recLen = Config.AUTN_CODE_TIME;
 		authCodeButton.setEnabled(false);
@@ -291,7 +291,7 @@ public class RegAccountFragment extends BaseV4Fragment {
 			cancel = true;
 		}
 
-		//检查验证码
+		// 检查验证码
 		else if (TextUtils.isEmpty(mAuthcode)) {
 			authCodeView.setError(getString(R.string.error_field_required));
 			focusView = authCodeView;
@@ -310,7 +310,7 @@ public class RegAccountFragment extends BaseV4Fragment {
 			// 如果错误，则提示错误
 			focusView.requestFocus();
 		} else {
-			//检查手机号是否被注册
+			// 检查手机号是否被注册
 			mCheckPhoneTask = new CheckPhoneTask();
 			mCheckPhoneTask.execute();
 		}
@@ -322,8 +322,7 @@ public class RegAccountFragment extends BaseV4Fragment {
 	private void next() {
 		RegSchoolFragment regSchoolFragment = new RegSchoolFragment();
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
-		transaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_left_out, R.anim.push_right_in,
-				R.anim.push_right_out);
+		transaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_left_out, R.anim.push_right_in, R.anim.push_right_out);
 		transaction.replace(R.id.fragment_container, regSchoolFragment);
 		transaction.addToBackStack(null);
 		transaction.commit();
@@ -337,13 +336,6 @@ public class RegAccountFragment extends BaseV4Fragment {
 		RequestParams params = new RequestParams();
 		params.put(UserTable.U_TEL, mPhone);
 		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
-
-			@Override
-			public void onStart() {
-				// TODO Auto-generated method stub
-				super.onStart();
-				rightImageButton.setEnabled(false);
-			}
 
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, String response) {

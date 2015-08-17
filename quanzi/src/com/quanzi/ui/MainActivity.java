@@ -40,10 +40,10 @@ import com.quanzi.utils.CommonTools;
  */
 public class MainActivity extends BaseFragmentActivity implements EMEventListener {
 	private View[] mTabs;
-	private MainMyQuanziFragment homeFragment;//圈子动态页面
-	private MainExploreFragment exploreFragment;//探索页面
-	private MainChatFragment chatFragment;//消息页面
-	private MainPersonalFragment personalFragment;//个人中心页面
+	private MainMyQuanziFragment homeFragment;// 圈子动态页面
+	private MainExploreFragment exploreFragment;// 探索页面
+	private MainChatFragment chatFragment;// 消息页面
+	private MainPersonalFragment personalFragment;// 个人中心页面
 
 	// 未读消息textview
 	private TextView unreadLabel;
@@ -58,7 +58,7 @@ public class MainActivity extends BaseFragmentActivity implements EMEventListene
 	private Fragment[] fragments;
 	boolean isExit;
 
-	private MyConnectionListener connectionListener = null;//监听连接状态
+	private MyConnectionListener connectionListener = null;// 监听连接状态
 	private android.app.AlertDialog.Builder conflictBuilder;
 	private android.app.AlertDialog.Builder accountRemovedBuilder;
 	private boolean isConflictDialogShow;
@@ -130,8 +130,7 @@ public class MainActivity extends BaseFragmentActivity implements EMEventListene
 	protected void initView() {
 		// TODO Auto-generated method stub
 		// 添加显示第一个fragment
-		getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, homeFragment).show(homeFragment)
-				.commit();
+		getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, homeFragment, MainMyQuanziFragment.TAG).show(homeFragment).commit();
 	}
 
 	@Override
@@ -148,12 +147,10 @@ public class MainActivity extends BaseFragmentActivity implements EMEventListene
 		sdkHelper.pushActivity(this);
 
 		// register the event listener when enter the foreground
-		EMChatManager.getInstance()
-				.registerEventListener(
-						this,
-						new EMNotifierEvent.Event[] { EMNotifierEvent.Event.EventNewMessage,
-								EMNotifierEvent.Event.EventOfflineMessage,
-								EMNotifierEvent.Event.EventConversationListChanged });
+		EMChatManager.getInstance().registerEventListener(
+				this,
+				new EMNotifierEvent.Event[] { EMNotifierEvent.Event.EventNewMessage, EMNotifierEvent.Event.EventOfflineMessage,
+						EMNotifierEvent.Event.EventConversationListChanged });
 	}
 
 	@Override
@@ -196,9 +193,27 @@ public class MainActivity extends BaseFragmentActivity implements EMEventListene
 			FragmentTransaction trx = getSupportFragmentManager().beginTransaction();
 			trx.hide(fragments[currentTabIndex]);
 			if (!fragments[index].isAdded()) {
-				trx.add(R.id.fragment_container, fragments[index]);
+				if (index == 0) {
+					trx.add(R.id.fragment_container, fragments[index], MainMyQuanziFragment.TAG);
+				} else if (index == 1) {
+					trx.add(R.id.fragment_container, fragments[index], MainExploreFragment.TAG);
+				} else {
+					trx.add(R.id.fragment_container, fragments[index]);
+				}
 			}
 			trx.show(fragments[index]).commit();
+		} else {
+			if (currentTabIndex == 0) {
+				MainMyQuanziFragment myQuanziFragment = (MainMyQuanziFragment) getSupportFragmentManager().findFragmentByTag(MainMyQuanziFragment.TAG);
+				if (myQuanziFragment != null) {
+					myQuanziFragment.refreshData();
+				}
+			} else if (currentTabIndex == 1) {
+				MainExploreFragment mainExploreFragment = (MainExploreFragment) getSupportFragmentManager().findFragmentByTag(MainExploreFragment.TAG);
+				if (mainExploreFragment != null) {
+					mainExploreFragment.refresh();
+				}
+			}
 		}
 		mTabs[currentTabIndex].setSelected(false);
 		// 把当前tab设为选中状态
@@ -291,7 +306,7 @@ public class MainActivity extends BaseFragmentActivity implements EMEventListene
 			CommonTools.showShortToast(getBaseContext(), "再按一次退出程序");
 			mHandler.sendEmptyMessageDelayed(0, 2000);
 		} else {
-//			close();
+			// close();
 			AppManager.getInstance().AppExit(getApplicationContext());
 		}
 	}
@@ -299,13 +314,13 @@ public class MainActivity extends BaseFragmentActivity implements EMEventListene
 	Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			// TODO Auto-generated method stub   
+			// TODO Auto-generated method stub
 			super.handleMessage(msg);
 			isExit = false;
 		}
 	};
 
-	//监听事件
+	// 监听事件
 	@Override
 	public void onEvent(EMNotifierEvent event) {
 		// TODO Auto-generated method stub
@@ -387,10 +402,12 @@ public class MainActivity extends BaseFragmentActivity implements EMEventListene
 		int unreadMsgCountTotal = 0;
 		int chatroomUnreadMsgCount = 0;
 		unreadMsgCountTotal = EMChatManager.getInstance().getUnreadMsgsCount();
-		//		for (EMConversation conversation : EMChatManager.getInstance().getAllConversations().values()) {
-		//			if (conversation.getType() == EMConversationType.ChatRoom)
-		//				chatroomUnreadMsgCount = chatroomUnreadMsgCount + conversation.getUnreadMsgCount();
-		//		}
+		// for (EMConversation conversation :
+		// EMChatManager.getInstance().getAllConversations().values()) {
+		// if (conversation.getType() == EMConversationType.ChatRoom)
+		// chatroomUnreadMsgCount = chatroomUnreadMsgCount +
+		// conversation.getUnreadMsgCount();
+		// }
 		return unreadMsgCountTotal - chatroomUnreadMsgCount;
 	}
 
@@ -430,38 +447,38 @@ public class MainActivity extends BaseFragmentActivity implements EMEventListene
 
 		}
 
-		//		@Override
-		//		public void onConnected() {
-		//			homeFragment.errorItem.setVisibility(View.GONE);
-		//		}
+		// @Override
+		// public void onConnected() {
+		// homeFragment.errorItem.setVisibility(View.GONE);
+		// }
 		//
-		//		@Override
-		//		public void onDisConnected(String errorString) {
-		//			if (errorString != null && errorString.contains("conflict")) {
-		//				// 显示帐号在其他设备登陆dialog
-		//				showConflictDialog();
-		//			} else {
-		//				homeFragment.errorItem.setVisibility(View.VISIBLE);
-		//				if (NetUtils.hasNetwork(MainActivity.this))
-		//					homeFragment.errorText.setText("连接不到聊天服务器");
-		//				else
-		//					homeFragment.errorText.setText("当前网络不可用，请检查网络设置");
+		// @Override
+		// public void onDisConnected(String errorString) {
+		// if (errorString != null && errorString.contains("conflict")) {
+		// // 显示帐号在其他设备登陆dialog
+		// showConflictDialog();
+		// } else {
+		// homeFragment.errorItem.setVisibility(View.VISIBLE);
+		// if (NetUtils.hasNetwork(MainActivity.this))
+		// homeFragment.errorText.setText("连接不到聊天服务器");
+		// else
+		// homeFragment.errorText.setText("当前网络不可用，请检查网络设置");
 		//
-		//			}
-		//		}
+		// }
+		// }
 		//
-		//		@Override
-		//		public void onReConnected() {
-		//			homeFragment.errorItem.setVisibility(View.GONE);
-		//		}
+		// @Override
+		// public void onReConnected() {
+		// homeFragment.errorItem.setVisibility(View.GONE);
+		// }
 		//
-		//		@Override
-		//		public void onReConnecting() {
-		//		}
+		// @Override
+		// public void onReConnecting() {
+		// }
 		//
-		//		@Override
-		//		public void onConnecting(String progress) {
-		//		}
+		// @Override
+		// public void onConnecting(String progress) {
+		// }
 
 	}
 }

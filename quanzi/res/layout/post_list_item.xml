@@ -43,7 +43,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/day_recommend_dot_space"
                     android:ellipsize="end"
-                    android:maxLength="4"
+                    android:singleLine="true"
                     android:textColor="@color/black"
                     android:textSize="@dimen/day_recommend_user_font" />
 
@@ -200,6 +200,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/personal_timecapsule_padding"
                 android:layout_marginTop="@dimen/margin_chat_activity"
+                android:ellipsize="end"
+                android:maxLength="5"
+                android:singleLine="true"
                 android:textColor="@color/comment_name"
                 android:textSize="@dimen/comment_font_size" />
 
@@ -219,6 +222,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dp"
                 android:layout_marginTop="@dimen/margin_chat_activity"
+                android:ellipsize="end"
+                android:maxLength="5"
+                android:singleLine="true"
                 android:textColor="@color/comment_name"
                 android:textSize="@dimen/comment_font_size" />
 
@@ -229,6 +235,7 @@
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="@dimen/personal_timecapsule_padding"
                 android:layout_marginTop="@dimen/margin_chat_activity"
+                android:ellipsize="end"
                 android:singleLine="true"
                 android:textColor="@color/unenable"
                 android:textSize="@dimen/comment_font_size" />
@@ -247,6 +254,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/personal_timecapsule_padding"
                 android:layout_marginTop="@dimen/margin_chat_activity"
+                android:ellipsize="end"
+                android:maxLength="5"
+                android:singleLine="true"
                 android:textColor="@color/comment_name"
                 android:textSize="@dimen/comment_font_size" />
 
@@ -266,6 +276,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dp"
                 android:layout_marginTop="@dimen/margin_chat_activity"
+                android:ellipsize="end"
+                android:maxLength="5"
+                android:singleLine="true"
                 android:textColor="@color/comment_name"
                 android:textSize="@dimen/comment_font_size" />
 
@@ -276,6 +289,7 @@
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="@dimen/personal_timecapsule_padding"
                 android:layout_marginTop="@dimen/margin_chat_activity"
+                android:ellipsize="end"
                 android:singleLine="true"
                 android:textColor="@color/unenable"
                 android:textSize="@dimen/comment_font_size" />
