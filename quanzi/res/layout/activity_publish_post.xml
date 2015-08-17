@@ -95,6 +95,7 @@
                     android:gravity="left|top"
                     android:height="100dp"
                     android:hint="写点什么..."
+                    android:maxLength="200"
                     android:maxLines="10"
                     android:padding="@dimen/personal_timecapsule_padding"
                     android:textSize="16sp" >

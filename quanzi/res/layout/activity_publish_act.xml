@@ -91,10 +91,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
+                    android:ellipsize="end"
                     android:ems="10"
                     android:gravity="left|top"
                     android:height="100dp"
                     android:hint="标题（20个字以内）"
+                    android:maxLength="20"
                     android:maxLines="10"
                     android:padding="@dimen/personal_timecapsule_padding"
                     android:textSize="16sp" >
@@ -455,6 +457,7 @@
                         android:gravity="left|top"
                         android:height="100dp"
                         android:hint="活动详情"
+                        android:maxLength="200"
                         android:maxLines="10"
                         android:padding="@dimen/personal_timecapsule_padding"
                         android:textSize="16sp" >

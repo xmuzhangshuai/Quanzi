@@ -12,12 +12,10 @@ import java.util.Locale;
 import org.apache.http.Header;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
-import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -57,11 +55,11 @@ import com.quanzi.utils.UserPreference;
 
 /**
  *
- * ÏîÄ¿Ãû³Æ£ºquanzi  
- * ÀàÃû³Æ£ºPublishActActivity  
- * ÀàÃèÊö£º·¢²¼»î¶¯Ò³Ãæ
+ * é¡¹ç›®åç§°ï¼šquanzi  
+ * ç±»åç§°ï¼šPublishActActivity  
+ * ç±»æè¿°ï¼šå‘å¸ƒæ´»åŠ¨é¡µé¢
  * @author zhangshuai
- * @date ´´½¨Ê±¼ä£º2015-4-29 ÏÂÎç7:56:55 
+ * @date åˆ›å»ºæ—¶é—´ï¼š2015-4-29 ä¸‹åˆ7:56:55 
  *
  */
 public class PublishActActivity extends BaseActivity implements OnClickListener {
@@ -79,11 +77,11 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 	private ImageView[] publishImageViews;
 	private ImageView[] addPublishImageViews;
 
-	private String[] photoUris;//Í¼Æ¬µØÖ·
+	private String[] photoUris;// å›¾ç‰‡åœ°å€
 	private UserPreference userPreference;
 	Calendar choosenCalendar = Calendar.getInstance(Locale.CHINA);
 
-	/**************ÓÃ»§±äÁ¿**************/
+	/**************ç”¨æˆ·å˜é‡**************/
 	public static final int NUM = 250;
 	private int minCount = 10;
 	Dialog dialog;
@@ -104,14 +102,12 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 	@Override
 	protected void findViewById() {
 		// TODO Auto-generated method stub
-		publishImageViews = new ImageView[] { (ImageView) findViewById(R.id.publish_image1),
-				(ImageView) findViewById(R.id.publish_image2), (ImageView) findViewById(R.id.publish_image3),
-				(ImageView) findViewById(R.id.publish_image4), (ImageView) findViewById(R.id.publish_image5),
+		publishImageViews = new ImageView[] { (ImageView) findViewById(R.id.publish_image1), (ImageView) findViewById(R.id.publish_image2),
+				(ImageView) findViewById(R.id.publish_image3), (ImageView) findViewById(R.id.publish_image4), (ImageView) findViewById(R.id.publish_image5),
 				(ImageView) findViewById(R.id.publish_image5) };
-		addPublishImageViews = new ImageView[] { (ImageView) findViewById(R.id.publish_addiamge1),
-				(ImageView) findViewById(R.id.publish_addiamge2), (ImageView) findViewById(R.id.publish_addiamge3),
-				(ImageView) findViewById(R.id.publish_addiamge4), (ImageView) findViewById(R.id.publish_addiamge5),
-				(ImageView) findViewById(R.id.publish_addiamge6) };
+		addPublishImageViews = new ImageView[] { (ImageView) findViewById(R.id.publish_addiamge1), (ImageView) findViewById(R.id.publish_addiamge2),
+				(ImageView) findViewById(R.id.publish_addiamge3), (ImageView) findViewById(R.id.publish_addiamge4),
+				(ImageView) findViewById(R.id.publish_addiamge5), (ImageView) findViewById(R.id.publish_addiamge6) };
 
 		publishBtn = (TextView) findViewById(R.id.publish_btn);
 		backBtn = findViewById(R.id.left_btn_bg);
@@ -151,12 +147,12 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 	}
 
 	/**
-	 * ·ÅÆú·¢²¼
+	 * æ”¾å¼ƒå‘å¸ƒ
 	 */
 	private void giveUpPublish() {
 		final MyAlertDialog myAlertDialog = new MyAlertDialog(this);
-		myAlertDialog.setTitle("ÌáÊ¾");
-		myAlertDialog.setMessage("·ÅÆú·¢²¼£¿  ");
+		myAlertDialog.setTitle("æç¤º");
+		myAlertDialog.setMessage("æ”¾å¼ƒå‘å¸ƒï¼Ÿ  ");
 		View.OnClickListener comfirm = new OnClickListener() {
 
 			@Override
@@ -175,13 +171,13 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 				myAlertDialog.dismiss();
 			}
 		};
-		myAlertDialog.setPositiveButton("È·¶¨", comfirm);
-		myAlertDialog.setNegativeButton("È¡Ïû", cancle);
+		myAlertDialog.setPositiveButton("ç¡®å®š", comfirm);
+		myAlertDialog.setNegativeButton("å–æ¶ˆ", cancle);
 		myAlertDialog.show();
 	}
 
 	/**
-	* ÏÔÊ¾¶Ô»°¿ò£¬´ÓÅÄÕÕºÍÏà²áÑ¡ÔñÍ¼Æ¬À´Ô´
+	* æ˜¾ç¤ºå¯¹è¯æ¡†ï¼Œä»æ‹ç…§å’Œç›¸å†Œé€‰æ‹©å›¾ç‰‡æ¥æº
 	* 
 	* @param context
 	* @param isCrop
@@ -189,10 +185,10 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 	private void showPicturePicker(final int index) {
 
 		final MyMenuDialog myMenuDialog = new MyMenuDialog(PublishActActivity.this);
-		myMenuDialog.setTitle("Í¼Æ¬À´Ô´");
+		myMenuDialog.setTitle("å›¾ç‰‡æ¥æº");
 		ArrayList<String> list = new ArrayList<String>();
-		list.add("ÅÄÕÕ");
-		list.add("Ïà²á");
+		list.add("æ‹ç…§");
+		list.add("ç›¸å†Œ");
 		myMenuDialog.setMenuList(list);
 		OnItemClickListener listener = new OnItemClickListener() {
 
@@ -203,13 +199,13 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 				case 0:
 					myMenuDialog.dismiss();
 					String status = Environment.getExternalStorageState();
-					if (status.equals(Environment.MEDIA_MOUNTED)) {// ÅĞ¶ÏÊÇ·ñÓĞSD¿¨
-						takePhoto(index);// ÓÃ»§µã»÷ÁË´ÓÕÕÏà»ú»ñÈ¡
+					if (status.equals(Environment.MEDIA_MOUNTED)) {// åˆ¤æ–­æ˜¯å¦æœ‰SDå¡
+						takePhoto(index);// ç”¨æˆ·ç‚¹å‡»äº†ä»ç…§ç›¸æœºè·å–
 					}
 					break;
 				case 1:
 					myMenuDialog.dismiss();
-					choosePhoto(index);// ´ÓÏà²áÖĞÈ¥»ñÈ¡
+					choosePhoto(index);// ä»ç›¸å†Œä¸­å»è·å–
 					break;
 
 				default:
@@ -222,7 +218,7 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 	}
 
 	/**
-	 * ÏÔÊ¾Í¼Æ¬
+	 * æ˜¾ç¤ºå›¾ç‰‡
 	 */
 	public void showPicture(int index) {
 		String tempPath = Environment.getExternalStorageDirectory() + "/quanzi/image";
@@ -242,7 +238,7 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 	}
 
 	/**
-	 * ´ÓÏà²áÑ¡ÔñÍ¼Æ¬
+	 * ä»ç›¸å†Œé€‰æ‹©å›¾ç‰‡
 	 */
 	private void choosePhoto(int index) {
 		Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -250,7 +246,7 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 	}
 
 	/**
-	 * ÅÄÕÕ
+	 * æ‹ç…§
 	 */
 	private void takePhoto(int index) {
 		try {
@@ -282,14 +278,13 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode != Activity.RESULT_OK)
 			return;
-		if (requestCode < 6) {//ÅÄÕÕ
+		if (requestCode < 6) {// æ‹ç…§
 			showPicture(requestCode);
-		} else if (requestCode < 12 && requestCode > 5) {//Ïà²á
+		} else if (requestCode < 12 && requestCode > 5) {// ç›¸å†Œ
 			try {
 				Uri selectedImage = data.getData();
 				String[] filePathColumn = { MediaStore.Images.Media.DATA };
-				Cursor cursor = PublishActActivity.this.getContentResolver().query(selectedImage, filePathColumn, null,
-						null, null);
+				Cursor cursor = PublishActActivity.this.getContentResolver().query(selectedImage, filePathColumn, null, null, null);
 				cursor.moveToFirst();
 				int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
 				photoUris[requestCode - 6] = cursor.getString(columnIndex);
@@ -297,7 +292,7 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 				cursor.close();
 				showPicture(requestCode - 6);
 			} catch (Exception e) {
-				// TODO: handle exception   
+				// TODO: handle exception
 				e.printStackTrace();
 			}
 		} else {
@@ -306,39 +301,39 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 	}
 
 	/**
-	 * ÏÔÊ¾Ñ¡ÔñÈÕÆÚ²Ëµ¥
+	 * æ˜¾ç¤ºé€‰æ‹©æ—¥æœŸèœå•
 	 */
 	private void showDatePicker() {
-		Date date = new Date();
-		final Calendar calendar = Calendar.getInstance(Locale.CHINA);
-		OnDateSetListener callBack = new OnDateSetListener() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		View view = View.inflate(this, R.layout.datetime_picker, null);
+		final DatePicker datePicker = (DatePicker) view.findViewById(R.id.datePicker);
+		final TimePicker timePicker = (TimePicker) view.findViewById(R.id.timePicker);
+		builder.setView(view);
+		Calendar calendar = Calendar.getInstance(Locale.CHINA);
+		calendar.setTimeInMillis(java.lang.System.currentTimeMillis());
+		datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null);
+		timePicker.setIs24HourView(true);
+		timePicker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
+		timePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
+		builder.setTitle("é€‰å–æ´»åŠ¨æ—¥æœŸ");
+		builder.setPositiveButton(" ç¡® å®š ", new DialogInterface.OnClickListener() {
 
 			@Override
-			public void onDateSet(DatePicker view, final int year, final int monthOfYear, final int dayOfMonth) {
+			public void onClick(DialogInterface dialog, int which) {
 				// TODO Auto-generated method stub
-				calendar.setTime(new Date());
-				TimePickerDialog timePickerDialog = new TimePickerDialog(PublishActActivity.this,
-						new OnTimeSetListener() {
-
-							@Override
-							public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-								// TODO Auto-generated method stub
-								choosenCalendar.set(year, monthOfYear, dayOfMonth, hourOfDay, minute);
-								timeTextView.setText(DateTimeTools.DateToString(choosenCalendar.getTime()));
-							}
-						}, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
-				timePickerDialog.show();
+				dialog.cancel();
+				choosenCalendar.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), timePicker.getCurrentHour(),
+						timePicker.getCurrentMinute());
+				timeTextView.setText(DateTimeTools.DateToString(choosenCalendar.getTime()));
 			}
-		};
-		DatePickerDialog datePickerDialog;
-		calendar.setTime(date);
-		datePickerDialog = new DatePickerDialog(PublishActActivity.this, callBack, calendar.get(Calendar.YEAR),
-				calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-		datePickerDialog.show();
+		});
+
+		Dialog dialog = builder.create();
+		dialog.show();
 	}
 
 	/**
-	* ÏÔÊ¾¶Ô»°¿ò£¬Ñ¡Ôñ¶ÔÏó
+	* æ˜¾ç¤ºå¯¹è¯æ¡†ï¼Œé€‰æ‹©å¯¹è±¡
 	* 
 	* @param context
 	* @param isCrop
@@ -346,11 +341,11 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 	private void showTargetPicker() {
 
 		final MyMenuDialog myMenuDialog = new MyMenuDialog(PublishActActivity.this);
-		myMenuDialog.setTitle("Ñ¡Ôñ¶ÔÏó");
+		myMenuDialog.setTitle("é€‰æ‹©å¯¹è±¡");
 		final ArrayList<String> list = new ArrayList<String>();
-		list.add("ÄĞ");
-		list.add("Å®");
-		list.add("ÄĞÅ®²»ÏŞ");
+		list.add("ç”·");
+		list.add("å¥³");
+		list.add("ç”·å¥³ä¸é™");
 		myMenuDialog.setMenuList(list);
 		OnItemClickListener listener = new OnItemClickListener() {
 
@@ -366,7 +361,7 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 	}
 
 	/**
-	* ÏÔÊ¾¶Ô»°¿ò£¬Ñ¡ÔñÀàĞÍ
+	* æ˜¾ç¤ºå¯¹è¯æ¡†ï¼Œé€‰æ‹©ç±»å‹
 	* 
 	* @param context
 	* @param isCrop
@@ -374,10 +369,10 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 	private void showTypePicker() {
 
 		final MyMenuDialog myMenuDialog = new MyMenuDialog(PublishActActivity.this);
-		myMenuDialog.setTitle("Ñ¡ÔñÀàĞÍ");
+		myMenuDialog.setTitle("é€‰æ‹©ç±»å‹");
 		final ArrayList<String> list = new ArrayList<String>();
 		list.addAll(Constants.ActivityType.getList());
-		list.add("ÆäËû");
+		list.add("å…¶ä»–");
 		myMenuDialog.setMenuList(list);
 		OnItemClickListener listener = new OnItemClickListener() {
 
@@ -428,11 +423,11 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 		}
 
 		else if (!publishImageViews[0].isShown()) {
-			ToastTool.showLong(PublishActActivity.this, "ÇëÖÁÉÙÉÏ´«Ò»ÕÅÍ¼Æ¬");
+			ToastTool.showLong(PublishActActivity.this, "è¯·è‡³å°‘ä¸Šä¼ ä¸€å¼ å›¾ç‰‡");
 			focusView = addPublishImageViews[0];
 			cancel = true;
 		}
-		
+
 		if (cancel) {
 			// There was an error; don't attempt login and focus the first
 			// form field with an error.
@@ -444,18 +439,18 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 	}
 
 	/**
-	 * ·¢²¼
+	 * å‘å¸ƒ
 	 */
 	private void publish() {
 		List<File> photoFiles = new ArrayList<File>();
 		for (int i = 0; i < 6; i++) {
 			if (!TextUtils.isEmpty(photoUris[i])) {
-				LogTool.i("µØÖ·", photoUris[i]);
+				LogTool.i("åœ°å€", photoUris[i]);
 				photoFiles.add(new File(photoUris[i]));
 			}
 		}
 
-		dialog = showProgressDialog("ÕıÔÚ·¢²¼£¬ÇëÉÔºó...");
+		dialog = showProgressDialog("æ­£åœ¨å‘å¸ƒï¼Œè¯·ç¨å...");
 		dialog.setCancelable(false);
 
 		RequestParams params = new RequestParams();
@@ -465,19 +460,19 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 			public void onSuccess(int statusCode, Header[] headers, String response) {
 				// TODO Auto-generated method stub
 				if (statusCode == 200 && response.equals("1")) {
-					ToastTool.showShort(PublishActActivity.this, "·¢²¼³É¹¦£¡");
+					ToastTool.showShort(PublishActActivity.this, "å‘å¸ƒæˆåŠŸï¼");
 					finish();
 					overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
 				} else {
-					LogTool.e("·¢²¼Ê§°Ü" + response);
+					LogTool.e("å‘å¸ƒå¤±è´¥" + response);
 				}
 			}
 
 			@Override
 			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
 				// TODO Auto-generated method stub
-				ToastTool.showShort(PublishActActivity.this, "·¢²¼Ê§°Ü£¡");
-				LogTool.e("·¢²¼Ê±Ê§°Ü£¡" + statusCode + "\n");
+				ToastTool.showShort(PublishActActivity.this, "å‘å¸ƒå¤±è´¥ï¼");
+				LogTool.e("å‘å¸ƒæ—¶å¤±è´¥ï¼" + statusCode + "\n");
 			}
 
 			@Override

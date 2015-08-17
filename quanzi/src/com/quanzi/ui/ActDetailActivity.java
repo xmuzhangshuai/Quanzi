@@ -113,7 +113,6 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 		setContentView(R.layout.activity_act_detail);
 		userPreference = BaseApplication.getInstance().getUserPreference();
 		commentList = new LinkedList<JsonComment>();
-		//		commentList.add(new JsonComment());
 		inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 
 		jsonActItem = (JsonActItem) getIntent().getSerializableExtra(ACT_ITEM);
