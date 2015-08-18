@@ -65,7 +65,6 @@ public class MainMyQuanziFragment extends BaseV4Fragment implements OnClickListe
 	private View searchBtn;// 查找按钮
 	private View publishBtn;// 发布按钮
 	private View emptyView;
-
 	private PullToRefreshListView postListView;
 
 	protected boolean pauseOnScroll = false;
