@@ -65,22 +65,22 @@ import com.quanzi.utils.UserPreference;
  */
 public class ActDetailActivity extends BaseFragmentActivity implements OnClickListener {
 	public static final String ACT_ITEM = "act_item";
-	
+
 	protected boolean pauseOnScroll = false;
 	protected boolean pauseOnFling = true;
 
-	private View headView;//详情区域
+	private View headView;// 详情区域
 	private View footView;
 	public TextView titleTextView;
 	public ImageView headImageView;
 	public TextView nameTextView;
 	public TextView timeTextView;
 	public ImageView contentImageView;
-	public TextView actTimeTextView;//活动时间
-	public TextView actLocationTextView;//活动地点
-	public TextView actGenderTextView;//活动性别要求
-	public TextView actContentTextView;//活动内容介绍
-	public TextView participantCountTextView;//参加活动人数
+	public TextView actTimeTextView;// 活动时间
+	public TextView actLocationTextView;// 活动地点
+	public TextView actGenderTextView;// 活动性别要求
+	public TextView actContentTextView;// 活动内容介绍
+	public TextView participantCountTextView;// 参加活动人数
 	private ImageView itemImageView;
 	private ImageView itemImageView1;
 	private ImageView itemImageView2;
@@ -90,17 +90,18 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 	private ImageView itemImageView6;
 	private View imageViewGroup2;
 	private View imageViewGroup1;
-	public TextView applyBtn;//我要报名
+	public TextView applyBtn;// 我要报名
 	private EditText commentEditText;
 	private Button sendBtn;
-	private View leftImageButton;//导航栏左侧按钮
+	private View leftImageButton;// 导航栏左侧按钮
 	private UserPreference userPreference;
 	private PullToRefreshListView actCommentListView;
 	private JsonActItem jsonActItem;
-	private int pageNow = 0;//控制页数
+	private int pageNow = 0;// 控制页数
 	private CommentAdapter mAdapter;
 	private LinkedList<JsonComment> commentList;
 	private InputMethodManager inputMethodManager;
+	private int position = -1;
 
 	private boolean isReply = false;
 	private int toUserID = 0;
@@ -116,6 +117,7 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 		inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 
 		jsonActItem = (JsonActItem) getIntent().getSerializableExtra(ACT_ITEM);
+		position = getIntent().getIntExtra("position", -1);
 		if (jsonActItem != null) {
 			toUserID = jsonActItem.getA_userid();
 		}
@@ -123,7 +125,7 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 		findViewById();
 		initView();
 
-		//获取数据
+		// 获取数据
 		getDataTask(pageNow);
 		actCommentListView.setMode(Mode.BOTH);
 		ListView mListView = actCommentListView.getRefreshableView();
@@ -185,21 +187,22 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 		applyBtn.setOnClickListener(this);
 		sendBtn.setOnClickListener(this);
 		participantCountTextView.setOnClickListener(this);
+
+		// 设置报名
 		if (!jsonActItem.isApply()) {
 			applyBtn.setEnabled(true);
 		} else {
 			applyBtn.setEnabled(false);
 		}
 
-		//设置上拉下拉刷新事件
+		// 设置上拉下拉刷新事件
 		actCommentListView.setOnRefreshListener(new OnRefreshListener2<ListView>() {
 
 			@Override
 			public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
 				// TODO Auto-generated method stub
-				String label = DateUtils.formatDateTime(ActDetailActivity.this.getApplicationContext(),
-						System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE
-								| DateUtils.FORMAT_ABBREV_ALL);
+				String label = DateUtils.formatDateTime(ActDetailActivity.this.getApplicationContext(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME
+						| DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 
 				pageNow = 0;
@@ -209,9 +212,8 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 			@Override
 			public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
 				// TODO Auto-generated method stub
-				String label = DateUtils.formatDateTime(ActDetailActivity.this.getApplicationContext(),
-						System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE
-								| DateUtils.FORMAT_ABBREV_ALL);
+				String label = DateUtils.formatDateTime(ActDetailActivity.this.getApplicationContext(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME
+						| DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 
 				if (pageNow >= 0)
@@ -221,46 +223,51 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 		});
 
 		if (jsonActItem != null) {
-			//设置头像
+			// 设置头像
 			if (!TextUtils.isEmpty(jsonActItem.getA_small_avatar())) {
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonActItem.getA_small_avatar()),
-						headImageView, ImageLoaderTool.getHeadImageOptions(10));
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonActItem.getA_small_avatar()), headImageView,
+						ImageLoaderTool.getHeadImageOptions(10));
 				if (userPreference.getU_id() != jsonActItem.getA_userid()) {
-					//点击头像进入详情页面
+					// 点击头像进入详情页面
 					headImageView.setOnClickListener(new OnClickListener() {
 
 						@Override
 						public void onClick(View v) {
 							// TODO Auto-generated method stub
-							//							Intent intent = new Intent(LoveBridgeDetailActivity.this, PersonDetailActivity.class);
-							//							intent.putExtra(PersonDetailActivity.PERSON_TYPE, Constants.PersonDetailType.SINGLE);
-							//							intent.putExtra(UserTable.U_ID, loveBridgeItem.getN_userid());
-							//							startActivity(intent);
-							//							LoveBridgeDetailActivity.this.overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
+							// Intent intent = new
+							// Intent(LoveBridgeDetailActivity.this,
+							// PersonDetailActivity.class);
+							// intent.putExtra(PersonDetailActivity.PERSON_TYPE,
+							// Constants.PersonDetailType.SINGLE);
+							// intent.putExtra(UserTable.U_ID,
+							// loveBridgeItem.getN_userid());
+							// startActivity(intent);
+							// LoveBridgeDetailActivity.this.overridePendingTransition(R.anim.zoomin2,
+							// R.anim.zoomout);
 						}
 					});
 				}
 			}
 
-			//设置姓名
+			// 设置姓名
 			nameTextView.setText(jsonActItem.getA_username());
 
-			//设置题目
+			// 设置题目
 			titleTextView.setText(jsonActItem.getA_title());
 
-			//设置活动日期
+			// 设置活动日期
 			actTimeTextView.setText(DateTimeTools.DateToStringForCN(jsonActItem.getA_act_date()));
 
-			//设置活动地点
+			// 设置活动地点
 			actLocationTextView.setText(jsonActItem.getA_act_location());
 
-			//设置活动对象
+			// 设置活动对象
 			actGenderTextView.setText(jsonActItem.getA_act_target());
 
-			//设置活动详情
+			// 设置活动详情
 			actContentTextView.setText(jsonActItem.getA_detail_content());
 
-			//设置发表日期
+			// 设置发表日期
 			timeTextView.setText(DateTimeTools.getHourAndMin(jsonActItem.getA_time()));
 
 			participantCountTextView.setText("" + jsonActItem.getA_apply_amount() + "人参加");
@@ -289,47 +296,41 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 			});
 
 			String[] smallPhotos = null;
-			//设置缩略图
+			// 设置缩略图
 			if (!jsonActItem.getA_thumbnail().isEmpty()) {
 				smallPhotos = jsonActItem.getA_thumbnail().split("\\|");
 			}
 
 			if (smallPhotos != null && smallPhotos.length > 0) {
 				switch (smallPhotos.length) {
-				case 1://只有一张图片
+				case 1:// 只有一张图片
 					imageViewGroup1.setVisibility(View.GONE);
 					imageViewGroup2.setVisibility(View.GONE);
 					itemImageView.setVisibility(View.VISIBLE);
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), itemImageView,
-							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), itemImageView, ImageLoaderTool.getImageOptions());
 					break;
-				case 2://有两张图片
+				case 2:// 有两张图片
 					itemImageView.setVisibility(View.GONE);
 					imageViewGroup2.setVisibility(View.GONE);
 					imageViewGroup1.setVisibility(View.VISIBLE);
 					itemImageView1.setVisibility(View.VISIBLE);
 					itemImageView2.setVisibility(View.VISIBLE);
 					itemImageView3.setVisibility(View.INVISIBLE);
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), itemImageView1,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), itemImageView2,
-							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), itemImageView1, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), itemImageView2, ImageLoaderTool.getImageOptions());
 					break;
-				case 3://有三张图片
+				case 3:// 有三张图片
 					itemImageView.setVisibility(View.GONE);
 					imageViewGroup2.setVisibility(View.GONE);
 					imageViewGroup1.setVisibility(View.VISIBLE);
 					itemImageView1.setVisibility(View.VISIBLE);
 					itemImageView2.setVisibility(View.VISIBLE);
 					itemImageView3.setVisibility(View.VISIBLE);
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), itemImageView1,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), itemImageView2,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), itemImageView3,
-							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), itemImageView1, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), itemImageView2, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), itemImageView3, ImageLoaderTool.getImageOptions());
 					break;
-				case 4://有四张图片
+				case 4:// 有四张图片
 					itemImageView.setVisibility(View.GONE);
 					imageViewGroup2.setVisibility(View.VISIBLE);
 					imageViewGroup1.setVisibility(View.VISIBLE);
@@ -339,16 +340,12 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 					itemImageView4.setVisibility(View.VISIBLE);
 					itemImageView5.setVisibility(View.VISIBLE);
 					itemImageView6.setVisibility(View.INVISIBLE);
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), itemImageView1,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), itemImageView2,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), itemImageView4,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[3]), itemImageView5,
-							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), itemImageView1, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), itemImageView2, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), itemImageView4, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[3]), itemImageView5, ImageLoaderTool.getImageOptions());
 					break;
-				case 5://有五张图片
+				case 5:// 有五张图片
 					itemImageView.setVisibility(View.GONE);
 					imageViewGroup2.setVisibility(View.VISIBLE);
 					imageViewGroup1.setVisibility(View.VISIBLE);
@@ -358,18 +355,13 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 					itemImageView4.setVisibility(View.VISIBLE);
 					itemImageView5.setVisibility(View.VISIBLE);
 					itemImageView6.setVisibility(View.INVISIBLE);
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), itemImageView1,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), itemImageView2,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), itemImageView3,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[3]), itemImageView4,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[4]), itemImageView5,
-							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), itemImageView1, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), itemImageView2, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), itemImageView3, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[3]), itemImageView4, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[4]), itemImageView5, ImageLoaderTool.getImageOptions());
 					break;
-				case 6://有六张图片
+				case 6:// 有六张图片
 					itemImageView.setVisibility(View.GONE);
 					imageViewGroup2.setVisibility(View.VISIBLE);
 					imageViewGroup1.setVisibility(View.VISIBLE);
@@ -379,18 +371,12 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 					itemImageView4.setVisibility(View.VISIBLE);
 					itemImageView5.setVisibility(View.VISIBLE);
 					itemImageView6.setVisibility(View.VISIBLE);
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), itemImageView1,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), itemImageView2,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), itemImageView3,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[3]), itemImageView4,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[4]), itemImageView5,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[5]), itemImageView6,
-							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), itemImageView1, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), itemImageView2, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), itemImageView3, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[3]), itemImageView4, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[4]), itemImageView5, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[5]), itemImageView6, ImageLoaderTool.getImageOptions());
 					break;
 				default:
 					itemImageView.setVisibility(View.GONE);
@@ -485,7 +471,7 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 		}
 	}
 
-	//查看大图
+	// 查看大图
 	public void goBigPhoto(String[] urls, int postion) {
 		Intent intent = new Intent(ActDetailActivity.this, GalleryPictureActivity.class);
 		intent.putExtra(GalleryPictureActivity.IMAGE_URLS, urls);
@@ -509,7 +495,7 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 	void showMoreDialog() {
 
 		// DialogFragment.show() will take care of adding the fragment
-		// in a transaction.  We also want to remove any currently showing
+		// in a transaction. We also want to remove any currently showing
 		// dialog, so make our own transaction and take care of that here.
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
@@ -549,8 +535,7 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 			break;
 		case R.id.participants_count:
 			if (jsonActItem.getA_apply_amount() > 0) {
-				startActivity(new Intent(ActDetailActivity.this, AllApplicantsActivity.class)
-						.putExtra(AllApplicantsActivity.A_ACTID, jsonActItem.getA_actid())
+				startActivity(new Intent(ActDetailActivity.this, AllApplicantsActivity.class).putExtra(AllApplicantsActivity.A_ACTID, jsonActItem.getA_actid())
 						.putExtra(AllApplicantsActivity.A_USERID, jsonActItem.getA_userid())
 						.putExtra(AllApplicantsActivity.APPLY_COUNT, jsonActItem.getA_apply_amount()));
 				overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
@@ -589,6 +574,12 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 						applyBtn.setEnabled(false);
 						participantCountTextView.setText("" + (jsonActItem.getA_apply_amount() + 1) + "人参加");
 						jsonActItem.setA_apply_amount(jsonActItem.getA_apply_amount() + 1);
+						jsonActItem.setApply(true);
+						if (position > -1) {
+							Intent mIntent = new Intent();
+							mIntent.putExtra("position", position);
+							ActDetailActivity.this.setResult(2, mIntent);
+						}
 					} else {
 						LogTool.e("报名返回" + response);
 					}
@@ -689,7 +680,7 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 					List<JsonComment> temp = FastJsonTool.getObjectList(response, JsonComment.class);
 					LogTool.i("活动详情获取评论列表", "长度" + temp.size());
 					if (temp != null) {
-						//如果是首次获取数据
+						// 如果是首次获取数据
 						if (page == 0) {
 							if (temp.size() < Config.PAGE_NUM) {
 								pageNow = -1;
@@ -698,7 +689,7 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 							commentList.add(new JsonComment());
 							commentList.addAll(temp);
 						}
-						//如果是获取更多
+						// 如果是获取更多
 						else if (page > 0) {
 							if (temp.size() < Config.PAGE_NUM) {
 								pageNow = -1;
@@ -809,12 +800,12 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 					return false;
 				}
 			});
-			//设置头像
+			// 设置头像
 			if (!TextUtils.isEmpty(jsonActItem.getA_small_avatar())) {
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonComment.getC_user_avatar()),
-						holder.headImageView, ImageLoaderTool.getHeadImageOptions(10));
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonComment.getC_user_avatar()), holder.headImageView,
+						ImageLoaderTool.getHeadImageOptions(10));
 				if (userPreference.getU_id() != jsonComment.getC_user_id()) {
-					//点击头像进入详情页面
+					// 点击头像进入详情页面
 					holder.headImageView.setOnClickListener(new OnClickListener() {
 
 						@Override
@@ -830,13 +821,13 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 				}
 			}
 
-			//设置内容
+			// 设置内容
 			holder.contentTextView.setText(jsonComment.getC_content());
 
-			//设置姓名
+			// 设置姓名
 			holder.nameTextView.setText(jsonComment.getC_user_nickname());
 
-			//设置性别
+			// 设置性别
 			if (jsonComment.getC_user_gender().equals(Constants.Gender.MALE)) {
 				holder.genderImageView.setImageResource(R.drawable.male);
 			} else {
@@ -852,11 +843,10 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 				holder.toUserName.setText(jsonComment.getTo_user_nickname() + ":");
 			}
 
-			//设置日期
+			// 设置日期
 			holder.timeTextView.setText(DateTimeTools.getHourAndMin(jsonComment.getC_time()));
 
 			return view;
 		}
 	}
-
 }

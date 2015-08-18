@@ -380,7 +380,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 				public boolean onLongClick(View v) {
 					// TODO Auto-generated method stub
 					if (userPreference.getU_id() == jsonPostItem.getP_userid()) {
-						deleteComment(position);
+						deletePost(position);
 					}
 					return false;
 				}
@@ -851,38 +851,46 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 		/**
 		 * É¾Ìû×Ó
 		 */
-		private void deleteComment(final int position) {
+		private void deletePost(final int position) {
+
 			final MyAlertDialog dialog = new MyAlertDialog(getActivity());
 			dialog.setTitle("É¾³ý");
-			dialog.setMessage("É¾³ýÆÀÂÛ²»¿ÉÄæ");
+			dialog.setMessage("É¾³ýÌû×Ó²»¿ÉÄæ");
 			View.OnClickListener comfirm = new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					dialog.dismiss();
-					RequestParams params = new RequestParams();
-					params.put(UserTable.U_ID, userPreference.getU_id());
-					TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
 
-						@Override
-						public void onSuccess(int statusCode, Header[] headers, String response) {
-							// TODO Auto-generated method stub
-							if (statusCode == 200) {
-								if (response.equals("1")) {
-									jsonPostItemList.remove(position);
-									mAdapter.notifyDataSetChanged();
-								}
-							}
-						}
-
-						@Override
-						public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
-							// TODO Auto-generated method stub
-						}
-
-					};
-					AsyncHttpClientTool.post(getActivity(), "", params, responseHandler);
+					jsonPostItemList.remove(position);
+					mAdapter.notifyDataSetChanged();
+					// RequestParams params = new RequestParams();
+					// params.put(UserTable.U_ID, userPreference.getU_id());
+					// TextHttpResponseHandler responseHandler = new
+					// TextHttpResponseHandler("utf-8") {
+					//
+					// @Override
+					// public void onSuccess(int statusCode, Header[] headers,
+					// String response) {
+					// // TODO Auto-generated method stub
+					// if (statusCode == 200) {
+					// if (response.equals("1")) {
+					// jsonPostItemList.remove(position);
+					// mAdapter.notifyDataSetChanged();
+					// }
+					// }
+					// }
+					//
+					// @Override
+					// public void onFailure(int statusCode, Header[] headers,
+					// String errorResponse, Throwable e) {
+					// // TODO Auto-generated method stub
+					// }
+					//
+					// };
+					// AsyncHttpClientTool.post(getActivity(), "", params,
+					// responseHandler);
 				}
 			};
 			View.OnClickListener cancle = new OnClickListener() {
