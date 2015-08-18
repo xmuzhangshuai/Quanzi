@@ -33,6 +33,7 @@
     <dimen name="personal_photo_margin">100dp</dimen>
     <dimen name="personal_photo_size">100dp</dimen>
     <dimen name="get_image_btn_top">120dp</dimen>
+    <dimen name="act_image">135dp</dimen>
     <dimen name="tape_margin_top">160dp</dimen>
     <dimen name="tape_margin">180dp</dimen>
     <dimen name="time_capsule_220">220dp</dimen>

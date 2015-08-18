@@ -267,6 +267,7 @@ public class MainExploreActFragment extends BaseV4Fragment {
 			public TextView actLocationTextView;// 活动地点
 			public TextView actGenderTextView;// 活动性别要求
 			public TextView actContentTextView;// 活动内容介绍
+			public TextView actTypeTextView;// 活动类型
 			public CheckBox favorBtn;
 			public TextView favorCountTextView;
 			public ImageView moreBtn;
@@ -324,6 +325,7 @@ public class MainExploreActFragment extends BaseV4Fragment {
 				holder.nameTextView = (TextView) view.findViewById(R.id.name);
 				holder.timeTextView = (TextView) view.findViewById(R.id.time);
 				holder.contentImageView = (ImageView) view.findViewById(R.id.item_image);
+				holder.actTypeTextView = (TextView) view.findViewById(R.id.act_type);
 				holder.favorBtn = (CheckBox) view.findViewById(R.id.favor_btn);
 				holder.favorCountTextView = (TextView) view.findViewById(R.id.favor_count);
 				holder.commentBtn = (ImageView) view.findViewById(R.id.comment_btn);
@@ -387,6 +389,9 @@ public class MainExploreActFragment extends BaseV4Fragment {
 
 			// 设置活动地点
 			holder.actLocationTextView.setText(jsonActItem.getA_act_location());
+
+			// 设置活动类型
+			holder.actTypeTextView.setText(jsonActItem.getA_act_type());
 
 			// 设置活动对象
 			holder.actGenderTextView.setText(jsonActItem.getA_act_target());
