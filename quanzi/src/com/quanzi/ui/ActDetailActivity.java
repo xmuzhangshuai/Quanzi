@@ -192,7 +192,7 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 		if (!jsonActItem.isApply()) {
 			applyBtn.setEnabled(true);
 		} else {
-			applyBtn.setEnabled(false);
+			applyBtn.setText("取消报名");
 		}
 
 		// 设置上拉下拉刷新事件
@@ -550,57 +550,78 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 	 * 报名参加活动
 	 */
 	private void applyAct() {
-		RequestParams params = new RequestParams();
-		params.put(ActivityTable.A_ACTID, jsonActItem.getA_actid());
-		params.put(ActivityTable.A_USERID, jsonActItem.getA_userid());
-		params.put(UserTable.U_ID, userPreference.getU_id());
-
-		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
-
-			@Override
-			public void onStart() {
-				// TODO Auto-generated method stub
-				super.onStart();
-				sendBtn.setEnabled(false);
-			}
-
-			@Override
-			public void onSuccess(int statusCode, Header[] headers, String response) {
-				// TODO Auto-generated method stub
-				if (statusCode == 200) {
-					if (response.equals("1")) {
-						LogTool.i("报名成功");
-						ToastTool.showLong(ActDetailActivity.this, "报名成功");
-						applyBtn.setEnabled(false);
-						participantCountTextView.setText("" + (jsonActItem.getA_apply_amount() + 1) + "人参加");
-						jsonActItem.setA_apply_amount(jsonActItem.getA_apply_amount() + 1);
-						jsonActItem.setApply(true);
-						if (position > -1) {
-							Intent mIntent = new Intent();
-							mIntent.putExtra("position", position);
-							ActDetailActivity.this.setResult(2, mIntent);
-						}
-					} else {
-						LogTool.e("报名返回" + response);
-					}
-				}
-			}
-
-			@Override
-			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
-				// TODO Auto-generated method stub
-				LogTool.e("报名失败");
-			}
-
-			@Override
-			public void onFinish() {
-				// TODO Auto-generated method stub
-				super.onFinish();
-				sendBtn.setEnabled(true);
-			}
-
-		};
-		AsyncHttpClientTool.post("activity/join", params, responseHandler);
+		if (jsonActItem.isApply()) {// 如果是取消报名
+			LogTool.i("已取消");
+			ToastTool.showLong(ActDetailActivity.this, "取消报名成功");
+			participantCountTextView.setText("" + (jsonActItem.getA_apply_amount() - 1) + "人参加");
+			jsonActItem.setA_apply_amount(jsonActItem.getA_apply_amount() - 1);
+			jsonActItem.setApply(false);
+			applyBtn.setText("我要报名");
+		} else {// 如果是报名
+			LogTool.i("报名成功");
+			ToastTool.showLong(ActDetailActivity.this, "报名成功");
+			participantCountTextView.setText("" + (jsonActItem.getA_apply_amount() + 1) + "人参加");
+			jsonActItem.setA_apply_amount(jsonActItem.getA_apply_amount() + 1);
+			jsonActItem.setApply(true);
+			applyBtn.setText("取消报名");
+		}
+		if (position > -1) {
+			Intent mIntent = new Intent();
+			mIntent.putExtra("position", position);
+			mIntent.putExtra("apply", jsonActItem.isApply());
+			ActDetailActivity.this.setResult(2, mIntent);
+		}
+//		RequestParams params = new RequestParams();
+//		params.put(ActivityTable.A_ACTID, jsonActItem.getA_actid());
+//		params.put(ActivityTable.A_USERID, jsonActItem.getA_userid());
+//		params.put(UserTable.U_ID, userPreference.getU_id());
+//
+//		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
+//
+//			@Override
+//			public void onSuccess(int statusCode, Header[] headers, String response) {
+//				// TODO Auto-generated method stub
+//				if (statusCode == 200) {
+//					if (response.equals("1")) {
+//						if (jsonActItem.isApply()) {// 如果是取消报名
+//							LogTool.i("已取消");
+//							ToastTool.showLong(ActDetailActivity.this, "取消报名成功");
+//							participantCountTextView.setText("" + (jsonActItem.getA_apply_amount() - 1) + "人参加");
+//							jsonActItem.setA_apply_amount(jsonActItem.getA_apply_amount() - 1);
+//							jsonActItem.setApply(false);
+//							applyBtn.setText("我要报名");
+//						} else {// 如果是报名
+//							LogTool.i("报名成功");
+//							ToastTool.showLong(ActDetailActivity.this, "报名成功");
+//							participantCountTextView.setText("" + (jsonActItem.getA_apply_amount() + 1) + "人参加");
+//							jsonActItem.setA_apply_amount(jsonActItem.getA_apply_amount() + 1);
+//							jsonActItem.setApply(true);
+//							applyBtn.setText("取消报名");
+//						}
+//						if (position > -1) {
+//							Intent mIntent = new Intent();
+//							mIntent.putExtra("position", position);
+//							mIntent.putExtra("apply", jsonActItem.isApply());
+//							ActDetailActivity.this.setResult(2, mIntent);
+//						}
+//					} else {
+//						LogTool.e("报名返回" + response);
+//					}
+//				}
+//			}
+//
+//			@Override
+//			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+//				// TODO Auto-generated method stub
+//				LogTool.e("报名失败");
+//			}
+//		};
+//		if (jsonActItem.isApply()) {// 如果是取消报名
+//			// AsyncHttpClientTool.post("activity/join", params,
+//			// responseHandler);
+//		} else {// 如果是报名
+//			AsyncHttpClientTool.post("activity/join", params, responseHandler);
+//		}
 	}
 
 	/**

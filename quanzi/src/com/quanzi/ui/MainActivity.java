@@ -27,6 +27,7 @@ import com.quanzi.config.DefaultKeys;
 import com.quanzi.huanxin.HXSDKHelper;
 import com.quanzi.huanxin.MyHXSDKHelper;
 import com.quanzi.utils.CommonTools;
+import com.quanzi.utils.LogTool;
 
 /**
  *

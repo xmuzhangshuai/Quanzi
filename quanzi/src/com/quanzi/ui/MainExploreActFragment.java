@@ -117,14 +117,18 @@ public class MainExploreActFragment extends BaseV4Fragment {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == 1 && resultCode == 2) {
-			LogTool.e("已报名");
-			int position = data.getIntExtra("position", -1);
-			if (position > -1) {
-				jsonActItemList.get(position).setApply(true);
-				mAdapter.notifyDataSetChanged();
-			}
-		}
+		LogTool.i("onActivityResult     " + "requestCode:" + requestCode + "   resultCode:" + resultCode + "      data:" + data);
+		// if (requestCode == 1) {
+		// LogTool.e("已报名");
+		// int position = data.getIntExtra("position", -1);
+		// boolean apply = data.getBooleanExtra("apply", false);
+		// LogTool.i("onActivityResult", "position:" + position + "apply" +
+		// apply);
+		// if (position > -1) {
+		// jsonActItemList.get(position).setApply(apply);
+		// mAdapter.notifyDataSetChanged();
+		// }
+		// }
 	}
 
 	@Override
@@ -369,7 +373,7 @@ public class MainExploreActFragment extends BaseV4Fragment {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					startActivityForResult(new Intent(getActivity(), ActDetailActivity.class).putExtra(ActDetailActivity.ACT_ITEM, jsonActItem), 1);
+					getParentFragment().startActivityForResult(new Intent(getActivity(), ActDetailActivity.class).putExtra(ActDetailActivity.ACT_ITEM, jsonActItem), 1);
 					getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 				}
 			});
