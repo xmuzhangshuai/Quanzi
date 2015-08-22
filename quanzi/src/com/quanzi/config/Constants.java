@@ -5,24 +5,19 @@ import java.util.List;
 
 public class Constants {
 
-	//包名
+	// 包名
 	public static final String PACKAGENAME = "com.quanzi";
-
-	//	public static String testIP = "http://192.168.1.101/";
-
-	//域名或者是IP
-	//	public static String AppliactionServerIP = "http://121.40.101.36/";
 
 	public static String AppliactionServerDomain = "http://192.168.1.100:8080/XiaoYuanQuanQuan/";
 
 	public static class Config {
-		//是否处于开发模式
+		// 是否处于开发模式
 		public static final boolean DEVELOPER_MODE = true;
 
-		//接受验证码时间为120s
+		// 接受验证码时间为120s
 		public static int AUTN_CODE_TIME = 120;
 
-		//照片缩小比例
+		// 照片缩小比例
 		public static final int SCALE = 5;
 
 		// 总共有多少页
@@ -33,49 +28,49 @@ public class Constants {
 
 		public static int PAGE_NUM = 20;
 
-		//聊天每次刷新纪录条数
+		// 聊天每次刷新纪录条数
 		public static int LOAD_MESSAGE_COUNT = 20;
 	}
 
-	//情感状态
+	// 情感状态
 	public static class LoveState {
-		//单身
+		// 单身
 		public static final String SINGLE = "single";
-		//恋爱
+		// 恋爱
 		public static final String INLOVE = "in_love";
-		//已婚
+		// 已婚
 		public static final String MARRIED = "married";
 	}
 
-	//评论类型
+	// 评论类型
 	public static class CommentType {
-		//评论
+		// 评论
 		public static final String COMMENT = "COMMENT";
-		//回复
+		// 回复
 		public static final String REPLY = "REPLY";
 	}
 
-	//身份
+	// 身份
 	public static class Identity {
-		//学生
+		// 学生
 		public static final String STUDENT = "student";
-		//校友
+		// 校友
 		public static final String SCHOOLMATE = "schoolmate";
 	}
 
-	//审核状态
+	// 审核状态
 	public static class VertifyState {
-		//通过
+		// 通过
 		public static final int PASSED = 2;
-		//正在审核
+		// 正在审核
 		public static final int VERTIFING = 1;
-		//未通过
+		// 未通过
 		public static final int NOTPASSED = -1;
-		//未提交
+		// 未提交
 		public static final int NOTSUBMIT = 0;
 	}
 
-	//活动种类
+	// 活动种类
 	public static class ActivityType {
 		public static final String JIANGZUO = "讲座";
 		public static final String ZHAOPIN = "招聘";

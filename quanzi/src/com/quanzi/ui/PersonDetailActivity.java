@@ -46,7 +46,7 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 	private TextView leftTextView;//导航栏左侧文字
 	private View leftButton;//导航栏左侧按钮
 	private View contactBtn;//私信按钮
-	private View moreBtn;//更多按钮
+//	private View moreBtn;//更多按钮
 	private CheckBox concernBtn;
 	private View postBtn;
 	private View dataBtn;
@@ -97,7 +97,7 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 		leftTextView = (TextView) findViewById(R.id.nav_text);
 		leftButton = findViewById(R.id.left_btn_bg);
 		contactBtn = findViewById(R.id.nav_right_btn2);
-		moreBtn = findViewById(R.id.nav_right_btn1);
+//		moreBtn = findViewById(R.id.nav_right_btn1);
 		headImageView = (ImageView) findViewById(R.id.head_image);
 		basicInfo = (TextView) findViewById(R.id.basic_info);
 		introduce = (TextView) findViewById(R.id.person_intro);
@@ -160,7 +160,7 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 		postBtn.setOnClickListener(this);
 		dataBtn.setOnClickListener(this);
 		contactBtn.setOnClickListener(this);
-		moreBtn.setOnClickListener(this);
+//		moreBtn.setOnClickListener(this);
 
 		leftTextView.setText(jsonUser.getU_nickname());
 		//设置头像

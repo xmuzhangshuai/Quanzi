@@ -44,12 +44,13 @@ public class MyPeopleActivity extends BaseActivity implements OnClickListener {
 
 	/***********VIEWS************/
 	public static final String TYPE = "type";//
-	public static final String MYQUANZI = "myquanzi";//我的圈子
-	public static final String MYFOLLOWER = "myfollower";//我的追随者
+	public static final String MYQUANZI = "myquanzi";// 我的圈子
+	public static final String MYFOLLOWER = "myfollower";// 我的追随者
+	public static final String SAME_IN_INDUSTRY = "same_in_industry";// 相同专业
 
 	private ListView allFavorListView;
-	private TextView leftTextView;//导航栏左侧文字
-	private View leftButton;//导航栏左侧按钮
+	private TextView leftTextView;// 导航栏左侧文字
+	private View leftButton;// 导航栏左侧按钮
 	List<JsonConcern> jsonConcernList;
 	private String industry_name;
 	int pa_userid;
@@ -122,7 +123,7 @@ public class MyPeopleActivity extends BaseActivity implements OnClickListener {
 
 		RequestParams params = new RequestParams();
 		params.put(UserTable.U_ID, userPreference.getU_id());
-		if (type.equals(MYQUANZI) || type.equals(MYFOLLOWER)) {
+		if (type.equals(MYQUANZI) || type.equals(MYFOLLOWER) || type.equals(SAME_IN_INDUSTRY)) {
 			params.put(IndustryTable.I_NAME, industry_name);
 		}
 
@@ -163,10 +164,11 @@ public class MyPeopleActivity extends BaseActivity implements OnClickListener {
 			}
 		};
 		if (type.equals(MYQUANZI) && industry_name != null) {
-			AsyncHttpClientTool.post(MyPeopleActivity.this, "quanzi/getQuanziUserListByIndustry", params,
-					responseHandler);
+			AsyncHttpClientTool.post(MyPeopleActivity.this, "quanzi/getQuanziUserListByIndustry", params, responseHandler);
 		} else if (type.equals(MYFOLLOWER)) {
 			AsyncHttpClientTool.post(MyPeopleActivity.this, "quanzi/getFollowersByIndustryID", params, responseHandler);
+		} else if (type.equals(SAME_IN_INDUSTRY)) {
+			AsyncHttpClientTool.post(MyPeopleActivity.this, "", params, responseHandler);
 		}
 	}
 
@@ -218,25 +220,27 @@ public class MyPeopleActivity extends BaseActivity implements OnClickListener {
 				holder = new ViewHolder();
 				holder.headImageView = (ImageView) view.findViewById(R.id.head_image);
 				holder.nameTextView = (TextView) view.findViewById(R.id.name);
-				view.setTag(holder); // 给View添加一个格外的数据 
+				view.setTag(holder); // 给View添加一个格外的数据
 			} else {
-				holder = (ViewHolder) view.getTag(); // 把数据取出来  
+				holder = (ViewHolder) view.getTag(); // 把数据取出来
 			}
 			//
-			//			view.setOnClickListener(new OnClickListener() {
+			// view.setOnClickListener(new OnClickListener() {
 			//
-			//				@Override
-			//				public void onClick(View v) {
-			//					// TODO Auto-generated method stub
-			//					Intent intent = new Intent(MyPeopleActivity.this, PersonDetailActivity.class);
-			//					intent.putExtra(PersonDetailActivity.JSONUSER, jsonUser);
-			//					startActivity(intent);
-			//					overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-			//				}
-			//			});
+			// @Override
+			// public void onClick(View v) {
+			// // TODO Auto-generated method stub
+			// Intent intent = new Intent(MyPeopleActivity.this,
+			// PersonDetailActivity.class);
+			// intent.putExtra(PersonDetailActivity.JSONUSER, jsonUser);
+			// startActivity(intent);
+			// overridePendingTransition(R.anim.push_left_in,
+			// R.anim.push_left_out);
+			// }
+			// });
 
-			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonConcern.getUser_small_avatar()),
-					holder.headImageView, ImageLoaderTool.getHeadImageOptions(0));
+			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonConcern.getUser_small_avatar()), holder.headImageView,
+					ImageLoaderTool.getHeadImageOptions(0));
 			holder.nameTextView.setText(jsonConcern.getUser_name());
 
 			return view;

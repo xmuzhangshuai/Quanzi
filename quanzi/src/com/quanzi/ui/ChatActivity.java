@@ -125,48 +125,48 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 	public static final int RESULT_CODE_OPEN = 4;
 	public static final int RESULT_CODE_DWONLOAD = 5;
 	public static final int RESULT_CODE_TO_CLOUD = 6;
-	public static final int REQUEST_CODE_PREVIEW_PICTURE = 1000;//预览图库图片后发送
+	public static final int REQUEST_CODE_PREVIEW_PICTURE = 1000;// 预览图库图片后发送
 	public static final int RESULT_CODE_PREVIEW_PICTURE = 1002;
 	public static final String COPY_IMAGE = "EASEMOBIMG";
 	public static final int CHATTYPE_SINGLE = 1;
 
 	private MsgListView mMsgListView;
-	private View topNavLeftBtn;//导航条左边按钮
-	private View topNavRightBtn;//导航条右边按钮，
+	private View topNavLeftBtn;// 导航条左边按钮
+	private View topNavRightBtn;// 导航条右边按钮，
 	private ImageView topNavRightImage;
-	private TextView topNavText;//导航条文字
-	private Button sendBtn;//发送按钮
-	private ImageView faceBtn;//表情
-	private ImageView moreBtn;//添加图片
-	private boolean isFaceShow = false;//是否显示表情
-	private boolean isMoreShow = false;//是否显示更多
-	private JazzyViewPager faceViewPager;//表情翻页
-	private EditText msgEt;//输入框
-	private LinearLayout faceLinearLayout;//表情区域
-	private FrameLayout morePanel;//更多区域
+	private TextView topNavText;// 导航条文字
+	private Button sendBtn;// 发送按钮
+	private ImageView faceBtn;// 表情
+	private ImageView moreBtn;// 添加图片
+	private boolean isFaceShow = false;// 是否显示表情
+	private boolean isMoreShow = false;// 是否显示更多
+	private JazzyViewPager faceViewPager;// 表情翻页
+	private EditText msgEt;// 输入框
+	private LinearLayout faceLinearLayout;// 表情区域
+	private FrameLayout morePanel;// 更多区域
 	private GridView moreGridView;
 	private WindowManager.LayoutParams params;
 	private InputMethodManager inputMethodManager;
-	private int currentPage = 0;//当前表情页
+	private int currentPage = 0;// 当前表情页
 	private List<String> keys;
 	private BaseApplication baseApplication;
 	private UserPreference userPreference;
-	private Drawable[] micImages;//录音动画
+	private Drawable[] micImages;// 录音动画
 	private String toChatUsername;// 给谁发送消息
-	private VoiceRecorder voiceRecorder;//录音
-	private ImageView micImage;//录音图片
-	private View buttonPressToSpeak;//按住说话
+	private VoiceRecorder voiceRecorder;// 录音
+	private ImageView micImage;// 录音图片
+	private View buttonPressToSpeak;// 按住说话
 	private View recordingContainer;
-	private TextView recordingHint;//录音提示
-	private PowerManager.WakeLock wakeLock;//保持屏幕常亮
-	private EMConversation emConversation;//聊天会话
-	private MessageAdapter adapter;//消息适配器
-	public static int resendPos;//重新发送消息位置
-	private View buttonSetModeKeyboard;//键盘键
-	private ImageView voiceBtn;//发送声音按钮
-	private NewMessageBroadcastReceiver receiver;//新消息广播
-	private ClipboardManager clipboard;//复制消息粘贴板
-	private File cameraFile;//相机文件
+	private TextView recordingHint;// 录音提示
+	private PowerManager.WakeLock wakeLock;// 保持屏幕常亮
+	private EMConversation emConversation;// 聊天会话
+	private MessageAdapter adapter;// 消息适配器
+	public static int resendPos;// 重新发送消息位置
+	private View buttonSetModeKeyboard;// 键盘键
+	private ImageView voiceBtn;// 发送声音按钮
+	private NewMessageBroadcastReceiver receiver;// 新消息广播
+	private ClipboardManager clipboard;// 复制消息粘贴板
+	private File cameraFile;// 相机文件
 	private String selectedImagePath;
 	public static ChatActivity activityInstance = null;
 	private int userId;
@@ -293,23 +293,15 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 		Set<String> keySet = baseApplication.getFaceMap().keySet();
 		keys = new ArrayList<String>();
 		keys.addAll(keySet);
-		//		friendPreference = BaseApplication.getInstance().getFriendPreference();
 		userPreference = baseApplication.getInstance().getUserPreference();
 		// 动画资源文件,用于录制语音时
-		micImages = new Drawable[] { getResources().getDrawable(R.drawable.record_animate_01),
-				getResources().getDrawable(R.drawable.record_animate_02),
-				getResources().getDrawable(R.drawable.record_animate_03),
-				getResources().getDrawable(R.drawable.record_animate_04),
-				getResources().getDrawable(R.drawable.record_animate_05),
-				getResources().getDrawable(R.drawable.record_animate_06),
-				getResources().getDrawable(R.drawable.record_animate_07),
-				getResources().getDrawable(R.drawable.record_animate_08),
-				getResources().getDrawable(R.drawable.record_animate_09),
-				getResources().getDrawable(R.drawable.record_animate_10),
-				getResources().getDrawable(R.drawable.record_animate_11),
-				getResources().getDrawable(R.drawable.record_animate_12),
-				getResources().getDrawable(R.drawable.record_animate_13),
-				getResources().getDrawable(R.drawable.record_animate_14), };
+		micImages = new Drawable[] { getResources().getDrawable(R.drawable.record_animate_01), getResources().getDrawable(R.drawable.record_animate_02),
+				getResources().getDrawable(R.drawable.record_animate_03), getResources().getDrawable(R.drawable.record_animate_04),
+				getResources().getDrawable(R.drawable.record_animate_05), getResources().getDrawable(R.drawable.record_animate_06),
+				getResources().getDrawable(R.drawable.record_animate_07), getResources().getDrawable(R.drawable.record_animate_08),
+				getResources().getDrawable(R.drawable.record_animate_09), getResources().getDrawable(R.drawable.record_animate_10),
+				getResources().getDrawable(R.drawable.record_animate_11), getResources().getDrawable(R.drawable.record_animate_12),
+				getResources().getDrawable(R.drawable.record_animate_13), getResources().getDrawable(R.drawable.record_animate_14), };
 
 		toChatUsername = "" + userId;
 		emConversation = EMChatManager.getInstance().getConversation(toChatUsername);
@@ -318,8 +310,7 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 
 		adapter = new MessageAdapter(this, toChatUsername, user.getSmall_avatar());
 
-		wakeLock = ((PowerManager) getSystemService(Context.POWER_SERVICE)).newWakeLock(
-				PowerManager.SCREEN_DIM_WAKE_LOCK, "quanzi");
+		wakeLock = ((PowerManager) getSystemService(Context.POWER_SERVICE)).newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "quanzi");
 		voiceRecorder = new VoiceRecorder(micImageHandler);
 		clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
 		activityInstance = this;
@@ -328,6 +319,7 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 	@Override
 	protected void initView() {
 		// TODO Auto-generated method stub
+		topNavRightBtn.setVisibility(View.GONE);
 		topNavText.setText(user.getNickname());
 		topNavRightImage.setImageResource(R.drawable.icon_persional);
 		inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -355,8 +347,7 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				// TODO Auto-generated method stub
 				if (keyCode == KeyEvent.KEYCODE_BACK) {
-					if (params.softInputMode == WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE || isFaceShow
-							|| isMoreShow) {
+					if (params.softInputMode == WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE || isFaceShow || isMoreShow) {
 						faceLinearLayout.setVisibility(View.GONE);
 						morePanel.setVisibility(View.GONE);
 						isFaceShow = false;
@@ -410,8 +401,7 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 		registerReceiver(receiver, intentFilter);
 
 		// 注册一个ack回执消息的BroadcastReceiver
-		IntentFilter ackMessageIntentFilter = new IntentFilter(EMChatManager.getInstance()
-				.getAckMessageBroadcastAction());
+		IntentFilter ackMessageIntentFilter = new IntentFilter(EMChatManager.getInstance().getAckMessageBroadcastAction());
 		ackMessageIntentFilter.setPriority(5);
 		registerReceiver(ackMessageReceiver, ackMessageIntentFilter);
 	}
@@ -445,7 +435,7 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 				break;
 			}
 		}
-		//发送图片预览
+		// 发送图片预览
 		if (resultCode == RESULT_CODE_PREVIEW_PICTURE) {
 			if (requestCode == REQUEST_CODE_PREVIEW_PICTURE) {
 				if (!TextUtils.isEmpty(selectedImagePath)) {
@@ -468,9 +458,9 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 					Uri selectedImage = data.getData();
 					selectedImagePath = getPicPathByUri(selectedImage);
 					if (selectedImage != null) {
-						startActivityForResult(new Intent(ChatActivity.this, ChatImagePreviewActivity.class).putExtra(
-								ChatImagePreviewActivity.SHOW_BIG_IMAGE, "file://" + selectedImagePath),
-								REQUEST_CODE_PREVIEW_PICTURE);
+						startActivityForResult(
+								new Intent(ChatActivity.this, ChatImagePreviewActivity.class).putExtra(ChatImagePreviewActivity.SHOW_BIG_IMAGE, "file://"
+										+ selectedImagePath), REQUEST_CODE_PREVIEW_PICTURE);
 					}
 				}
 			} else if (requestCode == REQUEST_CODE_MAP) { // 地图
@@ -478,7 +468,7 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 				double longitude = data.getDoubleExtra("longitude", 0);
 				String locationAddress = data.getStringExtra("address");
 				if (locationAddress != null && !locationAddress.equals("")) {
-					//					more(more);
+					// more(more);
 					sendLocationMsg(latitude, longitude, "", locationAddress);
 				} else {
 					ToastTool.showLong(this, "无法获取到您的位置信息！");
@@ -566,12 +556,9 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 			return;
 		}
 
-		cameraFile = new File(PathUtil.getInstance().getImagePath(), "" + userPreference.getU_id()
-				+ System.currentTimeMillis() + ".jpg");
+		cameraFile = new File(PathUtil.getInstance().getImagePath(), "" + userPreference.getU_id() + System.currentTimeMillis() + ".jpg");
 		cameraFile.getParentFile().mkdirs();
-		startActivityForResult(
-				new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cameraFile)),
-				REQUEST_CODE_CAMERA);
+		startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cameraFile)), REQUEST_CODE_CAMERA);
 	}
 
 	/**
@@ -599,8 +586,7 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 	 * 初始化更多等窗口
 	 */
 	private void initMorePage() {
-		int[] imageIds = new int[] { R.drawable.sel_chat_take_photo, R.drawable.sel_chat_choose_photo,
-				R.drawable.sel_chat_location };
+		int[] imageIds = new int[] { R.drawable.sel_chat_take_photo, R.drawable.sel_chat_choose_photo, R.drawable.sel_chat_location };
 		String[] names = new String[] { "拍照", "相册", "位置" };
 		List<Map<String, Object>> listItems = new ArrayList<Map<String, Object>>();
 		for (int i = 0; i < imageIds.length; i++) {
@@ -609,8 +595,8 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 			listItem.put("name", names[i]);
 			listItems.add(listItem);
 		}
-		SimpleAdapter adapter = new SimpleAdapter(ChatActivity.this, listItems, R.layout.more_gridview_cell,
-				new String[] { "image", "name" }, new int[] { R.id.cellimage, R.id.celltext });
+		SimpleAdapter adapter = new SimpleAdapter(ChatActivity.this, listItems, R.layout.more_gridview_cell, new String[] { "image", "name" }, new int[] {
+				R.id.cellimage, R.id.celltext });
 		moreGridView.setAdapter(adapter);
 		moreGridView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -624,9 +610,11 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 				case 1:
 					selectPicFromLocal(); // 点击图片图标
 					break;
-				case 2://点击位置图标
-						//					startActivityForResult(new Intent(ChatActivity.this, BaiduMapActivity.class), REQUEST_CODE_MAP);
-						//					overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+				case 2:// 点击位置图标
+						// startActivityForResult(new Intent(ChatActivity.this,
+						// BaiduMapActivity.class), REQUEST_CODE_MAP);
+						// overridePendingTransition(R.anim.push_left_in,
+						// R.anim.push_left_out);
 					break;
 				default:
 					break;
@@ -646,7 +634,7 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 		FacePageAdeapter adapter = new FacePageAdeapter(lv, faceViewPager);
 		faceViewPager.setAdapter(adapter);
 		faceViewPager.setCurrentItem(currentPage);
-		//设置翻页效果
+		// 设置翻页效果
 		faceViewPager.setTransitionEffect(TransitionEffect.Standard);
 		CirclePageIndicator indicator = (CirclePageIndicator) findViewById(R.id.indicator);
 		indicator.setViewPager(faceViewPager);
@@ -689,7 +677,7 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 		gv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		gv.setGravity(Gravity.CENTER);
 		gv.setAdapter(new FaceAdapter(this, i));
-		//		gv.setOnTouchListener(forbidenScroll());
+		// gv.setOnTouchListener(forbidenScroll());
 		gv.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -719,8 +707,8 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 					// msgEt.setSelection(index + keys.get(count).length());
 
 					// 下面这部分，在EditText中显示表情
-					Bitmap bitmap = BitmapFactory.decodeResource(getResources(), (Integer) BaseApplication
-							.getInstance().getFaceMap().values().toArray()[count]);
+					Bitmap bitmap = BitmapFactory
+							.decodeResource(getResources(), (Integer) BaseApplication.getInstance().getFaceMap().values().toArray()[count]);
 					if (bitmap != null) {
 						int rawHeigh = bitmap.getHeight();
 						int rawWidth = bitmap.getHeight();
@@ -742,8 +730,7 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 						ImageSpan imageSpan = new ImageSpan(ChatActivity.this, newBitmap);
 						String emojiStr = keys.get(count);
 						SpannableString spannableString = new SpannableString(emojiStr);
-						spannableString.setSpan(imageSpan, emojiStr.indexOf('['), emojiStr.indexOf(']') + 1,
-								Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+						spannableString.setSpan(imageSpan, emojiStr.indexOf('['), emojiStr.indexOf(']') + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 						msgEt.append(spannableString);
 					} else {
 						String ori = msgEt.getText().toString();
@@ -805,7 +792,7 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
-		//		super.onBackPressed();
+		// super.onBackPressed();
 		finish();
 		overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
 	}
@@ -1133,9 +1120,10 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String username = intent.getStringExtra("from");
-			//			String msgid = intent.getStringExtra("msgid");
+			// String msgid = intent.getStringExtra("msgid");
 			// 收到这个广播的时候，message已经在db和内存里了，可以通过id获取mesage对象
-			//			EMMessage message = EMChatManager.getInstance().getMessage(msgid);
+			// EMMessage message =
+			// EMChatManager.getInstance().getMessage(msgid);
 
 			if (!username.equals(toChatUsername)) {
 				// 消息不是发给当前会话，return
@@ -1230,8 +1218,7 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 					try {
 						int length = voiceRecorder.stopRecoding();
 						if (length > 0) {
-							sendVoice(voiceRecorder.getVoiceFilePath(), voiceRecorder.getVoiceFileName(toChatUsername),
-									Integer.toString(length), false);
+							sendVoice(voiceRecorder.getVoiceFilePath(), voiceRecorder.getVoiceFileName(toChatUsername), Integer.toString(length), false);
 						} else {
 							ToastTool.showShort(getApplicationContext(), "录音时间太短");
 						}
