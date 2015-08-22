@@ -246,7 +246,6 @@ public class MainChatMsgFragment extends BaseV4Fragment {
 			@Override
 			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
 				// TODO Auto-generated method stub
-				LogTool.e("获取学校帖子列表失败" + errorResponse);
 			}
 
 			@Override
@@ -257,7 +256,7 @@ public class MainChatMsgFragment extends BaseV4Fragment {
 			}
 
 		};
-		AsyncHttpClientTool.post(getActivity(), "post/getSchoolPosts", params, responseHandler);
+		AsyncHttpClientTool.post(getActivity(), "", params, responseHandler);
 	}
 
 	/**

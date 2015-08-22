@@ -75,8 +75,9 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:ems="10"
+        android:ems="8"
         android:inputType="textPersonName"
+        android:maxLength="8"
         android:paddingLeft="10dp" >
     </EditText>
 
@@ -86,7 +87,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="15dp"
-        android:text="填写真实姓名，方便朋友联系（10字以内）"
+        android:text="填写真实姓名，方便朋友联系（8字以内）"
         android:textColor="@color/unenable" />
 
 </LinearLayout>

@@ -64,7 +64,7 @@ public class ModifyPersonIntroActivity extends BaseActivity implements OnClickLi
 		// TODO Auto-generated method stub
 		saveBtn.setOnClickListener(this);
 		backBtn.setOnClickListener(this);
-		introEditText.setHint(userPreference.getU_introduce());
+		introEditText.setText(userPreference.getU_introduce());
 	}
 
 	@Override

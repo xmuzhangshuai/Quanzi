@@ -22,6 +22,7 @@ import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.quanzi.R;
 import com.quanzi.base.BaseActivity;
+import com.quanzi.base.BaseApplication;
 import com.quanzi.jsonobject.JsonUser;
 import com.quanzi.table.ActivityTable;
 import com.quanzi.table.PostTable;
@@ -29,6 +30,7 @@ import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.FastJsonTool;
 import com.quanzi.utils.ImageLoaderTool;
 import com.quanzi.utils.LogTool;
+import com.quanzi.utils.UserPreference;
 
 /**
  *
@@ -47,9 +49,10 @@ public class AllFavorsActivity extends BaseActivity implements OnClickListener {
 	public static final String TYPE = "type";
 
 	private ListView allFavorListView;
-	private TextView leftTextView;//导航栏左侧文字
-	private View leftButton;//导航栏左侧按钮
+	private TextView leftTextView;// 导航栏左侧文字
+	private View leftButton;// 导航栏左侧按钮
 	List<JsonUser> jsonUserList;
+	private UserPreference userPreference;
 	int pa_id;
 	int pa_userid;
 	int favor_count;
@@ -65,6 +68,7 @@ public class AllFavorsActivity extends BaseActivity implements OnClickListener {
 		pa_userid = getIntent().getIntExtra(PA_USERID, 0);
 		favor_count = getIntent().getIntExtra(FAVOR_COUNT, 0);
 		type = getIntent().getStringExtra(TYPE);
+		userPreference = BaseApplication.getInstance().getUserPreference();
 
 		jsonUserList = new ArrayList<JsonUser>();
 
@@ -221,9 +225,9 @@ public class AllFavorsActivity extends BaseActivity implements OnClickListener {
 				holder = new ViewHolder();
 				holder.headImageView = (ImageView) view.findViewById(R.id.head_image);
 				holder.nameTextView = (TextView) view.findViewById(R.id.name);
-				view.setTag(holder); // 给View添加一个格外的数据 
+				view.setTag(holder); // 给View添加一个格外的数据
 			} else {
-				holder = (ViewHolder) view.getTag(); // 把数据取出来  
+				holder = (ViewHolder) view.getTag(); // 把数据取出来
 			}
 
 			view.setOnClickListener(new OnClickListener() {
@@ -231,15 +235,21 @@ public class AllFavorsActivity extends BaseActivity implements OnClickListener {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					Intent intent = new Intent(AllFavorsActivity.this, PersonDetailActivity.class);
-					intent.putExtra(PersonDetailActivity.JSONUSER, jsonUser);
-					startActivity(intent);
-					overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+					if (jsonUser.getU_id() == userPreference.getU_id()) {
+						Intent intent = new Intent(AllFavorsActivity.this, MyPersonDetailActivity.class);
+						startActivity(intent);
+						overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+					} else {
+						Intent intent = new Intent(AllFavorsActivity.this, PersonDetailActivity.class);
+						intent.putExtra(PersonDetailActivity.JSONUSER, jsonUser);
+						startActivity(intent);
+						overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+					}
 				}
 			});
 
-			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonUser.getU_small_avatar()),
-					holder.headImageView, ImageLoaderTool.getHeadImageOptions(0));
+			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonUser.getU_small_avatar()), holder.headImageView,
+					ImageLoaderTool.getHeadImageOptions(0));
 			holder.nameTextView.setText(jsonUser.getU_nickname());
 
 			return view;

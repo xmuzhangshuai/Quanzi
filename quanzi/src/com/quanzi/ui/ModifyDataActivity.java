@@ -41,6 +41,7 @@ import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseFragmentActivity;
 import com.quanzi.customewidget.MyAlertDialog;
 import com.quanzi.customewidget.MyMenuDialog;
+import com.quanzi.table.IndustryTable;
 import com.quanzi.table.UserTable;
 import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.DateTimeTools;
@@ -157,7 +158,20 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 			industryTextView.setText("Œ¥ÃÓ–¥");
 		} else {
 			industryTextView.setText(userPreference.getU_industry());
+			industryTextView.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Intent intent = new Intent(ModifyDataActivity.this, MyPeopleActivity.class);
+					intent.putExtra(MyPeopleActivity.TYPE, MyPeopleActivity.SAME_IN_INDUSTRY);
+					intent.putExtra(IndustryTable.I_NAME, userPreference.getU_industry());
+					startActivity(intent);
+					overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+				}
+			});
 		}
+
 		/***ººƒ‹***/
 		if (userPreference.getU_skills().isEmpty()) {
 			skillTextView.setText("Œ¥ÃÓ–¥");

@@ -884,7 +884,7 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 		private void deleteComment(final int commentId, final int position) {
 			final MyAlertDialog dialog = new MyAlertDialog(ActDetailActivity.this);
 			dialog.setTitle("删除");
-			dialog.setMessage("删除评论不可逆");
+			dialog.setMessage("确定要删除评论吗？");
 			View.OnClickListener comfirm = new OnClickListener() {
 
 				@Override

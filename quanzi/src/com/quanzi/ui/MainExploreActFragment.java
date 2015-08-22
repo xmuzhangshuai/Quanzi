@@ -681,7 +681,7 @@ public class MainExploreActFragment extends BaseV4Fragment {
 
 			final MyAlertDialog dialog = new MyAlertDialog(getActivity());
 			dialog.setTitle("删除");
-			dialog.setMessage("删除活动不可逆");
+			dialog.setMessage("确定要删除活动吗？");
 			View.OnClickListener comfirm = new OnClickListener() {
 
 				@Override

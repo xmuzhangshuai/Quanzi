@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.http.Header;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -123,8 +124,11 @@ public class MyPeopleActivity extends BaseActivity implements OnClickListener {
 
 		RequestParams params = new RequestParams();
 		params.put(UserTable.U_ID, userPreference.getU_id());
-		if (type.equals(MYQUANZI) || type.equals(MYFOLLOWER) || type.equals(SAME_IN_INDUSTRY)) {
+		if (type.equals(MYQUANZI) || type.equals(MYFOLLOWER)) {
 			params.put(IndustryTable.I_NAME, industry_name);
+		} else if (type.equals(SAME_IN_INDUSTRY)) {
+			params.put(UserTable.U_SCHOOLID, userPreference.getU_schoolid());
+			params.put(UserTable.U_INDUSTRY_ITEM, industry_name);
 		}
 
 		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
@@ -168,7 +172,7 @@ public class MyPeopleActivity extends BaseActivity implements OnClickListener {
 		} else if (type.equals(MYFOLLOWER)) {
 			AsyncHttpClientTool.post(MyPeopleActivity.this, "quanzi/getFollowersByIndustryID", params, responseHandler);
 		} else if (type.equals(SAME_IN_INDUSTRY)) {
-			AsyncHttpClientTool.post(MyPeopleActivity.this, "", params, responseHandler);
+			AsyncHttpClientTool.post(MyPeopleActivity.this, "quanzi/getIndustryUsers", params, responseHandler);
 		}
 	}
 
@@ -224,20 +228,25 @@ public class MyPeopleActivity extends BaseActivity implements OnClickListener {
 			} else {
 				holder = (ViewHolder) view.getTag(); // 把数据取出来
 			}
-			//
-			// view.setOnClickListener(new OnClickListener() {
-			//
-			// @Override
-			// public void onClick(View v) {
-			// // TODO Auto-generated method stub
-			// Intent intent = new Intent(MyPeopleActivity.this,
-			// PersonDetailActivity.class);
-			// intent.putExtra(PersonDetailActivity.JSONUSER, jsonUser);
-			// startActivity(intent);
-			// overridePendingTransition(R.anim.push_left_in,
-			// R.anim.push_left_out);
-			// }
-			// });
+
+			view.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					if (jsonConcern.getUser_id() == userPreference.getU_id()) {
+						Intent intent = new Intent(MyPeopleActivity.this, MyPersonDetailActivity.class);
+						startActivity(intent);
+						overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+					} else {
+						Intent intent = new Intent(MyPeopleActivity.this, PersonDetailActivity.class);
+						intent.putExtra(UserTable.U_ID, jsonConcern.getUser_id());
+						startActivity(intent);
+						overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+					}
+
+				}
+			});
 
 			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonConcern.getUser_small_avatar()), holder.headImageView,
 					ImageLoaderTool.getHeadImageOptions(0));

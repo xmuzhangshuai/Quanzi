@@ -864,7 +864,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 
 			final MyAlertDialog dialog = new MyAlertDialog(getActivity());
 			dialog.setTitle("删除");
-			dialog.setMessage("删除帖子不可逆");
+			dialog.setMessage("确定要删除帖子吗？");
 			View.OnClickListener comfirm = new OnClickListener() {
 
 				@Override
