@@ -99,6 +99,7 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 	private void getDataTask() {
 		RequestParams params = new RequestParams();
 		params.put(UserTable.U_ID, userId);
+		params.put("my_userid", userPreference.getU_id());
 		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
 
 			@Override
@@ -194,7 +195,6 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 			holder.imageViewGroup2 = view.findViewById(R.id.item_image_group2);
 			holder.imageViewGroup1 = view.findViewById(R.id.item_image_group1);
 			holder.favorBtn = (CheckBox) view.findViewById(R.id.favor_btn);
-			holder.concernBtn = (CheckBox) view.findViewById(R.id.concern_btn);
 			holder.favorCountTextView = (TextView) view.findViewById(R.id.favor_count);
 			holder.commentBtn = (ImageView) view.findViewById(R.id.comment_btn);
 			holder.commentCountTextView = (TextView) view.findViewById(R.id.comment_count);
@@ -228,26 +228,32 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 		if (!TextUtils.isEmpty(jsonPostItem.getP_small_avatar())) {
 			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonPostItem.getP_small_avatar()), holder.headImageView,
 					ImageLoaderTool.getHeadImageOptions(10));
-			// if (userPreference.getU_id() != jsonPostItem.getP_userid()) {
-			// //点击头像进入详情页面
-			// holder.headImageView.setOnClickListener(new OnClickListener() {
-			//
-			// @Override
-			// public void onClick(View v) {
-			// // TODO Auto-generated method stub
-			// Intent intent = new Intent(getActivity(),
-			// PersonDetailActivity.class);
-			// intent.putExtra(UserTable.U_ID, jsonPostItem.getP_userid());
-			// intent.putExtra(UserTable.U_NICKNAME,
-			// jsonPostItem.getP_username());
-			// intent.putExtra(UserTable.U_SMALL_AVATAR,
-			// jsonPostItem.getP_small_avatar());
-			// startActivity(intent);
-			// getActivity().overridePendingTransition(R.anim.zoomin2,
-			// R.anim.zoomout);
-			// }
-			// });
-			// }
+		}
+		if (userPreference.getU_id() != jsonPostItem.getP_userid()) {
+			// 点击头像进入详情页面
+			holder.headImageView.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Intent intent = new Intent(getActivity(), PersonDetailActivity.class);
+					intent.putExtra(UserTable.U_ID, jsonPostItem.getP_userid());
+					intent.putExtra(UserTable.U_NICKNAME, jsonPostItem.getP_username());
+					intent.putExtra(UserTable.U_SMALL_AVATAR, jsonPostItem.getP_small_avatar());
+					startActivity(intent);
+					getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
+				}
+			});
+		} else {
+			holder.headImageView.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					startActivity(new Intent(getActivity(), MyPersonDetailActivity.class));
+					getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+				}
+			});
 		}
 
 		// 设置内容
@@ -261,9 +267,6 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 		// 设置姓名
 		holder.nameTextView.setText(jsonPostItem.getP_username());
 
-		// 显示关注
-		holder.concernBtn.setVisibility(View.GONE);
-
 		// 设置性别
 		if (jsonPostItem.getP_gender().equals(Constants.Gender.MALE)) {
 			holder.genderImageView.setImageResource(R.drawable.male);
@@ -272,7 +275,7 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 		}
 
 		// 设置日期
-		holder.timeTextView.setText(DateTimeTools.getHourAndMin(jsonPostItem.getP_time()));
+		holder.timeTextView.setText(DateTimeTools.getInterval(jsonPostItem.getP_time()));
 
 		// 设置被赞次数
 		if (jsonPostItem.getP_favor_count() > 0) {
@@ -281,7 +284,6 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 		} else {
 			holder.favorCountTextView.setVisibility(View.GONE);
 		}
-
 		holder.favorCountTextView.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -393,6 +395,12 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 							holder.favorCountTextView.setText("" + (jsonPostItem.getP_favor_count() - 1) + "赞");
 							jsonPostItem.setP_favor_count(jsonPostItem.getP_favor_count() - 1);
 							jsonPostItem.setLike(false);
+						}
+						// 设置被赞次数
+						if (jsonPostItem.getP_favor_count() > 0) {
+							holder.favorCountTextView.setVisibility(View.VISIBLE);
+						} else {
+							holder.favorCountTextView.setVisibility(View.GONE);
 						}
 					}
 
@@ -611,6 +619,7 @@ public class PersonDetailPostFragment extends BaseV4Fragment {
 				goBigPhoto(bigPhotoUrls, 5);
 			}
 		});
+
 		return view;
 	}
 

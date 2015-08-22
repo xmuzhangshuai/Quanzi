@@ -215,26 +215,32 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 			if (!TextUtils.isEmpty(jsonPostItem.getP_small_avatar())) {
 				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonPostItem.getP_small_avatar()), headImageView,
 						ImageLoaderTool.getHeadImageOptions(10));
-				if (userPreference.getU_id() != jsonPostItem.getP_userid()) {
-					// 点击头像进入详情页面
-					headImageView.setOnClickListener(new OnClickListener() {
+			}
+			if (userPreference.getU_id() != jsonPostItem.getP_userid()) {
+				// 点击头像进入详情页面
+				headImageView.setOnClickListener(new OnClickListener() {
 
-						@Override
-						public void onClick(View v) {
-							// TODO Auto-generated method stub
-							// Intent intent = new
-							// Intent(LoveBridgeDetailActivity.this,
-							// PersonDetailActivity.class);
-							// intent.putExtra(PersonDetailActivity.PERSON_TYPE,
-							// Constants.PersonDetailType.SINGLE);
-							// intent.putExtra(UserTable.U_ID,
-							// loveBridgeItem.getN_userid());
-							// startActivity(intent);
-							// LoveBridgeDetailActivity.this.overridePendingTransition(R.anim.zoomin2,
-							// R.anim.zoomout);
-						}
-					});
-				}
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						Intent intent = new Intent(PostDetailActivity.this, PersonDetailActivity.class);
+						intent.putExtra(UserTable.U_ID, jsonPostItem.getP_userid());
+						intent.putExtra(UserTable.U_NICKNAME, jsonPostItem.getP_username());
+						intent.putExtra(UserTable.U_SMALL_AVATAR, jsonPostItem.getP_small_avatar());
+						startActivity(intent);
+						overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
+					}
+				});
+			} else {
+				headImageView.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						startActivity(new Intent(PostDetailActivity.this, MyPersonDetailActivity.class));
+						overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+					}
+				});
 			}
 
 			// 设置内容
@@ -724,7 +730,7 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 				@Override
 				public boolean onLongClick(View v) {
 					// TODO Auto-generated method stub
-					deleteComment(position);
+					deleteComment(jsonComment.getC_id(), position);
 					return false;
 				}
 			});
@@ -733,21 +739,31 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 			if (!TextUtils.isEmpty(jsonPostItem.getP_small_avatar())) {
 				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonComment.getC_user_avatar()), holder.headImageView,
 						ImageLoaderTool.getHeadImageOptions(10));
-				if (userPreference.getU_id() != jsonComment.getC_user_id()) {
-					// 点击头像进入详情页面
-					holder.headImageView.setOnClickListener(new OnClickListener() {
+			}
+			if (userPreference.getU_id() != jsonComment.getC_user_id()) {
+				// 点击头像进入详情页面
+				holder.headImageView.setOnClickListener(new OnClickListener() {
 
-						@Override
-						public void onClick(View v) {
-							// TODO Auto-generated method stub
-							Intent intent = new Intent(PostDetailActivity.this, PersonDetailActivity.class);
-							intent.putExtra(UserTable.U_ID, jsonComment.getC_user_id());
-							intent.putExtra(UserTable.U_NICKNAME, jsonComment.getC_user_nickname());
-							startActivity(intent);
-							PostDetailActivity.this.overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
-						}
-					});
-				}
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						Intent intent = new Intent(PostDetailActivity.this, PersonDetailActivity.class);
+						intent.putExtra(UserTable.U_ID, jsonComment.getC_user_id());
+						intent.putExtra(UserTable.U_NICKNAME, jsonComment.getC_user_nickname());
+						startActivity(intent);
+						PostDetailActivity.this.overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
+					}
+				});
+			} else {
+				holder.headImageView.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						startActivity(new Intent(PostDetailActivity.this, MyPersonDetailActivity.class));
+						overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+					}
+				});
 			}
 
 			// 设置内容
@@ -781,7 +797,7 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 		/**
 		 * 删除评论
 		 */
-		private void deleteComment(final int position) {
+		private void deleteComment(final int commentId, final int position) {
 			final MyAlertDialog dialog = new MyAlertDialog(PostDetailActivity.this);
 			dialog.setTitle("删除");
 			dialog.setMessage("删除评论不可逆");
@@ -792,7 +808,7 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 					// TODO Auto-generated method stub
 					dialog.dismiss();
 					RequestParams params = new RequestParams();
-					params.put(UserTable.U_ID, userPreference.getU_id());
+					params.put(CommentTable.C_ID, commentId);
 					TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
 
 						@Override
@@ -802,6 +818,8 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 								if (response.equals("1")) {
 									commentList.remove(position);
 									mAdapter.notifyDataSetChanged();
+								} else {
+									LogTool.e("删除帖子评论返回-1");
 								}
 							}
 						}
@@ -809,10 +827,11 @@ public class PostDetailActivity extends BaseFragmentActivity implements OnClickL
 						@Override
 						public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
 							// TODO Auto-generated method stub
+							LogTool.e("删除帖子评论服务器错误，代码" + statusCode);
 						}
 
 					};
-					AsyncHttpClientTool.post(PostDetailActivity.this, "", params, responseHandler);
+					AsyncHttpClientTool.post(PostDetailActivity.this, "post/deleteComment", params, responseHandler);
 				}
 			};
 			View.OnClickListener cancle = new OnClickListener() {

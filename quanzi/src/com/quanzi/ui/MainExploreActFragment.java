@@ -373,7 +373,7 @@ public class MainExploreActFragment extends BaseV4Fragment {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					getParentFragment().startActivityForResult(new Intent(getActivity(), ActDetailActivity.class).putExtra(ActDetailActivity.ACT_ITEM, jsonActItem), 1);
+					startActivityForResult(new Intent(getActivity(), ActDetailActivity.class).putExtra(ActDetailActivity.ACT_ITEM, jsonActItem), 1);
 					getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 				}
 			});
@@ -395,22 +395,31 @@ public class MainExploreActFragment extends BaseV4Fragment {
 			if (!TextUtils.isEmpty(jsonActItem.getA_small_avatar())) {
 				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonActItem.getA_small_avatar()), holder.headImageView,
 						ImageLoaderTool.getHeadImageOptions(6));
-				if (userPreference.getU_id() != jsonActItem.getA_userid()) {
-					// 点击头像进入详情页面
-					holder.headImageView.setOnClickListener(new OnClickListener() {
-
-						@Override
-						public void onClick(View v) {
-							// TODO Auto-generated method stub
-							Intent intent = new Intent(getActivity(), PersonDetailActivity.class);
-							intent.putExtra(UserTable.U_ID, jsonActItem.getA_userid());
-							startActivity(intent);
-							getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
-						}
-					});
-				}
 			}
+			if (userPreference.getU_id() != jsonActItem.getA_userid()) {
+				// 点击头像进入详情页面
+				holder.headImageView.setOnClickListener(new OnClickListener() {
 
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						Intent intent = new Intent(getActivity(), PersonDetailActivity.class);
+						intent.putExtra(UserTable.U_ID, jsonActItem.getA_userid());
+						startActivity(intent);
+						getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
+					}
+				});
+			} else {
+				holder.headImageView.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						startActivity(new Intent(getActivity(), MyPersonDetailActivity.class));
+						getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+					}
+				});
+			}
 			// 设置姓名
 			holder.nameTextView.setText(jsonActItem.getA_username());
 
@@ -680,34 +689,32 @@ public class MainExploreActFragment extends BaseV4Fragment {
 					// TODO Auto-generated method stub
 					dialog.dismiss();
 
-					jsonActItemList.remove(position);
-					mAdapter.notifyDataSetChanged();
-					// RequestParams params = new RequestParams();
-					// params.put(UserTable.U_ID, userPreference.getU_id());
-					// TextHttpResponseHandler responseHandler = new
-					// TextHttpResponseHandler("utf-8") {
-					//
-					// @Override
-					// public void onSuccess(int statusCode, Header[] headers,
-					// String response) {
-					// // TODO Auto-generated method stub
-					// if (statusCode == 200) {
-					// if (response.equals("1")) {
-					// jsonPostItemList.remove(position);
-					// mAdapter.notifyDataSetChanged();
-					// }
-					// }
-					// }
-					//
-					// @Override
-					// public void onFailure(int statusCode, Header[] headers,
-					// String errorResponse, Throwable e) {
-					// // TODO Auto-generated method stub
-					// }
-					//
-					// };
-					// AsyncHttpClientTool.post(getActivity(), "", params,
-					// responseHandler);
+					RequestParams params = new RequestParams();
+					params.put(ActivityTable.A_ID, jsonActItemList.get(position).getA_actid());
+					params.put(ActivityTable.A_USERID, jsonActItemList.get(position).getA_userid());
+					TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
+
+						@Override
+						public void onSuccess(int statusCode, Header[] headers, String response) {
+							// TODO Auto-generated method stub
+							if (statusCode == 200) {
+								if (response.equals("1")) {
+									jsonActItemList.remove(position);
+									mAdapter.notifyDataSetChanged();
+								} else {
+									LogTool.e("删除活动返回-1");
+								}
+							}
+						}
+
+						@Override
+						public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+							// TODO Auto-generated method stub
+							LogTool.e("删除活动服务器错误，代码" + statusCode);
+						}
+
+					};
+					AsyncHttpClientTool.post(getActivity(), "activity/delete", params, responseHandler);
 				}
 			};
 			View.OnClickListener cancle = new OnClickListener() {

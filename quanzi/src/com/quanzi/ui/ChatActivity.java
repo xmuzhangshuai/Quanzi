@@ -586,8 +586,11 @@ public class ChatActivity extends BaseFragmentActivity implements OnTouchListene
 	 * 初始化更多等窗口
 	 */
 	private void initMorePage() {
-		int[] imageIds = new int[] { R.drawable.sel_chat_take_photo, R.drawable.sel_chat_choose_photo, R.drawable.sel_chat_location };
-		String[] names = new String[] { "拍照", "相册", "位置" };
+		// int[] imageIds = new int[] { R.drawable.sel_chat_take_photo,
+		// R.drawable.sel_chat_choose_photo, R.drawable.sel_chat_location };
+		// String[] names = new String[] { "拍照", "相册", "位置" };
+		int[] imageIds = new int[] { R.drawable.sel_chat_take_photo, R.drawable.sel_chat_choose_photo };
+		String[] names = new String[] { "拍照", "相册" };
 		List<Map<String, Object>> listItems = new ArrayList<Map<String, Object>>();
 		for (int i = 0; i < imageIds.length; i++) {
 			Map<String, Object> listItem = new HashMap<String, Object>();

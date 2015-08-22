@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -41,6 +42,7 @@ import com.quanzi.base.BaseFragmentActivity;
 import com.quanzi.config.Constants;
 import com.quanzi.config.Constants.CommentType;
 import com.quanzi.config.Constants.Config;
+import com.quanzi.customewidget.MyAlertDialog;
 import com.quanzi.jsonobject.JsonActItem;
 import com.quanzi.jsonobject.JsonComment;
 import com.quanzi.table.ActivityTable;
@@ -227,6 +229,7 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 			if (!TextUtils.isEmpty(jsonActItem.getA_small_avatar())) {
 				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonActItem.getA_small_avatar()), headImageView,
 						ImageLoaderTool.getHeadImageOptions(10));
+
 				if (userPreference.getU_id() != jsonActItem.getA_userid()) {
 					// 点击头像进入详情页面
 					headImageView.setOnClickListener(new OnClickListener() {
@@ -234,16 +237,22 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 						@Override
 						public void onClick(View v) {
 							// TODO Auto-generated method stub
-							// Intent intent = new
-							// Intent(LoveBridgeDetailActivity.this,
-							// PersonDetailActivity.class);
-							// intent.putExtra(PersonDetailActivity.PERSON_TYPE,
-							// Constants.PersonDetailType.SINGLE);
-							// intent.putExtra(UserTable.U_ID,
-							// loveBridgeItem.getN_userid());
-							// startActivity(intent);
-							// LoveBridgeDetailActivity.this.overridePendingTransition(R.anim.zoomin2,
-							// R.anim.zoomout);
+							Intent intent = new Intent(ActDetailActivity.this, PersonDetailActivity.class);
+							intent.putExtra(UserTable.U_ID, jsonActItem.getA_userid());
+							intent.putExtra(UserTable.U_NICKNAME, jsonActItem.getA_username());
+							intent.putExtra(UserTable.U_SMALL_AVATAR, jsonActItem.getA_small_avatar());
+							startActivity(intent);
+							overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
+						}
+					});
+				} else {
+					headImageView.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							startActivity(new Intent(ActDetailActivity.this, MyPersonDetailActivity.class));
+							overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 						}
 					});
 				}
@@ -550,78 +559,57 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 	 * 报名参加活动
 	 */
 	private void applyAct() {
+
+		RequestParams params = new RequestParams();
+		params.put(ActivityTable.A_ACTID, jsonActItem.getA_actid());
+		params.put(ActivityTable.A_USERID, jsonActItem.getA_userid());
+		params.put(UserTable.U_ID, userPreference.getU_id());
+
+		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, String response) {
+				// TODO Auto-generated method stub
+				if (statusCode == 200) {
+					if (response.equals("1")) {
+						if (jsonActItem.isApply()) {// 如果是取消报名
+							LogTool.i("已取消");
+							ToastTool.showLong(ActDetailActivity.this, "取消报名成功");
+							participantCountTextView.setText("" + (jsonActItem.getA_apply_amount() - 1) + "人参加");
+							jsonActItem.setA_apply_amount(jsonActItem.getA_apply_amount() - 1);
+							jsonActItem.setApply(false);
+							applyBtn.setText("我要报名");
+						} else {// 如果是报名
+							LogTool.i("报名成功");
+							ToastTool.showLong(ActDetailActivity.this, "报名成功");
+							participantCountTextView.setText("" + (jsonActItem.getA_apply_amount() + 1) + "人参加");
+							jsonActItem.setA_apply_amount(jsonActItem.getA_apply_amount() + 1);
+							jsonActItem.setApply(true);
+							applyBtn.setText("取消报名");
+						}
+						if (position > -1) {
+							Intent mIntent = new Intent();
+							mIntent.putExtra("position", position);
+							mIntent.putExtra("apply", jsonActItem.isApply());
+							ActDetailActivity.this.setResult(2, mIntent);
+						}
+					} else {
+						LogTool.e("报名返回" + response);
+					}
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+				// TODO Auto-generated method stub
+				LogTool.e("报名服务器错误，代码" + statusCode);
+			}
+		};
 		if (jsonActItem.isApply()) {// 如果是取消报名
-			LogTool.i("已取消");
-			ToastTool.showLong(ActDetailActivity.this, "取消报名成功");
-			participantCountTextView.setText("" + (jsonActItem.getA_apply_amount() - 1) + "人参加");
-			jsonActItem.setA_apply_amount(jsonActItem.getA_apply_amount() - 1);
-			jsonActItem.setApply(false);
-			applyBtn.setText("我要报名");
+			AsyncHttpClientTool.post("activity/unJoin", params, responseHandler);
 		} else {// 如果是报名
-			LogTool.i("报名成功");
-			ToastTool.showLong(ActDetailActivity.this, "报名成功");
-			participantCountTextView.setText("" + (jsonActItem.getA_apply_amount() + 1) + "人参加");
-			jsonActItem.setA_apply_amount(jsonActItem.getA_apply_amount() + 1);
-			jsonActItem.setApply(true);
-			applyBtn.setText("取消报名");
+			AsyncHttpClientTool.post("activity/join", params, responseHandler);
 		}
-		if (position > -1) {
-			Intent mIntent = new Intent();
-			mIntent.putExtra("position", position);
-			mIntent.putExtra("apply", jsonActItem.isApply());
-			ActDetailActivity.this.setResult(2, mIntent);
-		}
-//		RequestParams params = new RequestParams();
-//		params.put(ActivityTable.A_ACTID, jsonActItem.getA_actid());
-//		params.put(ActivityTable.A_USERID, jsonActItem.getA_userid());
-//		params.put(UserTable.U_ID, userPreference.getU_id());
-//
-//		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
-//
-//			@Override
-//			public void onSuccess(int statusCode, Header[] headers, String response) {
-//				// TODO Auto-generated method stub
-//				if (statusCode == 200) {
-//					if (response.equals("1")) {
-//						if (jsonActItem.isApply()) {// 如果是取消报名
-//							LogTool.i("已取消");
-//							ToastTool.showLong(ActDetailActivity.this, "取消报名成功");
-//							participantCountTextView.setText("" + (jsonActItem.getA_apply_amount() - 1) + "人参加");
-//							jsonActItem.setA_apply_amount(jsonActItem.getA_apply_amount() - 1);
-//							jsonActItem.setApply(false);
-//							applyBtn.setText("我要报名");
-//						} else {// 如果是报名
-//							LogTool.i("报名成功");
-//							ToastTool.showLong(ActDetailActivity.this, "报名成功");
-//							participantCountTextView.setText("" + (jsonActItem.getA_apply_amount() + 1) + "人参加");
-//							jsonActItem.setA_apply_amount(jsonActItem.getA_apply_amount() + 1);
-//							jsonActItem.setApply(true);
-//							applyBtn.setText("取消报名");
-//						}
-//						if (position > -1) {
-//							Intent mIntent = new Intent();
-//							mIntent.putExtra("position", position);
-//							mIntent.putExtra("apply", jsonActItem.isApply());
-//							ActDetailActivity.this.setResult(2, mIntent);
-//						}
-//					} else {
-//						LogTool.e("报名返回" + response);
-//					}
-//				}
-//			}
-//
-//			@Override
-//			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
-//				// TODO Auto-generated method stub
-//				LogTool.e("报名失败");
-//			}
-//		};
-//		if (jsonActItem.isApply()) {// 如果是取消报名
-//			// AsyncHttpClientTool.post("activity/join", params,
-//			// responseHandler);
-//		} else {// 如果是报名
-//			AsyncHttpClientTool.post("activity/join", params, responseHandler);
-//		}
 	}
 
 	/**
@@ -777,7 +765,7 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 		}
 
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
+		public View getView(final int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
 			if (position == 0) {
 				return LayoutInflater.from(ActDetailActivity.this).inflate(R.layout.emptyview, null);
@@ -821,25 +809,45 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 					return false;
 				}
 			});
+
+			view.setOnLongClickListener(new OnLongClickListener() {
+
+				@Override
+				public boolean onLongClick(View v) {
+					// TODO Auto-generated method stub
+					deleteComment(jsonComment.getC_id(), position);
+					return false;
+				}
+			});
 			// 设置头像
 			if (!TextUtils.isEmpty(jsonActItem.getA_small_avatar())) {
 				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonComment.getC_user_avatar()), holder.headImageView,
 						ImageLoaderTool.getHeadImageOptions(10));
-				if (userPreference.getU_id() != jsonComment.getC_user_id()) {
-					// 点击头像进入详情页面
-					holder.headImageView.setOnClickListener(new OnClickListener() {
+			}
+			if (userPreference.getU_id() != jsonComment.getC_user_id()) {
+				// 点击头像进入详情页面
+				holder.headImageView.setOnClickListener(new OnClickListener() {
 
-						@Override
-						public void onClick(View v) {
-							// TODO Auto-generated method stub
-							Intent intent = new Intent(ActDetailActivity.this, PersonDetailActivity.class);
-							intent.putExtra(UserTable.U_ID, jsonComment.getC_user_id());
-							intent.putExtra(UserTable.U_NICKNAME, jsonComment.getC_user_nickname());
-							startActivity(intent);
-							ActDetailActivity.this.overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
-						}
-					});
-				}
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						Intent intent = new Intent(ActDetailActivity.this, PersonDetailActivity.class);
+						intent.putExtra(UserTable.U_ID, jsonComment.getC_user_id());
+						intent.putExtra(UserTable.U_NICKNAME, jsonComment.getC_user_nickname());
+						startActivity(intent);
+						ActDetailActivity.this.overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
+					}
+				});
+			} else {
+				holder.headImageView.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						startActivity(new Intent(ActDetailActivity.this, MyPersonDetailActivity.class));
+						overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+					}
+				});
 			}
 
 			// 设置内容
@@ -868,6 +876,59 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 			holder.timeTextView.setText(DateTimeTools.getHourAndMin(jsonComment.getC_time()));
 
 			return view;
+		}
+
+		/**
+		 * 删除评论
+		 */
+		private void deleteComment(final int commentId, final int position) {
+			final MyAlertDialog dialog = new MyAlertDialog(ActDetailActivity.this);
+			dialog.setTitle("删除");
+			dialog.setMessage("删除评论不可逆");
+			View.OnClickListener comfirm = new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					dialog.dismiss();
+					RequestParams params = new RequestParams();
+					params.put(CommentTable.C_ID, commentId);
+					TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
+
+						@Override
+						public void onSuccess(int statusCode, Header[] headers, String response) {
+							// TODO Auto-generated method stub
+							if (statusCode == 200) {
+								if (response.equals("1")) {
+									commentList.remove(position);
+									mAdapter.notifyDataSetChanged();
+								} else {
+									LogTool.e("删除帖子评论返回-1");
+								}
+							}
+						}
+
+						@Override
+						public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+							// TODO Auto-generated method stub
+							LogTool.e("删除帖子评论服务器错误，代码" + statusCode);
+						}
+
+					};
+					AsyncHttpClientTool.post(ActDetailActivity.this, "activity/deleteComment", params, responseHandler);
+				}
+			};
+			View.OnClickListener cancle = new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					dialog.dismiss();
+				}
+			};
+			dialog.setPositiveButton("确定", comfirm);
+			dialog.setNegativeButton("取消", cancle);
+			dialog.show();
 		}
 	}
 }

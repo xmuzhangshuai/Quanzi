@@ -52,6 +52,7 @@ import com.quanzi.table.UserTable;
 import com.quanzi.task.LoadImageTask;
 import com.quanzi.ui.ChatActivity;
 import com.quanzi.ui.ContextMenu;
+import com.quanzi.ui.MyPersonDetailActivity;
 import com.quanzi.ui.PersonDetailActivity;
 import com.quanzi.ui.ShowBigImageActivity;
 import com.quanzi.utils.AsyncHttpClientTool;
@@ -149,17 +150,17 @@ public class MessageAdapter extends BaseAdapter {
 	private View createViewByMessage(EMMessage message, int position) {
 		switch (message.getType()) {
 		case LOCATION:
-			return message.direct == EMMessage.Direct.RECEIVE ? inflater.inflate(R.layout.row_received_location, null)
-					: inflater.inflate(R.layout.row_sent_location, null);
+			return message.direct == EMMessage.Direct.RECEIVE ? inflater.inflate(R.layout.row_received_location, null) : inflater.inflate(
+					R.layout.row_sent_location, null);
 		case IMAGE:
-			return message.direct == EMMessage.Direct.RECEIVE ? inflater.inflate(R.layout.row_received_picture, null)
-					: inflater.inflate(R.layout.row_sent_picture, null);
+			return message.direct == EMMessage.Direct.RECEIVE ? inflater.inflate(R.layout.row_received_picture, null) : inflater.inflate(
+					R.layout.row_sent_picture, null);
 		case VOICE:
-			return message.direct == EMMessage.Direct.RECEIVE ? inflater.inflate(R.layout.row_received_voice, null)
-					: inflater.inflate(R.layout.row_sent_voice, null);
+			return message.direct == EMMessage.Direct.RECEIVE ? inflater.inflate(R.layout.row_received_voice, null) : inflater.inflate(R.layout.row_sent_voice,
+					null);
 		default:
-			return message.direct == EMMessage.Direct.RECEIVE ? inflater.inflate(R.layout.row_received_message, null)
-					: inflater.inflate(R.layout.row_sent_message, null);
+			return message.direct == EMMessage.Direct.RECEIVE ? inflater.inflate(R.layout.row_received_message, null) : inflater.inflate(
+					R.layout.row_sent_message, null);
 		}
 	}
 
@@ -259,7 +260,7 @@ public class MessageAdapter extends BaseAdapter {
 
 		if (message.direct == EMMessage.Direct.SEND) {
 			View statusView = convertView.findViewById(R.id.msg_status);
-			//重发按钮点击事件
+			// 重发按钮点击事件
 			statusView.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -284,11 +285,10 @@ public class MessageAdapter extends BaseAdapter {
 		}
 
 		if (emConversation != null) {
-			//如果是收到消息
+			// 如果是收到消息
 			if (message.direct == EMMessage.Direct.RECEIVE) {
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallAvatar), holder.head_iv,
-						ImageLoaderTool.getHeadImageOptions(10));
-				//点击头像进入对方主页
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallAvatar), holder.head_iv, ImageLoaderTool.getHeadImageOptions(10));
+				// 点击头像进入对方主页
 				holder.head_iv.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
@@ -301,8 +301,17 @@ public class MessageAdapter extends BaseAdapter {
 					}
 				});
 			} else {
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(userPreference.getU_small_avatar()),
-						holder.head_iv, ImageLoaderTool.getHeadImageOptions(10));
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(userPreference.getU_small_avatar()), holder.head_iv,
+						ImageLoaderTool.getHeadImageOptions(10));
+				holder.head_iv.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						Intent intent = new Intent(context, MyPersonDetailActivity.class);
+						context.startActivity(intent);
+						((Activity) context).overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
+					}
+				});
 			}
 		}
 
@@ -312,7 +321,7 @@ public class MessageAdapter extends BaseAdapter {
 			timestamp.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
 			timestamp.setVisibility(View.VISIBLE);
 		} else {
-			//两条消息时间离得如果稍长，显示时间
+			// 两条消息时间离得如果稍长，显示时间
 			if (DateUtils.isCloseEnough(message.getMsgTime(), emConversation.getMessage(position - 1).getMsgTime())) {
 				timestamp.setVisibility(View.GONE);
 			} else {
@@ -336,8 +345,8 @@ public class MessageAdapter extends BaseAdapter {
 		holder.tv.setOnLongClickListener(new OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View v) {
-				activity.startActivityForResult((new Intent(activity, ContextMenu.class))
-						.putExtra("position", position).putExtra("type", EMMessage.Type.TXT.ordinal()),
+				activity.startActivityForResult(
+						(new Intent(activity, ContextMenu.class)).putExtra("position", position).putExtra("type", EMMessage.Type.TXT.ordinal()),
 						ChatActivity.REQUEST_CODE_CONTEXT_MENU);
 				return true;
 			}
@@ -368,28 +377,27 @@ public class MessageAdapter extends BaseAdapter {
 	 * @param position
 	 * @param convertView
 	 */
-	private void handleImageMessage(final EMMessage message, final ViewHolder holder, final int position,
-			View convertView) {
+	private void handleImageMessage(final EMMessage message, final ViewHolder holder, final int position, View convertView) {
 		holder.pb.setTag(position);
 		holder.iv.setOnLongClickListener(new OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View v) {
-				activity.startActivityForResult((new Intent(activity, ContextMenu.class))
-						.putExtra("position", position).putExtra("type", EMMessage.Type.IMAGE.ordinal()),
+				activity.startActivityForResult(
+						(new Intent(activity, ContextMenu.class)).putExtra("position", position).putExtra("type", EMMessage.Type.IMAGE.ordinal()),
 						ChatActivity.REQUEST_CODE_CONTEXT_MENU);
 				return true;
 			}
 		});
 
 		if (message.direct == EMMessage.Direct.RECEIVE) {
-			//"it is receive msg";
+			// "it is receive msg";
 			if (message.status == EMMessage.Status.INPROGRESS) {
-				//"!!!! back receive";
+				// "!!!! back receive";
 				holder.iv.setImageResource(R.drawable.photoconor);
 				showDownloadImageProgress(message, holder);
 				// downloadImage(message, holder);
 			} else {
-				//"!!!! not back receive, show image directly");
+				// "!!!! not back receive, show image directly");
 				holder.pb.setVisibility(View.GONE);
 				holder.tv.setVisibility(View.GONE);
 				holder.iv.setImageResource(R.drawable.photoconor);
@@ -447,10 +455,7 @@ public class MessageAdapter extends BaseAdapter {
 								// message.setSendingStatus(Message.SENDING_STATUS_FAIL);
 								// message.setProgress(0);
 								holder.staus_iv.setVisibility(View.VISIBLE);
-								ToastTool.showShort(
-										activity,
-										activity.getString(R.string.send_fail)
-												+ activity.getString(R.string.connect_failuer_toast));
+								ToastTool.showShort(activity, activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast));
 								timer.cancel();
 							}
 
@@ -473,17 +478,15 @@ public class MessageAdapter extends BaseAdapter {
 	 * @param position
 	 * @param convertView
 	 */
-	private void handleVoiceMessage(final EMMessage message, final ViewHolder holder, final int position,
-			View convertView) {
+	private void handleVoiceMessage(final EMMessage message, final ViewHolder holder, final int position, View convertView) {
 		VoiceMessageBody voiceBody = (VoiceMessageBody) message.getBody();
 		holder.tv.setText(voiceBody.getLength() + "\"");
-		holder.iv.setOnClickListener(new VoicePlayClickListener(message, holder.iv, holder.iv_read_status, this,
-				activity, username));
+		holder.iv.setOnClickListener(new VoicePlayClickListener(message, holder.iv, holder.iv_read_status, this, activity, username));
 		holder.iv.setOnLongClickListener(new OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View v) {
-				activity.startActivityForResult((new Intent(activity, ContextMenu.class))
-						.putExtra("position", position).putExtra("type", EMMessage.Type.VOICE.ordinal()),
+				activity.startActivityForResult(
+						(new Intent(activity, ContextMenu.class)).putExtra("position", position).putExtra("type", EMMessage.Type.VOICE.ordinal()),
 						ChatActivity.REQUEST_CODE_CONTEXT_MENU);
 				return true;
 			}
@@ -565,8 +568,7 @@ public class MessageAdapter extends BaseAdapter {
 	 * @param position
 	 * @param convertView
 	 */
-	private void handleLocationMessage(final EMMessage message, final ViewHolder holder, final int position,
-			View convertView) {
+	private void handleLocationMessage(final EMMessage message, final ViewHolder holder, final int position, View convertView) {
 		TextView locationView = ((TextView) convertView.findViewById(R.id.tv_location));
 		LocationMessageBody locBody = (LocationMessageBody) message.getBody();
 		locationView.setText(locBody.getAddress());
@@ -575,8 +577,8 @@ public class MessageAdapter extends BaseAdapter {
 		locationView.setOnLongClickListener(new OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View v) {
-				activity.startActivityForResult((new Intent(activity, ContextMenu.class))
-						.putExtra("position", position).putExtra("type", EMMessage.Type.LOCATION.ordinal()),
+				activity.startActivityForResult(
+						(new Intent(activity, ContextMenu.class)).putExtra("position", position).putExtra("type", EMMessage.Type.LOCATION.ordinal()),
 						ChatActivity.REQUEST_CODE_CONTEXT_MENU);
 				return false;
 			}
@@ -715,10 +717,7 @@ public class MessageAdapter extends BaseAdapter {
 							holder.tv.setVisibility(View.GONE);
 							// message.setSendingStatus(Message.SENDING_STATUS_FAIL);
 							holder.staus_iv.setVisibility(View.VISIBLE);
-							Toast.makeText(
-									activity,
-									activity.getString(R.string.send_fail)
-											+ activity.getString(R.string.connect_failuer_toast), 0).show();
+							Toast.makeText(activity, activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), 0).show();
 						}
 					});
 				}
@@ -768,10 +767,7 @@ public class MessageAdapter extends BaseAdapter {
 						holder.pb.setVisibility(View.GONE);
 					}
 					holder.staus_iv.setVisibility(View.VISIBLE);
-					Toast.makeText(
-							activity,
-							activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast),
-							0).show();
+					Toast.makeText(activity, activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), 0).show();
 				}
 			}
 		});
@@ -785,10 +781,8 @@ public class MessageAdapter extends BaseAdapter {
 	 * @param position
 	 * @return the image exists or not
 	 */
-	private boolean showImageView(final String thumbernailPath, final ImageView iv, final String localFullSizePath,
-			String remoteDir, final EMMessage message) {
-		String imagename = localFullSizePath.substring(localFullSizePath.lastIndexOf("/") + 1,
-				localFullSizePath.length());
+	private boolean showImageView(final String thumbernailPath, final ImageView iv, final String localFullSizePath, String remoteDir, final EMMessage message) {
+		String imagename = localFullSizePath.substring(localFullSizePath.lastIndexOf("/") + 1, localFullSizePath.length());
 		// final String remote = remoteDir != null ? remoteDir+imagename :
 		// imagename;
 		final String remote = remoteDir;
@@ -796,7 +790,7 @@ public class MessageAdapter extends BaseAdapter {
 		// first check if the thumbnail image already loaded into cache
 		Bitmap bitmap = ImageCache.getInstance().get(thumbernailPath);
 		if (bitmap != null) {
-			//根据大小缩放
+			// 根据大小缩放
 			int height = bitmap.getHeight();
 			if (height < 100) {
 				bitmap = ImageTools.zoomBitmap(bitmap, 4);
@@ -842,8 +836,7 @@ public class MessageAdapter extends BaseAdapter {
 			});
 			return true;
 		} else {
-			new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, message.getChatType(), iv,
-					activity, message);
+			new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, message.getChatType(), iv, activity, message);
 			return true;
 		}
 
@@ -923,13 +916,14 @@ public class MessageAdapter extends BaseAdapter {
 
 		@Override
 		public void onClick(View v) {
-			//			Intent intent;
-			//			intent = new Intent(context, BaiduMapActivity.class);
-			//			intent.putExtra("latitude", location.latitude);
-			//			intent.putExtra("longitude", location.longitude);
-			//			intent.putExtra("address", address);
-			//			activity.startActivity(intent);
-			//			activity.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+			// Intent intent;
+			// intent = new Intent(context, BaiduMapActivity.class);
+			// intent.putExtra("latitude", location.latitude);
+			// intent.putExtra("longitude", location.longitude);
+			// intent.putExtra("address", address);
+			// activity.startActivity(intent);
+			// activity.overridePendingTransition(R.anim.push_left_in,
+			// R.anim.push_left_out);
 		}
 	}
 }
