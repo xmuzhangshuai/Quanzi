@@ -1,21 +1,25 @@
 package com.quanzi.ui;
 
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.quanzi.R;
 import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseV4Fragment;
 import com.quanzi.customewidget.MyAlertDialog;
+import com.quanzi.utils.ToastTool;
 import com.quanzi.utils.UserPreference;
+import com.umeng.update.UmengUpdateAgent;
+import com.umeng.update.UmengUpdateListener;
+import com.umeng.update.UpdateResponse;
+import com.umeng.update.UpdateStatus;
 
 /**
  *
@@ -28,21 +32,21 @@ import com.quanzi.utils.UserPreference;
  */
 public class SettingAboutFragment extends BaseV4Fragment implements OnClickListener {
 	private View rootView;// 根View
-	private TextView topNavigation;//导航栏文字
-	private View leftImageButton;//导航栏左侧按钮
+	private TextView topNavigation;// 导航栏文字
+	private View leftImageButton;// 导航栏左侧按钮
 
-	private View settingClearCache;//清空缓存
-	private View settingFeedback;//反馈
-	private View settingCheckUpdate;//检查更新
-	private View settingUserContact;//关于
-	private View settingAboutUs;//退出
+	private View settingClearCache;// 清空缓存
+	private View settingFeedback;// 反馈
+	private View settingCheckUpdate;// 检查更新
+	private View settingUserContact;// 关于
+	private View settingAboutUs;// 退出
 	private FragmentTransaction transaction;
 	private UserPreference userPreference;
-	//	private FriendPreference friendPreference;
+	// private FriendPreference friendPreference;
 	private TextView cacheSize;
 	private TextView version;
 
-	//	FeedbackAgent agent;
+	// FeedbackAgent agent;
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -96,9 +100,10 @@ public class SettingAboutFragment extends BaseV4Fragment implements OnClickListe
 			}
 		});
 
-		//		cacheSize.setText(""
-		//				+ FileSizeUtil.getFileOrFilesSize(imageLoader.getDiskCache().getDirectory().getAbsolutePath(),
-		//						FileSizeUtil.SIZETYPE_MB) + "MB");
+		// cacheSize.setText(""
+		// +
+		// FileSizeUtil.getFileOrFilesSize(imageLoader.getDiskCache().getDirectory().getAbsolutePath(),
+		// FileSizeUtil.SIZETYPE_MB) + "MB");
 
 		version.setText(getVersion());
 
@@ -125,9 +130,10 @@ public class SettingAboutFragment extends BaseV4Fragment implements OnClickListe
 				myAlertDialog.dismiss();
 				imageLoader.clearMemoryCache();
 				imageLoader.clearDiskCache();
-				//				cacheSize.setText(""
-				//						+ FileSizeUtil.getFileOrFilesSize(imageLoader.getDiskCache().getDirectory().getAbsolutePath(),
-				//								FileSizeUtil.SIZETYPE_MB) + "MB");
+				// cacheSize.setText(""
+				// +
+				// FileSizeUtil.getFileOrFilesSize(imageLoader.getDiskCache().getDirectory().getAbsolutePath(),
+				// FileSizeUtil.SIZETYPE_MB) + "MB");
 			}
 		};
 		View.OnClickListener cancle = new OnClickListener() {
@@ -167,32 +173,33 @@ public class SettingAboutFragment extends BaseV4Fragment implements OnClickListe
 			clearCache();
 			break;
 		case R.id.setting_feedback:
-			//			agent = new FeedbackAgent(getActivity());
-			//			agent.startFeedbackActivity();
-			//			getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+			// agent = new FeedbackAgent(getActivity());
+			// agent.startFeedbackActivity();
+			// getActivity().overridePendingTransition(R.anim.push_left_in,
+			// R.anim.push_left_out);
 			break;
 		case R.id.setting_check_update:
 			/**********友盟自动更新组件**************/
-			//			UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
-			//				@Override
-			//				public void onUpdateReturned(int updateStatus, UpdateResponse updateInfo) {
-			//					switch (updateStatus) {
-			//					case UpdateStatus.Yes: // has update
-			//						UmengUpdateAgent.showUpdateDialog(getActivity(), updateInfo);
-			//						break;
-			//					case UpdateStatus.No: // has no update
-			//						ToastTool.showShort(getActivity(), "当前是最新版本");
-			//						break;
-			//					case UpdateStatus.NoneWifi: // none wifi
-			//						ToastTool.showShort(getActivity(), "没有wifi连接， 只在wifi下更新");
-			//						break;
-			//					case UpdateStatus.Timeout: // time out
-			//						ToastTool.showShort(getActivity(), "超时");
-			//						break;
-			//					}
-			//				}
-			//			});
-			//			UmengUpdateAgent.forceUpdate(getActivity());
+			UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
+				@Override
+				public void onUpdateReturned(int updateStatus, UpdateResponse updateInfo) {
+					switch (updateStatus) {
+					case UpdateStatus.Yes: // has update
+						UmengUpdateAgent.showUpdateDialog(getActivity(), updateInfo);
+						break;
+					case UpdateStatus.No: // has no update
+						ToastTool.showShort(getActivity(), "当前是最新版本");
+						break;
+					case UpdateStatus.NoneWifi: // none wifi
+						ToastTool.showShort(getActivity(), "没有wifi连接， 只在wifi下更新");
+						break;
+					case UpdateStatus.Timeout: // time out
+						ToastTool.showShort(getActivity(), "超时");
+						break;
+					}
+				}
+			});
+			UmengUpdateAgent.forceUpdate(getActivity());
 			break;
 		case R.id.about_us:
 

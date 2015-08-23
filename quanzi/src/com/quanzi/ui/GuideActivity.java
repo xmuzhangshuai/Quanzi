@@ -1,7 +1,5 @@
 package com.quanzi.ui;
 
-import java.net.ServerSocket;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,17 +14,15 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
-import com.easemob.chat.EMChatManager;
 import com.quanzi.R;
 import com.quanzi.base.BaseActivity;
 import com.quanzi.base.BaseApplication;
 import com.quanzi.config.DefaultKeys;
 import com.quanzi.db.CopyDataBase;
-import com.quanzi.db.SchoolDbService;
-import com.quanzi.utils.NetworkUtils;
 import com.quanzi.utils.ServerUtil;
 import com.quanzi.utils.SharePreferenceUtil;
 import com.quanzi.utils.UserPreference;
+import com.umeng.update.UmengUpdateAgent;
 
 /**
  * 类名称：GuideActivity
@@ -79,6 +75,8 @@ public class GuideActivity extends BaseActivity {
 		//		}
 
 		/************ 初始化友盟服务 **************/
+		UmengUpdateAgent.setUpdateOnlyWifi(false);
+		UmengUpdateAgent.update(this);
 		//		MobclickAgent.updateOnlineConfig(this);
 		//		new FeedbackAgent(this).sync();
 
