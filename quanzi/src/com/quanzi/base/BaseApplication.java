@@ -18,6 +18,7 @@ import com.quanzi.dao.DaoMaster.OpenHelper;
 import com.quanzi.dao.DaoSession;
 import com.quanzi.huanxin.MyHXSDKHelper;
 import com.quanzi.utils.UserPreference;
+import com.umeng.analytics.MobclickAgent;
 
 /**   
  *    
@@ -61,6 +62,8 @@ public class BaseApplication extends Application {
 		initData();
 
 		hxSDKHelper.onInit(myApplication);
+		//禁止友盟禁止默认的页面统计方式
+		MobclickAgent.openActivityDurationTrack(false);
 	}
 
 	private void initData() {

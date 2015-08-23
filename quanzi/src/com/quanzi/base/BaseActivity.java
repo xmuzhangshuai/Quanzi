@@ -1,8 +1,5 @@
 package com.quanzi.base;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.quanzi.utils.NetworkUtils;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
@@ -16,7 +13,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
-
+import com.easemob.chat.EMChatManager;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.quanzi.utils.NetworkUtils;
+import com.umeng.analytics.MobclickAgent;
 
 public abstract class BaseActivity extends Activity {
 	protected ImageLoader imageLoader = ImageLoader.getInstance();
@@ -24,7 +24,7 @@ public abstract class BaseActivity extends Activity {
 
 	protected Handler mHandler = null;
 
-	// 写一个广播的内部类，当收到动作时，结束activity  
+	// 写一个广播的内部类，当收到动作时，结束activity
 	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -32,7 +32,7 @@ public abstract class BaseActivity extends Activity {
 		}
 	};
 
-	//监听网络状态
+	// 监听网络状态
 	private BroadcastReceiver netBroadCastReceiver = new BroadcastReceiver() {
 
 		@Override
@@ -51,10 +51,10 @@ public abstract class BaseActivity extends Activity {
 		AppManager.getInstance().addActivity(this);
 		// PushAgent.getInstance(this).onAppStart();
 
-		// 在onCreate中注册广播  
+		// 在onCreate中注册广播
 		IntentFilter filter = new IntentFilter();
 		filter.addAction("close");
-		registerReceiver(this.broadcastReceiver, filter); // 注册  
+		registerReceiver(this.broadcastReceiver, filter); // 注册
 	}
 
 	/** 
@@ -62,8 +62,8 @@ public abstract class BaseActivity extends Activity {
 	 */
 	public void close() {
 		Intent intent = new Intent();
-		intent.setAction("close"); // 说明动作  
-		sendBroadcast(intent);// 该函数用于发送广播  
+		intent.setAction("close"); // 说明动作
+		sendBroadcast(intent);// 该函数用于发送广播
 		finish();
 	}
 
@@ -71,7 +71,7 @@ public abstract class BaseActivity extends Activity {
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		unregisterReceiver(broadcastReceiver);// 在onDestroy注销广播。  
+		unregisterReceiver(broadcastReceiver);// 在onDestroy注销广播。
 	}
 
 	@Override
@@ -83,8 +83,9 @@ public abstract class BaseActivity extends Activity {
 			BaseActivity.this.unregisterReceiver(netBroadCastReceiver);
 		}
 
-		//友盟统计
-//		MobclickAgent.onPause(this);
+		// 友盟统计
+		MobclickAgent.onPause(this); // 统计时长
+		MobclickAgent.onPageEnd(this.getClass().getName());// 统计页面
 	}
 
 	@Override
@@ -96,10 +97,12 @@ public abstract class BaseActivity extends Activity {
 		intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 		BaseActivity.this.registerReceiver(netBroadCastReceiver, intentFilter);
 
-		//友盟统计
-//		MobclickAgent.onResume(this);
-		//onresume时，取消notification显示
-//		EMChatManager.getInstance().activityResumed();
+		// 友盟统计
+		MobclickAgent.onResume(this); // 统计时长
+		MobclickAgent.onPageStart(this.getClass().getName());// 统计页面
+
+		// onresume时，取消notification显示
+		EMChatManager.getInstance().activityResumed();
 	}
 
 	@Override

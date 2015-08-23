@@ -1,5 +1,7 @@
 package com.quanzi.base;
 
+import com.umeng.analytics.MobclickAgent;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -45,6 +47,20 @@ public abstract class BaseFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		return super.onCreateView(inflater, container, savedInstanceState);
+	}
+
+	@Override
+	public void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		MobclickAgent.onPageStart(this.getClass().getName()); // Í³¼ÆÒ³Ãæ
+	}
+
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		MobclickAgent.onPageEnd(this.getClass().getName());
 	}
 
 	@Override

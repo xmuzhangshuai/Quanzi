@@ -1,13 +1,14 @@
 package com.quanzi.base;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.umeng.analytics.MobclickAgent;
 
 /**   
 *    
@@ -48,6 +49,20 @@ public abstract class BaseV4Fragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		return super.onCreateView(inflater, container, savedInstanceState);
+	}
+
+	@Override
+	public void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		MobclickAgent.onPageStart(this.getClass().getName()); // Í³¼ÆÒ³Ãæ
+	}
+
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		MobclickAgent.onPageEnd(this.getClass().getName());
 	}
 
 	@Override
