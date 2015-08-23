@@ -22,6 +22,7 @@ import com.quanzi.db.CopyDataBase;
 import com.quanzi.utils.ServerUtil;
 import com.quanzi.utils.SharePreferenceUtil;
 import com.quanzi.utils.UserPreference;
+import com.umeng.fb.FeedbackAgent;
 import com.umeng.update.UmengUpdateAgent;
 
 /**
@@ -59,26 +60,27 @@ public class GuideActivity extends BaseActivity {
 
 		// 获取定位
 		initLocation();
-		
-		// 开启百度推送服务
-		//		PushManager.startWork(getApplicationContext(), PushConstants.LOGIN_TYPE_API_KEY,
-		//				Constants.BaiduPushConfig.API_KEY);
-		// 基于地理位置推送，可以打开支持地理位置的推送的开关
-		//		PushManager.enableLbs(getApplicationContext());
-		// 设置标签
-		//		List<String> tags = new ArrayList<String>();
-		//		String gender = userPreference.getU_gender();
 
-		//		if (!TextUtils.isEmpty(gender)) {
-		//			tags.add(gender);
-		//			PushManager.setTags(this, tags);
-		//		}
+		// 开启百度推送服务
+		// PushManager.startWork(getApplicationContext(),
+		// PushConstants.LOGIN_TYPE_API_KEY,
+		// Constants.BaiduPushConfig.API_KEY);
+		// 基于地理位置推送，可以打开支持地理位置的推送的开关
+		// PushManager.enableLbs(getApplicationContext());
+		// 设置标签
+		// List<String> tags = new ArrayList<String>();
+		// String gender = userPreference.getU_gender();
+
+		// if (!TextUtils.isEmpty(gender)) {
+		// tags.add(gender);
+		// PushManager.setTags(this, tags);
+		// }
 
 		/************ 初始化友盟服务 **************/
 		UmengUpdateAgent.setUpdateOnlyWifi(false);
 		UmengUpdateAgent.update(this);
-		//		MobclickAgent.updateOnlineConfig(this);
-		//		new FeedbackAgent(this).sync();
+		// MobclickAgent.updateOnlineConfig(this);
+		new FeedbackAgent(getApplicationContext()).sync();
 
 		if (count == 0) {// 如果是第一次登陆，则启动向导页面
 			// 第一次运行拷贝数据库文件
@@ -93,7 +95,7 @@ public class GuideActivity extends BaseActivity {
 				ServerUtil.getInstance().login(GuideActivity.this, MainActivity.class);
 			} else {// 如果用户没有登录过或者已经注销
 				startActivity(new Intent(GuideActivity.this, LoginOrRegisterActivity.class));
-//				SchoolDbService.getInstance(getApplication()).getSchoolNameById(831);
+				// SchoolDbService.getInstance(getApplication()).getSchoolNameById(831);
 			}
 			sharePreferenceUtil.setUseCount(++count);// 次数加1
 		}
@@ -160,9 +162,9 @@ public class GuideActivity extends BaseActivity {
 		mLocationClient.registerLocationListener(myListener); // 注册监听函数
 		LocationClientOption option = new LocationClientOption();
 		option.setOpenGps(true);// 打开GPS
-		option.setIsNeedAddress(true);//返回的定位结果包含地址信息
+		option.setIsNeedAddress(true);// 返回的定位结果包含地址信息
 		option.setCoorType("bd09ll");// 返回的定位结果是百度经纬度,默认值gcj02
-		option.setLocationMode(LocationMode.Hight_Accuracy);//设置定位模式
+		option.setLocationMode(LocationMode.Hight_Accuracy);// 设置定位模式
 		option.setScanSpan(5 * 60 * 60 * 1000);// 设置发起定位请求的间隔时间为3000ms
 		mLocationClient.setLocOption(option);// 使用设置
 		mLocationClient.start();// 开启定位SDK
@@ -198,7 +200,7 @@ public class GuideActivity extends BaseActivity {
 			if (location != null) {
 				province = location.getProvince();
 				city = location.getCity();
-				detailLocation = location.getAddrStr();//详细地址
+				detailLocation = location.getAddrStr();// 详细地址
 				locationEditor.putString(DefaultKeys.USER_PROVINCE, province);
 				locationEditor.putString(DefaultKeys.USER_CITY, city);
 				locationEditor.putString(DefaultKeys.USER_DETAIL_LOCATION, detailLocation);

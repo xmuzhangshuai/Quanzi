@@ -16,6 +16,7 @@ import com.quanzi.base.BaseV4Fragment;
 import com.quanzi.customewidget.MyAlertDialog;
 import com.quanzi.utils.ToastTool;
 import com.quanzi.utils.UserPreference;
+import com.umeng.fb.FeedbackAgent;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UmengUpdateListener;
 import com.umeng.update.UpdateResponse;
@@ -173,10 +174,9 @@ public class SettingAboutFragment extends BaseV4Fragment implements OnClickListe
 			clearCache();
 			break;
 		case R.id.setting_feedback:
-			// agent = new FeedbackAgent(getActivity());
-			// agent.startFeedbackActivity();
-			// getActivity().overridePendingTransition(R.anim.push_left_in,
-			// R.anim.push_left_out);
+			FeedbackAgent agent = new FeedbackAgent(getActivity());
+			agent.startFeedbackActivity();
+			getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 			break;
 		case R.id.setting_check_update:
 			/**********友盟自动更新组件**************/

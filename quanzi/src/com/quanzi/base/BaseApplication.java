@@ -19,6 +19,7 @@ import com.quanzi.dao.DaoSession;
 import com.quanzi.huanxin.MyHXSDKHelper;
 import com.quanzi.utils.UserPreference;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.fb.FeedbackAgent;
 
 /**   
  *    
@@ -40,15 +41,13 @@ public class BaseApplication extends Application {
 	private Map<String, Integer> mFaceMap = new LinkedHashMap<String, Integer>();
 	private UserPreference userPreference;
 	private MediaPlayer messagePlayer;
-	private String huanXinUserName;
-	private String huanxinPassword;
 	public static MyHXSDKHelper hxSDKHelper = new MyHXSDKHelper();
 
 	public synchronized static BaseApplication getInstance() {
 		return myApplication;
 	}
 
-	//	@Override
+	// @Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
@@ -62,7 +61,7 @@ public class BaseApplication extends Application {
 		initData();
 
 		hxSDKHelper.onInit(myApplication);
-		//禁止友盟禁止默认的页面统计方式
+		// 禁止友盟禁止默认的页面统计方式
 		MobclickAgent.openActivityDurationTrack(false);
 	}
 
@@ -125,13 +124,13 @@ public class BaseApplication extends Application {
 	}
 
 	public static void initImageLoader(Context context) {
-		// This configuration tuning is custom. You can tune every option, you may tune some of them,
+		// This configuration tuning is custom. You can tune every option, you
+		// may tune some of them,
 		// or you can create default configuration by
-		//  ImageLoaderConfiguration.createDefault(this);
+		// ImageLoaderConfiguration.createDefault(this);
 		// method.
-		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
-				.threadPriority(Thread.NORM_PRIORITY - 2).denyCacheImageMultipleSizesInMemory()
-				.diskCacheFileNameGenerator(new Md5FileNameGenerator()).tasksProcessingOrder(QueueProcessingType.LIFO)
+		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context).threadPriority(Thread.NORM_PRIORITY - 2)
+				.denyCacheImageMultipleSizesInMemory().diskCacheFileNameGenerator(new Md5FileNameGenerator()).tasksProcessingOrder(QueueProcessingType.LIFO)
 				.build();
 		// Initialize ImageLoader with configuration.
 		ImageLoader.getInstance().init(config);
