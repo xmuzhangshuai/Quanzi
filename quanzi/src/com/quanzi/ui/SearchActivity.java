@@ -28,10 +28,9 @@ public class SearchActivity extends BaseActivity implements OnClickListener {
 	private ListView searchOutputListView;
 	private TextView searchBtn;
 	private View backBtn;
-	
+
 	private String[] names = new String[] { "张帅", "刘伟强", "黄蓉发", "王坤" };
-	private int[] headimages = new int[] { R.drawable.headimage, R.drawable.headimage1, R.drawable.headimage2,
-			R.drawable.headimage3 };
+	private int[] headimages = new int[] { R.drawable.act_type, R.drawable.balcklist, R.drawable.arrows, R.drawable.btn_blue_normal_shape };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +49,7 @@ public class SearchActivity extends BaseActivity implements OnClickListener {
 		searchOutputListView = (ListView) findViewById(R.id.search_output_list);
 		searchBtn = (TextView) findViewById(R.id.search_btn);
 		backBtn = findViewById(R.id.left_btn_bg);
-	
+
 	}
 
 	@Override
@@ -133,9 +132,9 @@ public class SearchActivity extends BaseActivity implements OnClickListener {
 				holder.headImageView = (ImageView) view.findViewById(R.id.head_image);
 				holder.nameTextView = (TextView) view.findViewById(R.id.name);
 				holder.concernBtn = (CheckBox) view.findViewById(R.id.concern_btn);
-				view.setTag(holder); // 给View添加一个格外的数据 
+				view.setTag(holder); // 给View添加一个格外的数据
 			} else {
-				holder = (ViewHolder) view.getTag(); // 把数据取出来  
+				holder = (ViewHolder) view.getTag(); // 把数据取出来
 			}
 
 			holder.headImageView.setImageResource(headimages[position]);
