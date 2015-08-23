@@ -117,8 +117,7 @@
                             android:layout_width="@dimen/personal_photo_margin"
                             android:layout_height="@dimen/personal_photo_margin"
                             android:scaleType="centerCrop"
-                            android:layout_marginLeft="@dimen/personal_timecapsule_padding"
-                            android:src="@drawable/content" />
+                            android:layout_marginLeft="@dimen/personal_timecapsule_padding" />
 
                         <TextView
                             android:layout_width="wrap_content"
