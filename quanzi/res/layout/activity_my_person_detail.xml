@@ -1,21 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/back"
+    android:background="@color/system_back"
     android:orientation="vertical" >
 
     <include
+        android:id="@+id/top"
         layout="@layout/top_navigation3"
         android:focusable="true" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top"
+        android:scaleType="centerCrop"
+        android:src="@drawable/back" />
 
     <ListView
         android:id="@+id/my_person_post_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@android:color/transparent"
+        android:layout_below="@+id/top"
+        android:divider="@color/system_back"
         android:dividerHeight="0dp"
         android:scrollbars="none" >
     </ListView>
 
-</LinearLayout>
+</RelativeLayout>

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/back"
+    android:background="@color/system_back"
     android:isScrollContainer="true"
     android:orientation="vertical" >
 
     <RelativeLayout
+        android:id="@+id/top"
         android:layout_width="fill_parent"
         android:layout_height="52dp"
         android:gravity="center_vertical"
@@ -68,7 +69,7 @@
                 android:src="@drawable/envelope" />
         </LinearLayout>
 
-        <!--  
+        <!--
         <LinearLayout
             android:id="@+id/nav_right_btn1"
             android:layout_width="@dimen/login_register"
@@ -87,12 +88,21 @@
                 android:gravity="center"
                 android:includeFontPadding="false"
                 android:src="@drawable/ic_action_overflow" />
-        </LinearLayout>-->
+        </LinearLayout>
+        -->
     </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top"
+        android:scaleType="centerCrop"
+        android:src="@drawable/back" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/top"
         android:scrollbars="none" >
 
         <LinearLayout
@@ -160,4 +170,4 @@
         </LinearLayout>
     </ScrollView>
 
-</LinearLayout>
+</RelativeLayout>

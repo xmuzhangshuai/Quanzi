@@ -50,9 +50,9 @@ import com.quanzi.utils.UserPreference;
  *
  */
 public class MyPersonDetailActivity extends BaseFragmentActivity implements OnClickListener {
-	private TextView leftTextView;//导航栏左侧文字
-	private View leftButton;//导航栏左侧按钮
-	private View headView;//详情区域
+	private TextView leftTextView;// 导航栏左侧文字
+	private View leftButton;// 导航栏左侧按钮
+	private View headView;// 详情区域
 	private ImageView headImageView;
 	private TextView basicInfo;
 	private TextView introduce;
@@ -99,27 +99,28 @@ public class MyPersonDetailActivity extends BaseFragmentActivity implements OnCl
 		// TODO Auto-generated method stub
 		leftTextView.setText(userPreference.getU_nickname());
 		leftButton.setOnClickListener(this);
-		//设置头像
+		// 设置头像
 		if (!TextUtils.isEmpty(userPreference.getU_small_avatar())) {
-			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(userPreference.getU_small_avatar()),
-					headImageView, ImageLoaderTool.getHeadImageOptions(10));
-			//点击显示高清头像
+			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(userPreference.getU_small_avatar()), headImageView,
+					ImageLoaderTool.getHeadImageOptions(10));
+			// 点击显示高清头像
 			headImageView.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					Intent intent = new Intent(MyPersonDetailActivity.this, ImageShowerActivity.class);
-					intent.putExtra(ImageShowerActivity.SHOW_BIG_IMAGE,
-							AsyncHttpClientTool.getAbsoluteUrl(userPreference.getU_large_avatar()));
+					intent.putExtra(ImageShowerActivity.SHOW_BIG_IMAGE, AsyncHttpClientTool.getAbsoluteUrl(userPreference.getU_large_avatar()));
 					startActivity(intent);
 					MyPersonDetailActivity.this.overridePendingTransition(R.anim.zoomin, R.anim.zoomout);
 				}
 			});
+		} else {
+			imageLoader.displayImage("drawable://" + R.drawable.photoconor, headImageView, ImageLoaderTool.getHeadImageOptions(10));
 		}
-		//设置姓名、省份、及学校
+		// 设置姓名、省份、及学校
 
-		basicInfo.setText(userPreference.getU_gender() + " | " + userPreference.getSchoolName() + " | "
-				+ userPreference.getU_identity() + " | " + userPreference.getU_love_state());
+		basicInfo.setText(userPreference.getU_gender() + " | " + userPreference.getSchoolName() + " | " + userPreference.getU_identity() + " | "
+				+ userPreference.getU_love_state());
 		introduce.setText(userPreference.getU_introduce());
 
 		concernBtn.setVisibility(View.GONE);
@@ -174,7 +175,7 @@ public class MyPersonDetailActivity extends BaseFragmentActivity implements OnCl
 	void showMoreDialog() {
 
 		// DialogFragment.show() will take care of adding the fragment
-		// in a transaction.  We also want to remove any currently showing
+		// in a transaction. We also want to remove any currently showing
 		// dialog, so make our own transaction and take care of that here.
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
@@ -306,9 +307,9 @@ public class MyPersonDetailActivity extends BaseFragmentActivity implements OnCl
 				holder.label2 = (TextView) view.findViewById(R.id.labe2);
 				holder.toUser2 = (TextView) view.findViewById(R.id.to_user_name2);
 				holder.commentContent2 = (TextView) view.findViewById(R.id.comment_content2);
-				view.setTag(holder); // 给View添加一个格外的数据 
+				view.setTag(holder); // 给View添加一个格外的数据
 			} else {
-				holder = (ViewHolder) view.getTag(); // 把数据取出来  
+				holder = (ViewHolder) view.getTag(); // 把数据取出来
 			}
 
 			view.setOnClickListener(new OnClickListener() {
@@ -316,39 +317,38 @@ public class MyPersonDetailActivity extends BaseFragmentActivity implements OnCl
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					startActivity(new Intent(MyPersonDetailActivity.this, PostDetailActivity.class).putExtra(
-							PostDetailActivity.POST_ITEM, jsonPostItem));
+					startActivity(new Intent(MyPersonDetailActivity.this, PostDetailActivity.class).putExtra(PostDetailActivity.POST_ITEM, jsonPostItem));
 					overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 				}
 			});
 
-			//设置头像
+			// 设置头像
 			if (!TextUtils.isEmpty(jsonPostItem.getP_small_avatar())) {
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonPostItem.getP_small_avatar()),
-						holder.headImageView, ImageLoaderTool.getHeadImageOptions(10));
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonPostItem.getP_small_avatar()), holder.headImageView,
+						ImageLoaderTool.getHeadImageOptions(10));
 
 			}
 
-			//设置内容
+			// 设置内容
 			holder.contentTextView.setText(jsonPostItem.getP_text_content());
 
-			//设置姓名
+			// 设置姓名
 			holder.nameTextView.setText(jsonPostItem.getP_username());
 
-			//显示关注
+			// 显示关注
 			holder.concernBtn.setVisibility(View.GONE);
 
-			//设置性别
+			// 设置性别
 			if (jsonPostItem.getP_gender().equals(Constants.Gender.MALE)) {
 				holder.genderImageView.setImageResource(R.drawable.male);
 			} else {
 				holder.genderImageView.setImageResource(R.drawable.female);
 			}
 
-			//设置日期
+			// 设置日期
 			holder.timeTextView.setText(DateTimeTools.getHourAndMin(jsonPostItem.getP_time()));
 
-			//设置被赞次数
+			// 设置被赞次数
 			holder.favorCountTextView.setText("" + jsonPostItem.getP_favor_count() + "赞");
 
 			holder.favorCountTextView.setOnClickListener(new OnClickListener() {
@@ -360,8 +360,7 @@ public class MyPersonDetailActivity extends BaseFragmentActivity implements OnCl
 						startActivity(new Intent(MyPersonDetailActivity.this, AllFavorsActivity.class)
 								.putExtra(AllFavorsActivity.PA_ID, jsonPostItem.getP_postid())
 								.putExtra(AllFavorsActivity.PA_USERID, jsonPostItem.getP_userid())
-								.putExtra(AllFavorsActivity.FAVOR_COUNT, jsonPostItem.getP_favor_count())
-								.putExtra(AllFavorsActivity.TYPE, "post"));
+								.putExtra(AllFavorsActivity.FAVOR_COUNT, jsonPostItem.getP_favor_count()).putExtra(AllFavorsActivity.TYPE, "post"));
 						overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 					}
 				}
@@ -369,7 +368,7 @@ public class MyPersonDetailActivity extends BaseFragmentActivity implements OnCl
 
 			List<Map<String, String>> comments = jsonPostItem.getCommentList();
 
-			//设置评论
+			// 设置评论
 			if (comments != null) {
 				if (comments.size() == 0) {
 					holder.comment1Container.setVisibility(View.GONE);
@@ -379,10 +378,10 @@ public class MyPersonDetailActivity extends BaseFragmentActivity implements OnCl
 					holder.comment2Container.setVisibility(View.GONE);
 					holder.commentUser1.setText(comments.get(0).get(CommentTable.C_USER_NICKNAME) + ":");
 					holder.commentContent1.setText(comments.get(0).get(CommentTable.C_CONTENT));
-					if (comments.get(0).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {//如果是评论
+					if (comments.get(0).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {// 如果是评论
 						holder.toUser1.setVisibility(View.GONE);
 						holder.label1.setVisibility(View.GONE);
-					} else {//如果是回复
+					} else {// 如果是回复
 						holder.toUser1.setVisibility(View.VISIBLE);
 						holder.label1.setVisibility(View.VISIBLE);
 						holder.toUser1.setText(comments.get(0).get(CommentTable.TO_USER_NICKNAME));
@@ -391,10 +390,10 @@ public class MyPersonDetailActivity extends BaseFragmentActivity implements OnCl
 					holder.comment1Container.setVisibility(View.VISIBLE);
 					holder.commentUser1.setText(comments.get(0).get(CommentTable.C_USER_NICKNAME) + ":");
 					holder.commentContent1.setText(comments.get(0).get(CommentTable.C_CONTENT));
-					if (comments.get(0).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {//如果是评论
+					if (comments.get(0).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {// 如果是评论
 						holder.toUser1.setVisibility(View.GONE);
 						holder.label1.setVisibility(View.GONE);
-					} else {//如果是回复
+					} else {// 如果是回复
 						holder.toUser1.setVisibility(View.VISIBLE);
 						holder.label1.setVisibility(View.VISIBLE);
 						holder.toUser1.setText(comments.get(0).get(CommentTable.TO_USER_NICKNAME));
@@ -402,10 +401,10 @@ public class MyPersonDetailActivity extends BaseFragmentActivity implements OnCl
 					holder.comment2Container.setVisibility(View.VISIBLE);
 					holder.commentUser2.setText(comments.get(1).get(CommentTable.C_USER_NICKNAME) + ":");
 					holder.commentContent2.setText(comments.get(1).get(CommentTable.C_CONTENT));
-					if (comments.get(1).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {//如果是评论
+					if (comments.get(1).get(CommentTable.COMMENT_TYPE).equals(CommentType.COMMENT)) {// 如果是评论
 						holder.toUser2.setVisibility(View.GONE);
 						holder.label2.setVisibility(View.GONE);
-					} else {//如果是回复
+					} else {// 如果是回复
 						holder.toUser2.setVisibility(View.VISIBLE);
 						holder.label2.setVisibility(View.VISIBLE);
 						holder.toUser2.setText(comments.get(1).get(CommentTable.TO_USER_NICKNAME));
@@ -418,7 +417,7 @@ public class MyPersonDetailActivity extends BaseFragmentActivity implements OnCl
 				holder.comment2Container.setVisibility(View.GONE);
 			}
 
-			//设置评论次数
+			// 设置评论次数
 			if (jsonPostItem.getP_comment_count() == 0) {
 				holder.commentCountTextView.setVisibility(View.GONE);
 			} else {
@@ -426,19 +425,18 @@ public class MyPersonDetailActivity extends BaseFragmentActivity implements OnCl
 				holder.commentCountTextView.setText("查看全部" + jsonPostItem.getP_comment_count() + "条评论");
 			}
 
-			//评论
+			// 评论
 			holder.commentBtn.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					startActivity(new Intent(MyPersonDetailActivity.this, PostDetailActivity.class).putExtra(
-							PostDetailActivity.POST_ITEM, jsonPostItem));
+					startActivity(new Intent(MyPersonDetailActivity.this, PostDetailActivity.class).putExtra(PostDetailActivity.POST_ITEM, jsonPostItem));
 					overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 				}
 			});
 
-			//设置是否赞过
+			// 设置是否赞过
 			holder.favorBtn.setChecked(jsonPostItem.isLike());
 
 			holder.favorBtn.setOnClickListener(new OnClickListener() {
@@ -457,11 +455,11 @@ public class MyPersonDetailActivity extends BaseFragmentActivity implements OnCl
 						public void onStart() {
 							// TODO Auto-generated method stub
 							super.onStart();
-							if (!jsonPostItem.isLike()) {//喜欢
+							if (!jsonPostItem.isLike()) {// 喜欢
 								holder.favorCountTextView.setText("" + (jsonPostItem.getP_favor_count() + 1) + "赞");
 								jsonPostItem.setP_favor_count(jsonPostItem.getP_favor_count() + 1);
 								jsonPostItem.setLike(true);
-							} else {//喜欢变成不喜欢
+							} else {// 喜欢变成不喜欢
 								holder.favorCountTextView.setText("" + (jsonPostItem.getP_favor_count() - 1) + "赞");
 								jsonPostItem.setP_favor_count(jsonPostItem.getP_favor_count() - 1);
 								jsonPostItem.setLike(false);
@@ -511,47 +509,41 @@ public class MyPersonDetailActivity extends BaseFragmentActivity implements OnCl
 			});
 
 			String[] smallPhotos = null;
-			//设置缩略图
+			// 设置缩略图
 			if (!jsonPostItem.getP_thumbnail().isEmpty()) {
 				smallPhotos = jsonPostItem.getP_thumbnail().split("\\|");
 			}
 
 			if (smallPhotos != null && smallPhotos.length > 0) {
 				switch (smallPhotos.length) {
-				case 1://只有一张图片
+				case 1:// 只有一张图片
 					holder.imageViewGroup1.setVisibility(View.GONE);
 					holder.imageViewGroup2.setVisibility(View.GONE);
 					holder.itemImageView.setVisibility(View.VISIBLE);
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView,
-							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView, ImageLoaderTool.getImageOptions());
 					break;
-				case 2://有两张图片
+				case 2:// 有两张图片
 					holder.itemImageView.setVisibility(View.GONE);
 					holder.imageViewGroup2.setVisibility(View.GONE);
 					holder.imageViewGroup1.setVisibility(View.VISIBLE);
 					holder.itemImageView1.setVisibility(View.VISIBLE);
 					holder.itemImageView2.setVisibility(View.VISIBLE);
 					holder.itemImageView3.setVisibility(View.INVISIBLE);
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2,
-							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2, ImageLoaderTool.getImageOptions());
 					break;
-				case 3://有三张图片
+				case 3:// 有三张图片
 					holder.itemImageView.setVisibility(View.GONE);
 					holder.imageViewGroup2.setVisibility(View.GONE);
 					holder.imageViewGroup1.setVisibility(View.VISIBLE);
 					holder.itemImageView1.setVisibility(View.VISIBLE);
 					holder.itemImageView2.setVisibility(View.VISIBLE);
 					holder.itemImageView3.setVisibility(View.VISIBLE);
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), holder.itemImageView3,
-							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), holder.itemImageView3, ImageLoaderTool.getImageOptions());
 					break;
-				case 4://有四张图片
+				case 4:// 有四张图片
 					holder.itemImageView.setVisibility(View.GONE);
 					holder.imageViewGroup2.setVisibility(View.VISIBLE);
 					holder.imageViewGroup1.setVisibility(View.VISIBLE);
@@ -561,16 +553,12 @@ public class MyPersonDetailActivity extends BaseFragmentActivity implements OnCl
 					holder.itemImageView4.setVisibility(View.VISIBLE);
 					holder.itemImageView5.setVisibility(View.VISIBLE);
 					holder.itemImageView6.setVisibility(View.INVISIBLE);
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), holder.itemImageView4,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[3]), holder.itemImageView5,
-							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), holder.itemImageView4, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[3]), holder.itemImageView5, ImageLoaderTool.getImageOptions());
 					break;
-				case 5://有五张图片
+				case 5:// 有五张图片
 					holder.itemImageView.setVisibility(View.GONE);
 					holder.imageViewGroup2.setVisibility(View.VISIBLE);
 					holder.imageViewGroup1.setVisibility(View.VISIBLE);
@@ -580,18 +568,13 @@ public class MyPersonDetailActivity extends BaseFragmentActivity implements OnCl
 					holder.itemImageView4.setVisibility(View.VISIBLE);
 					holder.itemImageView5.setVisibility(View.VISIBLE);
 					holder.itemImageView6.setVisibility(View.INVISIBLE);
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), holder.itemImageView3,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[3]), holder.itemImageView4,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[4]), holder.itemImageView5,
-							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), holder.itemImageView3, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[3]), holder.itemImageView4, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[4]), holder.itemImageView5, ImageLoaderTool.getImageOptions());
 					break;
-				case 6://有六张图片
+				case 6:// 有六张图片
 					holder.itemImageView.setVisibility(View.GONE);
 					holder.imageViewGroup2.setVisibility(View.VISIBLE);
 					holder.imageViewGroup1.setVisibility(View.VISIBLE);
@@ -601,18 +584,12 @@ public class MyPersonDetailActivity extends BaseFragmentActivity implements OnCl
 					holder.itemImageView4.setVisibility(View.VISIBLE);
 					holder.itemImageView5.setVisibility(View.VISIBLE);
 					holder.itemImageView6.setVisibility(View.VISIBLE);
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), holder.itemImageView3,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[3]), holder.itemImageView4,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[4]), holder.itemImageView5,
-							ImageLoaderTool.getImageOptions());
-					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[5]), holder.itemImageView6,
-							ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[0]), holder.itemImageView1, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[1]), holder.itemImageView2, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[2]), holder.itemImageView3, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[3]), holder.itemImageView4, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[4]), holder.itemImageView5, ImageLoaderTool.getImageOptions());
+					imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallPhotos[5]), holder.itemImageView6, ImageLoaderTool.getImageOptions());
 					break;
 				default:
 					holder.itemImageView.setVisibility(View.GONE);
@@ -708,7 +685,7 @@ public class MyPersonDetailActivity extends BaseFragmentActivity implements OnCl
 			return view;
 		}
 
-		//查看大图
+		// 查看大图
 		public void goBigPhoto(String[] urls, int postion) {
 			Intent intent = new Intent(MyPersonDetailActivity.this, GalleryPictureActivity.class);
 			intent.putExtra(GalleryPictureActivity.IMAGE_URLS, urls);

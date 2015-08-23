@@ -43,10 +43,10 @@ import com.quanzi.utils.UserPreference;
 public class PersonDetailActivity extends BaseFragmentActivity implements OnClickListener {
 	public static final String JSONUSER = "jsonuser";
 
-	private TextView leftTextView;//导航栏左侧文字
-	private View leftButton;//导航栏左侧按钮
-	private View contactBtn;//私信按钮
-//	private View moreBtn;//更多按钮
+	private TextView leftTextView;// 导航栏左侧文字
+	private View leftButton;// 导航栏左侧按钮
+	private View contactBtn;// 私信按钮
+	// private View moreBtn;//更多按钮
 	private CheckBox concernBtn;
 	private View postBtn;
 	private View dataBtn;
@@ -81,9 +81,13 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 		initView();
 
 		if (jsonUser == null) {
-			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallAvator), headImageView,
-					ImageLoaderTool.getHeadImageOptions(10));
-			getUser();//网络获取user数据
+			if (!TextUtils.isEmpty(smallAvator)) {
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(smallAvator), headImageView, ImageLoaderTool.getHeadImageOptions(10));
+			} else {
+				imageLoader.displayImage("drawable://" + R.drawable.photoconor, headImageView, ImageLoaderTool.getHeadImageOptions(10));
+			}
+
+			getUser();// 网络获取user数据
 		} else {
 			userId = jsonUser.getU_id();
 			initPersonView();
@@ -97,7 +101,7 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 		leftTextView = (TextView) findViewById(R.id.nav_text);
 		leftButton = findViewById(R.id.left_btn_bg);
 		contactBtn = findViewById(R.id.nav_right_btn2);
-//		moreBtn = findViewById(R.id.nav_right_btn1);
+		// moreBtn = findViewById(R.id.nav_right_btn1);
 		headImageView = (ImageView) findViewById(R.id.head_image);
 		basicInfo = (TextView) findViewById(R.id.basic_info);
 		introduce = (TextView) findViewById(R.id.person_intro);
@@ -126,7 +130,7 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 	void showMoreDialog() {
 
 		// DialogFragment.show() will take care of adding the fragment
-		// in a transaction.  We also want to remove any currently showing
+		// in a transaction. We also want to remove any currently showing
 		// dialog, so make our own transaction and take care of that here.
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
@@ -154,36 +158,32 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 		// 把第一个tab设为选中状态
 		mTabs[0].setSelected(true);
 
-		getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, personDetailPostFragment)
-				.show(personDetailPostFragment).commit();
+		getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, personDetailPostFragment).show(personDetailPostFragment).commit();
 
 		postBtn.setOnClickListener(this);
 		dataBtn.setOnClickListener(this);
 		contactBtn.setOnClickListener(this);
-//		moreBtn.setOnClickListener(this);
+		// moreBtn.setOnClickListener(this);
 
 		leftTextView.setText(jsonUser.getU_nickname());
-		//设置头像
+		// 设置头像
 		if (!TextUtils.isEmpty(jsonUser.getU_small_avatar())) {
-			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonUser.getU_small_avatar()), headImageView,
-					ImageLoaderTool.getHeadImageOptions(10));
-			//点击显示高清头像
+			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonUser.getU_small_avatar()), headImageView, ImageLoaderTool.getHeadImageOptions(10));
+			// 点击显示高清头像
 			headImageView.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					Intent intent = new Intent(PersonDetailActivity.this, ImageShowerActivity.class);
-					intent.putExtra(ImageShowerActivity.SHOW_BIG_IMAGE,
-							AsyncHttpClientTool.getAbsoluteUrl(jsonUser.getU_large_avatar()));
+					intent.putExtra(ImageShowerActivity.SHOW_BIG_IMAGE, AsyncHttpClientTool.getAbsoluteUrl(jsonUser.getU_large_avatar()));
 					startActivity(intent);
 					PersonDetailActivity.this.overridePendingTransition(R.anim.zoomin, R.anim.zoomout);
 				}
 			});
 		}
-		//设置姓名、省份、及学校
+		// 设置姓名、省份、及学校
 
-		basicInfo.setText(jsonUser.getU_gender() + " | "
-				+ SchoolDbService.getInstance(getApplicationContext()).getSchoolNameById(jsonUser.getU_schoolid())
+		basicInfo.setText(jsonUser.getU_gender() + " | " + SchoolDbService.getInstance(getApplicationContext()).getSchoolNameById(jsonUser.getU_schoolid())
 				+ " | " + jsonUser.getU_identity() + " | " + jsonUser.getU_love_state());
 		introduce.setText(jsonUser.getU_introduce());
 	}
@@ -361,13 +361,13 @@ public class PersonDetailActivity extends BaseFragmentActivity implements OnClic
 			finish();
 			overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
 			break;
-		case R.id.nav_right_btn2://私信
+		case R.id.nav_right_btn2:// 私信
 			Intent toChatIntent = new Intent(PersonDetailActivity.this, ChatActivity.class);
 			toChatIntent.putExtra(UserTable.U_ID, jsonUser.getU_id());
 			startActivity(toChatIntent);
 			overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 			break;
-		case R.id.nav_right_btn1://更多
+		case R.id.nav_right_btn1:// 更多
 			showMoreDialog();
 			break;
 		case R.id.postBtn:
