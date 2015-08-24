@@ -42,9 +42,9 @@ import com.quanzi.utils.UserPreference;
 public class MyFollowerActivity extends BaseActivity {
 	/***********VIEWS************/
 	private ListView myQuanziListView;
-	private TextView leftTextView;//导航栏左侧文字
-	private View leftButton;//导航栏左侧按钮
-	private View newFollowerBtn;//新的追随者
+	private TextView leftTextView;// 导航栏左侧文字
+	private View leftButton;// 导航栏左侧按钮
+	private View newFollowerBtn;// 新的追随者
 	private TextView newFollowerCount;
 
 	private List<JsonQuanZiItem> quanZiItemList;
@@ -82,20 +82,21 @@ public class MyFollowerActivity extends BaseActivity {
 		if (userPreference.getNewMyFollower_count() > 0) {
 			newFollowerCount.setText("" + userPreference.getNewMyFollower_count());
 			newFollowerCount.setVisibility(View.VISIBLE);
-			newFollowerBtn.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					startActivity(new Intent(MyFollowerActivity.this, NewFollowerActivity.class));
-					overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-					userPreference.setNewMyFollower_count(0);
-				}
-			});
 
 		} else {
 			newFollowerCount.setVisibility(View.GONE);
 		}
+
+		newFollowerBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				startActivity(new Intent(MyFollowerActivity.this, NewFollowerActivity.class));
+				overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+				userPreference.setNewMyFollower_count(0);
+			}
+		});
 		leftButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -205,9 +206,9 @@ public class MyFollowerActivity extends BaseActivity {
 					holder = new ViewHolder();
 					holder.nameTextView = (TextView) view.findViewById(R.id.name);
 					holder.countTextView = (TextView) view.findViewById(R.id.count);
-					view.setTag(holder); // 给View添加一个格外的数据 
+					view.setTag(holder); // 给View添加一个格外的数据
 				} else {
-					holder = (ViewHolder) view.getTag(); // 把数据取出来  
+					holder = (ViewHolder) view.getTag(); // 把数据取出来
 				}
 				holder.nameTextView.setText(jsonQuanZiItem.getI_name());
 				holder.countTextView.setText("" + jsonQuanZiItem.getAmount());

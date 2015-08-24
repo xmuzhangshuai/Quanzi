@@ -10,6 +10,9 @@ public class Constants {
 
 	public static String AppliactionServerDomain = "http://192.168.1.100:8080/XiaoYuanQuanQuan/";
 
+	// public static String AppliactionServerDomain =
+	// "http://192.168.0.103:8080/XiaoYuanQuanQuan/";
+
 	public static class Config {
 		// 是否处于开发模式
 		public static final boolean DEVELOPER_MODE = true;

@@ -132,6 +132,7 @@ public class MyPersonDetailActivity extends BaseFragmentActivity implements OnCl
 	private void getDataTask() {
 		RequestParams params = new RequestParams();
 		params.put(UserTable.U_ID, userPreference.getU_id());
+		params.put("my_userid", userPreference.getU_id());
 		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
 
 			@Override
