@@ -59,7 +59,7 @@ public class MainChatMsgFragment extends BaseV4Fragment {
 
 	protected boolean pauseOnScroll = false;
 	protected boolean pauseOnFling = true;
-	private int pageNow = 0;//控制页数
+	private int pageNow = 0;// 控制页数
 	private MyMessageAdapter mAdapter;
 	private UserPreference userPreference;
 	private LinkedList<JsonMyMessage> messageList;
@@ -80,7 +80,7 @@ public class MainChatMsgFragment extends BaseV4Fragment {
 		findViewById();// 初始化views
 		initView();
 
-		//获取数据
+		// 获取数据
 		getDataTask(pageNow);
 
 		messageListView.setMode(Mode.BOTH);
@@ -98,15 +98,14 @@ public class MainChatMsgFragment extends BaseV4Fragment {
 	@Override
 	protected void initView() {
 		// TODO Auto-generated method stub
-		//设置上拉下拉刷新事件
+		// 设置上拉下拉刷新事件
 		messageListView.setOnRefreshListener(new OnRefreshListener2<ListView>() {
 
 			@Override
 			public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
 				// TODO Auto-generated method stub
-				String label = DateUtils.formatDateTime(getActivity().getApplicationContext(),
-						System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE
-								| DateUtils.FORMAT_ABBREV_ALL);
+				String label = DateUtils.formatDateTime(getActivity().getApplicationContext(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME
+						| DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 
 				pageNow = 0;
@@ -116,9 +115,8 @@ public class MainChatMsgFragment extends BaseV4Fragment {
 			@Override
 			public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
 				// TODO Auto-generated method stub
-				String label = DateUtils.formatDateTime(getActivity().getApplicationContext(),
-						System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE
-								| DateUtils.FORMAT_ABBREV_ALL);
+				String label = DateUtils.formatDateTime(getActivity().getApplicationContext(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME
+						| DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 
 				if (pageNow >= 0)
@@ -152,7 +150,7 @@ public class MainChatMsgFragment extends BaseV4Fragment {
 					List<JsonMyMessage> temp = FastJsonTool.getObjectList(response, JsonMyMessage.class);
 					if (temp != null) {
 						LogTool.i("消息", "长度" + temp.size());
-						//如果是首次获取数据
+						// 如果是首次获取数据
 						if (page == 0) {
 							if (temp.size() < Config.PAGE_NUM) {
 								pageNow = -1;
@@ -160,7 +158,7 @@ public class MainChatMsgFragment extends BaseV4Fragment {
 							messageList = new LinkedList<JsonMyMessage>();
 							messageList.addAll(temp);
 						}
-						//如果是获取更多
+						// 如果是获取更多
 						else if (page > 0) {
 							if (temp.size() < Config.PAGE_NUM) {
 								pageNow = -1;
@@ -199,6 +197,9 @@ public class MainChatMsgFragment extends BaseV4Fragment {
 		final ProgressDialog dialog = new ProgressDialog(getActivity());
 		dialog.setMessage("正在加载...");
 		dialog.setCancelable(false);
+		params.put("my_userid", userPreference.getU_id());
+
+		LogTool.i("pa_id" + pa_id + "   pauserid:" + pa_user_id);
 		if (type == 0) {
 			params.put(PostTable.P_POSTID, pa_id);
 			params.put(PostTable.P_USERID, pa_user_id);
@@ -224,22 +225,24 @@ public class MainChatMsgFragment extends BaseV4Fragment {
 					if (type == 0) {
 						JsonPostItem jsonPostItem = FastJsonTool.getObject(response, JsonPostItem.class);
 						if (jsonPostItem != null) {
-							startActivity(new Intent(getActivity(), PostDetailActivity.class).putExtra(
-									PostDetailActivity.POST_ITEM, jsonPostItem));
+							startActivity(new Intent(getActivity(), PostDetailActivity.class).putExtra(PostDetailActivity.POST_ITEM, jsonPostItem));
 							getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 						} else {
-							LogTool.e("返回帖子数据出错" + response);
+							LogTool.e("返回帖子数据为空" + response);
 						}
-					} else if (type == 1) {
-						JsonActItem jsonActItem = FastJsonTool.getObject(response, JsonActItem.class);
-						if (jsonActItem != null) {
-							startActivity(new Intent(getActivity(), ActDetailActivity.class).putExtra(
-									ActDetailActivity.ACT_ITEM, jsonActItem));
-							getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-						} else {
-							LogTool.e("返回帖子数据出错" + response);
-						}
+
 					}
+
+				} else if (type == 1) {
+					JsonActItem jsonActItem = FastJsonTool.getObject(response, JsonActItem.class);
+					if (jsonActItem != null) {
+						startActivity(new Intent(getActivity(), ActDetailActivity.class).putExtra(ActDetailActivity.ACT_ITEM, jsonActItem));
+						getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+					}
+					{
+						LogTool.e("返回帖子数据为空" + response);
+					}
+
 				}
 			}
 
@@ -256,7 +259,12 @@ public class MainChatMsgFragment extends BaseV4Fragment {
 			}
 
 		};
-		AsyncHttpClientTool.post(getActivity(), "", params, responseHandler);
+		if (type == 0) {
+			AsyncHttpClientTool.post(getActivity(), "post/getPostByID", params, responseHandler);
+		} else if (type == 1) {
+			AsyncHttpClientTool.post(getActivity(), "activity/getActivityByID", params, responseHandler);
+		}
+
 	}
 
 	/**
@@ -316,9 +324,9 @@ public class MainChatMsgFragment extends BaseV4Fragment {
 				holder.commentTextView = (TextView) view.findViewById(R.id.comment);
 				holder.itemTextView = (TextView) view.findViewById(R.id.item_text);
 				holder.favorImageView = (ImageView) view.findViewById(R.id.favor);
-				view.setTag(holder); // 给View添加一个格外的数据 
+				view.setTag(holder); // 给View添加一个格外的数据
 			} else {
-				holder = (ViewHolder) view.getTag(); // 把数据取出来  
+				holder = (ViewHolder) view.getTag(); // 把数据取出来
 			}
 
 			view.setOnClickListener(new OnClickListener() {
@@ -326,54 +334,53 @@ public class MainChatMsgFragment extends BaseV4Fragment {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					goToDetail(jsonMyMessage.getType(), jsonMyMessage.getPa_id(), jsonMyMessage.getUserid());
+					goToDetail(jsonMyMessage.getPa_type(), jsonMyMessage.getPa_id(), jsonMyMessage.getPa_userid());
 				}
 			});
 
-			//设置头像
+			// 设置头像
 			if (!TextUtils.isEmpty(jsonMyMessage.getSmall_avatar())) {
+				LogTool.i("头像" + jsonMyMessage.getSmall_avatar());
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonMyMessage.getSmall_avatar()), holder.headImageView,
+						ImageLoaderTool.getHeadImageOptions(10));
+			}
+			if (userPreference.getU_id() != jsonMyMessage.getUserid()) {
+				// 点击头像进入详情页面
+				holder.headImageView.setOnClickListener(new OnClickListener() {
 
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonMyMessage.getSmall_avatar()),
-						holder.headImageView, ImageLoaderTool.getHeadImageOptions(10));
-
-				if (userPreference.getU_id() != jsonMyMessage.getUserid()) {
-					//点击头像进入详情页面
-					holder.headImageView.setOnClickListener(new OnClickListener() {
-
-						@Override
-						public void onClick(View v) {
-							// TODO Auto-generated method stub
-							Intent intent = new Intent(getActivity(), PersonDetailActivity.class);
-							intent.putExtra(UserTable.U_ID, jsonMyMessage.getUserid());
-							intent.putExtra(UserTable.U_NICKNAME, jsonMyMessage.getUsername());
-							intent.putExtra(UserTable.U_SMALL_AVATAR, jsonMyMessage.getSmall_avatar());
-							startActivity(intent);
-							getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
-						}
-					});
-				}
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						Intent intent = new Intent(getActivity(), PersonDetailActivity.class);
+						intent.putExtra(UserTable.U_ID, jsonMyMessage.getUserid());
+						intent.putExtra(UserTable.U_NICKNAME, jsonMyMessage.getUsername());
+						intent.putExtra(UserTable.U_SMALL_AVATAR, jsonMyMessage.getSmall_avatar());
+						startActivity(intent);
+						getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
+					}
+				});
 			}
 
-			//设置姓名
+			// 设置姓名
 			holder.nameTextView.setText(jsonMyMessage.getUsername());
 
-			//设置内容
-			if (jsonMyMessage.getType() == 2) {//赞
+			// 设置内容
+			if (jsonMyMessage.getType() == 2) {// 赞
 				holder.commentTextView.setVisibility(View.GONE);
 				holder.favorImageView.setVisibility(View.VISIBLE);
-			} else if (jsonMyMessage.getType() == 0 || jsonMyMessage.getType() == 1) {//评论或回复
+			} else if (jsonMyMessage.getType() == 0 || jsonMyMessage.getType() == 1) {// 评论或回复
 				holder.commentTextView.setText(jsonMyMessage.getCommentcontent());
 				holder.commentTextView.setVisibility(View.VISIBLE);
 				holder.favorImageView.setVisibility(View.GONE);
 			}
 
-			//设置日期
+			// 设置日期
 			holder.timeTextView.setText(DateTimeTools.getMonAndDay(jsonMyMessage.getCommenttime()));
 
-			//设置帖子或活动的信息
-			if (jsonMyMessage.getPa_image() != null && !jsonMyMessage.getPa_image().isEmpty()) {//如果有图片
-				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonMyMessage.getPa_image()),
-						holder.itemImageView, ImageLoaderTool.getHeadImageOptions(0));
+			// 设置帖子或活动的信息
+			if (jsonMyMessage.getPa_image() != null && !jsonMyMessage.getPa_image().isEmpty()) {// 如果有图片
+				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonMyMessage.getPa_image()), holder.itemImageView,
+						ImageLoaderTool.getHeadImageOptions(0));
 				holder.itemTextView.setVisibility(View.GONE);
 				holder.itemImageView.setVisibility(View.VISIBLE);
 			} else {

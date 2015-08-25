@@ -260,115 +260,6 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 		}
 	}
 
-	// @Override
-	// protected void onActivityResult(int requestCode, int resultCode, Intent
-	// data) {
-	// switch (requestCode) {
-	// case activity_result_camara_with_data: // 拍照
-	// try {
-	// cropImageUriByTakePhoto();
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// break;
-	// case activity_result_cropimage_with_data:
-	// try {
-	// if (photoUri != null) {
-	// uploadImage(photoUri.getPath());
-	// }
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// break;
-	//
-	// }
-	// }
-	//
-	// /**
-	// * 拍照获取图片
-	// *
-	// */
-	// protected void doTakePhoto() {
-	// try {
-	// File uploadFileDir = new File(Environment.getExternalStorageDirectory(),
-	// "/quanzi/image");
-	// Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-	// if (!uploadFileDir.exists()) {
-	// uploadFileDir.mkdirs();
-	// }
-	// picFile = new File(uploadFileDir, "headimage.jpeg");
-	// if (!picFile.exists()) {
-	// picFile.createNewFile();
-	// }
-	// photoUri = Uri.fromFile(picFile);
-	// cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-	// startActivityForResult(cameraIntent, activity_result_camara_with_data);
-	// } catch (ActivityNotFoundException e) {
-	// e.printStackTrace();
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// }
-	// }
-	//
-	// /**
-	// * 从相册中获取
-	// */
-	// protected void doCropPhoto() {
-	// try {
-	// File pictureFileDir = new File(Environment.getExternalStorageDirectory(),
-	// "/quanzi/image");
-	// if (!pictureFileDir.exists()) {
-	// pictureFileDir.mkdirs();
-	// }
-	// picFile = new File(pictureFileDir, "headimage.jpeg");
-	// if (!picFile.exists()) {
-	// picFile.createNewFile();
-	// }
-	// photoUri = Uri.fromFile(picFile);
-	// final Intent intent = getCropImageIntent();
-	// startActivityForResult(intent, activity_result_cropimage_with_data);
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
-	//
-	// /**
-	// * 调用图片剪辑程序
-	// */
-	// public Intent getCropImageIntent() {
-	// Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
-	// intent.setType("image/*");
-	// intent.putExtra("crop", "true");
-	// intent.putExtra("aspectX", 1);
-	// intent.putExtra("aspectY", 1);
-	// intent.putExtra("outputX", 800);
-	// intent.putExtra("outputY", 800);
-	// intent.putExtra("noFaceDetection", true);
-	// intent.putExtra("scale", true);
-	// intent.putExtra("scaleUpIfNeeded", true);
-	// intent.putExtra("return-data", false);
-	// intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-	// intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-	// return intent;
-	// }
-	//
-	// private void cropImageUriByTakePhoto() {
-	// Intent intent = new Intent("com.android.camera.action.CROP");
-	// intent.setDataAndType(photoUri, "image/*");
-	// intent.putExtra("crop", "true");
-	// intent.putExtra("aspectX", 1);
-	// intent.putExtra("aspectY", 1);
-	// intent.putExtra("outputX", 800);
-	// intent.putExtra("outputY", 800);
-	// intent.putExtra("scale", true);
-	// intent.putExtra("scaleUpIfNeeded", true);
-	// intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-	// intent.putExtra("return-data", false);
-	// intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-	// intent.putExtra("noFaceDetection", true); // no face detection
-	// startActivityForResult(intent, activity_result_cropimage_with_data);
-	// }
-
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -518,7 +409,6 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 
 			RequestParams params = new RequestParams();
 			int userId = userPreference.getU_id();
-			LogTool.e("" + userId);
 			if (userId > -1) {
 				params.put(UserTable.U_ID, String.valueOf(userId));
 				try {
