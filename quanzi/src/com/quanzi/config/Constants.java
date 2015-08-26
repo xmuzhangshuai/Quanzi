@@ -8,7 +8,7 @@ public class Constants {
 	// °üÃû
 	public static final String PACKAGENAME = "com.quanzi";
 
-	public static String AppliactionServerDomain = "http://192.168.1.100:8080/XiaoYuanQuanQuan/";
+	public static String AppliactionServerDomain = "http://112.124.98.207:8080/XiaoYuanQuanQuan/";
 
 	// public static String AppliactionServerDomain =
 	// "http://192.168.0.103:8080/XiaoYuanQuanQuan/";

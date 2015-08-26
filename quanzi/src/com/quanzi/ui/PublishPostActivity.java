@@ -287,7 +287,6 @@ public class PublishPostActivity extends BaseActivity implements OnClickListener
 				cursor.moveToFirst();
 				int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
 				photoUris[requestCode - 6] = cursor.getString(columnIndex);
-				LogTool.i(cursor.getString(columnIndex));
 				cursor.close();
 				showPicture(requestCode - 6);
 			} catch (Exception e) {
@@ -308,7 +307,6 @@ public class PublishPostActivity extends BaseActivity implements OnClickListener
 		// File[] photoFiles = new File[] {};
 		for (int i = 0; i < 6; i++) {
 			if (!TextUtils.isEmpty(photoUris[i])) {
-				LogTool.i("µØÖ·", photoUris[i]);
 				photoFiles.add(new File(photoUris[i]));
 			}
 		}
@@ -379,7 +377,6 @@ public class PublishPostActivity extends BaseActivity implements OnClickListener
 			} else {
 				AsyncHttpClientTool.post("post/add_no_pic", params, responseHandler);
 			}
-
 		} else {
 			ToastTool.showLong(PublishPostActivity.this, "ÇëÌîÐ´ÄÚÈÝ»òÍ¼Æ¬");
 			dialog.dismiss();
