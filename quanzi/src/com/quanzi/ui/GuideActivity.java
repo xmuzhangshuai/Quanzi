@@ -22,6 +22,7 @@ import com.quanzi.db.CopyDataBase;
 import com.quanzi.utils.ServerUtil;
 import com.quanzi.utils.SharePreferenceUtil;
 import com.quanzi.utils.UserPreference;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
 import com.umeng.update.UmengUpdateAgent;
 
@@ -77,6 +78,8 @@ public class GuideActivity extends BaseActivity {
 		// }
 
 		/************ 初始化友盟服务 **************/
+		// 禁止友盟禁止默认的页面统计方式
+		MobclickAgent.openActivityDurationTrack(false);
 		UmengUpdateAgent.setUpdateOnlyWifi(false);
 		UmengUpdateAgent.update(this);
 		// MobclickAgent.updateOnlineConfig(this);

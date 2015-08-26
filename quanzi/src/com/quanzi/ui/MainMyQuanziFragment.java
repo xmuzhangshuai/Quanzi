@@ -244,7 +244,6 @@ public class MainMyQuanziFragment extends BaseV4Fragment implements OnClickListe
 			public void onStart() {
 				// TODO Auto-generated method stub
 				super.onStart();
-				// postListView.setRefreshing();
 			}
 
 			@Override

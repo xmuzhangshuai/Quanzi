@@ -559,7 +559,6 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 	 * 报名参加活动
 	 */
 	private void applyAct() {
-
 		RequestParams params = new RequestParams();
 		params.put(ActivityTable.A_ACTID, jsonActItem.getA_actid());
 		params.put(ActivityTable.A_USERID, jsonActItem.getA_userid());

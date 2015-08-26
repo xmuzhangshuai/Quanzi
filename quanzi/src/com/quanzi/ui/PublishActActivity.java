@@ -477,7 +477,6 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 		List<File> photoFiles = new ArrayList<File>();
 		for (int i = 0; i < 6; i++) {
 			if (!TextUtils.isEmpty(photoUris[i])) {
-				LogTool.i("地址", photoUris[i]);
 				photoFiles.add(new File(photoUris[i]));
 			}
 		}
@@ -486,7 +485,7 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 		dialog.setCancelable(false);
 
 		RequestParams params = new RequestParams();
-		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
+		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("gbk") {
 
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, String response) {

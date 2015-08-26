@@ -117,7 +117,7 @@ public class MainExploreActFragment extends BaseV4Fragment {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
-		LogTool.i("onActivityResult     " + "requestCode:" + requestCode + "   resultCode:" + resultCode + "      data:" + data);
+		LogTool.i("MainExploreActFragment onActivityResult     " + "requestCode:" + requestCode + "   resultCode:" + resultCode + "      data:" + data);
 		// if (requestCode == 1) {
 		// LogTool.e("ÒÑ±¨Ãû");
 		// int position = data.getIntExtra("position", -1);

@@ -27,6 +27,7 @@ import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseV4Fragment;
 import com.quanzi.config.Constants;
 import com.quanzi.customewidget.MyMenuDialog;
+import com.quanzi.utils.LogTool;
 import com.quanzi.utils.UserPreference;
 
 /**
@@ -87,6 +88,24 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 		// TODO Auto-generated method stub
 		super.onResume();
 		schoolTextView.setText(userPreference.getSchoolName());
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		LogTool.i("MainExploreFragment onActivityResult     " + "requestCode:" + requestCode + "   resultCode:" + resultCode + "      data:" + data);
+		// if (requestCode == 1) {
+		// LogTool.e("ÒÑ±¨Ãû");
+		// int position = data.getIntExtra("position", -1);
+		// boolean apply = data.getBooleanExtra("apply", false);
+		// LogTool.i("onActivityResult", "position:" + position + "apply" +
+		// apply);
+		// if (position > -1) {
+		// jsonActItemList.get(position).setApply(apply);
+		// mAdapter.notifyDataSetChanged();
+		// }
+		// }
 	}
 
 	@Override

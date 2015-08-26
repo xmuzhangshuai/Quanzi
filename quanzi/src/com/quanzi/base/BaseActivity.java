@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.easemob.chat.EMChatManager;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.quanzi.utils.LogTool;
 import com.quanzi.utils.NetworkUtils;
 import com.umeng.analytics.MobclickAgent;
 
@@ -84,8 +85,8 @@ public abstract class BaseActivity extends Activity {
 		}
 
 		// 友盟统计
-		MobclickAgent.onPause(this); // 统计时长
 		MobclickAgent.onPageEnd(this.getClass().getName());// 统计页面
+		MobclickAgent.onPause(this); // 统计时长
 	}
 
 	@Override
@@ -98,8 +99,8 @@ public abstract class BaseActivity extends Activity {
 		BaseActivity.this.registerReceiver(netBroadCastReceiver, intentFilter);
 
 		// 友盟统计
+		MobclickAgent.onPageStart(this.getClass().getCanonicalName());// 统计页面
 		MobclickAgent.onResume(this); // 统计时长
-		MobclickAgent.onPageStart(this.getClass().getName());// 统计页面
 
 		// onresume时，取消notification显示
 		EMChatManager.getInstance().activityResumed();

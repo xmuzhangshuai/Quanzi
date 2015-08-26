@@ -110,7 +110,7 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 	private TextView introTextView;
 
 	private UserPreference userPreference;
-	private File picFile;
+	// private File picFile;
 	// private Uri photoUri;
 	// private final int activity_result_camara_with_data = 1006;
 	// private final int activity_result_cropimage_with_data = 1007;
@@ -404,15 +404,14 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 	 * @param filePath
 	 */
 	public void uploadImage(final String filePath) {
-		final Bitmap largeAvatar = BitmapFactory.decodeFile(filePath);
-		if (largeAvatar != null) {
-
+		File file = new File(filePath);
+		if (file.exists()) {
 			RequestParams params = new RequestParams();
 			int userId = userPreference.getU_id();
 			if (userId > -1) {
 				params.put(UserTable.U_ID, String.valueOf(userId));
 				try {
-					params.put(UserTable.U_LARGE_AVATAR, picFile);
+					params.put(UserTable.U_LARGE_AVATAR, new File(filePath));
 				} catch (FileNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -450,13 +449,13 @@ public class ModifyDataActivity extends BaseFragmentActivity implements OnClickL
 						super.onFinish();
 						// 删除本地头像
 						ImageTools.deleteImageByPath(filePath);
-						largeAvatar.recycle();
+						// largeAvatar.recycle();
 					}
 				};
 				AsyncHttpClientTool.post("user/uploadHeadImg", params, responseHandler);
 			}
 		} else {
-			ImageTools.deleteImageByPath(filePath);
+			LogTool.e("头像文件不存在");
 		}
 	}
 

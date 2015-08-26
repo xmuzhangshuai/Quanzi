@@ -61,8 +61,6 @@ public class BaseApplication extends Application {
 		initData();
 
 		hxSDKHelper.onInit(myApplication);
-		// 禁止友盟禁止默认的页面统计方式
-		MobclickAgent.openActivityDurationTrack(false);
 	}
 
 	private void initData() {

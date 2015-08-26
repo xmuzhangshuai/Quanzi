@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.quanzi.utils.LogTool;
 import com.umeng.analytics.MobclickAgent;
 
 /**   
@@ -55,7 +56,7 @@ public abstract class BaseV4Fragment extends Fragment {
 	public void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-		MobclickAgent.onPageStart(this.getClass().getName()); // 统计页面
+		MobclickAgent.onPageStart(this.getClass().getCanonicalName()); // 统计页面
 	}
 
 	@Override
