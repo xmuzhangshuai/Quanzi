@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.easemob.chat.EMChatManager;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.quanzi.utils.LogTool;
 import com.quanzi.utils.NetworkUtils;
 import com.umeng.analytics.MobclickAgent;
 

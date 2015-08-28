@@ -91,24 +91,6 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 	}
 
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		super.onActivityResult(requestCode, resultCode, data);
-		LogTool.i("MainExploreFragment onActivityResult     " + "requestCode:" + requestCode + "   resultCode:" + resultCode + "      data:" + data);
-		// if (requestCode == 1) {
-		// LogTool.e("ÒÑ±¨Ãû");
-		// int position = data.getIntExtra("position", -1);
-		// boolean apply = data.getBooleanExtra("apply", false);
-		// LogTool.i("onActivityResult", "position:" + position + "apply" +
-		// apply);
-		// if (position > -1) {
-		// jsonActItemList.get(position).setApply(apply);
-		// mAdapter.notifyDataSetChanged();
-		// }
-		// }
-	}
-
-	@Override
 	protected void initView() {
 		// TODO Auto-generated method stub
 		filterBtn.setVisibility(View.VISIBLE);

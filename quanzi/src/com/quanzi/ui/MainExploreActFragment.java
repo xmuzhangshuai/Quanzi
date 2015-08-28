@@ -117,18 +117,21 @@ public class MainExploreActFragment extends BaseV4Fragment {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
-		LogTool.i("MainExploreActFragment onActivityResult     " + "requestCode:" + requestCode + "   resultCode:" + resultCode + "      data:" + data);
-		// if (requestCode == 1) {
-		// LogTool.e("ÒÑ±¨Ãû");
-		// int position = data.getIntExtra("position", -1);
-		// boolean apply = data.getBooleanExtra("apply", false);
-		// LogTool.i("onActivityResult", "position:" + position + "apply" +
-		// apply);
-		// if (position > -1) {
-		// jsonActItemList.get(position).setApply(apply);
-		// mAdapter.notifyDataSetChanged();
-		// }
-		// }
+		if (requestCode == 201 && resultCode == 202) {
+			if (data != null) {
+				int position = data.getIntExtra("position", -1);
+				boolean apply = data.getBooleanExtra("apply", false);
+				int count = data.getIntExtra("count", -1);
+				LogTool.i("onActivityResult", "position:" + position + "apply" + apply);
+				if (position > -1) {
+					jsonActItemList.get(position).setApply(apply);
+					if (count > -1) {
+						jsonActItemList.get(position).setA_apply_amount(count);
+					}
+					mAdapter.notifyDataSetChanged();
+				}
+			}
+		}
 	}
 
 	@Override
@@ -373,7 +376,9 @@ public class MainExploreActFragment extends BaseV4Fragment {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					startActivityForResult(new Intent(getActivity(), ActDetailActivity.class).putExtra(ActDetailActivity.ACT_ITEM, jsonActItem), 1);
+					startActivityForResult(
+							new Intent(getActivity(), ActDetailActivity.class).putExtra(ActDetailActivity.ACT_ITEM, jsonActItem).putExtra("position", position),
+							201);
 					getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 				}
 			});

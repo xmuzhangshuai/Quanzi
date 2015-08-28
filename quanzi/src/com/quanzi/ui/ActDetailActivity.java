@@ -590,7 +590,8 @@ public class ActDetailActivity extends BaseFragmentActivity implements OnClickLi
 							Intent mIntent = new Intent();
 							mIntent.putExtra("position", position);
 							mIntent.putExtra("apply", jsonActItem.isApply());
-							ActDetailActivity.this.setResult(2, mIntent);
+							mIntent.putExtra("count", jsonActItem.getA_apply_amount());
+							ActDetailActivity.this.setResult(202, mIntent);
 						}
 					} else {
 						LogTool.e("±¨Ãû·µ»Ø" + response);
