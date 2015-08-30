@@ -45,14 +45,15 @@ import com.quanzi.utils.UserPreference;
 public class RegEduSysFragment extends BaseV4Fragment {
 	private View rootView;// ¸ùView
 	// UI references.
-	private EditText mStudentNumberView;//Ñ§ºÅ
-	private EditText mPasswordView;//ÃÜÂë
-	private View mProgressView;//»º³å
-	private TextView topNavigation;//µ¼º½À¸ÎÄ×Ö
-	private TextView leftNavigation;//²½Öè
-	private View leftImageButton;//µ¼º½À¸×ó²à°´Å¥
-	private View rightImageButton;//µ¼º½À¸ÓÒ²à°´Å¥
+	private EditText mStudentNumberView;// Ñ§ºÅ
+	private EditText mPasswordView;// ÃÜÂë
+	private View mProgressView;// »º³å
+	private TextView topNavigation;// µ¼º½À¸ÎÄ×Ö
+	private TextView leftNavigation;// ²½Öè
+	private View leftImageButton;// µ¼º½À¸×ó²à°´Å¥
+	private View rightImageButton;// µ¼º½À¸ÓÒ²à°´Å¥
 	private UserPreference userPreference;
+	View focusView = null;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -113,7 +114,6 @@ public class RegEduSysFragment extends BaseV4Fragment {
 		String password = mPasswordView.getText().toString();
 
 		boolean cancel = false;
-		View focusView = null;
 
 		// Check for a valid email address.
 		if (TextUtils.isEmpty(studentNumber)) {
@@ -144,27 +144,24 @@ public class RegEduSysFragment extends BaseV4Fragment {
 		} else {
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
-			showProgress(true);
 
 			// Ã»ÓÐ´íÎó£¬Ôò´æ´¢Öµ
 			userPreference.setU_student_number(studentNumber);
 			userPreference.setU_student_pass(password);
 
-			register();
-
+			register(studentNumber, password);
 		}
 	}
 
-	//×¢²áÍøÂç²Ù×÷
-	private void register() {
+	// ×¢²áÍøÂç²Ù×÷
+	private void register(String number, String pass) {
 		// Ã»ÓÐ´íÎó£¬ÔòÐÞ¸Ä
 		RequestParams params = new RequestParams();
-		JsonUser jsonUser = new JsonUser(userPreference.getU_nickname(), userPreference.getU_password(),
-				userPreference.getU_gender(), userPreference.getU_tel(), userPreference.getU_provinceid(),
-				userPreference.getU_cityid(), userPreference.getU_schoolid(), userPreference.getU_student_number(),
-				userPreference.getU_student_pass());
+		JsonUser jsonUser = new JsonUser(userPreference.getU_nickname(), userPreference.getU_password(), userPreference.getU_gender(),
+				userPreference.getU_tel(), userPreference.getU_provinceid(), userPreference.getU_cityid(), userPreference.getU_schoolid(), number, pass);
 
 		params.put("register", FastJsonTool.createJsonString(jsonUser));
+		LogTool.e(FastJsonTool.createJsonString(jsonUser));
 
 		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
 
@@ -192,8 +189,20 @@ public class RegEduSysFragment extends BaseV4Fragment {
 							userPreference.setU_id(userID);
 							userPreference.setUserLogin(true);
 							loginHuanxin("" + userID, userPreference.getU_password());
+						} else if (userID == -1) {
+							mStudentNumberView.setError("×¢²áÑ§Ð£ÔÝÊ±²»Ö§³Ö");
+							focusView = mStudentNumberView;
+							focusView.requestFocus();
+						} else if (userID == -3) {
+							mStudentNumberView.setError("ÕËºÅ»òÃÜÂë´íÎó");
+							focusView = mStudentNumberView;
+							focusView.requestFocus();
+						} else if (userID == -4) {
+							mStudentNumberView.setError("ÕËºÅ²»´æÔÚ");
+							focusView = mStudentNumberView;
+							focusView.requestFocus();
 						} else {
-							LogTool.e("×¢²áÊ±·µ»Ø¸ºÊý" + response);
+							LogTool.e("×¢²áÊ±·µ»Ø³ö´í" + userID);
 						}
 					} else {
 						LogTool.e("×¢²áÊ±·µ»ØÎª¿Õ");
@@ -216,7 +225,7 @@ public class RegEduSysFragment extends BaseV4Fragment {
 	 * µÇÂ¼»·ÐÅ
 	 */
 	private void loginHuanxin(String userName, String password) {
-		EMChatManager.getInstance().login(userName, password, new EMCallBack() {//»Øµ÷
+		EMChatManager.getInstance().login(userName, password, new EMCallBack() {// »Øµ÷
 					@Override
 					public void onSuccess() {
 						EMChatManager.getInstance().loadAllConversations();
@@ -253,22 +262,20 @@ public class RegEduSysFragment extends BaseV4Fragment {
 		// for very easy animations. If available, use these APIs to fade-in
 		// the progress spinner.
 		if (show) {
-			//Òþ²ØÈí¼üÅÌ   
-			((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE))
-					.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
-							InputMethodManager.HIDE_NOT_ALWAYS);
+			// Òþ²ØÈí¼üÅÌ
+			((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus()
+					.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 		}
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
 			int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
 			mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-			mProgressView.animate().setDuration(shortAnimTime).alpha(show ? 1 : 0)
-					.setListener(new AnimatorListenerAdapter() {
-						@Override
-						public void onAnimationEnd(Animator animation) {
-							mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-						}
-					});
+			mProgressView.animate().setDuration(shortAnimTime).alpha(show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+				@Override
+				public void onAnimationEnd(Animator animation) {
+					mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+				}
+			});
 		} else {
 			// The ViewPropertyAnimator APIs are not available, so simply show
 			// and hide the relevant UI components.

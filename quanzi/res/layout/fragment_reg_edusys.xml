@@ -27,7 +27,7 @@
             android:drawablePadding="10dp"
             android:hint="学号"
             android:inputType="phone"
-            android:maxLength="11"
+            android:maxLength="25"
             android:maxLines="1"
             android:paddingLeft="10.0dip"
             android:textSize="@dimen/day_recommend_user_font" />

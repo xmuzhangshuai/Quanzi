@@ -5,12 +5,12 @@
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="red">#ff0000</color>
-    <color name="navigation_bg">#22272c</color> <!-- 导航条颜色 -->
+    <color name="navigation_bg">#304347</color> <!-- 导航条颜色 -->
     <color name="navigation_pressed">#161a1d</color> <!-- 导航条按后颜色 -->
     <color name="system_green">#00ca6b</color> <!-- 系统绿色 -->
     <color name="system_green_pressed">#00a758</color> <!-- 系统深绿色 -->
-    <color name="system_main_bg">#303355</color> <!-- 系统深绿色 -->
-    <color name="system_back">#F0F0F0</color> <!-- 系统背景色 -->
+    <color name="system_main_bg">#eaeaea</color> <!-- 系统深绿色 -->
+    <color name="system_back">#eaeaea</color> <!-- 系统背景色 -->
 
     <color name="system_male">#33CCCC</color> <!-- 男生系统颜色 -->
     <color name="system_male_light">#8033CCCC</color> <!-- 男生系统颜色 -->

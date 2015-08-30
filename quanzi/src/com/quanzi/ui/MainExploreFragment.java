@@ -75,7 +75,7 @@ public class MainExploreFragment extends BaseV4Fragment implements OnClickListen
 	@Override
 	protected void findViewById() {
 		// TODO Auto-generated method stub
-		schoolTextView = (TextView) rootView.findViewById(R.id.left_text2);
+		schoolTextView = (TextView) rootView.findViewById(R.id.left_text1);
 		filterBtn = rootView.findViewById(R.id.nav_right_btn3);
 		searchBtn = rootView.findViewById(R.id.nav_right_btn2);
 		publishBtn = rootView.findViewById(R.id.nav_right_btn1);
