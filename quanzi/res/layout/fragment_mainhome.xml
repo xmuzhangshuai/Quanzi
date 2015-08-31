@@ -34,7 +34,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="100dp"
             android:text="快去探索自己的圈子吧..."
-            android:textColor="@color/white"
+            android:textColor="@color/dark_gray"
             android:textSize="18.0sp" />
     </RelativeLayout>
 

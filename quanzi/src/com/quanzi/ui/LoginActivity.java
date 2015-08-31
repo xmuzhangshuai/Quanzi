@@ -257,7 +257,7 @@ public class LoginActivity extends BaseActivity {
 		userPreference.setU_industry(user.getU_industry_item());
 		userPreference.setU_introduce(user.getU_introduce());
 		userPreference.setU_student_number(user.getU_student_number());
-		userPreference.setU_student_pass(user.getU_stundet_pass());
+		userPreference.setU_student_pass(user.getU_student_pass());
 		userPreference.setMyConcerned_count(user.getU_my_concern_count());
 		userPreference.setMyFollower_count(user.getU_my_follower_count());
 		userPreference.setMyFavor_count(user.getU_my_favor_count());

@@ -161,7 +161,6 @@ public class RegEduSysFragment extends BaseV4Fragment {
 				userPreference.getU_tel(), userPreference.getU_provinceid(), userPreference.getU_cityid(), userPreference.getU_schoolid(), number, pass);
 
 		params.put("register", FastJsonTool.createJsonString(jsonUser));
-		LogTool.e(FastJsonTool.createJsonString(jsonUser));
 
 		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
 

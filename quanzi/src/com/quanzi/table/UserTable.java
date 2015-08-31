@@ -33,7 +33,7 @@ public class UserTable {
 	public static final String U_INTRODUCE = "u_introduce";
 	public static final String U_GENDER = "u_gender";
 	public static final String U_STUDENT_NUMBER = "u_student_number";
-	public static final String U_STUDENT_PASS = "u_stundet_pass";
+	public static final String U_STUDENT_PASS = "u_student_pass";
 
 
 }

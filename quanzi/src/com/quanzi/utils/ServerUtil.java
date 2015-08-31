@@ -142,7 +142,7 @@ public class ServerUtil {
 		instance.userPreference.setU_industry(user.getU_industry_item());
 		instance.userPreference.setU_introduce(user.getU_introduce());
 		instance.userPreference.setU_student_number(user.getU_student_number());
-		instance.userPreference.setU_student_pass(user.getU_stundet_pass());
+		instance.userPreference.setU_student_pass(user.getU_student_pass());
 		instance.userPreference.setMyConcerned_count(user.getU_my_concern_count());
 		instance.userPreference.setMyFollower_count(user.getU_my_follower_count());
 		instance.userPreference.setMyFavor_count(user.getU_my_favor_count());

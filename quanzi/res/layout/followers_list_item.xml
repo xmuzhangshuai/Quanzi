@@ -25,8 +25,7 @@
         android:layout_marginLeft="@dimen/day_recommend_help_padding"
         android:layout_toRightOf="@+id/head_image"
         android:ellipsize="end"
-        android:maxLength="4"
-        android:text="张帅"
+        android:maxLength="8"
         android:textSize="@dimen/day_recommend_user_font" />
 
     <CheckBox

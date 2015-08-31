@@ -43,7 +43,7 @@ public class JsonUser implements Serializable {
 	private int u_new_follower_count;
 
 	private String u_student_number;//学号
-	private String u_stundet_pass;//密码
+	private String u_student_pass;//密码
 
 	//打印用户信息
 	public void printUserInfo() {
@@ -62,7 +62,7 @@ public class JsonUser implements Serializable {
 		LogTool.i("学校ID: " + getU_schoolid());
 		LogTool.i("简介: " + getU_introduce());
 		LogTool.i("学号: " + getU_student_number());
-		LogTool.i("教务处密码: " + getU_stundet_pass());
+		LogTool.i("教务处密码: " + getU_student_pass());
 		LogTool.i("身份: " + getU_identity());
 		LogTool.i("行业: " + getU_industry_item());
 		LogTool.i("技能: " + getU_skill_items());
@@ -241,12 +241,12 @@ public class JsonUser implements Serializable {
 		this.u_student_number = u_student_number;
 	}
 
-	public String getU_stundet_pass() {
-		return u_stundet_pass;
+	public String getU_student_pass() {
+		return u_student_pass;
 	}
 
-	public void setU_stundet_pass(String u_stundet_pass) {
-		this.u_stundet_pass = u_stundet_pass;
+	public void setU_student_pass(String u_stundet_pass) {
+		this.u_student_pass = u_stundet_pass;
 	}
 
 	public String getU_love_state() {
@@ -304,7 +304,7 @@ public class JsonUser implements Serializable {
 		this.u_cityid = u_cityid;
 		this.u_schoolid = u_schoolid;
 		this.u_student_number = u_student_number;
-		this.u_stundet_pass = u_stundet_pass;
+		this.u_student_pass = u_stundet_pass;
 	}
 
 }

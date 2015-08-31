@@ -22,11 +22,8 @@
             android:layout_marginLeft="@dimen/personal_timecapsule_padding"
             android:layout_marginRight="@dimen/personal_timecapsule_padding"
             android:layout_marginTop="@dimen/margin_chat_activity"
-            android:ellipsize="end"
-            android:maxLength="15"
-            android:singleLine="true"
-            android:textColor="@color/comment_name"
-            android:textSize="@dimen/act_title_size"
+            android:maxLength="20"
+            android:textSize="19sp"
             android:textStyle="bold" />
 
         <RelativeLayout
