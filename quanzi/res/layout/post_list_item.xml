@@ -44,6 +44,7 @@
                     android:layout_marginLeft="@dimen/day_recommend_dot_space"
                     android:ellipsize="end"
                     android:singleLine="true"
+                    android:maxLength="8"
                     android:textColor="@color/black"
                     android:textSize="@dimen/day_recommend_user_font" />
 

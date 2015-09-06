@@ -2,6 +2,7 @@ package com.quanzi.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,11 +20,10 @@ import com.quanzi.utils.UserPreference;
 
 /**
  *
- * 项目名称：quanzi  
- * 类名称：PersonDataFragment  
- * 类描述：他人个人中心的资料子页面
+ * 项目名称：quanzi 类名称：PersonDataFragment 类描述：他人个人中心的资料子页面
+ * 
  * @author zhangshuai
- * @date 创建时间：2015-5-11 上午10:55:28 
+ * @date 创建时间：2015-5-11 上午10:55:28
  *
  */
 public class PersonDataFragment extends BaseV4Fragment {
@@ -31,43 +31,43 @@ public class PersonDataFragment extends BaseV4Fragment {
 
 	private JsonUser jsonUser;
 
-	/***昵称***/
+	/*** 昵称 ***/
 	private View nicknameView;
 	private TextView nickNameTextView;
 
-	/***性别***/
+	/*** 性别 ***/
 	private View genderView;
 	private TextView genderText;
 
-	/***生日***/
+	/*** 生日 ***/
 	private View birthdayView;
 	private TextView birthdayTextView;
 
-	/***学校***/
+	/*** 学校 ***/
 	private View schoolView;
 	private TextView schoolTextView;
 
-	/***当前身份***/
+	/*** 当前身份 ***/
 	private View statusView;
 	private TextView statusTextView;
 
-	/***情感状态***/
+	/*** 情感状态 ***/
 	private View loveStatusView;
 	private TextView loveStatusTextView;
 
-	/***兴趣爱好***/
+	/*** 兴趣爱好 ***/
 	private View interestView;
 	private TextView interestTextView;
 
-	/***擅长技能***/
+	/*** 擅长技能 ***/
 	private View skillView;
 	private TextView skillTextView;
 
-	/***所属行业***/
+	/*** 所属行业 ***/
 	private View industryView;
 	private TextView industryTextView;
 
-	/***个人签名***/
+	/*** 个人签名 ***/
 	private View introView;
 	private TextView introTextView;
 
@@ -121,35 +121,40 @@ public class PersonDataFragment extends BaseV4Fragment {
 		// TODO Auto-generated method stub
 		if (jsonUser != null) {
 
-			/***昵称***/
+			/*** 昵称 ***/
 			if (jsonUser.getU_nickname() == null || jsonUser.getU_nickname().isEmpty()) {
 				nickNameTextView.setText("未填写");
 			} else {
 				nickNameTextView.setText(jsonUser.getU_nickname());
 			}
 
-			/***性别***/
+			/*** 性别 ***/
 			genderText.setText(jsonUser.getU_gender());
 
-			/***生日***/
+			/*** 生日 ***/
 			birthdayTextView.setText(DateTimeTools.DateToString(jsonUser.getU_birthday()));
 
-			/***学校***/
-			schoolTextView.setText(SchoolDbService.getInstance(getActivity()).getSchoolNameById(jsonUser.getU_schoolid()));
+			/*** 学校 ***/
+			schoolTextView
+					.setText(SchoolDbService.getInstance(getActivity()).getSchoolNameById(jsonUser.getU_schoolid()));
 
-			/***当前身份***/
+			/*** 当前身份 ***/
 			statusTextView.setText(jsonUser.getU_identity());
 
-			/***情感状态***/
+			/*** 情感状态 ***/
 			loveStatusTextView.setText(jsonUser.getU_love_state());
 
-			/***兴趣爱好***/
-			interestTextView.setText(jsonUser.getU_interest_items().replace("|", "\n"));
+			/*** 兴趣爱好 ***/
+			if (!TextUtils.isEmpty(jsonUser.getU_interest_items())) {
+				interestTextView.setText(jsonUser.getU_interest_items().replace("|", "\n"));
+			}
+			
+			/*** 擅长技能 ***/
+			if (!TextUtils.isEmpty(jsonUser.getU_skill_items())) {
+				skillTextView.setText(jsonUser.getU_skill_items().replace("|", "\n"));
+			}
 
-			/***擅长技能***/
-			skillTextView.setText(jsonUser.getU_skill_items().replace("|", "\n"));
-
-			/***所属行业***/
+			/*** 所属行业 ***/
 			if (jsonUser.getU_industry_item() != null && jsonUser.getU_industry_item().length() > 0) {
 				industryTextView.setText(jsonUser.getU_industry_item());
 				industryTextView.setOnClickListener(new OnClickListener() {
@@ -166,7 +171,7 @@ public class PersonDataFragment extends BaseV4Fragment {
 				});
 			}
 
-			/***个人签名***/
+			/*** 个人签名 ***/
 			if (jsonUser.getU_introduce() == null || jsonUser.getU_introduce().isEmpty()) {
 				introTextView.setText("未填写");
 			} else {

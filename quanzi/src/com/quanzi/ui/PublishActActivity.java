@@ -11,11 +11,28 @@ import java.util.Locale;
 
 import org.apache.http.Header;
 
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
+import com.quanzi.R;
+import com.quanzi.base.BaseActivity;
+import com.quanzi.base.BaseApplication;
+import com.quanzi.config.Constants;
+import com.quanzi.customewidget.MyAlertDialog;
+import com.quanzi.customewidget.MyMenuDialog;
+import com.quanzi.table.ActivityTable;
+import com.quanzi.table.PostTable;
+import com.quanzi.utils.AsyncHttpClientTool;
+import com.quanzi.utils.DateTimeTools;
+import com.quanzi.utils.ImageTools;
+import com.quanzi.utils.LogTool;
+import com.quanzi.utils.ToastTool;
+import com.quanzi.utils.UserPreference;
+
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -38,30 +55,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.loopj.android.http.RequestParams;
-import com.loopj.android.http.TextHttpResponseHandler;
-import com.quanzi.R;
-import com.quanzi.base.BaseActivity;
-import com.quanzi.base.BaseApplication;
-import com.quanzi.config.Constants;
-import com.quanzi.customewidget.MyAlertDialog;
-import com.quanzi.customewidget.MyMenuDialog;
-import com.quanzi.table.ActivityTable;
-import com.quanzi.table.PostTable;
-import com.quanzi.utils.AsyncHttpClientTool;
-import com.quanzi.utils.DateTimeTools;
-import com.quanzi.utils.ImageTools;
-import com.quanzi.utils.LogTool;
-import com.quanzi.utils.ToastTool;
-import com.quanzi.utils.UserPreference;
-
 /**
  *
- * 项目名称：quanzi  
- * 类名称：PublishActActivity  
- * 类描述：发布活动页面
+ * 项目名称：quanzi 类名称：PublishActActivity 类描述：发布活动页面
+ * 
  * @author zhangshuai
- * @date 创建时间：2015-4-29 下午7:56:55 
+ * @date 创建时间：2015-4-29 下午7:56:55
  *
  */
 public class PublishActActivity extends BaseActivity implements OnClickListener {
@@ -84,9 +83,10 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 	private UserPreference userPreference;
 	Calendar choosenCalendar = Calendar.getInstance(Locale.CHINA);
 
-	/**************用户变量**************/
+	/************** 用户变量 **************/
 	public static final int NUM = 200;
 	Dialog dialog;
+	boolean mFired = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -104,12 +104,14 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 	@Override
 	protected void findViewById() {
 		// TODO Auto-generated method stub
-		publishImageViews = new ImageView[] { (ImageView) findViewById(R.id.publish_image1), (ImageView) findViewById(R.id.publish_image2),
-				(ImageView) findViewById(R.id.publish_image3), (ImageView) findViewById(R.id.publish_image4), (ImageView) findViewById(R.id.publish_image5),
+		publishImageViews = new ImageView[] { (ImageView) findViewById(R.id.publish_image1),
+				(ImageView) findViewById(R.id.publish_image2), (ImageView) findViewById(R.id.publish_image3),
+				(ImageView) findViewById(R.id.publish_image4), (ImageView) findViewById(R.id.publish_image5),
 				(ImageView) findViewById(R.id.publish_image5) };
-		addPublishImageViews = new ImageView[] { (ImageView) findViewById(R.id.publish_addiamge1), (ImageView) findViewById(R.id.publish_addiamge2),
-				(ImageView) findViewById(R.id.publish_addiamge3), (ImageView) findViewById(R.id.publish_addiamge4),
-				(ImageView) findViewById(R.id.publish_addiamge5), (ImageView) findViewById(R.id.publish_addiamge6) };
+		addPublishImageViews = new ImageView[] { (ImageView) findViewById(R.id.publish_addiamge1),
+				(ImageView) findViewById(R.id.publish_addiamge2), (ImageView) findViewById(R.id.publish_addiamge3),
+				(ImageView) findViewById(R.id.publish_addiamge4), (ImageView) findViewById(R.id.publish_addiamge5),
+				(ImageView) findViewById(R.id.publish_addiamge6) };
 
 		publishBtn = (TextView) findViewById(R.id.publish_btn);
 		backBtn = findViewById(R.id.left_btn_bg);
@@ -209,11 +211,11 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 	}
 
 	/**
-	* 显示对话框，从拍照和相册选择图片来源
-	* 
-	* @param context
-	* @param isCrop
-	*/
+	 * 显示对话框，从拍照和相册选择图片来源
+	 * 
+	 * @param context
+	 * @param isCrop
+	 */
 	private void showPicturePicker(final int index) {
 
 		final MyMenuDialog myMenuDialog = new MyMenuDialog(PublishActActivity.this);
@@ -273,8 +275,11 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 	 * 从相册选择图片
 	 */
 	private void choosePhoto(int index) {
-		Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-		startActivityForResult(intent, index + 6);
+		Intent openAlbumIntent = new Intent(Intent.ACTION_GET_CONTENT);
+		openAlbumIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+		// Intent intent = new Intent(Intent.ACTION_PICK,
+		// MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		startActivityForResult(openAlbumIntent, index + 6);
 	}
 
 	/**
@@ -316,7 +321,8 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 			try {
 				Uri selectedImage = data.getData();
 				String[] filePathColumn = { MediaStore.Images.Media.DATA };
-				Cursor cursor = PublishActActivity.this.getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+				Cursor cursor = PublishActActivity.this.getContentResolver().query(selectedImage, filePathColumn, null,
+						null, null);
 				cursor.moveToFirst();
 				int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
 				photoUris[requestCode - 6] = cursor.getString(columnIndex);
@@ -336,40 +342,45 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 	 * 显示选择日期菜单
 	 */
 	private void showDatePicker() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		View view = View.inflate(this, R.layout.datetime_picker, null);
-		final DatePicker datePicker = (DatePicker) view.findViewById(R.id.datePicker);
-		final TimePicker timePicker = (TimePicker) view.findViewById(R.id.timePicker);
-		builder.setView(view);
-		Calendar calendar = Calendar.getInstance(Locale.CHINA);
-		calendar.setTimeInMillis(java.lang.System.currentTimeMillis());
-		datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null);
-		timePicker.setIs24HourView(true);
-		timePicker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
-		timePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
-		builder.setTitle("选取活动日期");
-		builder.setPositiveButton(" 确 定 ", new DialogInterface.OnClickListener() {
+		Dialog dateDialog = null;
 
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
-				dialog.cancel();
-				choosenCalendar.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), timePicker.getCurrentHour(),
-						timePicker.getCurrentMinute());
-				timeTextView.setText(DateTimeTools.DateToString(choosenCalendar.getTime()));
+		final Calendar c = Calendar.getInstance();
+		dateDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+
+			public void onDateSet(DatePicker dp, int year, int month, int dayOfMonth) {
+				if (mFired == true) {
+					return;
+				} else {
+					// first time mFired
+					mFired = true;
+				}
+				choosenCalendar.set(year, month, dayOfMonth);
+				Dialog timeDialog = null;
+				timeDialog = new TimePickerDialog(PublishActActivity.this, new TimePickerDialog.OnTimeSetListener() {
+					public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+						choosenCalendar.set(choosenCalendar.get(Calendar.YEAR), choosenCalendar.get(Calendar.MONTH),
+								choosenCalendar.get(Calendar.DAY_OF_MONTH), hourOfDay, minute);
+						timeTextView.setText(DateTimeTools.DateToString(choosenCalendar.getTime()));
+					}
+				}, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), false);
+				timeDialog.show();
 			}
-		});
 
-		Dialog dialog = builder.create();
-		dialog.show();
+		}, c.get(Calendar.YEAR), // 传入年份
+				c.get(Calendar.MONTH), // 传入月份
+				c.get(Calendar.DAY_OF_MONTH) // 传入天数
+		);
+
+		dateDialog.show();
+
 	}
 
 	/**
-	* 显示对话框，选择对象
-	* 
-	* @param context
-	* @param isCrop
-	*/
+	 * 显示对话框，选择对象
+	 * 
+	 * @param context
+	 * @param isCrop
+	 */
 	private void showTargetPicker() {
 
 		final MyMenuDialog myMenuDialog = new MyMenuDialog(PublishActActivity.this);
@@ -393,11 +404,11 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 	}
 
 	/**
-	* 显示对话框，选择类型
-	* 
-	* @param context
-	* @param isCrop
-	*/
+	 * 显示对话框，选择类型
+	 * 
+	 * @param context
+	 * @param isCrop
+	 */
 	private void showTypePicker() {
 
 		final MyMenuDialog myMenuDialog = new MyMenuDialog(PublishActActivity.this);

@@ -8,6 +8,20 @@ import java.util.List;
 
 import org.apache.http.Header;
 
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
+import com.quanzi.R;
+import com.quanzi.base.BaseActivity;
+import com.quanzi.base.BaseApplication;
+import com.quanzi.customewidget.MyAlertDialog;
+import com.quanzi.customewidget.MyMenuDialog;
+import com.quanzi.table.PostTable;
+import com.quanzi.utils.AsyncHttpClientTool;
+import com.quanzi.utils.ImageTools;
+import com.quanzi.utils.LogTool;
+import com.quanzi.utils.ToastTool;
+import com.quanzi.utils.UserPreference;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
@@ -30,20 +44,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.loopj.android.http.RequestParams;
-import com.loopj.android.http.TextHttpResponseHandler;
-import com.quanzi.R;
-import com.quanzi.base.BaseActivity;
-import com.quanzi.base.BaseApplication;
-import com.quanzi.customewidget.MyAlertDialog;
-import com.quanzi.customewidget.MyMenuDialog;
-import com.quanzi.table.PostTable;
-import com.quanzi.utils.AsyncHttpClientTool;
-import com.quanzi.utils.ImageTools;
-import com.quanzi.utils.LogTool;
-import com.quanzi.utils.ToastTool;
-import com.quanzi.utils.UserPreference;
 
 /**
  *
@@ -240,8 +240,10 @@ public class PublishPostActivity extends BaseActivity implements OnClickListener
 	 * ¥”œ‡≤·—°‘ÒÕº∆¨
 	 */
 	private void choosePhoto(int index) {
-		Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-		startActivityForResult(intent, index + 6);
+		Intent openAlbumIntent = new Intent(Intent.ACTION_GET_CONTENT);
+		openAlbumIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+//		Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		startActivityForResult(openAlbumIntent, index + 6);
 	}
 
 	/**

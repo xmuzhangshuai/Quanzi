@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,22 +33,19 @@ import com.quanzi.utils.ToastTool;
 import com.quanzi.utils.UserPreference;
 
 /**
- * 类名称：RegSchoolFragment
- * 类描述：学校选择页面
- * 创建人： 张帅
- * 创建时间：2014年7月6日 下午7:56:17
+ * 类名称：RegSchoolFragment 类描述：学校选择页面 创建人： 张帅 创建时间：2014年7月6日 下午7:56:17
  *
  */
 public class RegSchoolFragment extends BaseV4Fragment {
-	/*************Views************/
+	/************* Views ************/
 	private View rootView;// 根View
-	private TextView topNavigation;//导航栏文字
-	private View leftImageButton;//导航栏左侧按钮
-	private View rightImageButton;//导航栏右侧按钮
-	private TextView leftNavigation;//步骤
-	private Spinner mProvinceView;//省
-	private Spinner mCityView;//城市
-	private Spinner mSchoolView;//学校
+	private TextView topNavigation;// 导航栏文字
+	private View leftImageButton;// 导航栏左侧按钮
+	private View rightImageButton;// 导航栏右侧按钮
+	private TextView leftNavigation;// 步骤
+	private Spinner mProvinceView;// 省
+	private Spinner mCityView;// 城市
+	private Spinner mSchoolView;// 学校
 
 	public SharedPreferences locationPreferences;// 记录用户位置
 	private UserPreference userPreference;
@@ -57,12 +55,12 @@ public class RegSchoolFragment extends BaseV4Fragment {
 	private City currentCity;
 	private School currentSchool;
 
-	private List<Province> provinceList;//省份列表
-	private List<String> provinceNameList;//省份名称列表
-	private List<City> cityList;//城市列表
-	private List<String> cityNameList;//城市名称列表
-	private List<School> schoolList;//学校列表
-	private List<String> schoolNameList;//学校名称列表
+	private List<Province> provinceList;// 省份列表
+	private List<String> provinceNameList;// 省份名称列表
+	private List<City> cityList;// 城市列表
+	private List<String> cityNameList;// 城市名称列表
+	private List<School> schoolList;// 学校列表
+	private List<String> schoolNameList;// 学校名称列表
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +68,7 @@ public class RegSchoolFragment extends BaseV4Fragment {
 		super.onCreate(savedInstanceState);
 		userPreference = BaseApplication.getInstance().getUserPreference();
 
-		//获取用户位置
+		// 获取用户位置
 		locationPreferences = getActivity().getSharedPreferences("location", Context.MODE_PRIVATE);
 		mProvince = locationPreferences.getString(DefaultKeys.USER_PROVINCE, "");
 		mCity = locationPreferences.getString(DefaultKeys.USER_CITY, "");
@@ -108,10 +106,10 @@ public class RegSchoolFragment extends BaseV4Fragment {
 		rightImageButton.setEnabled(false);
 		leftNavigation.setText("3/4");
 
-		//初始化省份信息
+		// 初始化省份信息
 		initProvinceData();
 
-		//点击省份时初始化对应城市
+		// 点击省份时初始化对应城市
 		mProvinceView.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
@@ -137,7 +135,7 @@ public class RegSchoolFragment extends BaseV4Fragment {
 			}
 		});
 
-		//点击城市时初始化对应学校
+		// 点击城市时初始化对应学校
 		mCityView.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
@@ -172,7 +170,7 @@ public class RegSchoolFragment extends BaseV4Fragment {
 			}
 		});
 
-		//选学校时
+		// 选学校时
 		mSchoolView.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
@@ -205,7 +203,7 @@ public class RegSchoolFragment extends BaseV4Fragment {
 			}
 		});
 
-		//初始化城市信息
+		// 初始化城市信息
 		initCityData();
 	}
 
@@ -213,7 +211,7 @@ public class RegSchoolFragment extends BaseV4Fragment {
 	 * 初始化省份信息
 	 */
 	private void initProvinceData() {
-		int currentPostion = 0;//当前位置
+		int currentPostion = 0;// 当前位置
 		provinceList = new ArrayList<Province>();
 		provinceNameList = new ArrayList<String>();
 		provinceList = ProvinceDbService.getInstance(getActivity()).provinceDao.loadAll();
@@ -246,14 +244,14 @@ public class RegSchoolFragment extends BaseV4Fragment {
 	 * 初始化城市信息
 	 */
 	private void initCityData() {
-		int currentPostion = 0;//当前位置
+		int currentPostion = 0;// 当前位置
 		if (currentProvince != null) {
 			cityList = CityDbService.getInstance(getActivity()).getCityListByProvince(currentProvince);
 			cityNameList = new ArrayList<String>();
 			if (cityList != null) {
 				for (int i = 0; i < cityList.size(); i++) {
 					cityNameList.add(cityList.get(i).getCityName());
-					//如果已经有保存
+					// 如果已经有保存
 					if (userPreference.getU_cityid() > -1) {
 						if (cityList.get(i).getCityID().intValue() == userPreference.getU_cityid()) {
 							currentCity = cityList.get(i);
@@ -282,19 +280,19 @@ public class RegSchoolFragment extends BaseV4Fragment {
 
 		boolean cancel = false;
 
-		//检查是否选择省
-		if (mProvinceView.getSelectedItem().toString().length() == 0) {
+		// 检查是否选择省
+		if (TextUtils.isEmpty(mProvinceView.getSelectedItem().toString())) {
 			cancel = true;
 			ToastTool.showShort(getActivity(), "请选择省");
 		}
 
-		//检查是否选城市
-		else if (mCityView.getSelectedItem().toString().length() == 0) {
+		// 检查是否选城市
+		else if (TextUtils.isEmpty(mCityView.getSelectedItem().toString())) {
 			cancel = true;
 			ToastTool.showShort(getActivity(), "请选择所在城市");
 		}
-		//检查是否选学校
-		else if (mSchoolView.getSelectedItem().toString().length() == 0) {
+		// 检查是否选学校
+		else if (TextUtils.isEmpty(mSchoolView.getSelectedItem().toString())) {
 			cancel = true;
 			ToastTool.showShort(getActivity(), "请选择所在学校");
 		}
