@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.BaseAdapter;
@@ -29,6 +30,7 @@ import com.quanzi.base.BaseApplication;
 import com.quanzi.base.BaseFragmentActivity;
 import com.quanzi.config.Constants;
 import com.quanzi.config.Constants.CommentType;
+import com.quanzi.customewidget.MyAlertDialog;
 import com.quanzi.jsonobject.JsonPostItem;
 import com.quanzi.table.CommentTable;
 import com.quanzi.table.PostTable;
@@ -322,7 +324,17 @@ public class MyPersonDetailActivity extends BaseFragmentActivity implements OnCl
 					overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 				}
 			});
+			view.setOnLongClickListener(new OnLongClickListener() {
 
+				@Override
+				public boolean onLongClick(View v) {
+					// TODO Auto-generated method stub
+					if (userPreference.getU_id() == jsonPostItem.getP_userid()) {
+						deletePost(position);
+					}
+					return false;
+				}
+			});
 			// 设置头像
 			if (!TextUtils.isEmpty(jsonPostItem.getP_small_avatar())) {
 				imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonPostItem.getP_small_avatar()), holder.headImageView,
@@ -693,6 +705,61 @@ public class MyPersonDetailActivity extends BaseFragmentActivity implements OnCl
 			intent.putExtra(GalleryPictureActivity.POSITON, postion);
 			startActivity(intent);
 			overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
+		}
+
+		/**
+		 * 删帖子
+		 */
+		private void deletePost(final int position) {
+
+			final MyAlertDialog dialog = new MyAlertDialog(MyPersonDetailActivity.this);
+			dialog.setTitle("删除");
+			dialog.setMessage("确定要删除帖子吗？");
+			View.OnClickListener comfirm = new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					dialog.dismiss();
+					RequestParams params = new RequestParams();
+					params.put(PostTable.P_POSTID, jsonPostItemList.get(position).getP_postid());
+					params.put(PostTable.P_USERID, jsonPostItemList.get(position).getP_userid());
+					TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
+
+						@Override
+						public void onSuccess(int statusCode, Header[] headers, String response) {
+							// TODO Auto-generated method stub
+							if (statusCode == 200) {
+								if (response.equals("1")) {
+									jsonPostItemList.remove(position);
+									mAdapter.notifyDataSetChanged();
+								} else {
+									LogTool.e("删除帖子返回-1");
+								}
+							}
+						}
+
+						@Override
+						public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+							// TODO Auto-generated method stub
+							LogTool.e("删除帖子服务器错误，代码" + statusCode);
+						}
+
+					};
+					AsyncHttpClientTool.post(MyPersonDetailActivity.this, "post/delete", params, responseHandler);
+				}
+			};
+			View.OnClickListener cancle = new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					dialog.dismiss();
+				}
+			};
+			dialog.setPositiveButton("确定", comfirm);
+			dialog.setNegativeButton("取消", cancle);
+			dialog.show();
 		}
 	}
 

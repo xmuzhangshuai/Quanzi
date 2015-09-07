@@ -104,14 +104,12 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 	@Override
 	protected void findViewById() {
 		// TODO Auto-generated method stub
-		publishImageViews = new ImageView[] { (ImageView) findViewById(R.id.publish_image1),
-				(ImageView) findViewById(R.id.publish_image2), (ImageView) findViewById(R.id.publish_image3),
-				(ImageView) findViewById(R.id.publish_image4), (ImageView) findViewById(R.id.publish_image5),
+		publishImageViews = new ImageView[] { (ImageView) findViewById(R.id.publish_image1), (ImageView) findViewById(R.id.publish_image2),
+				(ImageView) findViewById(R.id.publish_image3), (ImageView) findViewById(R.id.publish_image4), (ImageView) findViewById(R.id.publish_image5),
 				(ImageView) findViewById(R.id.publish_image5) };
-		addPublishImageViews = new ImageView[] { (ImageView) findViewById(R.id.publish_addiamge1),
-				(ImageView) findViewById(R.id.publish_addiamge2), (ImageView) findViewById(R.id.publish_addiamge3),
-				(ImageView) findViewById(R.id.publish_addiamge4), (ImageView) findViewById(R.id.publish_addiamge5),
-				(ImageView) findViewById(R.id.publish_addiamge6) };
+		addPublishImageViews = new ImageView[] { (ImageView) findViewById(R.id.publish_addiamge1), (ImageView) findViewById(R.id.publish_addiamge2),
+				(ImageView) findViewById(R.id.publish_addiamge3), (ImageView) findViewById(R.id.publish_addiamge4),
+				(ImageView) findViewById(R.id.publish_addiamge5), (ImageView) findViewById(R.id.publish_addiamge6) };
 
 		publishBtn = (TextView) findViewById(R.id.publish_btn);
 		backBtn = findViewById(R.id.left_btn_bg);
@@ -321,8 +319,7 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 			try {
 				Uri selectedImage = data.getData();
 				String[] filePathColumn = { MediaStore.Images.Media.DATA };
-				Cursor cursor = PublishActActivity.this.getContentResolver().query(selectedImage, filePathColumn, null,
-						null, null);
+				Cursor cursor = PublishActActivity.this.getContentResolver().query(selectedImage, filePathColumn, null, null, null);
 				cursor.moveToFirst();
 				int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
 				photoUris[requestCode - 6] = cursor.getString(columnIndex);
@@ -514,7 +511,7 @@ public class PublishActActivity extends BaseActivity implements OnClickListener 
 			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
 				// TODO Auto-generated method stub
 				ToastTool.showShort(PublishActActivity.this, "发布失败！");
-				LogTool.e("发布时失败！" + statusCode + "\n");
+				LogTool.e("发布时服务器失败！" + statusCode + "\n" + errorResponse);
 			}
 
 			@Override

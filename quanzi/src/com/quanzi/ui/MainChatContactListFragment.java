@@ -49,7 +49,7 @@ import com.quanzi.utils.UserPreference;
  */
 public class MainChatContactListFragment extends BaseV4Fragment {
 	private View rootView;// 根View
-	private ImageView newMsg;
+//	private ImageView newMsg;
 	private ListView mContactListView;
 	private TextView mEmpty;
 	private ContractListAdapter mAdapter;
@@ -210,18 +210,18 @@ public class MainChatContactListFragment extends BaseV4Fragment {
 	/**
 	 * 显示或隐藏新消息提示红点
 	 */
-	public void showNewMsgTip(final boolean show) {
-		// 可能会在子线程中调到这方法
-		getActivity().runOnUiThread(new Runnable() {
-			public void run() {
-				if (show) {
-					newMsg.setVisibility(View.VISIBLE);
-				} else {
-					newMsg.setVisibility(View.GONE);
-				}
-			}
-		});
-	}
+//	public void showNewMsgTip(final boolean show) {
+//		// 可能会在子线程中调到这方法
+//		getActivity().runOnUiThread(new Runnable() {
+//			public void run() {
+//				if (show) {
+//					newMsg.setVisibility(View.VISIBLE);
+//				} else {
+//					newMsg.setVisibility(View.GONE);
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * 获取所有会话

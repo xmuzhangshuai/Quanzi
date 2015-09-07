@@ -703,12 +703,10 @@ public class MainExploreActFragment extends BaseV4Fragment {
 						public void onSuccess(int statusCode, Header[] headers, String response) {
 							// TODO Auto-generated method stub
 							if (statusCode == 200) {
-								if (response.equals("1")) {
+								if (!response.equals("-1")) {
 									jsonActItemList.remove(position);
 									mAdapter.notifyDataSetChanged();
-								} else {
-									LogTool.e("É¾³ý»î¶¯·µ»Ø-1");
-								}
+								} 
 							}
 						}
 

@@ -55,7 +55,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/day_recommend_dot_space"
                     android:ellipsize="end"
-                    android:maxLength="4"
+                    android:maxLength="8"
                     android:textColor="@color/black"
                     android:textSize="@dimen/day_recommend_user_font" />
 

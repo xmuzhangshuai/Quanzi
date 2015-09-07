@@ -106,12 +106,7 @@ public class ContractListAdapter extends BaseAdapter {
 		EMConversation conversation = conversationList.get(position);
 		User user = UserDbService.getInstance(mContext).getUserById(Integer.parseInt(conversation.getUserName()));
 
-		try {
-			holder.name.setText(conversation.getLastMessage().getStringAttribute("username"));
-		} catch (EaseMobException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		holder.name.setText(user.getNickname());
 
 		if (conversation.getUnreadMsgCount() > 0) {
 			// 显示与此用户的消息未读数
@@ -124,8 +119,7 @@ public class ContractListAdapter extends BaseAdapter {
 		if (conversation.getMsgCount() != 0) {
 			// 把最后一条消息的内容作为item的message内容
 			EMMessage lastMessage = conversation.getLastMessage();
-			holder.message.setText(convertNormalStringToSpannableString(getMessageDigest(lastMessage, mContext)),
-					BufferType.SPANNABLE);
+			holder.message.setText(convertNormalStringToSpannableString(getMessageDigest(lastMessage, mContext)), BufferType.SPANNABLE);
 
 			holder.time.setText(DateUtils.getTimestampString(new Date(lastMessage.getMsgTime())));
 			if (lastMessage.direct == EMMessage.Direct.SEND && lastMessage.status == EMMessage.Status.FAIL) {
@@ -137,8 +131,7 @@ public class ContractListAdapter extends BaseAdapter {
 
 		ImageLoader imageLoader = ImageLoader.getInstance();
 		if (user != null) {
-			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(user.getSmall_avatar()), holder.avatar,
-					ImageLoaderTool.getHeadImageOptions(10));
+			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(user.getSmall_avatar()), holder.avatar, ImageLoaderTool.getHeadImageOptions(10));
 		}
 
 		return convertView;
@@ -158,13 +151,13 @@ public class ContractListAdapter extends BaseAdapter {
 		}
 	}
 
-	//	public void addFirst(Conversation item) {
-	//		if (conversationList.contains(item)) {
-	//			conversationList.remove(item);
-	//		}
-	//		conversationList.addFirst(item);
-	//		notifyDataSetChanged();
-	//	}
+	// public void addFirst(Conversation item) {
+	// if (conversationList.contains(item)) {
+	// conversationList.remove(item);
+	// }
+	// conversationList.addFirst(item);
+	// notifyDataSetChanged();
+	// }
 
 	/**
 	 * 根据消息内容和消息类型获取消息内容提示
@@ -178,19 +171,23 @@ public class ContractListAdapter extends BaseAdapter {
 		switch (message.getType()) {
 		case LOCATION: // 位置消息
 			if (message.direct == EMMessage.Direct.RECEIVE) {
-				//从sdk中提到了ui中，使用更简单不犯错的获取string方法
-				//				digest = EasyUtils.getAppResourceString(context, "location_recv");
+				// 从sdk中提到了ui中，使用更简单不犯错的获取string方法
+				// digest = EasyUtils.getAppResourceString(context,
+				// "location_recv");
 				digest = getString(context, R.string.location_recv);
 				digest = String.format(digest, message.getStringAttribute("username", ""));
 				return digest;
 			} else {
-				//				digest = EasyUtils.getAppResourceString(context, "location_prefix");
+				// digest = EasyUtils.getAppResourceString(context,
+				// "location_prefix");
 				digest = getString(context, R.string.location_prefix);
 			}
 			break;
 		case IMAGE: // 图片消息
-			//			ImageMessageBody imageBody = (ImageMessageBody) message.getBody();
-			//			digest = getString(context, R.string.picture) + imageBody.getFileName();
+			// ImageMessageBody imageBody = (ImageMessageBody)
+			// message.getBody();
+			// digest = getString(context, R.string.picture) +
+			// imageBody.getFileName();
 			digest = getString(context, R.string.picture);
 			break;
 		case VOICE:// 语音消息

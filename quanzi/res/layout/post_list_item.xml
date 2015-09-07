@@ -62,7 +62,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/day_recommend_help_padding"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/day_recommend_help_padding"
+                    android:layout_marginRight="@dimen/space22"
                     android:layout_toLeftOf="@+id/time"
                     android:background="@drawable/sel_concern_gray_green"
                     android:button="@null"
