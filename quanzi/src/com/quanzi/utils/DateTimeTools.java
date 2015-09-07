@@ -54,6 +54,16 @@ public class DateTimeTools {
 			return "";
 		}
 	}
+	
+	public static String DateToStringForYAM(Date date) {
+		if (date != null) {
+			SimpleDateFormat format = new SimpleDateFormat("yy-MM-dd");
+			return format.format(date);
+		} else {
+			return "";
+		}
+	}
+
 
 	public static String getMonAndDay(Date date) {
 		SimpleDateFormat format = new SimpleDateFormat("MM-dd HH:mm");
@@ -147,7 +157,7 @@ public class DateTimeTools {
 		Map<String, Integer> interval = DateTimeTools.compareTo(DateTimeTools.getCurrentDateTime(), date);
 		// 根据时间先后设置人性化时间提醒
 		if (interval.get("day") >= 7) {
-			intervalString = DateToString(date);
+			intervalString = DateToStringForYAM(date);
 		} else if (interval.get("day") >= 1) {
 			intervalString = interval.get("day") + "天前";
 		} else if (interval.get("hour") >= 1) {

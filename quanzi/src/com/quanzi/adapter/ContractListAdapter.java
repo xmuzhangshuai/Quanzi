@@ -23,7 +23,6 @@ import android.widget.TextView.BufferType;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
-import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.DateUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.quanzi.R;
@@ -85,22 +84,27 @@ public class ContractListAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
 
+		View view = convertView;
+		final ViewHolder holder;
 		if (convertView == null) {
-			convertView = mInflater.inflate(R.layout.home_list_item, parent, false);
-		}
-
-		ViewHolder holder = (ViewHolder) convertView.getTag();
-
-		if (holder == null) {
+			view = mInflater.inflate(R.layout.home_list_item, parent, false);
 			holder = new ViewHolder();
-			holder.name = (TextView) convertView.findViewById(R.id.recent_list_item_name);
-			holder.message = (TextView) convertView.findViewById(R.id.recent_list_item_msg);
-			holder.unreadLabel = (TextView) convertView.findViewById(R.id.unreadmsg);
-			holder.time = (TextView) convertView.findViewById(R.id.recent_list_item_time);
-			holder.avatar = (ImageView) convertView.findViewById(R.id.icon);
-			holder.msgState = convertView.findViewById(R.id.msg_state);
-			convertView.setTag(holder);
+			holder.name = (TextView) view.findViewById(R.id.recent_list_item_name);
+			holder.message = (TextView) view.findViewById(R.id.recent_list_item_msg);
+			holder.unreadLabel = (TextView) view.findViewById(R.id.unreadmsg);
+			holder.time = (TextView) view.findViewById(R.id.recent_list_item_time);
+			holder.avatar = (ImageView) view.findViewById(R.id.icon);
+			holder.msgState = view.findViewById(R.id.msg_state);
+			view.setTag(holder);
+		}else {
+			holder = (ViewHolder) view.getTag(); // 把数据取出来
 		}
+
+//		ViewHolder holder = (ViewHolder) convertView.getTag();
+//
+//		if (holder == null) {
+//			
+//		}
 
 		// 获取与此用户/群组的会话
 		EMConversation conversation = conversationList.get(position);
@@ -134,7 +138,7 @@ public class ContractListAdapter extends BaseAdapter {
 			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(user.getSmall_avatar()), holder.avatar, ImageLoaderTool.getHeadImageOptions(10));
 		}
 
-		return convertView;
+		return view;
 	}
 
 	public void remove(int position) {

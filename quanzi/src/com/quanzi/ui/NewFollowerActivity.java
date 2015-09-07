@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.http.Header;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,8 +47,8 @@ public class NewFollowerActivity extends BaseActivity {
 
 	/***********VIEWS************/
 	private ListView myQuanziListView;
-	private TextView leftTextView;//导航栏左侧文字
-	private View leftButton;//导航栏左侧按钮
+	private TextView leftTextView;// 导航栏左侧文字
+	private View leftButton;// 导航栏左侧按钮
 	List<JsonConcern> jsonConcernList;
 	private UserPreference userPreference;
 
@@ -194,18 +195,36 @@ public class NewFollowerActivity extends BaseActivity {
 				holder.nameTextView = (TextView) view.findViewById(R.id.name);
 				holder.concernBtn = (CheckBox) view.findViewById(R.id.concern_btn);
 				holder.timeTextView = (TextView) view.findViewById(R.id.time);
-				view.setTag(holder); // 给View添加一个格外的数据 
+				view.setTag(holder); // 给View添加一个格外的数据
 			} else {
-				holder = (ViewHolder) view.getTag(); // 把数据取出来  
+				holder = (ViewHolder) view.getTag(); // 把数据取出来
 			}
+			view.setOnClickListener(new OnClickListener() {
 
-			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonConcern.getUser_small_avatar()),
-					holder.headImageView, ImageLoaderTool.getHeadImageOptions(0));
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					if (jsonConcern.getUser_id() == userPreference.getU_id()) {
+						Intent intent = new Intent(NewFollowerActivity.this, MyPersonDetailActivity.class);
+						startActivity(intent);
+						overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+					} else {
+						Intent intent = new Intent(NewFollowerActivity.this, PersonDetailActivity.class);
+						intent.putExtra(UserTable.U_ID, jsonConcern.getUser_id());
+						startActivity(intent);
+						overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+					}
+
+				}
+			});
+
+			imageLoader.displayImage(AsyncHttpClientTool.getAbsoluteUrl(jsonConcern.getUser_small_avatar()), holder.headImageView,
+					ImageLoaderTool.getHeadImageOptions(0));
 
 			holder.nameTextView.setText(jsonConcern.getUser_name());
 			holder.timeTextView.setText(DateTimeTools.getMonAndDay(jsonConcern.getConcern_date()));
 
-			//显示关注
+			// 显示关注
 			if (jsonConcern.getUser_id() != userPreference.getU_id()) {
 				holder.concernBtn.setVisibility(View.VISIBLE);
 				holder.concernBtn.setChecked(jsonConcern.isIs_concern());
@@ -224,9 +243,9 @@ public class NewFollowerActivity extends BaseActivity {
 							public void onStart() {
 								// TODO Auto-generated method stub
 								super.onStart();
-								if (!jsonConcern.isIs_concern()) {//没有关注过
+								if (!jsonConcern.isIs_concern()) {// 没有关注过
 									jsonConcern.setIs_concern(true);
-								} else {//已经关注了
+								} else {// 已经关注了
 									jsonConcern.setIs_concern(false);
 								}
 							}
@@ -259,11 +278,9 @@ public class NewFollowerActivity extends BaseActivity {
 
 						};
 						if (!jsonConcern.isIs_concern()) {
-							AsyncHttpClientTool.post(NewFollowerActivity.this, "quanzi/concern", params,
-									responseHandler);
+							AsyncHttpClientTool.post(NewFollowerActivity.this, "quanzi/concern", params, responseHandler);
 						} else {
-							AsyncHttpClientTool.post(NewFollowerActivity.this, "quanzi/undoConcern", params,
-									responseHandler);
+							AsyncHttpClientTool.post(NewFollowerActivity.this, "quanzi/undoConcern", params, responseHandler);
 						}
 					}
 				});

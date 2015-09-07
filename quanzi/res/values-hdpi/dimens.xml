@@ -3,5 +3,8 @@
     <dimen name="get_image_btn_padding">70dp</dimen>
     <dimen name="message_maxlength">200dp</dimen>
     <dimen name="day_recommend_dot_space">12dp</dimen>
+    <dimen name="space22">12dp</dimen>
+    <dimen name="share_space">8dp</dimen>
+    <dimen name="personal_timecapsule_padding">12dp</dimen>
 
 </resources>
