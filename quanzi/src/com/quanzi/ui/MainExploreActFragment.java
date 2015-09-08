@@ -111,6 +111,7 @@ public class MainExploreActFragment extends BaseV4Fragment {
 		// TODO Auto-generated method stub
 		super.onResume();
 		actListView.setOnScrollListener(new PauseOnScrollListener(imageLoader, pauseOnScroll, pauseOnFling));
+		refresh();
 	}
 
 	@Override
@@ -216,7 +217,7 @@ public class MainExploreActFragment extends BaseV4Fragment {
 	private void getDataTask(int p) {
 		final int page = p;
 		RequestParams params = new RequestParams();
-		params.put("page", pageNow);
+		params.put("page", page);
 		params.put(UserTable.U_SCHOOLID, userPreference.getU_schoolid());
 		params.put(UserTable.U_ID, userPreference.getU_id());
 		params.put(ActivityTable.A_ACT_TYPE, actType);
@@ -706,7 +707,7 @@ public class MainExploreActFragment extends BaseV4Fragment {
 								if (!response.equals("-1")) {
 									jsonActItemList.remove(position);
 									mAdapter.notifyDataSetChanged();
-								} 
+								}
 							}
 						}
 

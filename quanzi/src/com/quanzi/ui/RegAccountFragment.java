@@ -333,40 +333,39 @@ public class RegAccountFragment extends BaseV4Fragment {
 	 * @return
 	 */
 	private void getAuthCode() {
-		responseAuthcode = "123456";
-//		RequestParams params = new RequestParams();
-//		params.put(UserTable.U_TEL, mPhone);
-//		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
-//
-//			@Override
-//			public void onSuccess(int statusCode, Header[] headers, String response) {
-//				// TODO Auto-generated method stub
-//
-//				if (response.length() == 6) {
-//					responseAuthcode = response;
-//				} else if (response.endsWith("-1")) {
-//					ToastTool.showLong(getActivity(), "服务器出现异常，请稍后再试");
-//					LogTool.e("获取验证码服务器返回-1");
-//				} else if (response.endsWith("1")) {
-//					ToastTool.showShort(getActivity(), "手机号码为空");
-//				} else {
-//					LogTool.e("获取验证码服务器错误");
-//				}
-//			}
-//
-//			@Override
-//			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
-//				// TODO Auto-generated method stub
-//				LogTool.e("验证码", "服务器错误,错误代码" + statusCode + "，  原因" + errorResponse);
-//			}
-//
-//			@Override
-//			public void onFinish() {
-//				// TODO Auto-generated method stub
-//				super.onFinish();
-//			}
-//		};
-//		AsyncHttpClientTool.post("user/getValidateCode", params, responseHandler);
+		RequestParams params = new RequestParams();
+		params.put(UserTable.U_TEL, mPhone);
+		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler() {
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, String response) {
+				// TODO Auto-generated method stub
+
+				if (response.length() == 6) {
+					responseAuthcode = response;
+				} else if (response.endsWith("-1")) {
+					ToastTool.showLong(getActivity(), "服务器出现异常，请稍后再试");
+					LogTool.e("获取验证码服务器返回-1");
+				} else if (response.endsWith("1")) {
+					ToastTool.showShort(getActivity(), "手机号码为空");
+				} else {
+					LogTool.e("获取验证码服务器错误");
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+				// TODO Auto-generated method stub
+				LogTool.e("验证码", "服务器错误,错误代码" + statusCode + "，  原因" + errorResponse);
+			}
+
+			@Override
+			public void onFinish() {
+				// TODO Auto-generated method stub
+				super.onFinish();
+			}
+		};
+		AsyncHttpClientTool.post("user/getValidateCode", params, responseHandler);
 	}
 
 	/**

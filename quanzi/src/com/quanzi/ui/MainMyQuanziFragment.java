@@ -105,6 +105,8 @@ public class MainMyQuanziFragment extends BaseV4Fragment implements OnClickListe
 		// TODO Auto-generated method stub
 		super.onResume();
 		postListView.setOnScrollListener(new PauseOnScrollListener(imageLoader, pauseOnScroll, pauseOnFling));
+		refreshData();
+		refresh();
 	}
 
 	@Override
@@ -148,6 +150,9 @@ public class MainMyQuanziFragment extends BaseV4Fragment implements OnClickListe
 
 				if (pageNow >= 0)
 					++pageNow;
+				if (pageNow < 0) {
+					pageNow = 0;
+				}
 				getDataTask(pageNow);
 			}
 		});
@@ -235,7 +240,7 @@ public class MainMyQuanziFragment extends BaseV4Fragment implements OnClickListe
 	private void getDataTask(int p) {
 		final int page = p;
 		RequestParams params = new RequestParams();
-		params.put("page", pageNow);
+		params.put("page", page);
 		params.put(UserTable.U_ID, userPreference.getU_id());
 		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
 

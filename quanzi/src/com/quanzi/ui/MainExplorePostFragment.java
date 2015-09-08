@@ -117,6 +117,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 		// TODO Auto-generated method stub
 		super.onResume();
 		postListView.setOnScrollListener(new PauseOnScrollListener(imageLoader, pauseOnScroll, pauseOnFling));
+		refresh();
 	}
 
 	@Override
@@ -203,7 +204,7 @@ public class MainExplorePostFragment extends BaseV4Fragment {
 	private void getDataTask(int p) {
 		final int page = p;
 		RequestParams params = new RequestParams();
-		params.put("page", pageNow);
+		params.put("page", page);
 		params.put(UserTable.U_SCHOOLID, userPreference.getU_schoolid());
 		params.put(UserTable.U_ID, userPreference.getU_id());
 		params.put(UserTable.U_GENDER, gender);
