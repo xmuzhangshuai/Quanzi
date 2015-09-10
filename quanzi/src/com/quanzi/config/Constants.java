@@ -12,7 +12,7 @@ public class Constants {
 
 	public static class Config {
 		// 是否处于开发模式
-		public static final boolean DEVELOPER_MODE = true;
+		public static final boolean DEVELOPER_MODE = false;
 
 		// 接受验证码时间为120s
 		public static int AUTN_CODE_TIME = 120;

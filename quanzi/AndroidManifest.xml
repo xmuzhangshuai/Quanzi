@@ -363,7 +363,7 @@
             android:value="yixianqian#quanzi" />
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="55d929d5e0f55a3cc0003f8d" >
+            android:value="55f17c3c67e58ea98e001d59" >
         </meta-data>
         <meta-data
             android:name="UMENG_CHANNEL"
