@@ -73,14 +73,7 @@ public class SettingAboutActivity extends BaseActivity implements OnClickListene
 	protected void initView() {
 		// TODO Auto-generated method stub
 		topNavigation.setText("¹ØÓÚ");
-		leftImageButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				getFragmentManager().popBackStack();
-			}
-		});
+		leftImageButton.setOnClickListener(this);
 
 		cacheSize.setText("" + FileSizeUtil.getFileOrFilesSize(imageLoader.getDiskCache().getDirectory().getAbsolutePath(), FileSizeUtil.SIZETYPE_MB) + "MB");
 
@@ -91,6 +84,7 @@ public class SettingAboutActivity extends BaseActivity implements OnClickListene
 		settingClearCache.setOnClickListener(this);
 		settingFeedback.setOnClickListener(this);
 		settingCheckUpdate.setOnClickListener(this);
+
 	}
 
 	/**
