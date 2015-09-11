@@ -3,17 +3,16 @@ package com.quanzi.ui;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.TextView;
 
 import com.quanzi.R;
+import com.quanzi.base.BaseActivity;
 import com.quanzi.base.BaseApplication;
-import com.quanzi.base.BaseV4Fragment;
 import com.quanzi.customewidget.MyAlertDialog;
+import com.quanzi.utils.FileSizeUtil;
 import com.quanzi.utils.ToastTool;
 import com.quanzi.utils.UserPreference;
 import com.umeng.fb.FeedbackAgent;
@@ -31,8 +30,7 @@ import com.umeng.update.UpdateStatus;
  * @date 创建时间：2015-4-30 下午7:51:04 
  *
  */
-public class SettingAboutFragment extends BaseV4Fragment implements OnClickListener {
-	private View rootView;// 根View
+public class SettingAboutActivity extends BaseActivity implements OnClickListener {
 	private TextView topNavigation;// 导航栏文字
 	private View leftImageButton;// 导航栏左侧按钮
 
@@ -41,51 +39,34 @@ public class SettingAboutFragment extends BaseV4Fragment implements OnClickListe
 	private View settingCheckUpdate;// 检查更新
 	private View settingUserContact;// 关于
 	private View settingAboutUs;// 退出
-	private FragmentTransaction transaction;
 	private UserPreference userPreference;
-	// private FriendPreference friendPreference;
 	private TextView cacheSize;
 	private TextView version;
 
-	// FeedbackAgent agent;
-
 	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		super.onActivityCreated(savedInstanceState);
-		transaction = getFragmentManager().beginTransaction();
+		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.activity_setting_about);
 		userPreference = BaseApplication.getInstance().getUserPreference();
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		rootView = inflater.inflate(R.layout.fragment_setting_about, container, false);
 
 		findViewById();
 		initView();
-		return rootView;
-	}
-
-	@Override
-	public void onDestroy() {
-		// TODO Auto-generated method stub
-		super.onDestroy();
-		transaction = null;
 	}
 
 	@Override
 	protected void findViewById() {
 		// TODO Auto-generated method stub
-		topNavigation = (TextView) rootView.findViewById(R.id.nav_text);
-		leftImageButton = (View) rootView.findViewById(R.id.left_btn_bg);
-		settingClearCache = rootView.findViewById(R.id.setting_clear_cache);
-		settingFeedback = rootView.findViewById(R.id.setting_feedback);
-		settingCheckUpdate = rootView.findViewById(R.id.setting_check_update);
-		settingUserContact = rootView.findViewById(R.id.user_contact);
-		settingAboutUs = rootView.findViewById(R.id.about_us);
-		cacheSize = (TextView) rootView.findViewById(R.id.cache_size);
-		version = (TextView) rootView.findViewById(R.id.version);
+		topNavigation = (TextView) findViewById(R.id.nav_text);
+		leftImageButton = (View) findViewById(R.id.left_btn_bg);
+		settingClearCache = findViewById(R.id.setting_clear_cache);
+		settingFeedback = findViewById(R.id.setting_feedback);
+		settingCheckUpdate = findViewById(R.id.setting_check_update);
+		settingUserContact = findViewById(R.id.user_contact);
+		settingAboutUs = findViewById(R.id.about_us);
+		cacheSize = (TextView) findViewById(R.id.cache_size);
+		version = (TextView) findViewById(R.id.version);
 	}
 
 	@Override
@@ -101,10 +82,7 @@ public class SettingAboutFragment extends BaseV4Fragment implements OnClickListe
 			}
 		});
 
-		// cacheSize.setText(""
-		// +
-		// FileSizeUtil.getFileOrFilesSize(imageLoader.getDiskCache().getDirectory().getAbsolutePath(),
-		// FileSizeUtil.SIZETYPE_MB) + "MB");
+		cacheSize.setText("" + FileSizeUtil.getFileOrFilesSize(imageLoader.getDiskCache().getDirectory().getAbsolutePath(), FileSizeUtil.SIZETYPE_MB) + "MB");
 
 		version.setText(getVersion());
 
@@ -120,7 +98,7 @@ public class SettingAboutFragment extends BaseV4Fragment implements OnClickListe
 	 */
 	private void clearCache() {
 
-		final MyAlertDialog myAlertDialog = new MyAlertDialog(getActivity());
+		final MyAlertDialog myAlertDialog = new MyAlertDialog(SettingAboutActivity.this);
 		myAlertDialog.setTitle("提示");
 		myAlertDialog.setMessage("是否清除缓存？");
 		View.OnClickListener comfirm = new OnClickListener() {
@@ -131,10 +109,8 @@ public class SettingAboutFragment extends BaseV4Fragment implements OnClickListe
 				myAlertDialog.dismiss();
 				imageLoader.clearMemoryCache();
 				imageLoader.clearDiskCache();
-				// cacheSize.setText(""
-				// +
-				// FileSizeUtil.getFileOrFilesSize(imageLoader.getDiskCache().getDirectory().getAbsolutePath(),
-				// FileSizeUtil.SIZETYPE_MB) + "MB");
+				cacheSize.setText("" + FileSizeUtil.getFileOrFilesSize(imageLoader.getDiskCache().getDirectory().getAbsolutePath(), FileSizeUtil.SIZETYPE_MB)
+						+ "MB");
 			}
 		};
 		View.OnClickListener cancle = new OnClickListener() {
@@ -156,8 +132,8 @@ public class SettingAboutFragment extends BaseV4Fragment implements OnClickListe
 	 */
 	public String getVersion() {
 		try {
-			PackageManager manager = getActivity().getPackageManager();
-			PackageInfo info = manager.getPackageInfo(getActivity().getPackageName(), 0);
+			PackageManager manager = getPackageManager();
+			PackageInfo info = manager.getPackageInfo(getPackageName(), 0);
 			String version = info.versionName;
 			return this.getString(R.string.version_name) + version;
 		} catch (Exception e) {
@@ -174,9 +150,9 @@ public class SettingAboutFragment extends BaseV4Fragment implements OnClickListe
 			clearCache();
 			break;
 		case R.id.setting_feedback:
-			FeedbackAgent agent = new FeedbackAgent(getActivity());
+			FeedbackAgent agent = new FeedbackAgent(SettingAboutActivity.this);
 			agent.startFeedbackActivity();
-			getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+			overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 			break;
 		case R.id.setting_check_update:
 			/**********友盟自动更新组件**************/
@@ -185,27 +161,29 @@ public class SettingAboutFragment extends BaseV4Fragment implements OnClickListe
 				public void onUpdateReturned(int updateStatus, UpdateResponse updateInfo) {
 					switch (updateStatus) {
 					case UpdateStatus.Yes: // has update
-						UmengUpdateAgent.showUpdateDialog(getActivity(), updateInfo);
+						UmengUpdateAgent.showUpdateDialog(SettingAboutActivity.this, updateInfo);
 						break;
 					case UpdateStatus.No: // has no update
-						ToastTool.showShort(getActivity(), "当前是最新版本");
+						ToastTool.showShort(SettingAboutActivity.this, "当前是最新版本");
 						break;
 					case UpdateStatus.NoneWifi: // none wifi
-						ToastTool.showShort(getActivity(), "没有wifi连接， 只在wifi下更新");
+						ToastTool.showShort(SettingAboutActivity.this, "没有wifi连接， 只在wifi下更新");
 						break;
 					case UpdateStatus.Timeout: // time out
-						ToastTool.showShort(getActivity(), "超时");
+						ToastTool.showShort(SettingAboutActivity.this, "超时");
 						break;
 					}
 				}
 			});
-			UmengUpdateAgent.forceUpdate(getActivity());
+			UmengUpdateAgent.forceUpdate(SettingAboutActivity.this);
 			break;
 		case R.id.about_us:
 
 			break;
 		case R.id.user_contact:
 			break;
+		case R.id.left_btn_bg:
+			finish();
 		default:
 			break;
 		}

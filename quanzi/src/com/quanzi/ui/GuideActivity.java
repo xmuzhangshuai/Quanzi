@@ -80,8 +80,7 @@ public class GuideActivity extends BaseActivity {
 		/************ 初始化友盟服务 **************/
 		// 禁止友盟禁止默认的页面统计方式
 		MobclickAgent.openActivityDurationTrack(false);
-		UmengUpdateAgent.setUpdateOnlyWifi(false);
-		UmengUpdateAgent.update(this);
+		
 		// MobclickAgent.updateOnlineConfig(this);
 		new FeedbackAgent(getApplicationContext()).sync();
 

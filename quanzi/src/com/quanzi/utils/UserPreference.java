@@ -16,7 +16,7 @@ import com.quanzi.table.UserTable;
 public class UserPreference {
 	private SharedPreferences sp;
 	private SharedPreferences.Editor editor;
-	public static final String USER_SHAREPREFERENCE = "userSharePreference";//用户SharePreference
+	public static final String USER_SHAREPREFERENCE = "userSharePreference";// 用户SharePreference
 	private Context context;
 
 	public UserPreference(Context context) {
@@ -25,7 +25,7 @@ public class UserPreference {
 		editor = sp.edit();
 	}
 
-	//打印用户信息
+	// 打印用户信息
 	public void printUserInfo() {
 		LogTool.i("是否登录: " + getUserLogin());
 		LogTool.i("用户ID: " + getU_id());
@@ -67,7 +67,7 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//记录用户是否登录
+	// 记录用户是否登录
 	public boolean getUserLogin() {
 		return sp.getBoolean("login", false);
 	}
@@ -77,7 +77,7 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//用户ID
+	// 用户ID
 	public int getU_id() {
 		return sp.getInt(UserTable.U_ID, -1);
 	}
@@ -87,7 +87,7 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//用户昵称
+	// 用户昵称
 	public String getU_nickname() {
 		return sp.getString(UserTable.U_NICKNAME, "");
 	}
@@ -97,7 +97,7 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//密码
+	// 密码
 	public String getU_password() {
 		return sp.getString(UserTable.U_PASSWORD, "");
 	}
@@ -107,7 +107,7 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//性别
+	// 性别
 	public String getU_gender() {
 		return sp.getString(UserTable.U_GENDER, "");
 	}
@@ -117,7 +117,7 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//手机号
+	// 手机号
 	public String getU_tel() {
 		return sp.getString(UserTable.U_TEL, "");
 	}
@@ -127,7 +127,7 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//邮箱
+	// 邮箱
 	public String getU_email() {
 		return sp.getString(UserTable.U_EMAIL, "");
 	}
@@ -137,7 +137,7 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//生日
+	// 生日
 	public Date getU_birthday() {
 		Long time = sp.getLong(UserTable.U_BIRTHDAY, 0);
 		if (time != 0) {
@@ -154,7 +154,7 @@ public class UserPreference {
 		}
 	}
 
-	//年龄
+	// 年龄
 	public int getU_age() {
 		return sp.getInt(UserTable.U_AGE, -1);
 	}
@@ -164,7 +164,7 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//大头像
+	// 大头像
 	public String getU_large_avatar() {
 		return sp.getString(UserTable.U_LARGE_AVATAR, "");
 	}
@@ -174,7 +174,7 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//小头像
+	// 小头像
 	public String getU_small_avatar() {
 		return sp.getString(UserTable.U_SMALL_AVATAR, "");
 	}
@@ -184,7 +184,7 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//省份
+	// 省份
 	public int getU_provinceid() {
 		return sp.getInt(UserTable.U_PROVINCEID, -1);
 	}
@@ -205,7 +205,7 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//城市
+	// 城市
 	public int getU_cityid() {
 		return sp.getInt(UserTable.U_CITYID, -1);
 	}
@@ -229,7 +229,7 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//学校
+	// 学校
 	public int getU_schoolid() {
 		return sp.getInt(UserTable.U_SCHOOLID, -1);
 	}
@@ -237,7 +237,9 @@ public class UserPreference {
 	public void setU_schoolid(int u_schoolid) {
 		SchoolDbService schoolDbService = SchoolDbService.getInstance(context);
 		School school = schoolDbService.schoolDao.load((long) u_schoolid);
-		setSchoolName(school.getSchoolName());
+		if (school != null) {
+			setSchoolName(school.getSchoolName());
+		}
 		editor.putInt(UserTable.U_SCHOOLID, u_schoolid);
 		editor.commit();
 	}
@@ -251,7 +253,7 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//用户简介
+	// 用户简介
 	public String getU_introduce() {
 		return sp.getString(UserTable.U_INTRODUCE, "");
 	}
@@ -261,7 +263,7 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//学号
+	// 学号
 	public String getU_student_number() {
 		return sp.getString(UserTable.U_STUDENT_NUMBER, "");
 	}
@@ -271,7 +273,7 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//教务处密码
+	// 教务处密码
 	public String getU_student_pass() {
 		return sp.getString(UserTable.U_STUDENT_PASS, "");
 	}
@@ -281,7 +283,7 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//身份
+	// 身份
 	public String getU_identity() {
 		return sp.getString(UserTable.U_IDENTITY, "");
 	}
@@ -291,7 +293,7 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//行业
+	// 行业
 	public String getU_industry() {
 		return sp.getString(UserTable.U_INDUSTRY_ITEM, "");
 	}
@@ -301,7 +303,7 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//技能
+	// 技能
 	public String getU_skills() {
 		return sp.getString(UserTable.U_SKILL_ITEMS, "");
 	}
@@ -311,7 +313,7 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//情感状态
+	// 情感状态
 	public String getU_love_state() {
 		return sp.getString(UserTable.U_LOVE_STATE, "");
 	}
@@ -321,7 +323,7 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//兴趣
+	// 兴趣
 	public String getU_interests() {
 		return sp.getString(UserTable.U_INTEREST_ITEMS, "");
 	}
@@ -331,7 +333,7 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//我关注的人数
+	// 我关注的人数
 	public int getMyConcerned_count() {
 		return sp.getInt("my_concerned_count", -1);
 	}
@@ -341,7 +343,7 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//我的追随者数量
+	// 我的追随者数量
 	public int getMyFollower_count() {
 		return sp.getInt("my_follower_count", -1);
 	}
@@ -351,7 +353,7 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//新的追随者数量
+	// 新的追随者数量
 	public int getNewMyFollower_count() {
 		return sp.getInt("new_my_follower_count", -1);
 	}
@@ -361,7 +363,7 @@ public class UserPreference {
 		editor.commit();
 	}
 
-	//我赞过的帖子的数量
+	// 我赞过的帖子的数量
 	public int getMyFavor_count() {
 		return sp.getInt("my_favor_count", -1);
 	}

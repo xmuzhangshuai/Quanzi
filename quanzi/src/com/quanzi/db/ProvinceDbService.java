@@ -8,7 +8,6 @@ import com.quanzi.entities.Province;
 
 import android.content.Context;
 
-
 public class ProvinceDbService {
 	private static final String TAG = ProvinceDbService.class.getSimpleName();
 	private static ProvinceDbService instance;
@@ -49,6 +48,10 @@ public class ProvinceDbService {
 	 * @return
 	 */
 	public String getProNameById(int provinceID) {
-		return provinceDao.queryBuilder().where(Properties.ProvinceID.eq(provinceID)).unique().getProvinceName();
+		Province province = provinceDao.queryBuilder().where(Properties.ProvinceID.eq(provinceID)).unique();
+		if (province != null) {
+			return province.getProvinceName();
+		}
+		return "";
 	}
 }

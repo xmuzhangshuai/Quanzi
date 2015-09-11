@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
+import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
@@ -34,6 +35,7 @@ import com.quanzi.utils.AsyncHttpClientTool;
 import com.quanzi.utils.ImageLoaderTool;
 import com.quanzi.utils.ImageTools;
 import com.quanzi.utils.LogTool;
+import com.quanzi.utils.ServerUtil;
 
 public class ContractListAdapter extends BaseAdapter {
 	private LayoutInflater mInflater;
@@ -96,21 +98,25 @@ public class ContractListAdapter extends BaseAdapter {
 			holder.avatar = (ImageView) view.findViewById(R.id.icon);
 			holder.msgState = view.findViewById(R.id.msg_state);
 			view.setTag(holder);
-		}else {
+		} else {
 			holder = (ViewHolder) view.getTag(); // 把数据取出来
 		}
-
-//		ViewHolder holder = (ViewHolder) convertView.getTag();
-//
-//		if (holder == null) {
-//			
-//		}
 
 		// 获取与此用户/群组的会话
 		EMConversation conversation = conversationList.get(position);
 		User user = UserDbService.getInstance(mContext).getUserById(Integer.parseInt(conversation.getUserName()));
 
-		holder.name.setText(user.getNickname());
+		if (user == null) {
+			// ServerUtil.getUser(mContext,
+			// Integer.parseInt(conversation.getUserName()));
+			EMChatManager.getInstance().deleteConversation(conversationList.get(position).getUserName(), false);
+			conversationList.remove(position);
+			this.notifyDataSetChanged();
+		}
+
+		if (user != null) {
+			holder.name.setText(user.getNickname());
+		}
 
 		if (conversation.getUnreadMsgCount() > 0) {
 			// 显示与此用户的消息未读数

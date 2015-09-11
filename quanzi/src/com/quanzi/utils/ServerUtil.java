@@ -3,6 +3,7 @@ package com.quanzi.utils;
 import org.apache.http.Header;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
@@ -12,10 +13,12 @@ import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.quanzi.R;
 import com.quanzi.base.BaseApplication;
+import com.quanzi.db.UserDbService;
 import com.quanzi.jsonobject.JsonUser;
 import com.quanzi.table.UserTable;
 import com.quanzi.ui.LoginActivity;
 import com.quanzi.ui.LoginOrRegisterActivity;
+import com.quanzi.ui.PersonDetailActivity;
 
 /**
  *
@@ -77,7 +80,7 @@ public class ServerUtil {
 							LogTool.i("ServerUtil", "登录成功！");
 							saveUser(jsonUser);
 
-							//从本地数据库加载聊天记录到内存
+							// 从本地数据库加载聊天记录到内存
 							try {
 								EMChatManager.getInstance().loadAllConversations();
 							} catch (Exception e) {
@@ -148,5 +151,47 @@ public class ServerUtil {
 		instance.userPreference.setMyFavor_count(user.getU_my_favor_count());
 		instance.userPreference.setNewMyFollower_count(user.getU_new_follower_count());
 		instance.userPreference.setUserLogin(true);
+	}
+
+	public static void getUser(final Context context, int userId) {
+		final ProgressDialog dialog = new ProgressDialog(context);
+		dialog.setMessage("正在加载...");
+		dialog.setCancelable(false);
+		RequestParams params = new RequestParams();
+		params.put(UserTable.U_ID, userId);
+
+		TextHttpResponseHandler responseHandler = new TextHttpResponseHandler("utf-8") {
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+				dialog.show();
+			}
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, String response) {
+				// TODO Auto-generated method stub
+				if (statusCode == 200) {
+					JsonUser jsonUser = FastJsonTool.getObject(response, JsonUser.class);
+					if (jsonUser != null) {
+						UserDbService.getInstance(context).saveUser(jsonUser);
+					}
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
+				// TODO Auto-generated method stub
+				LogTool.e("获取用户服务器错误");
+			}
+
+			@Override
+			public void onFinish() {
+				// TODO Auto-generated method stub
+				super.onFinish();
+				dialog.dismiss();
+			}
+		};
+		AsyncHttpClientTool.post("user/getInfoByID", params, responseHandler);
 	}
 }

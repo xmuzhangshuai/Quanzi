@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -46,15 +47,15 @@ import com.quanzi.utils.UserPreference;
 public class LoginActivity extends BaseActivity {
 
 	// UI references.
-	private EditText mPhoneView;//手机号
-	private EditText mPasswordView;//密码
-	private View mProgressView;//缓冲
-	private TextView topNavigation;//导航栏文字
-	private View leftImageButton;//导航栏左侧按钮
-	private View rightImageButton;//导航栏右侧按钮
+	private EditText mPhoneView;// 手机号
+	private EditText mPasswordView;// 密码
+	private View mProgressView;// 缓冲
+	private TextView topNavigation;// 导航栏文字
+	private View leftImageButton;// 导航栏左侧按钮
+	private View rightImageButton;// 导航栏右侧按钮
 	private UserPreference userPreference;
-	private TextView forgetPassword;//忘记密码
-	private Button loginButton;//登录
+	private TextView forgetPassword;// 忘记密码
+	private Button loginButton;// 登录
 
 	List<JsonUser> jsonUsers;
 
@@ -177,7 +178,7 @@ public class LoginActivity extends BaseActivity {
 
 	}
 
-	//登录
+	// 登录
 	private void login(String tel, final String pass) {
 
 		RequestParams params = new RequestParams();
@@ -196,7 +197,6 @@ public class LoginActivity extends BaseActivity {
 			@Override
 			public void onFinish() {
 				// TODO Auto-generated method stub
-				showProgress(false);
 				super.onFinish();
 			}
 
@@ -208,14 +208,13 @@ public class LoginActivity extends BaseActivity {
 						if (response.equals("-1")) {
 							mPasswordView.setError("电话或密码错误！");
 							mPasswordView.requestFocus();
-							showProgress(false);
 						} else {
 							JsonUser user = FastJsonTool.getObject(response, JsonUser.class);
 							if (user != null) {
-								saveUser(user);//更新用户信息
+								saveUser(user);// 更新用户信息
 								loginHuanxin("" + user.getU_id(), user.getU_password());
 							} else {
-								LogTool.e("登录返回出错,user为空"+response);
+								LogTool.e("登录返回出错,user为空" + response);
 							}
 						}
 					}
@@ -226,7 +225,9 @@ public class LoginActivity extends BaseActivity {
 			public void onFailure(int statusCode, Header[] headers, String errorResponse, Throwable e) {
 				// TODO Auto-generated method stub
 				LogTool.e("服务器错误" + errorResponse);
+				showProgress(false);
 			}
+
 		};
 		AsyncHttpClientTool.post("user/login", params, responseHandler);
 	}
@@ -269,14 +270,19 @@ public class LoginActivity extends BaseActivity {
 	 * 登录环信
 	 */
 	private void loginHuanxin(String userName, String password) {
-		EMChatManager.getInstance().login(userName, password, new EMCallBack() {//回调
+		EMChatManager.getInstance().login(userName, password, new EMCallBack() {// 回调
 					@Override
 					public void onSuccess() {
 						LogTool.i("环信", "登陆环信成功！");
 						Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 						startActivity(intent);
 						overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-						showProgress(false);
+
+						LoginActivity.this.runOnUiThread(new Runnable() {
+							public void run() {
+								showProgress(false);
+							}
+						});
 					}
 
 					@Override
@@ -287,7 +293,12 @@ public class LoginActivity extends BaseActivity {
 					@Override
 					public void onError(int code, String message) {
 						LogTool.e("环信", "登陆聊天服务器失败！");
-						showProgress(false);
+						LoginActivity.this.runOnUiThread(new Runnable() {
+							public void run() {
+								showProgress(false);
+							}
+						});
+
 					}
 				});
 	}
@@ -301,21 +312,20 @@ public class LoginActivity extends BaseActivity {
 		// for very easy animations. If available, use these APIs to fade-in
 		// the progress spinner.
 		if (show) {
-			//隐藏软键盘   
-			((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(LoginActivity.this
-					.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+			// 隐藏软键盘
+			((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(LoginActivity.this.getCurrentFocus().getWindowToken(),
+					InputMethodManager.HIDE_NOT_ALWAYS);
 		}
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
 			int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
 			mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-			mProgressView.animate().setDuration(shortAnimTime).alpha(show ? 1 : 0)
-					.setListener(new AnimatorListenerAdapter() {
-						@Override
-						public void onAnimationEnd(Animator animation) {
-							mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-						}
-					});
+			mProgressView.animate().setDuration(shortAnimTime).alpha(show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+				@Override
+				public void onAnimationEnd(Animator animation) {
+					mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+				}
+			});
 		} else {
 			// The ViewPropertyAnimator APIs are not available, so simply show
 			// and hide the relevant UI components.

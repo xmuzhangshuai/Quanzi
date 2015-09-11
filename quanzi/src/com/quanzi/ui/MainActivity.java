@@ -28,6 +28,7 @@ import com.quanzi.huanxin.HXSDKHelper;
 import com.quanzi.huanxin.MyHXSDKHelper;
 import com.quanzi.utils.CommonTools;
 import com.quanzi.utils.LogTool;
+import com.umeng.update.UmengUpdateAgent;
 
 /**
  *
@@ -76,6 +77,8 @@ public class MainActivity extends BaseFragmentActivity implements EMEventListene
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		UmengUpdateAgent.setUpdateOnlyWifi(false);
+		UmengUpdateAgent.update(this);
 
 		if (savedInstanceState != null && savedInstanceState.getBoolean(DefaultKeys.ACCOUNT_REMOVED, false)) {
 			// 防止被移除后，没点确定按钮然后按了home键，长期在后台又进app导致的crash

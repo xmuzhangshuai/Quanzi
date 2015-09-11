@@ -27,22 +27,22 @@ import com.quanzi.utils.UserPreference;
  */
 public class SettingMainFragment extends BaseV4Fragment implements OnClickListener {
 	private View rootView;// 根View
-	private TextView topNavigation;//导航栏文字
-	private View leftImageButton;//导航栏左侧按钮
+	private TextView topNavigation;// 导航栏文字
+	private View leftImageButton;// 导航栏左侧按钮
 
-	private View settingNewMsg;//新消息提醒
-	private View settingChat;//聊天设置
-	private View settingPass;//修改密码
-	private View settingBlackList;//黑名单
-	private View settingAbout;//关于
-	private View settingLogout;//退出
+	private View settingNewMsg;// 新消息提醒
+	private View settingChat;// 聊天设置
+	private View settingPass;// 修改密码
+	private View settingBlackList;// 黑名单
+	private View settingAbout;// 关于
+	private View settingLogout;// 退出
 	private FragmentTransaction transaction;
 	private UserPreference userPreference;
-	//	private FriendPreference friendPreference;
+	// private FriendPreference friendPreference;
 	private TextView cacheSize;
 	private TextView version;
 
-	//	FeedbackAgent agent;
+	// FeedbackAgent agent;
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -50,7 +50,8 @@ public class SettingMainFragment extends BaseV4Fragment implements OnClickListen
 		super.onActivityCreated(savedInstanceState);
 		transaction = getFragmentManager().beginTransaction();
 		userPreference = BaseApplication.getInstance().getUserPreference();
-		//		friendPreference = BaseApplication.getInstance().getFriendPreference();
+		// friendPreference =
+		// BaseApplication.getInstance().getFriendPreference();
 	}
 
 	@Override
@@ -98,10 +99,6 @@ public class SettingMainFragment extends BaseV4Fragment implements OnClickListen
 			}
 		});
 
-		//		cacheSize.setText(""
-		//				+ FileSizeUtil.getFileOrFilesSize(imageLoader.getDiskCache().getDirectory().getAbsolutePath(),
-		//						FileSizeUtil.SIZETYPE_MB) + "MB");
-
 		settingNewMsg.setOnClickListener(this);
 		settingChat.setOnClickListener(this);
 		settingAbout.setOnClickListener(this);
@@ -114,7 +111,7 @@ public class SettingMainFragment extends BaseV4Fragment implements OnClickListen
 	 * 退出登录
 	 */
 	private void logout() {
-		//设置用户不曾登录
+		// 设置用户不曾登录
 
 		final MyAlertDialog myAlertDialog = new MyAlertDialog(getActivity());
 		myAlertDialog.setTitle("提示");
@@ -173,10 +170,8 @@ public class SettingMainFragment extends BaseV4Fragment implements OnClickListen
 			getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
 			break;
 		case R.id.setting_about:
-			transaction.setCustomAnimations(R.anim.zoomin2, R.anim.zoomout);
-			transaction.replace(R.id.container, new SettingAboutFragment());
-			transaction.addToBackStack("setting");
-			transaction.commit();
+			getActivity().startActivity(new Intent(getActivity(), SettingAboutActivity.class));
+			getActivity().overridePendingTransition(R.anim.zoomin2, R.anim.zoomout);
 			break;
 		case R.id.setting_logout:
 			logout();
