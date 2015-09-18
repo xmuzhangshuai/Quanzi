@@ -4,22 +4,6 @@ import java.util.List;
 
 import org.apache.http.Header;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
-import android.content.Intent;
-import android.os.Build;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
 import com.loopj.android.http.RequestParams;
@@ -36,6 +20,21 @@ import com.quanzi.utils.LogTool;
 import com.quanzi.utils.MD5For32;
 import com.quanzi.utils.SIMCardInfo;
 import com.quanzi.utils.UserPreference;
+
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
+import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 /**
  * 类名称：LoginActivity 
@@ -172,7 +171,6 @@ public class LoginActivity extends BaseActivity {
 		} else {
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
-			showProgress(true);
 			login(phone, MD5For32.GetMD5Code(password));
 		}
 
@@ -215,8 +213,11 @@ public class LoginActivity extends BaseActivity {
 								loginHuanxin("" + user.getU_id(), user.getU_password());
 							} else {
 								LogTool.e("登录返回出错,user为空" + response);
+								showProgress(false);
 							}
 						}
+					}else{
+						showProgress(false);
 					}
 				}
 			}
