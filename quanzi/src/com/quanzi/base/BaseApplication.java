@@ -3,10 +3,6 @@ package com.quanzi.base;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import android.app.Application;
-import android.content.Context;
-import android.media.MediaPlayer;
-
 import com.easemob.chat.EMChatManager;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -18,8 +14,10 @@ import com.quanzi.dao.DaoMaster.OpenHelper;
 import com.quanzi.dao.DaoSession;
 import com.quanzi.huanxin.MyHXSDKHelper;
 import com.quanzi.utils.UserPreference;
-import com.umeng.analytics.MobclickAgent;
-import com.umeng.fb.FeedbackAgent;
+
+import android.app.Application;
+import android.content.Context;
+import android.media.MediaPlayer;
 
 /**   
  *    

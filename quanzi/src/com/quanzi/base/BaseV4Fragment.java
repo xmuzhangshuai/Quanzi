@@ -52,12 +52,14 @@ public abstract class BaseV4Fragment extends Fragment {
 		return super.onCreateView(inflater, container, savedInstanceState);
 	}
 
+	
 	@Override
-	public void onStart() {
+	public void onResume() {
 		// TODO Auto-generated method stub
-		super.onStart();
+		super.onResume();
 		MobclickAgent.onPageStart(this.getClass().getCanonicalName()); // Í³¼ÆÒ³Ãæ
 	}
+
 
 	@Override
 	public void onPause() {

@@ -50,9 +50,9 @@ public abstract class BaseFragment extends Fragment {
 	}
 
 	@Override
-	public void onStart() {
+	public void onResume() {
 		// TODO Auto-generated method stub
-		super.onStart();
+		super.onResume();
 		MobclickAgent.onPageStart(this.getClass().getName()); // Í³¼ÆÒ³Ãæ
 	}
 
